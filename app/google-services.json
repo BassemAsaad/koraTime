@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "124325507590",
+    "project_id": "kora-time-d21c3",
+    "storage_bucket": "kora-time-d21c3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:124325507590:android:5027f8e4a7b507fa200987",
+        "android_client_info": {
+          "package_name": "com.example.koratime"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD2-LK1ZmpP268ANPVyH8KWaNEk70aFJrM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
