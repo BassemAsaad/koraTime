@@ -22,7 +22,6 @@ class LoginActivity
     override fun initView() {
         dataBinding.loginVM = viewModel
         viewModel.navigator = this
-
     }
 
     override fun getLayoutID(): Int {

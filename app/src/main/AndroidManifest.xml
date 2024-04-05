@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -20,22 +17,8 @@
         android:theme="@style/Theme.KoraTime"
         tools:targetApi="31">
         <activity
-            android:name=".registration.create_account.RegisterActivity"
+            android:name=".location.LocationActivity"
             android:exported="true" >
-        </activity>
-        <activity
-            android:name=".registration.sign_in.LoginActivity"
-            android:exported="true" >
-
-        </activity>
-
-        <activity
-            android:name=".home.HomeActivity"
-            android:exported="true" />
-
-        <activity
-            android:name=".splash.SplashActivity"
-            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -43,6 +26,26 @@
             </intent-filter>
         </activity>
 
+
+
+
+        <activity
+            android:name=".registration.create_account.RegisterActivity"
+            android:exported="true">
+
+        </activity>
+        <activity
+            android:name=".registration.sign_in.LoginActivity"
+            android:exported="true"/>
+        <activity
+            android:name=".home.HomeActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".splash.SplashActivity"
+            android:exported="true">
+
+        </activity>
     </application>
 
 </manifest>
