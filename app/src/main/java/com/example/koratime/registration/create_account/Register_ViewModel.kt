@@ -2,14 +2,13 @@ package com.example.koratime.registration.create_account
 
 import android.util.Log
 import androidx.databinding.ObservableField
-import androidx.lifecycle.ViewModel
 import com.example.koratime.basic.BasicViewModel
-import com.example.koratime.basic.Navigator
+import com.example.koratime.database.addUser_toFirestore
+import com.example.koratime.model.UserModel
 import com.google.firebase.Firebase
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 
-class Register_ViewModel : BasicViewModel<Navigator>() {
+class Register_ViewModel : BasicViewModel<RegisterNavigator>() {
     val firstName = ObservableField<String>()
     val firstNameError = ObservableField<String>()
 
@@ -25,7 +24,8 @@ class Register_ViewModel : BasicViewModel<Navigator>() {
     val password = ObservableField<String>()
     val passwordError = ObservableField<String>()
 
-    lateinit var auth: FirebaseAuth
+    private val auth = Firebase.auth
+
 
     fun createAccount(){
         //validation
@@ -36,24 +36,50 @@ class Register_ViewModel : BasicViewModel<Navigator>() {
 
 
 
-
     }
 
-    fun addAccount_toFirebase() {
-        showLoading.value =true
-        auth = Firebase.auth
+    fun login(){
+        navigator?.openLoginActivity()
+    }
+
+    private fun addAccount_toFirebase() {
+        showLoading.value = true
         auth.createUserWithEmailAndPassword(email.get()!!, password.get()!!)
-            .addOnCompleteListener {task->
+            .addOnCompleteListener{task ->
                 if (!task.isSuccessful){
+                    showLoading.value = false
                     Log.e("Firebase: ",task.exception?.localizedMessage.toString())
                 } else{
-                    Log.e("Firebase: ","Success")
-                    navigator?.openHomeActivity()
-                    messageLiveData.value = "Successful Login"
                     showLoading.value = false
-                }
-            }
+                    Log.e("Firebase: ", "Success")
+                    createFirestore_User(task.result.user?.uid)
 
+                }
+
+            }
+    }
+
+    private fun createFirestore_User(uid: String?) {
+        showLoading.value=true
+        val user = UserModel(
+            id = uid,
+            firstName = firstName.get(),
+            secondName = secondName.get(),
+            userName = userName.get(),
+            email = email.get()
+        )
+        addUser_toFirestore(
+            user,
+            //OnSuccessListener
+            {
+                showLoading.value=false
+                messageLiveData.value = "Successful Register"
+            },
+            //OnFailureListener
+            {
+                showLoading.value=false
+                messageLiveData.value = it.localizedMessage
+            })
     }
 
     fun validation():Boolean {
@@ -61,39 +87,41 @@ class Register_ViewModel : BasicViewModel<Navigator>() {
 
         //firstName
         if (firstName.get().isNullOrBlank()){
-            valid = false
+            valid=false
             firstNameError.set("Enter First Name")
         } else{
             firstNameError.set(null)
         }
         //secondName
         if (secondName.get().isNullOrBlank()){
-            valid = false
+            valid=false
             secondNameError.set("Enter Second Name")
         } else {
             secondNameError.set(null)
         }
         //userName
         if (userName.get().isNullOrBlank() ){
-            valid = false
+            valid=false
             userNameError.set("Enter User Name")
         } else {
             userNameError.set(null)
         }
+
         //email
         if (email.get().isNullOrBlank()){
-            valid = false
+            valid=false
             emailError.set("Enter Email")
         } else {
             emailError.set(null)
         }
+
         //password
         if (password.get().isNullOrBlank() ){
-            valid = false
+            valid=false
             passwordError.set("Enter Password")
         }
         else if (password.get()?.length!! < 8){
-            valid = false
+            valid=false
             passwordError.set("Password is less than 8")
         }
         else {
@@ -102,5 +130,4 @@ class Register_ViewModel : BasicViewModel<Navigator>() {
 
         return valid
     }
-
 }

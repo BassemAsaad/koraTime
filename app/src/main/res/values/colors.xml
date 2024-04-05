@@ -5,5 +5,14 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="transparent">#00000000</color>
-
+    <color name="red">#A53939</color>
+    <color name="red_dark">#7A2B2B</color>
+    <color name="red_light">#C91C22</color>
+    <color name="blue">#003E90</color>
+    <color name="pink">#ED1E79</color>
+    <color name="brown">#CF7E48</color>
+    <color name="blue_light">#4882CF</color>
+    <color name="yellow">#F2D352</color>
+    <color name="grey">#79828B</color>
+    <color name="dark_grey">#42505C</color>
 </resources>

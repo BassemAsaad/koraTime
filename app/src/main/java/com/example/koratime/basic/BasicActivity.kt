@@ -8,9 +8,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 
- abstract class BasicActivity <DB : ViewDataBinding, VM : BasicViewModel<Navigator>>: AppCompatActivity(){
+abstract class BasicActivity <DB : ViewDataBinding, VM : BasicViewModel<*>>: AppCompatActivity(){
 
     lateinit var dataBinding : DB
     lateinit var viewModel: VM
@@ -81,5 +80,6 @@ import androidx.lifecycle.ViewModel
          progressDialog?.dismiss()
          progressDialog = null
      }
+
 
 }

@@ -100,7 +100,7 @@
                     android:layout_marginTop="5dp"
                     app:boxBackgroundColor="@color/transparent"
                     app:error="@{loginVM.passwordError_login}"
-
+                    app:passwordToggleEnabled="true"
                     >
 
                     <EditText
@@ -108,6 +108,7 @@
                         android:layout_height="match_parent"
                         android:hint="Password"
                         android:text="@={loginVM.password_login}"
+                        android:inputType="textPassword"
 
                         />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -133,6 +134,7 @@
                     android:layout_marginTop="10dp"
                     android:textSize="15sp"
                     android:textColor="@color/primary"
+                    android:onClick="@{()->loginVM.createAccount()}"
                     />
 
 

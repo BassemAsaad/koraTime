@@ -5,15 +5,13 @@ import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import com.example.koratime.basic.BasicActivity
 import com.example.koratime.R
-import com.example.koratime.basic.Navigator
 import com.example.koratime.databinding.ActivityLoginBinding
 import com.example.koratime.registration.create_account.RegisterActivity
 import com.example.koratime.home.HomeActivity
 
 
 class LoginActivity
-    : BasicActivity<ActivityLoginBinding, Login_ViewModel>(),Navigator {
-
+    : BasicActivity<ActivityLoginBinding, Login_ViewModel>(),LoginNavigator {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,11 +22,7 @@ class LoginActivity
     override fun initView() {
         dataBinding.loginVM = viewModel
         viewModel.navigator = this
-        dataBinding.signUp.setOnClickListener{
-            val intent = Intent(this,RegisterActivity::class.java)
-            startActivity(intent)
-            viewModel.showLoading.value=true
-        }
+
     }
 
     override fun getLayoutID(): Int {
@@ -42,6 +36,14 @@ class LoginActivity
         val intent = Intent(this, HomeActivity::class.java)
         startActivity(intent)
         viewModel.showLoading.value=true
+    }
+
+    override fun openRegisterActivity() {
+        dataBinding.signUp.setOnClickListener{
+            val intent = Intent(this, RegisterActivity::class.java)
+            startActivity(intent)
+            viewModel.showLoading.value=true
+        }
     }
 
 }
