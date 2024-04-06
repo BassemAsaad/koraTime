@@ -16,6 +16,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.KoraTime"
         tools:targetApi="31">
+
+
         <activity
             android:name=".location.LocationActivity"
             android:exported="true" >
