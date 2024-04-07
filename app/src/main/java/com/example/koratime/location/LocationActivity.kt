@@ -1,5 +1,7 @@
 package com.example.koratime.location
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.widget.Toast
@@ -10,8 +12,6 @@ import com.example.koratime.basic.BasicActivity
 import com.example.koratime.databinding.ActivityLocationBinding
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-
-
 
 class LocationActivity : BasicActivity<ActivityLocationBinding, LocationViewModel>() {
 
@@ -26,13 +26,15 @@ class LocationActivity : BasicActivity<ActivityLocationBinding, LocationViewMode
         initView()
     }
 
-    lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+
     override fun initView() {
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+
         getLocation()
 
     }
+    lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     fun getLocation() {
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         if (ActivityCompat.checkSelfPermission(this,android.Manifest.permission.ACCESS_FINE_LOCATION)
             != PackageManager.PERMISSION_GRANTED &&
             ActivityCompat.checkSelfPermission(this , android.Manifest.permission.ACCESS_COARSE_LOCATION)
