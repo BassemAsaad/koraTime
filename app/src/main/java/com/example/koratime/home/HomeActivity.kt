@@ -33,7 +33,7 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>() ,HomeNa
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 100
     }
-    override fun openLoginActivity() {
+    override fun LogoutActivity() {
         TODO("Not yet implemented")
     }
     override fun getLayoutID(): Int {
@@ -46,16 +46,6 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>() ,HomeNa
         super.onStart()
         updateLocationEvery10Seconds()
     }
-    private fun updateLocationEvery10Seconds() {
-        handler.post(object : Runnable {
-            override fun run() {
-                getLastKnownLocation()
-                handler.postDelayed(this, 10 * 1000) // Repeat every 10 seconds
-            }
-        })
-    }
-
-
     override fun onStop() {
         super.onStop()
         handler.removeCallbacksAndMessages(null)
@@ -67,15 +57,10 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>() ,HomeNa
 
     }
 
-
-
-
     override fun initView() {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         getLocationIfPermissionGranted()
         openActivity()
-
-
     }
 
     override fun openActivity() {
@@ -89,7 +74,6 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>() ,HomeNa
             if (item.itemId == R.id.home_bar){
                 pushFragment(Stadiums_Fragment())
             }
-
             return@setOnItemSelectedListener true
         }
     }
@@ -99,7 +83,6 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>() ,HomeNa
             .addToBackStack("")
             .commit()
     }
-
     private fun getLocationIfPermissionGranted() {
         if (hasLocationPermissions()) {
             getLastKnownLocation()
@@ -147,8 +130,16 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>() ,HomeNa
             ""
         }
     }
-
-
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) { // Check if the request code matches the location permission request code
+            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) { // Check if permissions are granted
+                getLastKnownLocation() // If permissions are granted, attempt to get the last known location
+            } else {
+                Toast.makeText(this, "Location permission denied.", Toast.LENGTH_SHORT).show() // Show a toast message indicating permission denial
+            }
+        }
+    }
     private fun updateLocationInFirestore(userId: String, latitude: Double, longitude: Double, cityName: String) {
         val db = FirebaseFirestore.getInstance()
         val userRef = db.collection(UserModel.collectionName).document(userId)
@@ -167,16 +158,13 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>() ,HomeNa
             Log.e("Firestore", "Error updating location in Firestore", e)
         }
     }
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) { // Check if the request code matches the location permission request code
-            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) { // Check if permissions are granted
-                getLastKnownLocation() // If permissions are granted, attempt to get the last known location
-            } else {
-                Toast.makeText(this, "Location permission denied.", Toast.LENGTH_SHORT).show() // Show a toast message indicating permission denial
+    private fun updateLocationEvery10Seconds() {
+        handler.post(object : Runnable {
+            override fun run() {
+                getLastKnownLocation()
+                handler.postDelayed(this, 10 * 1000) // Repeat every 10 seconds
             }
-        }
+        })
     }
-
 
 }
