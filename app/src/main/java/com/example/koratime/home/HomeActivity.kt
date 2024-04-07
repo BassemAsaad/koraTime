@@ -141,22 +141,14 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>() ,HomeNa
     private fun getCityName(latitude: Double, longitude: Double): String {
         val geocoder = Geocoder(this, Locale.getDefault())
         val addresses = geocoder.getFromLocation(latitude, longitude, 1)
-        return addresses?.firstOrNull()?.locality ?: ""
+        return if (addresses!!.isNotEmpty()) {
+            addresses[0].locality ?: addresses[0].adminArea ?: ""
+        } else {
+            ""
+        }
     }
 
-    private fun getSpecificPlaceName(latitude: Double, longitude: Double): String {
-        val geocoder = Geocoder(this, Locale.getDefault())
-        var cityName = ""
-        try {
-            val addresses = geocoder.getFromLocation(latitude, longitude, 1)
-            if (addresses!!.isNotEmpty()) {
-                cityName = addresses[0].locality ?: ""
-            }
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-        return cityName
-    }
+
     private fun updateLocationInFirestore(userId: String, latitude: Double, longitude: Double, cityName: String) {
         val db = FirebaseFirestore.getInstance()
         val userRef = db.collection(UserModel.collectionName).document(userId)
