@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.koratime.R
 import com.example.koratime.basic.BasicActivity
 import com.example.koratime.chat.ChatFragment
+import com.example.koratime.database.updateLocationInFirestore
 import com.example.koratime.databinding.ActivityHomeBinding
 import com.example.koratime.model.UserModel
 import com.example.koratime.stadiums.Stadiums_Fragment
@@ -140,24 +141,7 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>() ,HomeNa
             }
         }
     }
-    private fun updateLocationInFirestore(userId: String, latitude: Double, longitude: Double, cityName: String) {
-        val db = FirebaseFirestore.getInstance()
-        val userRef = db.collection(UserModel.collectionName).document(userId)
-        userRef.update(
-            mapOf(
-                "latitude" to latitude,
-                "longitude" to longitude,
-                "city" to cityName
-            )
-        ).addOnSuccessListener {
-            // Handle successful update
-            Toast.makeText(this, "Location updated in Firestore", Toast.LENGTH_SHORT).show()
-        }.addOnFailureListener { e ->
-            // Handle failure
-            Toast.makeText(this, "Failed to update location in Firestore", Toast.LENGTH_SHORT).show()
-            Log.e("Firestore", "Error updating location in Firestore", e)
-        }
-    }
+
     private fun updateLocationEvery10Seconds() {
         handler.post(object : Runnable {
             override fun run() {
