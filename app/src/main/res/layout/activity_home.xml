@@ -21,6 +21,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:menu="@menu/home_bar"
             app:itemIconTint="@color/white"
+            app:itemTextColor="@color/black"
             android:background="@color/primary"
             android:layout_marginHorizontal="1dp"
 
