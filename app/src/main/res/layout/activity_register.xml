@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:fitsSystemWindows="true"
             tools:context=".registration.RegisterActivity"
-            android:background="@drawable/register_bg">
+            android:background="@drawable/main_bg">
 
             <com.google.android.material.appbar.AppBarLayout
                 android:id="@+id/app_bar"

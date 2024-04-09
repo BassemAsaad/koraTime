@@ -14,7 +14,7 @@ import com.example.koratime.home.HomeActivity
 class RoomsActivity : BasicActivity<ActivityRoomsBinding,RoomsViewModel>(),RoomsNavigator {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        initView()
     }
 
     override fun getLayoutID(): Int {

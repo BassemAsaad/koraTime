@@ -16,6 +16,7 @@ import com.example.koratime.basic.BasicActivity
 import com.example.koratime.chat.ChatActivity
 import com.example.koratime.database.updateLocationInFirestore
 import com.example.koratime.databinding.ActivityHomeBinding
+import com.example.koratime.rooms.RoomsActivity
 import com.example.koratime.stadiums.StadiumsActivity
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -39,6 +40,14 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>() ,HomeNa
         initView()
 
     }
+    override fun initView() {
+        viewModel.navigator=this
+        dataBinding.vm=viewModel
+
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+        getLocationIfPermissionGranted()
+        openActivity()
+    }
 
 
     override fun getLayoutID(): Int {
@@ -58,7 +67,11 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>() ,HomeNa
                 startActivity(intent)
             }
             if (item.itemId == R.id.home_bar){
-                val intent = Intent(this,ChatActivity::class.java)
+                val intent = Intent(this,StadiumsActivity::class.java)
+                startActivity(intent)
+            }
+            if (item.itemId == R.id.rooms_bar){
+                val intent = Intent(this,RoomsActivity::class.java)
                 startActivity(intent)
             }
             return@setOnItemSelectedListener true
@@ -68,11 +81,6 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>() ,HomeNa
         TODO("Not yet implemented")
     }
 
-    override fun initView() {
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
-        getLocationIfPermissionGranted()
-        openActivity()
-    }
     private fun pushFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container,fragment)
