@@ -2,28 +2,25 @@ package com.example.koratime.home
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.koratime.R
 import com.example.koratime.basic.BasicActivity
-import com.example.koratime.chat.ChatFragment
+import com.example.koratime.chat.ChatActivity
 import com.example.koratime.database.updateLocationInFirestore
 import com.example.koratime.databinding.ActivityHomeBinding
-import com.example.koratime.model.UserModel
-import com.example.koratime.stadiums.Stadiums_Fragment
+import com.example.koratime.stadiums.StadiumsActivity
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
-import com.google.firebase.firestore.FirebaseFirestore
-import java.io.IOException
 import java.util.Locale
 
 class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>() ,HomeNavigator{
@@ -34,23 +31,8 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>() ,HomeNa
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 100
     }
-    override fun LogoutActivity() {
-        TODO("Not yet implemented")
-    }
-    override fun getLayoutID(): Int {
-        return R.layout.activity_home
-    }
-    override fun initViewModel(): HomeViewModel {
-        return ViewModelProvider(this)[HomeViewModel::class.java]
-    }
-    override fun onStart() {
-        super.onStart()
-        updateLocationEvery10Seconds()
-    }
-    override fun onStop() {
-        super.onStop()
-        handler.removeCallbacksAndMessages(null)
-    }
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,25 +40,38 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>() ,HomeNa
 
     }
 
-    override fun initView() {
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
-        getLocationIfPermissionGranted()
-        openActivity()
+
+    override fun getLayoutID(): Int {
+        return R.layout.activity_home
+    }
+    override fun initViewModel(): HomeViewModel {
+        return ViewModelProvider(this)[HomeViewModel::class.java]
     }
 
     override fun openActivity() {
         dataBinding.homeBar.selectedItemId = R.id.home_bar
-        pushFragment(Stadiums_Fragment())
+//        pushFragment()
 
         dataBinding.homeBar.setOnItemSelectedListener {item->
             if (item.itemId == R.id.chat_bar){
-                pushFragment(ChatFragment())
+                val intent = Intent(this,ChatActivity::class.java)
+                startActivity(intent)
             }
             if (item.itemId == R.id.home_bar){
-                pushFragment(Stadiums_Fragment())
+                val intent = Intent(this,ChatActivity::class.java)
+                startActivity(intent)
             }
             return@setOnItemSelectedListener true
         }
+    }
+    override fun LogoutActivity() {
+        TODO("Not yet implemented")
+    }
+
+    override fun initView() {
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+        getLocationIfPermissionGranted()
+        openActivity()
     }
     private fun pushFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
@@ -94,9 +89,6 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>() ,HomeNa
     private fun hasLocationPermissions(): Boolean {
         return ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
-    }
-    private fun requestLocationPermissions() {
-        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE)
     }
     @SuppressLint("MissingPermission")
     private fun getLastKnownLocation() {
@@ -131,6 +123,9 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>() ,HomeNa
             ""
         }
     }
+    private fun requestLocationPermissions() {
+        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE)
+    }
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) { // Check if the request code matches the location permission request code
@@ -141,7 +136,6 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>() ,HomeNa
             }
         }
     }
-
     private fun updateLocationEvery10Seconds() {
         handler.post(object : Runnable {
             override fun run() {
@@ -150,5 +144,12 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>() ,HomeNa
             }
         })
     }
-
+    override fun onStart() {
+        super.onStart()
+        updateLocationEvery10Seconds()
+    }
+    override fun onStop() {
+        super.onStop()
+        handler.removeCallbacksAndMessages(null)
+    }
 }

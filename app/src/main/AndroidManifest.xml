@@ -16,26 +16,21 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.KoraTime"
         tools:targetApi="31">
-
-
+        <activity
+            android:name=".room.AddRoomActivity"
+            android:exported="false" />
         <activity
             android:name=".location.LocationActivity"
-            android:exported="false" >
-
-        </activity>
-
+            android:exported="false"></activity>
         <activity
             android:name=".registration.create_account.RegisterActivity"
-            android:exported="true">
-
-        </activity>
+            android:exported="true"></activity>
         <activity
             android:name=".registration.sign_in.LoginActivity"
-            android:exported="true"/>
+            android:exported="true" />
         <activity
             android:name=".home.HomeActivity"
             android:exported="true" />
-
         <activity
             android:name=".splash.SplashActivity"
             android:exported="true">
