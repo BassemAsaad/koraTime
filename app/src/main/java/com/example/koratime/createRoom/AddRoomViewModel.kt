@@ -1,4 +1,4 @@
-package com.example.koratime.room
+package com.example.koratime.createRoom
 
 import com.example.koratime.basic.BasicViewModel
 

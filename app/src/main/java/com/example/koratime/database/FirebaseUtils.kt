@@ -2,6 +2,7 @@ package com.example.koratime.database
 
 import android.util.Log
 import android.widget.Toast
+import com.example.koratime.model.RoomModel
 import com.example.koratime.model.UserModel
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
@@ -47,4 +48,21 @@ fun updateLocationInFirestore(userId: String, latitude: Double, longitude: Doubl
         // Handle failure
         Log.e("Firestore", "Error updating location in Firestore")
     }
+}
+
+
+fun addRoomToFirestore(
+    room:RoomModel,
+    onSuccessListener: OnSuccessListener<Void>,
+    onFailureListener: OnFailureListener)
+{
+    val db = Firebase.firestore
+    val collection = db.collection(RoomModel.COLLECTION_NAME)
+    val document = collection.document()
+    room.id = collection.id
+    document.set(room)
+        .addOnSuccessListener(onSuccessListener)
+        .addOnFailureListener(onFailureListener)
+
+
 }

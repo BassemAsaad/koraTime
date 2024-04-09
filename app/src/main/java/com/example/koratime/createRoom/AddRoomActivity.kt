@@ -1,9 +1,11 @@
-package com.example.koratime.room
+package com.example.koratime.createRoom
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.example.koratime.R
+import com.example.koratime.rooms.RoomsActivity
 import com.example.koratime.basic.BasicActivity
 import com.example.koratime.databinding.ActivityAddRoomBinding
 
@@ -26,5 +28,10 @@ class AddRoomActivity : BasicActivity< ActivityAddRoomBinding,AddRoomViewModel>(
         dataBinding.vm = viewModel
 
 
+    }
+    override fun roomActivity() {
+        Toast.makeText(this, "Room Added Successfully", Toast.LENGTH_SHORT).show()
+        val intent = Intent(this, RoomsActivity::class.java)
+        startActivity(intent)
     }
 }

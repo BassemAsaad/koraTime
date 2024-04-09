@@ -6,13 +6,152 @@
     <data>
         <variable
             name="vm"
-            type="com.example.koratime.room.AddRoomViewModel" />
+            type="com.example.koratime.createRoom.AddRoomViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".room.AddRoomActivity">
+        tools:context=".addRoom.AddRoomActivity"
+        android:background="@drawable/register_bg"
+        >
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/app_bar"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:fitsSystemWindows="true"
+            android:background="@color/transparent"
+            android:elevation="0dp">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                >
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="20dp"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:text="Add Room"
+                        android:textSize="40sp"
+                        android:textColor="@color/white"
+                        android:background="@color/transparent"
+                        android:gravity="center" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.appbar.MaterialToolbar>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/app_bar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:background="@drawable/bg_rounded"
+            app:layout_constraintWidth_percent=".8"
+            android:layout_marginBottom="50dp"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                android:orientation="vertical"
+                android:paddingHorizontal="10dp">
+
+
+                <TextView
+                    android:id="@+id/newRoom_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|top"
+                    android:text="Create new Room"
+                    android:textSize="18dp"
+                    android:padding="20dp"
+                    android:textStyle="bold"
+                    />
+
+                <ImageView
+                    android:id="@+id/img_group"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_group"
+                    android:layout_marginTop="8dp"
+                    />
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/roomName_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/img_group"
+                    android:layout_marginTop="12dp"
+                    app:error="@{vm.roomNameError}"
+                    >
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="Enter Room Name"
+                        android:text="@={vm.roomName}"
+                        />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/roomDescription_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/img_group"
+                    android:layout_marginTop="12dp"
+                    app:error="@{vm.descriptionError}"
+
+                    >
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="Enter Room Description"
+                        android:text="@={vm.description}"
+                        android:lines="4"
+
+                        />
+                </com.google.android.material.textfield.TextInputLayout>
+                <Spinner
+                    android:id="@+id/roomSpinner_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:layout_marginTop="12dp"
+
+                    />
+
+                <Button
+                    android:id="@+id/roomButton_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Create room"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="20dp"
+                    android:layout_margin="10dp"
+                    android:onClick="@{()->vm.createRoom()}"
+
+
+                    />
+
+            </LinearLayout>
+
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>
