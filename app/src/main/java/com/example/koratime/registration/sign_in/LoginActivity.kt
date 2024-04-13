@@ -11,7 +11,7 @@ import com.example.koratime.home.HomeActivity
 
 
 class LoginActivity
-    : BasicActivity<ActivityLoginBinding, Login_ViewModel>(),LoginNavigator {
+    : BasicActivity<ActivityLoginBinding, LoginViewModel>(),LoginNavigator {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,8 +27,8 @@ class LoginActivity
     override fun getLayoutID(): Int {
         return R.layout.activity_login
     }
-    override fun initViewModel(): Login_ViewModel {
-        return ViewModelProvider(this).get(Login_ViewModel::class.java)
+    override fun initViewModel(): LoginViewModel {
+        return ViewModelProvider(this).get(LoginViewModel::class.java)
     }
 
     override fun openHomeActivity() {

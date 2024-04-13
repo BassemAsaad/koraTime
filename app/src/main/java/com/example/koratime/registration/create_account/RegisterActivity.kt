@@ -9,7 +9,7 @@ import com.example.koratime.databinding.ActivityRegisterBinding
 import com.example.koratime.registration.sign_in.LoginActivity
 import com.example.koratime.home.HomeActivity
 
-class RegisterActivity : BasicActivity<ActivityRegisterBinding, Register_ViewModel>(),RegisterNavigator {
+class RegisterActivity : BasicActivity<ActivityRegisterBinding, RegisterViewModel>(),RegisterNavigator {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,8 +26,8 @@ class RegisterActivity : BasicActivity<ActivityRegisterBinding, Register_ViewMod
     override fun getLayoutID(): Int {
         return R.layout.activity_register
     }
-    override fun initViewModel(): Register_ViewModel {
-        return ViewModelProvider(this).get(Register_ViewModel::class.java)
+    override fun initViewModel(): RegisterViewModel {
+        return ViewModelProvider(this).get(RegisterViewModel::class.java)
     }
     override fun openLoginActivity() {
         val intent = Intent(this, LoginActivity::class.java)

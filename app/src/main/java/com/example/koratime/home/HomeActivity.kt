@@ -2,7 +2,6 @@ package com.example.koratime.home
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.os.Bundle
@@ -13,11 +12,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.koratime.R
 import com.example.koratime.basic.BasicActivity
-import com.example.koratime.chat.ChatActivity
+import com.example.koratime.chat.ChatFragment
 import com.example.koratime.database.updateLocationInFirestore
 import com.example.koratime.databinding.ActivityHomeBinding
-import com.example.koratime.rooms.RoomsActivity
-import com.example.koratime.stadiums.StadiumsActivity
+import com.example.koratime.rooms.RoomsFragment
+import com.example.koratime.stadiums.StadiumsFragment
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.firebase.Firebase
@@ -63,16 +62,13 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>() ,HomeNa
 
         dataBinding.homeBar.setOnItemSelectedListener {item->
             if (item.itemId == R.id.chat_bar){
-                val intent = Intent(this,ChatActivity::class.java)
-                startActivity(intent)
+                pushFragment(ChatFragment())
             }
             if (item.itemId == R.id.home_bar){
-                val intent = Intent(this,StadiumsActivity::class.java)
-                startActivity(intent)
+                pushFragment(StadiumsFragment())
             }
             if (item.itemId == R.id.rooms_bar){
-                val intent = Intent(this,RoomsActivity::class.java)
-                startActivity(intent)
+                pushFragment(RoomsFragment())
             }
             return@setOnItemSelectedListener true
         }

@@ -17,7 +17,7 @@
         android:theme="@style/Theme.KoraTime"
         tools:targetApi="31">
         <activity
-            android:name=".rooms.RoomsActivity"
+            android:name=".rooms.RoomsFragment"
             android:exported="false" />
         <activity
             android:name=".createRoom.AddRoomActivity"

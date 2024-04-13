@@ -11,7 +11,7 @@ import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.*
 import com.google.firebase.auth.*
 
-class Login_ViewModel : BasicViewModel<LoginNavigator>() {
+class LoginViewModel : BasicViewModel<LoginNavigator>() {
 
     val email_login = ObservableField<String>()
     val emailError_login = ObservableField<String>()

@@ -8,7 +8,7 @@ import com.example.koratime.model.UserModel
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 
-class Register_ViewModel : BasicViewModel<RegisterNavigator>() {
+class RegisterViewModel : BasicViewModel<RegisterNavigator>() {
     val firstName = ObservableField<String>()
     val firstNameError = ObservableField<String>()
 

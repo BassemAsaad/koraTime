@@ -6,7 +6,7 @@
     <data>
         <variable
             name="loginVM"
-            type="com.example.koratime.registration.sign_in.Login_ViewModel" />
+            type="com.example.koratime.registration.sign_in.LoginViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
