@@ -2,6 +2,7 @@ package com.example.koratime.home
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.os.Bundle
@@ -15,6 +16,7 @@ import com.example.koratime.basic.BasicActivity
 import com.example.koratime.chat.ChatFragment
 import com.example.koratime.database.updateLocationInFirestore
 import com.example.koratime.databinding.ActivityHomeBinding
+import com.example.koratime.registration.log_in.LoginActivity
 import com.example.koratime.rooms.RoomsFragment
 import com.example.koratime.stadiums.StadiumsFragment
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -74,7 +76,8 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>() ,HomeNa
         }
     }
     override fun LogoutActivity() {
-        TODO("Not yet implemented")
+        val intent = Intent(this,LoginActivity::class.java)
+        startActivity(intent)
     }
 
     private fun pushFragment(fragment: Fragment) {
@@ -150,7 +153,7 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>() ,HomeNa
     }
     override fun onStart() {
         super.onStart()
-        updateLocationEvery10Seconds()
+//        updateLocationEvery10Seconds()
     }
     override fun onStop() {
         super.onStop()

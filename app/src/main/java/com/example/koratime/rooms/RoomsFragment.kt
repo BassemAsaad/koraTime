@@ -41,13 +41,17 @@ class RoomsFragment : Fragment(),RoomsNavigator {
 
 
      fun initView() {
-        dataBinding.vm = viewModel
-        viewModel.navigator=this
+         dataBinding.vm = viewModel
+         viewModel.navigator=this
+         addRoomActivity()
     }
 
     override fun addRoomActivity() {
-        val intent = Intent(requireContext(), AddRoomActivity::class.java)
-        startActivity(intent)
+        dataBinding.createRoomButton.setOnClickListener {
+            val intent = Intent(requireContext(), AddRoomActivity::class.java)
+            startActivity(intent)
+        }
+
     }
 
 

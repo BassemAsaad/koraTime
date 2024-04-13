@@ -25,6 +25,7 @@
             android:background="@color/primary"
             android:layout_marginHorizontal="1dp"
 
+
             />
 
         <FrameLayout

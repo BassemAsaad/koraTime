@@ -38,9 +38,6 @@ class RegisterViewModel : BasicViewModel<RegisterNavigator>() {
 
     }
 
-    fun login(){
-        navigator?.openLoginActivity()
-    }
 
     private fun addAccount_toFirebase() {
         showLoading.value = true
@@ -51,7 +48,7 @@ class RegisterViewModel : BasicViewModel<RegisterNavigator>() {
                     Log.e("Firebase: ",task.exception?.localizedMessage.toString())
                 } else{
                     showLoading.value = false
-                    Log.e("Firebase: ", "Success")
+                    Log.e("Firebase: ", "account added to firestore")
                     createFirestore_User(task.result.user?.uid)
 
                 }
@@ -60,7 +57,6 @@ class RegisterViewModel : BasicViewModel<RegisterNavigator>() {
     }
 
     private fun createFirestore_User(uid: String?) {
-        showLoading.value=true
         val user = UserModel(
             id = uid,
             firstName = firstName.get(),
@@ -72,7 +68,7 @@ class RegisterViewModel : BasicViewModel<RegisterNavigator>() {
             user,
             //OnSuccessListener
             {
-                showLoading.value=false
+                Log.e("Firebase: ", "account added to firestore")
                 messageLiveData.value = "Successful Register"
             },
             //OnFailureListener

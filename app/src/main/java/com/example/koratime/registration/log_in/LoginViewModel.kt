@@ -1,4 +1,4 @@
-package com.example.koratime.registration.sign_in
+package com.example.koratime.registration.log_in
 
 
 import android.util.Log
@@ -31,9 +31,6 @@ class LoginViewModel : BasicViewModel<LoginNavigator>() {
 
     }
 
-    fun createAccount(){
-        navigator?.openRegisterActivity()
-    }
 
     fun login_withFirebase() {
         showLoading.value=true
@@ -46,8 +43,7 @@ class LoginViewModel : BasicViewModel<LoginNavigator>() {
                     messageLiveData.value = "Invalid Email or Password"
                 }else{
 
-                    Log.e("Firebase: ", "Successful")
-
+                    Log.e("Firebase: ", "Successful Login")
                     showLoading.value = false
                     messageLiveData.value = "Successful Login"
                     getUser_fromFirestore(task.result.user?.uid)
@@ -57,25 +53,22 @@ class LoginViewModel : BasicViewModel<LoginNavigator>() {
     }
 
     private fun getUser_fromFirestore(uid: String?) {
-        showLoading.value=true
         getUserData_forLogin(
             uid,
             //OnSuccessListener
             OnSuccessListener{docSnapshot->
-                showLoading.value=false
                 val user = docSnapshot.toObject(UserModel::class.java)
                 if (user == null){
                     messageLiveData.value = "Invalid Email or Password"
+                    Log.e("Firebase: ", "Successful Login")
                     return@OnSuccessListener
 
                 }else{
-                    showLoading.value=false
                     navigator?.openHomeActivity()
                 }
             }//end OnSuccessListener
             ,
             OnFailureListener{
-                showLoading.value=false
                 messageLiveData.value = it.localizedMessage
             }//end OnFailureListener
         )

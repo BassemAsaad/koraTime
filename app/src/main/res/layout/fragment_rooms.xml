@@ -61,6 +61,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             >
             <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/createRoom_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -69,7 +70,6 @@
                 android:layout_marginBottom="20dp"
                 android:backgroundTint="@color/primary"
                 android:src="@drawable/ic_add"
-                android:onClick="@{()->vm.createRoom()}"
                 />
 
 

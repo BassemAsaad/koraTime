@@ -1,4 +1,4 @@
-package com.example.koratime.registration.sign_in
+package com.example.koratime.registration.log_in
 import android.content.Intent
 import android.os.Bundle
 
@@ -22,6 +22,7 @@ class LoginActivity
     override fun initView() {
         dataBinding.loginVM = viewModel
         viewModel.navigator = this
+        openRegisterActivity()
     }
 
     override fun getLayoutID(): Int {

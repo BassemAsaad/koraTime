@@ -1,13 +1,12 @@
 package com.example.koratime.splash
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import com.example.koratime.R
-import com.example.koratime.registration.sign_in.LoginActivity
+import com.example.koratime.registration.log_in.LoginActivity
 
 
 class SplashActivity : AppCompatActivity() {

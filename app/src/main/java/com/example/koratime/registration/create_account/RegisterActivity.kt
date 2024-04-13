@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.koratime.basic.BasicActivity
 import com.example.koratime.R
 import com.example.koratime.databinding.ActivityRegisterBinding
-import com.example.koratime.registration.sign_in.LoginActivity
+import com.example.koratime.registration.log_in.LoginActivity
 import com.example.koratime.home.HomeActivity
 
 class RegisterActivity : BasicActivity<ActivityRegisterBinding, RegisterViewModel>(),RegisterNavigator {
@@ -30,8 +30,10 @@ class RegisterActivity : BasicActivity<ActivityRegisterBinding, RegisterViewMode
         return ViewModelProvider(this).get(RegisterViewModel::class.java)
     }
     override fun openLoginActivity() {
-        val intent = Intent(this, LoginActivity::class.java)
-        startActivity(intent)
+        dataBinding.logIn.setOnClickListener {
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+        }
         viewModel.showLoading.value=true
     }
 

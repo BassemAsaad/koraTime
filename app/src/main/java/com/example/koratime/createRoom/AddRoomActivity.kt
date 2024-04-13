@@ -26,7 +26,10 @@ class AddRoomActivity : BasicActivity< ActivityAddRoomBinding,AddRoomViewModel>(
     override fun initView() {
         viewModel.navigator = this
         dataBinding.vm = viewModel
-
+        dataBinding.backbuttonToolbar.setOnClickListener{
+            val intent = Intent(this, RoomsFragment::class.java)
+            startActivity(intent)
+        }
 
     }
     override fun roomActivity() {

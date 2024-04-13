@@ -29,7 +29,7 @@
             android:name=".registration.create_account.RegisterActivity"
             android:exported="true" />
         <activity
-            android:name=".registration.sign_in.LoginActivity"
+            android:name=".registration.log_in.LoginActivity"
             android:exported="true" />
         <activity
             android:name=".home.HomeActivity"
