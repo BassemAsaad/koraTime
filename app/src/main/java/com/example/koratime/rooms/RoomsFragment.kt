@@ -9,7 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.koratime.R
-import com.example.koratime.createRoom.AddRoomActivity
+import com.example.koratime.rooms.createRoom.AddRoomActivity
 import com.example.koratime.databinding.FragmentRoomsBinding
 
 class RoomsFragment : Fragment(),RoomsNavigator {

@@ -48,7 +48,7 @@ class StadiumsFragment : Fragment(),StadiumsNavigator{
 
 
         openImagePicker()
-        //data binding
+            //data binding
             // Launch the photo picker and let the user choose only images.
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
 

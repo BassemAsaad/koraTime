@@ -4,15 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <variable
-            name="vm"
-            type="com.example.koratime.rooms.createRoom.AddRoomViewModel" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".addRoom.AddRoomActivity"
+        tools:context=".stadiums.createStadium.AddStadiumActivity"
         android:background="@drawable/main_bg"
         >
         <com.google.android.material.appbar.AppBarLayout
@@ -40,7 +38,7 @@
                         android:layout_height="wrap_content"
                         android:background="@color/transparent"
                         android:gravity="center"
-                        android:text="Add Room"
+                        android:text="Add Stadium"
                         android:textColor="@color/white"
                         android:textSize="40sp"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -53,7 +51,6 @@
             </com.google.android.material.appbar.MaterialToolbar>
 
         </com.google.android.material.appbar.AppBarLayout>
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -79,20 +76,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|top"
-                    android:text="Create new Room"
-                    android:textSize="18dp"
+                    android:text="Add Your Stadium"
+                    android:textSize="20dp"
                     android:padding="20dp"
                     android:textStyle="bold"
                     />
 
-                <ImageView
-                    android:id="@+id/img_group"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_group"
-                    android:layout_marginTop="8dp"
-                    />
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/roomName_layout"
                     android:layout_width="match_parent"
@@ -104,8 +93,8 @@
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:hint="Enter Room Name"
-                        android:text="@={vm.roomName}"
+                        android:hint="Enter Your Stadium Name"
+                        android:text=""
                         />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -115,15 +104,15 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintTop_toBottomOf="@id/img_group"
                     android:layout_marginTop="12dp"
-                    app:error="@{vm.descriptionError}"
+                    app:error=" "
 
                     >
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:hint="Enter Room Description"
-                        android:text="@={vm.description}"
-                        android:lines="4"
+                        android:hint="Enter Your Stadium Description"
+                        android:text=""
+                        android:lines="3"
 
                         />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -143,7 +132,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="Add Group Picture"
+                    android:text="Add Stadium Pictures"
                     android:textColor="@color/black"
                     android:textSize="12sp"
                     android:layout_marginTop="5dp"
@@ -153,11 +142,10 @@
                     android:id="@+id/roomButton_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Create room"
+                    android:text="Add Stadium"
                     android:layout_gravity="center"
                     android:layout_marginTop="20dp"
                     android:layout_margin="20dp"
-                    android:onClick="@{()->vm.createRoom()}"
                     android:backgroundTint="@color/primary"
                     />
 
@@ -168,6 +156,6 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

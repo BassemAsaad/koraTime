@@ -1,4 +1,4 @@
-package com.example.koratime.createRoom
+package com.example.koratime.rooms.createRoom
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -19,7 +19,8 @@ import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 
 @Suppress("DEPRECATION")
-class AddRoomActivity : BasicActivity< ActivityAddRoomBinding,AddRoomViewModel>(),AddRoomNavigator{
+class AddRoomActivity : BasicActivity< ActivityAddRoomBinding, AddRoomViewModel>(),
+    AddRoomNavigator {
 
     lateinit var pickMedia : ActivityResultLauncher<PickVisualMediaRequest>
 

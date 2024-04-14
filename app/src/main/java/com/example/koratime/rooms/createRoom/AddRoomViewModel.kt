@@ -1,4 +1,4 @@
-package com.example.koratime.createRoom
+package com.example.koratime.rooms.createRoom
 
 import androidx.databinding.ObservableField
 import com.example.koratime.basic.BasicViewModel
