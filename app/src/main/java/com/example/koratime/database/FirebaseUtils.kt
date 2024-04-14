@@ -1,7 +1,7 @@
 package com.example.koratime.database
 
+import android.net.Uri
 import android.util.Log
-import android.widget.Toast
 import com.example.koratime.model.RoomModel
 import com.example.koratime.model.UserModel
 import com.google.android.gms.tasks.OnFailureListener
@@ -10,6 +10,8 @@ import com.google.firebase.Firebase
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
+import com.google.firebase.storage.FirebaseStorage
+import java.util.UUID
 
 fun addUser_toFirestore(user : UserModel,
                         onSuccessListener: OnSuccessListener<Void>,
@@ -64,5 +66,23 @@ fun addRoomToFirestore(
         .addOnSuccessListener(onSuccessListener)
         .addOnFailureListener(onFailureListener)
 
+}
 
+fun uploadImageToStorage(
+    imageUri: Uri,
+    onSuccessListener: OnSuccessListener<Uri>,
+    onFailureListener: OnFailureListener
+) {
+    val storage = FirebaseStorage.getInstance()
+    val storageRef = storage.reference
+    val imagesRef = storageRef.child("images/${UUID.randomUUID()}")
+    val uploadTask = imagesRef.putFile(imageUri)
+
+    uploadTask.addOnSuccessListener { taskSnapshot ->
+        // Image uploaded successfully
+        imagesRef.downloadUrl.addOnSuccessListener { uri ->
+            // Get the download URL for the uploaded image
+            onSuccessListener.onSuccess(uri)
+        }.addOnFailureListener(onFailureListener)
+    }.addOnFailureListener(onFailureListener)
 }

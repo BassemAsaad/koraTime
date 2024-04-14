@@ -47,6 +47,8 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-auth")
     implementation ("com.google.firebase:firebase-firestore-ktx:24.11.0")
+    implementation("com.google.firebase:firebase-storage")
+
     implementation ("com.google.android.gms:play-services-location:21.2.0")
 
     //activitycompose

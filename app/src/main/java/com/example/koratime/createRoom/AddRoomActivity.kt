@@ -13,7 +13,10 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.koratime.R
 import com.example.koratime.rooms.RoomsFragment
 import com.example.koratime.basic.BasicActivity
+import com.example.koratime.database.uploadImageToStorage
 import com.example.koratime.databinding.ActivityAddRoomBinding
+import com.google.android.gms.tasks.OnFailureListener
+import com.google.android.gms.tasks.OnSuccessListener
 
 @Suppress("DEPRECATION")
 class AddRoomActivity : BasicActivity< ActivityAddRoomBinding,AddRoomViewModel>(),AddRoomNavigator{
@@ -54,14 +57,25 @@ class AddRoomActivity : BasicActivity< ActivityAddRoomBinding,AddRoomViewModel>(
     fun openImagePicker(){
         // Registers a photo picker activity launcher in single-select mode.
          pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-            // Callback is invoked after the user selects a media item or closes the
-            // photo picker.
+            // photo picker
             if (uri != null) {
                 Log.d("PhotoPicker", "Selected URI: $uri")
+                uploadImageToStorage(uri,
+                    onSuccessListener = { downloadUri ->
+                        Log.e("Firebase Storage:", "Image uploaded successfully")
+                        // Do something with the downloadUri if needed
+
+                    },
+                    onFailureListener = {
+                        Log.e("Firebase Storage:", it.localizedMessage!!.toString())
+                    }
+                )
+
                 dataBinding.roomImageLayout.setImageURI(uri)
                 dataBinding.roomImageTextLayout.text = "Change Picture Chosen"
             } else {
-                Log.d("PhotoPicker", "No media selected")
+                Toast.makeText(this, "No image selected", Toast.LENGTH_SHORT).show()
+                Log.d("PhotoPicker", "No image selected")
             }
         }
 
@@ -69,7 +83,7 @@ class AddRoomActivity : BasicActivity< ActivityAddRoomBinding,AddRoomViewModel>(
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        // go back to the previous fragment when back button clicked on the toolbar
+        // go to the previous fragment when back button clicked on toolbar
         onBackPressed()
         return true
     }
