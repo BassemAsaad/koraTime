@@ -74,18 +74,18 @@
 
 
                 <TextView
-                    android:id="@+id/newRoom_textView"
+                    android:id="@+id/newStadium_textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|top"
-                    android:text="Create new Room"
+                    android:text="Create new Stadium"
                     android:textSize="18dp"
                     android:padding="20dp"
                     android:textStyle="bold"
                     />
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/roomName_layout"
+                    android:id="@+id/stadiumName_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layout_constraintTop_toBottomOf="@id/img_group"
@@ -95,13 +95,13 @@
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:hint="Enter Room Name"
+                        android:hint="Enter Stadium Name"
                         android:text="@={vm.stadiumName}"
                         />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/roomDescription_layout"
+                    android:id="@+id/stadiumDescription_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layout_constraintTop_toBottomOf="@id/img_group"
@@ -112,7 +112,7 @@
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:hint="Enter Room Description"
+                        android:hint="Enter Stadium Description"
                         android:text="@={vm.stadiumDescription}"
                         android:lines="4"
 
@@ -120,7 +120,7 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/roomImage_layout"
+                    android:id="@+id/stadiumImage_layout"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_gravity="center"
@@ -130,11 +130,11 @@
                     app:civ_border_color="@color/primaryVariant"
                     />
                 <TextView
-                    android:id="@+id/roomImageText_layout"
+                    android:id="@+id/stadiumImageText_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="Add Group Picture"
+                    android:text="Add Stadium Picture"
                     android:textColor="@color/black"
                     android:textSize="12sp"
                     android:layout_marginTop="5dp"
@@ -144,7 +144,7 @@
                     android:id="@+id/roomButton_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Create room"
+                    android:text="Create Stadium"
                     android:layout_gravity="center"
                     android:layout_marginTop="20dp"
                     android:layout_margin="20dp"
