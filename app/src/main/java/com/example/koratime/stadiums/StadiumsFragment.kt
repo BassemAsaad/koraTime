@@ -47,26 +47,8 @@ class StadiumsFragment : Fragment(),StadiumsNavigator{
         viewModel.navigator=this
 
 
-        openImagePicker()
-            //data binding
-            // Launch the photo picker and let the user choose only images.
-            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-
-
     }
-    fun openImagePicker(){
-        // Registers a photo picker activity launcher in single-select mode.
-        pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-            // Callback is invoked after the user selects a media item or closes the
-            // photo picker.
-            if (uri != null) {
-                Log.d("PhotoPicker", "Selected URI: $uri")
-//                dataBinding.roomImageLayout.setImageURI(uri)
-            } else {
-                Log.d("PhotoPicker", "No media selected")
-            }
-        }
 
 
-    }
+
 }

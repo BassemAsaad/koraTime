@@ -15,6 +15,7 @@ class AddRoomViewModel : BasicViewModel<AddRoomNavigator>() {
     val descriptionError = ObservableField<String>()
     val imageUrl = ObservableField<String>()
 
+
     private val user = Firebase.auth.currentUser
     fun createRoom(){
         if (validate()){
@@ -26,6 +27,7 @@ class AddRoomViewModel : BasicViewModel<AddRoomNavigator>() {
             )
             //add in firebase
             addRoom(room)
+            navigator?.roomsFragment()
         }
     }
     private fun addRoom(room: RoomModel) {
@@ -61,4 +63,10 @@ class AddRoomViewModel : BasicViewModel<AddRoomNavigator>() {
 
         return valid
     }
+
+
+
+
+
+
 }
