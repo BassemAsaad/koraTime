@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <variable
+            name="vm"
+            type="com.example.koratime.stadiums.createStadium.AddStadiumViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -72,7 +74,7 @@
 
 
                 <TextView
-                    android:id="@+id/newRoom_textView"
+                    android:id="@+id/newStadium_textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|top"
@@ -83,7 +85,7 @@
                     />
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/roomName_layout"
+                    android:id="@+id/stadiumName_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layout_constraintTop_toBottomOf="@id/img_group"
@@ -99,7 +101,7 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/roomDescription_layout"
+                    android:id="@+id/stadiumDescription_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layout_constraintTop_toBottomOf="@id/img_group"
@@ -117,7 +119,7 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/roomImage_layout"
+                    android:id="@+id/stadiumImage_layout"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_gravity="center"
@@ -127,7 +129,7 @@
                     app:civ_border_color="@color/primaryVariant"
                     />
                 <TextView
-                    android:id="@+id/roomImageText_layout"
+                    android:id="@+id/stadiumImageText_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -138,7 +140,7 @@
                     />
 
                 <Button
-                    android:id="@+id/roomButton_layout"
+                    android:id="@+id/stadiumButton_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Add Stadium"

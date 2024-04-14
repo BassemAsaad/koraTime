@@ -90,9 +90,10 @@ class AddRoomActivity : BasicActivity< ActivityAddRoomBinding, AddRoomViewModel>
         return true
     }
 
-    override fun roomActivity() {
+    override fun roomsFragment() {
         Toast.makeText(this, "Room Added Successfully", Toast.LENGTH_SHORT).show()
         val intent = Intent(this, RoomsFragment::class.java)
         startActivity(intent)
+        finish()
     }
 }

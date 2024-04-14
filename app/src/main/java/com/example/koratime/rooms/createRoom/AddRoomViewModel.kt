@@ -36,7 +36,7 @@ class AddRoomViewModel : BasicViewModel<AddRoomNavigator>() {
                 showLoading.value=false
 
                 //navigate
-                navigator?.roomActivity()
+                navigator?.roomsFragment()
             },
             onFailureListener = {
                 showLoading.value=false

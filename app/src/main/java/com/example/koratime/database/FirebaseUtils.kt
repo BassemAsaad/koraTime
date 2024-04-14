@@ -3,6 +3,7 @@ package com.example.koratime.database
 import android.net.Uri
 import android.util.Log
 import com.example.koratime.model.RoomModel
+import com.example.koratime.model.StadiumModel
 import com.example.koratime.model.UserModel
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
@@ -66,6 +67,20 @@ fun addRoomToFirestore(
         .addOnSuccessListener(onSuccessListener)
         .addOnFailureListener(onFailureListener)
 
+}
+
+fun addStadiumToFirestore(
+    stadium:StadiumModel,
+    onSuccessListener: OnSuccessListener<Void>,
+    onFailureListener: OnFailureListener)
+{
+    val db = Firebase.firestore
+    val collection = db.collection(StadiumModel.COLLECTION_NAME)
+    val document = collection.document()
+    stadium.id = collection.id
+    document.set(stadium)
+        .addOnSuccessListener(onSuccessListener)
+        .addOnFailureListener(onFailureListener)
 }
 
 fun uploadImageToStorage(
