@@ -49,17 +49,6 @@
                         android:background="@color/transparent"
                         android:gravity="center" />
 
-                    <ImageView
-                        android:id="@+id/backbutton_toolbar"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        android:src="@drawable/ic_back_arrow"
-
-
-                        />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.appbar.MaterialToolbar>
@@ -146,9 +135,9 @@
                     android:layout_height="100dp"
                     android:layout_gravity="center"
                     android:layout_marginTop="12dp"
-                    tools:src="@drawable/stadium_img"
+                    android:src="@drawable/stadium_img"
                     app:civ_border_width="3dp"
-                    app:civ_border_color="@color/white"
+                    app:civ_border_color="@color/primaryVariant"
 
                     />
                 <TextView
@@ -169,7 +158,7 @@
                     android:layout_marginTop="20dp"
                     android:layout_margin="10dp"
                     android:onClick="@{()->vm.createRoom()}"
-
+                    android:backgroundTint="@color/primary"
                     />
 
             </LinearLayout>
