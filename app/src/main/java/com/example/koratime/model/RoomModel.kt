@@ -6,7 +6,6 @@ data class RoomModel(
     var id: String?=null,
     val name: String?=null,
     val description: String?=null,
-    val imageUri : URI?=null,
     val userManager: String? =null
 ) {
     companion object {
