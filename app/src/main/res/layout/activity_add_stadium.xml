@@ -90,13 +90,13 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintTop_toBottomOf="@id/img_group"
                     android:layout_marginTop="12dp"
-                    app:error=""
+                    app:error="@{vm.stadiumNameError}"
                     >
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:hint="Enter Your Stadium Name"
-                        android:text=""
+                        android:text="@={vm.stadiumName}"
                         />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -106,14 +106,14 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintTop_toBottomOf="@id/img_group"
                     android:layout_marginTop="12dp"
-                    app:error=" "
+                    app:error="@{vm.descriptionError}"
 
                     >
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:hint="Enter Your Stadium Description"
-                        android:text=""
+                        android:text="@={vm.description}"
                         android:lines="3"
                         />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -148,6 +148,8 @@
                     android:layout_marginTop="20dp"
                     android:layout_margin="20dp"
                     android:backgroundTint="@color/primary"
+                    android:onClick="@{()->vm.createStadium()}"
+
                     />
 
             </LinearLayout>
