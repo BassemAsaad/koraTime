@@ -13,8 +13,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".home.HomeActivity"
-        android:background="@drawable/main_bg"
+        tools:background="@drawable/main_bg"
         >
 
         <com.google.android.material.appbar.AppBarLayout
@@ -48,7 +47,9 @@
                         android:textSize="40sp"
                         android:textColor="@color/white"
                         android:background="@color/transparent"
-                        android:gravity="center" />
+                        android:gravity="center"
+                        android:padding="10dp"
+                        />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.appbar.MaterialToolbar>
 

@@ -61,8 +61,6 @@ class AddStadiumActivity : BasicActivity<ActivityAddStadiumBinding, AddStadiumVi
     }
     override fun stadiumFragment() {
         Toast.makeText(this, "Stadium Added Successfully", Toast.LENGTH_SHORT).show()
-        val intent = Intent(this, StadiumsFragment::class.java)
-        startActivity(intent)
         finish()
     }
 
