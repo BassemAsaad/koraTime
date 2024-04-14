@@ -13,26 +13,21 @@ class AddRoomViewModel : BasicViewModel<AddRoomNavigator>() {
     val roomNameError = ObservableField<String>()
     val description = ObservableField<String>()
     val descriptionError = ObservableField<String>()
-
+    val imageUrl = ObservableField<String>()
 
     private val user = Firebase.auth.currentUser
-
-
     fun createRoom(){
         if (validate()){
             val room = RoomModel(
                 name = roomName.get(),
                 description = description.get(),
-                //img
+                imageUrl = imageUrl.get(),
                 userManager = user?.uid
             )
             //add in firebase
             addRoom(room)
-
         }
-
     }
-
     private fun addRoom(room: RoomModel) {
         showLoading.value=true
         addRoomToFirestore(
@@ -49,7 +44,6 @@ class AddRoomViewModel : BasicViewModel<AddRoomNavigator>() {
             }
         )
     }
-
     fun validate():Boolean{
         var valid = true
         if (roomName.get().isNullOrBlank()){
@@ -67,5 +61,4 @@ class AddRoomViewModel : BasicViewModel<AddRoomNavigator>() {
 
         return valid
     }
-
 }

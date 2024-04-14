@@ -138,7 +138,6 @@
                     android:src="@drawable/stadium_img"
                     app:civ_border_width="3dp"
                     app:civ_border_color="@color/primaryVariant"
-
                     />
                 <TextView
                     android:id="@+id/roomImageText_layout"

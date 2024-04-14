@@ -63,7 +63,8 @@ class AddRoomActivity : BasicActivity< ActivityAddRoomBinding,AddRoomViewModel>(
                 uploadImageToStorage(uri,
                     onSuccessListener = { downloadUri ->
                         Log.e("Firebase Storage:", "Image uploaded successfully")
-                        // Do something with the downloadUri if needed
+                        // pass imageUrl to view model
+                        viewModel.imageUrl.set(downloadUri.toString())
 
                     },
                     onFailureListener = {
