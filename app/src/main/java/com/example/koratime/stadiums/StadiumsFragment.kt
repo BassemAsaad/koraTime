@@ -47,7 +47,7 @@ class StadiumsFragment : Fragment(),StadiumsNavigator{
     fun initView() {
         dataBinding.vm = viewModel
         viewModel.navigator=this
-
+        addStadiumActivity()
 
     }
 

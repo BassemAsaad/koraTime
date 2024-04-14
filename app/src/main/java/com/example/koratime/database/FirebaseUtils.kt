@@ -66,7 +66,6 @@ fun addRoomToFirestore(
     document.set(room)
         .addOnSuccessListener(onSuccessListener)
         .addOnFailureListener(onFailureListener)
-
 }
 
 fun addStadiumToFirestore(
@@ -81,6 +80,7 @@ fun addStadiumToFirestore(
     document.set(stadium)
         .addOnSuccessListener(onSuccessListener)
         .addOnFailureListener(onFailureListener)
+
 }
 
 fun uploadImageToStorage(
@@ -93,11 +93,12 @@ fun uploadImageToStorage(
     val imagesRef = storageRef.child("images/${UUID.randomUUID()}")
     val uploadTask = imagesRef.putFile(imageUri)
 
-    uploadTask.addOnSuccessListener { taskSnapshot ->
+    uploadTask.addOnSuccessListener {
         // Image uploaded successfully
         imagesRef.downloadUrl.addOnSuccessListener { uri ->
             // Get the download URL for the uploaded image
             onSuccessListener.onSuccess(uri)
         }.addOnFailureListener(onFailureListener)
     }.addOnFailureListener(onFailureListener)
+
 }

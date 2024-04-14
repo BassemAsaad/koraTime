@@ -7,6 +7,4 @@ import com.example.koratime.basic.BasicViewModel
 
 class StadiumsViewModel : BasicViewModel<StadiumsNavigator>() {
 
-
-
-    }
+}

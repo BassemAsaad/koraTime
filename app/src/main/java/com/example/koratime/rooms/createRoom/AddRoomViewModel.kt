@@ -1,6 +1,7 @@
 package com.example.koratime.rooms.createRoom
 
 import androidx.databinding.ObservableField
+import androidx.lifecycle.MutableLiveData
 import com.example.koratime.basic.BasicViewModel
 import com.example.koratime.database.addRoomToFirestore
 import com.example.koratime.model.RoomModel
@@ -13,7 +14,7 @@ class AddRoomViewModel : BasicViewModel<AddRoomNavigator>() {
     val roomNameError = ObservableField<String>()
     val description = ObservableField<String>()
     val descriptionError = ObservableField<String>()
-    val imageUrl = ObservableField<String>()
+    val imageUrl = MutableLiveData<String>()
 
 
     private val user = Firebase.auth.currentUser
@@ -22,7 +23,7 @@ class AddRoomViewModel : BasicViewModel<AddRoomNavigator>() {
             val room = RoomModel(
                 name = roomName.get(),
                 description = description.get(),
-                imageUrl = imageUrl.get(),
+                imageUrl = imageUrl.value,
                 userManager = user?.uid
             )
             //add in firebase

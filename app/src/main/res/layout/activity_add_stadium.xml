@@ -30,16 +30,15 @@
                 android:layout_height="match_parent">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginHorizontal="20dp">
+                    android:layout_gravity="center">
 
                     <TextView
                         android:id="@+id/title_toolbar"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@color/transparent"
-                        android:gravity="center"
                         android:text="Add Stadium"
                         android:textColor="@color/white"
                         android:textSize="40sp"
@@ -53,6 +52,7 @@
             </com.google.android.material.appbar.MaterialToolbar>
 
         </com.google.android.material.appbar.AppBarLayout>
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -74,18 +74,18 @@
 
 
                 <TextView
-                    android:id="@+id/newStadium_textView"
+                    android:id="@+id/newRoom_textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|top"
-                    android:text="Add Your Stadium"
-                    android:textSize="20dp"
+                    android:text="Create new Room"
+                    android:textSize="18dp"
                     android:padding="20dp"
                     android:textStyle="bold"
                     />
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/stadiumName_layout"
+                    android:id="@+id/roomName_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layout_constraintTop_toBottomOf="@id/img_group"
@@ -95,31 +95,32 @@
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:hint="Enter Your Stadium Name"
+                        android:hint="Enter Room Name"
                         android:text="@={vm.stadiumName}"
                         />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/stadiumDescription_layout"
+                    android:id="@+id/roomDescription_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layout_constraintTop_toBottomOf="@id/img_group"
                     android:layout_marginTop="12dp"
-                    app:error="@{vm.descriptionError}"
+                    app:error="@{vm.stadiumDescriptionError}"
 
                     >
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:hint="Enter Your Stadium Description"
-                        android:text="@={vm.description}"
-                        android:lines="3"
+                        android:hint="Enter Room Description"
+                        android:text="@={vm.stadiumDescription}"
+                        android:lines="4"
+
                         />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/stadiumImage_layout"
+                    android:id="@+id/roomImage_layout"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_gravity="center"
@@ -129,27 +130,26 @@
                     app:civ_border_color="@color/primaryVariant"
                     />
                 <TextView
-                    android:id="@+id/stadiumImageText_layout"
+                    android:id="@+id/roomImageText_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="Add Stadium Pictures"
+                    android:text="Add Group Picture"
                     android:textColor="@color/black"
                     android:textSize="12sp"
                     android:layout_marginTop="5dp"
                     />
 
                 <Button
-                    android:id="@+id/stadiumButton_layout"
+                    android:id="@+id/roomButton_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Add Stadium"
+                    android:text="Create room"
                     android:layout_gravity="center"
                     android:layout_marginTop="20dp"
                     android:layout_margin="20dp"
-                    android:backgroundTint="@color/primary"
                     android:onClick="@{()->vm.createStadium()}"
-
+                    android:backgroundTint="@color/primary"
                     />
 
             </LinearLayout>
@@ -158,6 +158,7 @@
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

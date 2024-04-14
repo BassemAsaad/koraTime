@@ -60,7 +60,7 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>() ,HomeNa
 
     override fun openActivity() {
         dataBinding.homeBar.selectedItemId = R.id.home_bar
-//        pushFragment()
+        pushFragment(StadiumsFragment())
 
         dataBinding.homeBar.setOnItemSelectedListener {item->
             if (item.itemId == R.id.chat_bar){

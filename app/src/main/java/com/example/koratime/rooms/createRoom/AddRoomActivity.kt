@@ -14,8 +14,7 @@ import com.example.koratime.database.uploadImageToStorage
 import com.example.koratime.databinding.ActivityAddRoomBinding
 
 @Suppress("DEPRECATION")
-class AddRoomActivity : BasicActivity< ActivityAddRoomBinding, AddRoomViewModel>(),
-    AddRoomNavigator {
+class AddRoomActivity : BasicActivity< ActivityAddRoomBinding, AddRoomViewModel>(), AddRoomNavigator {
 
     lateinit var pickMedia : ActivityResultLauncher<PickVisualMediaRequest>
 
@@ -23,8 +22,6 @@ class AddRoomActivity : BasicActivity< ActivityAddRoomBinding, AddRoomViewModel>
         super.onCreate(savedInstanceState)
         initView()
     }
-
-
 
     override fun getLayoutID(): Int {
         return R.layout.activity_add_room
@@ -34,7 +31,7 @@ class AddRoomActivity : BasicActivity< ActivityAddRoomBinding, AddRoomViewModel>
         return ViewModelProvider(this)[AddRoomViewModel::class.java]
     }
 
-    @SuppressLint("SetTextI18n")
+
     override fun initView() {
         viewModel.navigator = this
         dataBinding.vm = viewModel
@@ -63,7 +60,7 @@ class AddRoomActivity : BasicActivity< ActivityAddRoomBinding, AddRoomViewModel>
                     onSuccessListener = { downloadUri ->
                         Log.e("Firebase Storage:", "Image uploaded successfully")
                         // pass imageUrl to view model
-                        viewModel.imageUrl.set(downloadUri.toString())
+                        viewModel.imageUrl.value = downloadUri.toString()
 
                     },
                     onFailureListener = {

@@ -4,7 +4,7 @@ data class StadiumModel(
     var id: String?=null,
     val stadiumName: String?=null,
     val stadiumDescription: String?=null,
-    val imageUrl :String?=null,
+    val stadiumImageUrl :String?=null,
     val userManager: String? =null
 ) {
     companion object {
