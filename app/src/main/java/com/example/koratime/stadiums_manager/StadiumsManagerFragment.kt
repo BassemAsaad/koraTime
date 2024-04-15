@@ -13,7 +13,7 @@ import com.example.koratime.R
 import com.example.koratime.databinding.FragmentStadiumsManagerBinding
 
 class StadiumsManagerFragment : Fragment(),StadiumsManagerNavigator{
-    lateinit var pickMedia : ActivityResultLauncher<PickVisualMediaRequest>
+
     lateinit var dataBinding : FragmentStadiumsManagerBinding
     lateinit var viewModel : StadiumsManagerViewModel
 
@@ -47,10 +47,7 @@ class StadiumsManagerFragment : Fragment(),StadiumsManagerNavigator{
     }
 
     override fun addStadiumActivity() {
-        dataBinding.createStadiumButton.setOnClickListener {
-//            val intent = Intent(requireContext(), AddStadiumActivity::class.java)
-//            startActivity(intent)
-        }
+
     }
 
 
