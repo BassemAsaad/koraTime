@@ -59,11 +59,16 @@ class LoginViewModel : BasicViewModel<LoginNavigator>() {
                 val user = docSnapshot.toObject(UserModel::class.java)
                 if (user == null){
                     messageLiveData.value = "Invalid Email or Password"
-                    Log.e("Firebase: ", "Successful Login")
+                    Log.e("Firebase: ", "Not successful Login")
                     return@OnSuccessListener
 
                 }else{
-                    navigator?.openHomeActivity()
+                    Log.e("Firebase: ", "Successful Login")
+                    if (user.nationalID==null){
+                        navigator?.openHomeActivity()
+                    } else {
+                        navigator?.openHomeManagerActivity()
+                    }
                 }
             }//end OnSuccessListener
             ,

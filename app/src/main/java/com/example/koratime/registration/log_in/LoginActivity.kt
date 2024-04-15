@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.koratime.basic.BasicActivity
 import com.example.koratime.R
 import com.example.koratime.databinding.ActivityLoginBinding
+import com.example.koratime.home.home_manager.ManagerHomeActivity
 import com.example.koratime.registration.create_account.RegisterActivity
 import com.example.koratime.home.home_user.HomeActivity
 
@@ -34,6 +35,12 @@ class LoginActivity
 
     override fun openHomeActivity() {
         val intent = Intent(this, HomeActivity::class.java)
+        startActivity(intent)
+        viewModel.showLoading.value=true
+    }
+
+    override fun openHomeManagerActivity() {
+        val intent = Intent(this, ManagerHomeActivity::class.java)
         startActivity(intent)
         viewModel.showLoading.value=true
     }
