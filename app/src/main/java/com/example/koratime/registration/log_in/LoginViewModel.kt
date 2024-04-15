@@ -6,36 +6,35 @@ import androidx.databinding.ObservableField
 import com.example.koratime.basic.BasicViewModel
 import com.example.koratime.database.getUserData_forLogin
 import com.example.koratime.model.UserModel
-import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.*
 import com.google.firebase.auth.*
 
 class LoginViewModel : BasicViewModel<LoginNavigator>() {
 
-    val email_login = ObservableField<String>()
-    val emailError_login = ObservableField<String>()
+    val emailLogin = ObservableField<String>()
+    val emailErrorLogin = ObservableField<String>()
 
-    val password_login = ObservableField<String>()
-    val passwordError_login = ObservableField<String>()
+    val passwordLogin = ObservableField<String>()
+    val passwordErrorLogin = ObservableField<String>()
 
-    lateinit var auth: FirebaseAuth
+    private lateinit var auth: FirebaseAuth
 
 
-    fun login_account(){
+    fun loginIntoAccount(){
         //validation
-        if (validation()==true){
-            login_withFirebase()
+        if (validation()){
+            loginWithFirebase()
         }
 
 
     }
 
 
-    fun login_withFirebase() {
+    private fun loginWithFirebase() {
         showLoading.value=true
         auth = Firebase.auth
-        auth.signInWithEmailAndPassword(email_login.get()!!, password_login.get()!!)
+        auth.signInWithEmailAndPassword(emailLogin.get()!!, passwordLogin.get()!!)
             .addOnCompleteListener {task->
                 if (!task.isSuccessful){
                     Log.e("Firebase: ",task.exception?.localizedMessage.toString())
@@ -46,17 +45,17 @@ class LoginViewModel : BasicViewModel<LoginNavigator>() {
                     Log.e("Firebase: ", "Successful Login")
                     showLoading.value = false
                     messageLiveData.value = "Successful Login"
-                    getUser_fromFirestore(task.result.user?.uid)
+                    getUserFromFirestore(task.result.user?.uid)
                 }
             }
 
     }
 
-    private fun getUser_fromFirestore(uid: String?) {
+    private fun getUserFromFirestore(uid: String?) {
         getUserData_forLogin(
             uid,
             //OnSuccessListener
-            OnSuccessListener{docSnapshot->
+            onSuccessListener = OnSuccessListener{ docSnapshot->
                 val user = docSnapshot.toObject(UserModel::class.java)
                 if (user == null){
                     messageLiveData.value = "Invalid Email or Password"
@@ -68,33 +67,33 @@ class LoginViewModel : BasicViewModel<LoginNavigator>() {
                 }
             }//end OnSuccessListener
             ,
-            OnFailureListener{
+            onFailureListener = {
                 messageLiveData.value = it.localizedMessage
             }//end OnFailureListener
         )
     }
 
-    fun validation():Boolean {
+    private fun validation():Boolean {
         var valid = true
         //email
-        if (email_login.get().isNullOrBlank()){
+        if (emailLogin.get().isNullOrBlank()){
             valid = false
-            emailError_login.set("Enter Email")
+            emailErrorLogin.set("Enter Email")
         } else {
-            emailError_login.set(null)
+            emailErrorLogin.set(null)
         }
 
         //password
-        if (password_login.get().isNullOrBlank() ){
+        if (passwordLogin.get().isNullOrBlank() ){
             valid = false
-            passwordError_login.set("Enter Password")
+            passwordErrorLogin.set("Enter Password")
         }
-        else if (password_login.get()?.length!! < 8){
+        else if (passwordLogin.get()?.length!! < 8){
             valid = false
-            passwordError_login.set("Password is less than 8")
+            passwordErrorLogin.set("Password is less than 8")
         }
         else {
-            passwordError_login.set(null)
+            passwordErrorLogin.set(null)
         }
 
         return valid

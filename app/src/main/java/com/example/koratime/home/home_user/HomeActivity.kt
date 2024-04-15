@@ -1,4 +1,4 @@
-package com.example.koratime.home
+package com.example.koratime.home.home_user
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -25,7 +25,7 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import java.util.Locale
 
-class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>() ,HomeNavigator{
+class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>() , HomeNavigator {
 
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private val auth= Firebase.auth

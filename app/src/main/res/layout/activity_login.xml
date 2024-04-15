@@ -83,14 +83,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     app:boxBackgroundColor="@color/transparent"
-                    app:error="@{loginVM.emailError_login}"
+                    app:error="@{loginVM.emailErrorLogin}"
 
                     >
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:hint="Email"
-                        android:text="@={loginVM.email_login}"
+                        android:text="@={loginVM.emailLogin}"
 
                         />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -101,7 +101,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     app:boxBackgroundColor="@color/transparent"
-                    app:error="@{loginVM.passwordError_login}"
+                    app:error="@{loginVM.passwordErrorLogin}"
                     app:passwordToggleEnabled="true"
                     >
 
@@ -109,7 +109,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:hint="Password"
-                        android:text="@={loginVM.password_login}"
+                        android:text="@={loginVM.passwordLogin}"
                         android:inputType="textPassword"
 
                         />
@@ -124,7 +124,7 @@
                     android:textSize="20sp"
                     android:paddingVertical="10dp"
                     android:layout_gravity="center"
-                    android:onClick="@{()->loginVM.login_account()}"
+                    android:onClick="@{()->loginVM.loginIntoAccount()}"
                     />
 
                 <TextView

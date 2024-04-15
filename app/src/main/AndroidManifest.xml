@@ -36,7 +36,7 @@
             android:name=".registration.log_in.LoginActivity"
             android:exported="true" />
         <activity
-            android:name=".home.HomeActivity"
+            android:name=".home.home_user.HomeActivity"
             android:exported="true" />
         <activity
             android:name=".splash.SplashActivity"

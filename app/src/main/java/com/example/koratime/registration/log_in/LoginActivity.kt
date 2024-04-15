@@ -7,7 +7,7 @@ import com.example.koratime.basic.BasicActivity
 import com.example.koratime.R
 import com.example.koratime.databinding.ActivityLoginBinding
 import com.example.koratime.registration.create_account.RegisterActivity
-import com.example.koratime.home.HomeActivity
+import com.example.koratime.home.home_user.HomeActivity
 
 
 class LoginActivity

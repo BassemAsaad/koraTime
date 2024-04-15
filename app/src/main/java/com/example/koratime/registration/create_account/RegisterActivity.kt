@@ -9,7 +9,7 @@ import com.example.koratime.basic.BasicActivity
 import com.example.koratime.R
 import com.example.koratime.databinding.ActivityRegisterBinding
 import com.example.koratime.registration.log_in.LoginActivity
-import com.example.koratime.home.HomeActivity
+import com.example.koratime.home.home_user.HomeActivity
 
 class RegisterActivity : BasicActivity<ActivityRegisterBinding, RegisterViewModel>(),RegisterNavigator {
 
