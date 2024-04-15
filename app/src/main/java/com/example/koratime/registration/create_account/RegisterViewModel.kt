@@ -2,6 +2,7 @@ package com.example.koratime.registration.create_account
 
 import android.util.Log
 import androidx.databinding.ObservableField
+import androidx.lifecycle.MutableLiveData
 import com.example.koratime.basic.BasicViewModel
 import com.example.koratime.database.addUser_toFirestore
 import com.example.koratime.model.UserModel
@@ -24,7 +25,23 @@ class RegisterViewModel : BasicViewModel<RegisterNavigator>() {
     val password = ObservableField<String>()
     val passwordError = ObservableField<String>()
 
+    val asPlayerRadioButton = ObservableField<Boolean>()
+    val asManagerRadioButton = ObservableField<Boolean>()
+    val radioButtonsError = ObservableField<String>()
+
+    val nationalID = ObservableField<String>()
+    val nationalIDError = ObservableField<String>()
+
     private val auth = Firebase.auth
+
+    val showNationalID = MutableLiveData<Boolean>().apply { value = false }
+
+
+
+
+
+
+
 
 
     fun createAccount(){
@@ -33,9 +50,6 @@ class RegisterViewModel : BasicViewModel<RegisterNavigator>() {
             //create account in firebase
             addAccount_toFirebase()
         }
-
-
-
     }
 
 
@@ -50,7 +64,6 @@ class RegisterViewModel : BasicViewModel<RegisterNavigator>() {
                     showLoading.value = false
                     Log.e("Firebase: ", "account added to firestore")
                     createFirestore_User(task.result.user?.uid)
-
                 }
 
             }
@@ -62,6 +75,7 @@ class RegisterViewModel : BasicViewModel<RegisterNavigator>() {
             firstName = firstName.get(),
             secondName = secondName.get(),
             userName = userName.get(),
+            nationalID= nationalID.get(),
             email = email.get()
         )
         addUser_toFirestore(
@@ -78,8 +92,30 @@ class RegisterViewModel : BasicViewModel<RegisterNavigator>() {
             })
     }
 
+
     fun validation():Boolean {
         var valid = true
+
+
+        // Validate radio button selection
+        if (asPlayerRadioButton.get()==false && asManagerRadioButton.get()==false ) {
+            valid = false
+            radioButtonsError.set("Choose Type")
+
+        } else {
+            // Reset the error message if selection is valid
+             radioButtonsError.set(null)
+        }
+
+        // Validate National ID if the user selected "Sign Up As Stadium Manager"
+    if (asManagerRadioButton.get()==true && nationalID.get().isNullOrBlank()){
+        valid = false
+        nationalIDError.set("Enter National ID")
+    } else if (asManagerRadioButton.get()==true && nationalID.get()?.length !=14)  {
+        nationalIDError.set("Not Correct National ID")
+    } else{
+        nationalIDError.set(null)
+    }
 
         //firstName
         if (firstName.get().isNullOrBlank()){
@@ -123,6 +159,8 @@ class RegisterViewModel : BasicViewModel<RegisterNavigator>() {
         else {
             passwordError.set(null)
         }
+
+
 
         return valid
     }
