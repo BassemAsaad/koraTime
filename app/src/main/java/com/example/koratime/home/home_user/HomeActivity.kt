@@ -34,23 +34,6 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>() , HomeN
         private const val LOCATION_PERMISSION_REQUEST_CODE = 100
     }
 
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        initView()
-
-    }
-    override fun initView() {
-        viewModel.navigator=this
-        dataBinding.vm=viewModel
-
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
-        getLocationIfPermissionGranted()
-        openActivity()
-    }
-
-
     override fun getLayoutID(): Int {
         return R.layout.activity_home
     }
@@ -78,6 +61,20 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>() , HomeN
     override fun LogoutActivity() {
         val intent = Intent(this,LoginActivity::class.java)
         startActivity(intent)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        initView()
+
+    }
+    override fun initView() {
+        viewModel.navigator=this
+        dataBinding.vm=viewModel
+
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+        getLocationIfPermissionGranted()
+        openActivity()
     }
 
     private fun pushFragment(fragment: Fragment) {

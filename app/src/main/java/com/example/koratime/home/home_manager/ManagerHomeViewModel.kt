@@ -1,4 +1,6 @@
 package com.example.koratime.home.home_manager
 
-class ManagerHomeViewModel {
+import com.example.koratime.basic.BasicViewModel
+
+class ManagerHomeViewModel: BasicViewModel<ManagerHomeNavigator>() {
 }
