@@ -25,7 +25,6 @@ class RegisterViewModel : BasicViewModel<RegisterNavigator>() {
     val password = ObservableField<String>()
     val passwordError = ObservableField<String>()
 
-    val asPlayerRadioButton = ObservableField<Boolean>()
     val asManagerRadioButton = ObservableField<Boolean>()
     val radioButtonsError = ObservableField<String>()
 
@@ -97,15 +96,6 @@ class RegisterViewModel : BasicViewModel<RegisterNavigator>() {
         var valid = true
 
 
-        // Validate radio button selection
-        if (asPlayerRadioButton.get()==false && asManagerRadioButton.get()==false ) {
-            valid = false
-            radioButtonsError.set("Choose Type")
-
-        } else {
-            // Reset the error message if selection is valid
-             radioButtonsError.set(null)
-        }
 
         // Validate National ID if the user selected "Sign Up As Stadium Manager"
     if (asManagerRadioButton.get()==true && nationalID.get().isNullOrBlank()){

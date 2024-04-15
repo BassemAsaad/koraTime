@@ -39,7 +39,7 @@
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginHorizontal="50dp"
+                        android:layout_marginHorizontal="30dp"
                         >
 
                         <TextView
@@ -55,6 +55,7 @@
                             android:background="@color/transparent"
                             android:gravity="center"
                             android:padding="10dp"
+
                             />
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </com.google.android.material.appbar.MaterialToolbar>
@@ -133,7 +134,22 @@
 
                             />
                     </com.google.android.material.textfield.TextInputLayout>
-
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/nationalID_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:boxBackgroundColor="@color/transparent"
+                        app:error="@{registerVM.nationalIDError}"
+                        android:visibility="gone"
+                        >
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:hint="National ID"
+                            android:text="@={registerVM.nationalID}"
+                            android:inputType="number"
+                            />
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/email_layout"
@@ -172,22 +188,7 @@
 
                             />
                     </com.google.android.material.textfield.TextInputLayout>
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/nationalID_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:boxBackgroundColor="@color/transparent"
-                        app:error="@{registerVM.nationalIDError}"
-                        android:visibility="gone"
-                        >
-                        <EditText
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:hint="National ID"
-                            android:text="@={registerVM.nationalID}"
-                            android:inputType="number"
-                            />
-                    </com.google.android.material.textfield.TextInputLayout>
+
 
                     <RadioGroup
                         android:id="@+id/radioGroup_layout"
@@ -201,6 +202,7 @@
                             android:layout_height="wrap_content"
                             android:text="Sign Up As Player"
                             android:layout_marginTop="5dp"
+                            android:checked="true"
                             />
                         <RadioButton
                             android:id="@+id/asStadiumManager_layout"
@@ -210,15 +212,7 @@
                             android:checked="@={registerVM.asManagerRadioButton}"
                             />
                     </RadioGroup>
-                    <TextView
-                        android:id="@+id/radioButtonsErrorTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=""
-                        android:textColor="@color/red"
-                        android:visibility="@{registerVM.radioButtonsError != null ? View.VISIBLE : View.GONE}"
 
-                        />
 
                     <Button
                         android:id="@+id/create_account"

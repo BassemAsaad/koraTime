@@ -22,6 +22,7 @@ class RegisterActivity : BasicActivity<ActivityRegisterBinding, RegisterViewMode
     override fun initView() {
         dataBinding.registerVM = viewModel
         viewModel.navigator = this
+        openLoginActivity()
 
         dataBinding.radioGroupLayout.setOnCheckedChangeListener { group, checkedId ->
             when (checkedId) {
@@ -58,8 +59,8 @@ class RegisterActivity : BasicActivity<ActivityRegisterBinding, RegisterViewMode
         dataBinding.logIn.setOnClickListener {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
+            viewModel.showLoading.value=true
         }
-        viewModel.showLoading.value=true
     }
 
     override fun openHomeActivity() {
