@@ -18,7 +18,7 @@ import com.example.koratime.database.updateLocationInFirestore
 import com.example.koratime.databinding.ActivityHomeBinding
 import com.example.koratime.registration.log_in.LoginActivity
 import com.example.koratime.rooms.RoomsFragment
-import com.example.koratime.stadiums.StadiumsFragment
+import com.example.koratime.stadiums_manager.StadiumsManagerFragment
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.firebase.Firebase
@@ -43,14 +43,14 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>() , HomeN
 
     override fun openActivity() {
         dataBinding.homeBar.selectedItemId = R.id.home_bar
-        pushFragment(StadiumsFragment())
+        pushFragment(StadiumsManagerFragment())
 
         dataBinding.homeBar.setOnItemSelectedListener {item->
             if (item.itemId == R.id.chat_bar){
                 pushFragment(ChatFragment())
             }
             if (item.itemId == R.id.home_bar){
-                pushFragment(StadiumsFragment())
+                pushFragment(StadiumsManagerFragment())
             }
             if (item.itemId == R.id.rooms_bar){
                 pushFragment(RoomsFragment())

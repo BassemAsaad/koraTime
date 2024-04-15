@@ -1,10 +1,12 @@
 package com.example.koratime.home.home_manager
 
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.koratime.R
 import com.example.koratime.basic.BasicActivity
 import com.example.koratime.databinding.ActivityManagerHomeBinding
+import com.example.koratime.stadiums_manager.StadiumsManagerFragment
 
 class ManagerHomeActivity : BasicActivity<ActivityManagerHomeBinding,ManagerHomeViewModel>(),ManagerHomeNavigator {
     override fun getLayoutID(): Int {
@@ -15,7 +17,18 @@ class ManagerHomeActivity : BasicActivity<ActivityManagerHomeBinding,ManagerHome
         return ViewModelProvider(this)[ManagerHomeViewModel::class.java]
     }
     override fun openActivity() {
-        TODO("Not yet implemented")
+        dataBinding.managerHomeBar.selectedItemId = R.id.stadium_bar
+        pushFragment(StadiumsManagerFragment())
+
+        dataBinding.managerHomeBar.setOnItemSelectedListener {item->
+            if (item.itemId == R.id.stadium_bar){
+                pushFragment(StadiumsManagerFragment())
+            }
+            if (item.itemId == R.id.notification_bar){
+                pushFragment(StadiumsManagerFragment())
+            }
+            return@setOnItemSelectedListener true
+        }
     }
 
     override fun LogoutActivity() {
@@ -31,7 +44,12 @@ class ManagerHomeActivity : BasicActivity<ActivityManagerHomeBinding,ManagerHome
         dataBinding.vm = viewModel
     }
 
-
+    private fun pushFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container,fragment)
+            .addToBackStack("")
+            .commit()
+    }
 
 
 }
