@@ -84,21 +84,26 @@ fun addStadiumToFirestore(
 }
 
 fun uploadImageToStorage(
-    imageUri: Uri,
+    imageUri: Uri?,
     onSuccessListener: OnSuccessListener<Uri>,
     onFailureListener: OnFailureListener
 ) {
+    if (imageUri == null) {
+        // default image URL
+        val defaultImageUrl = Uri.parse("https://firebasestorage.googleapis.com/v0/b/kora-time-d21c3.appspot.com/o/images%2Fgroup_profile.png?alt=media&token=68cbdd0e-43f2-4634-9ba9-bdcdec71555d")
+        onSuccessListener.onSuccess(defaultImageUrl)
+        return
+    }
+
+    // Proceed with uploading the user-selected image
     val storage = FirebaseStorage.getInstance()
     val storageRef = storage.reference
     val imagesRef = storageRef.child("images/${UUID.randomUUID()}")
     val uploadTask = imagesRef.putFile(imageUri)
 
     uploadTask.addOnSuccessListener {
-        // Image uploaded successfully
         imagesRef.downloadUrl.addOnSuccessListener { uri ->
-            // Get the download URL for the uploaded image
             onSuccessListener.onSuccess(uri)
         }.addOnFailureListener(onFailureListener)
     }.addOnFailureListener(onFailureListener)
-
 }

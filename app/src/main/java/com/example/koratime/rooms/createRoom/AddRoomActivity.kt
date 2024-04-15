@@ -42,11 +42,15 @@ class AddRoomActivity : BasicActivity< ActivityAddRoomBinding, AddRoomViewModel>
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
+        // If no image is selected, use the default image URL
+        val defaultImageUrl = "https://firebasestorage.googleapis.com/v0/b/kora-time-d21c3.appspot.com/o/images%2Fgroup_profile.png?alt=media&token=68cbdd0e-43f2-4634-9ba9-bdcdec71555d"
+        viewModel.imageUrl.value = defaultImageUrl
         openImagePicker()
         dataBinding.roomImageLayout.setOnClickListener {
-            // Launch the photo picker and let the user choose only images.
-            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        // Launch the photo picker and let the user choose only images.
+        pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
+
 
     }
 
@@ -65,18 +69,18 @@ class AddRoomActivity : BasicActivity< ActivityAddRoomBinding, AddRoomViewModel>
                     },
                     onFailureListener = {
                         Log.e("Firebase Storage:", it.localizedMessage!!.toString())
+
                     }
                 )
 
                 dataBinding.roomImageLayout.setImageURI(uri)
                 dataBinding.roomImageTextLayout.text = "Change Picture Chosen"
             } else {
+                dataBinding.roomImageTextLayout.text = "Default Picture"
                 Toast.makeText(this, "No image selected", Toast.LENGTH_SHORT).show()
                 Log.d("PhotoPicker", "No image selected")
             }
         }
-
-
     }
 
     override fun onSupportNavigateUp(): Boolean {

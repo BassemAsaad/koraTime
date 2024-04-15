@@ -15,9 +15,8 @@ class AddRoomViewModel : BasicViewModel<AddRoomNavigator>() {
     val description = ObservableField<String>()
     val descriptionError = ObservableField<String>()
     val imageUrl = MutableLiveData<String>()
-
-
     private val user = Firebase.auth.currentUser
+
     fun createRoom(){
         if (validate()){
             val room = RoomModel(
