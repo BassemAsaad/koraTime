@@ -5,11 +5,11 @@ import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import com.example.koratime.basic.BasicActivity
 import com.example.koratime.R
-import com.example.koratime.databinding.ActivityRegisterBinding
+import com.example.koratime.databinding.ActivityRegisterPlayerBinding
 import com.example.koratime.registration.log_in.LoginActivity
 import com.example.koratime.home.HomeActivity
 
-class RegisterActivity : BasicActivity<ActivityRegisterBinding, RegisterViewModel>(),RegisterNavigator {
+class RegisterActivity : BasicActivity<ActivityRegisterPlayerBinding, RegisterViewModel>(),RegisterNavigator {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,7 +24,7 @@ class RegisterActivity : BasicActivity<ActivityRegisterBinding, RegisterViewMode
     }
 
     override fun getLayoutID(): Int {
-        return R.layout.activity_register
+        return R.layout.activity_register_player
     }
     override fun initViewModel(): RegisterViewModel {
         return ViewModelProvider(this).get(RegisterViewModel::class.java)
