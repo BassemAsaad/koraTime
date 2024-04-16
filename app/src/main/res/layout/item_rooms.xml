@@ -43,7 +43,7 @@
                 app:layout_constraintTop_toBottomOf="@id/roomName_item"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                tools:src="@drawable/room"
+                tools:src="@drawable/ic_friends"
                 app:imageUrl="@{vm.imageUrl}"
                 android:layout_marginTop="8dp"
                 />

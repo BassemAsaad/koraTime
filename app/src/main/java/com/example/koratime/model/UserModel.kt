@@ -9,7 +9,9 @@ data class UserModel(
     val email:String?=null,
     val latitude: Double?=null,
     val longitude: Double?=null,
-    val city : String?=null
+    val city : String?=null,
+    val profilePicture :String?=null,
+    var createdAt : Long = System.currentTimeMillis()
 ){
     companion object{
         const val collectionName = "User"
