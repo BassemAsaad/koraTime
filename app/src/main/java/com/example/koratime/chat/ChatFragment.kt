@@ -9,8 +9,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.koratime.R
 import com.example.koratime.databinding.FragmentChatBinding
+import com.example.koratime.model.RoomModel
 
-class ChatFragment : Fragment(),ChatNavigator {
+class ChatFragment (room: RoomModel?,): Fragment(),ChatNavigator {
     lateinit var dataBinding : FragmentChatBinding
     lateinit var viewModel : ChatViewModel
 

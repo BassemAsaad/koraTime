@@ -5,30 +5,37 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.example.koratime.Constants
 import com.example.koratime.R
+import com.example.koratime.chat.ChatFragment
+import com.example.koratime.database.getRoomsFromFirestore
 import com.example.koratime.rooms.createRoom.AddRoomActivity
 import com.example.koratime.databinding.FragmentRoomsBinding
+import com.example.koratime.home.home_user.HomeActivity
+import com.example.koratime.model.RoomModel
 
 class RoomsFragment : Fragment(),RoomsNavigator {
 
-    lateinit var dataBinding : FragmentRoomsBinding
-    lateinit var viewModel : RoomsViewModel
+    private lateinit var dataBinding : FragmentRoomsBinding
+    private lateinit var viewModel : RoomsViewModel
+    private val adapter = RoomsAdapter(null)
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         dataBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_rooms,container,false)
         return dataBinding.root
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel =  ViewModelProvider(this).get(RoomsViewModel::class.java)
+        viewModel = ViewModelProvider(this)[RoomsViewModel::class.java]
 
 
     }
@@ -43,15 +50,32 @@ class RoomsFragment : Fragment(),RoomsNavigator {
      fun initView() {
          dataBinding.vm = viewModel
          viewModel.navigator=this
-         addRoomActivity()
+         dataBinding.recyclerView.adapter = adapter
+         adapter.onItemClickListener = object : RoomsAdapter.OnItemClickListener{
+             override fun onItemClick(room: RoomModel?, position: Int) {
+                 (activity as? HomeActivity)?.onDataClicked(room,position)
+             }
+         }
     }
 
-    override fun addRoomActivity() {
-        dataBinding.createRoomButton.setOnClickListener {
+    override fun openAddRoomActivity() {
             val intent = Intent(requireContext(), AddRoomActivity::class.java)
             startActivity(intent)
-        }
+    }
 
+    override fun onStart() {
+        super.onStart()
+
+        getRoomsFromFirestore(
+            onSuccessListener = {querySnapShot->
+                val rooms = querySnapShot.toObjects(RoomModel::class.java)
+                adapter.changeData(rooms)
+            }
+            , onFailureListener = {
+                Toast.makeText(requireContext(), it.localizedMessage, Toast.LENGTH_SHORT).show()
+            }
+
+        )
     }
 
 

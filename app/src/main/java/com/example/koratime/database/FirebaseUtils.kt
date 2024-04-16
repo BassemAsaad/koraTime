@@ -10,8 +10,11 @@ import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.firestore
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.storage
 import java.util.UUID
 
 fun addUser_toFirestore(user : UserModel,
@@ -80,6 +83,8 @@ fun addStadiumToFirestore(
     document.set(stadium)
         .addOnSuccessListener(onSuccessListener)
         .addOnFailureListener(onFailureListener)
+    //test
+
 
 }
 
@@ -95,15 +100,27 @@ fun uploadImageToStorage(
         return
     }
 
-    // Proceed with uploading the user-selected image
-    val storage = FirebaseStorage.getInstance()
-    val storageRef = storage.reference
-    val imagesRef = storageRef.child("images/${UUID.randomUUID()}")
-    val uploadTask = imagesRef.putFile(imageUri)
+    // upload the user selected image
+    val storage = Firebase.storage
+    val storageRef = storage.reference.child("images/${UUID.randomUUID()}")
+    val uploadImage = storageRef.putFile(imageUri)
+    uploadImage
+        .addOnSuccessListener {
+        storageRef.downloadUrl.addOnSuccessListener{ uri -> onSuccessListener.onSuccess(uri) }
+            .addOnFailureListener(onFailureListener)
+        }
+        .addOnFailureListener(onFailureListener)
+}
 
-    uploadTask.addOnSuccessListener {
-        imagesRef.downloadUrl.addOnSuccessListener { uri ->
-            onSuccessListener.onSuccess(uri)
-        }.addOnFailureListener(onFailureListener)
-    }.addOnFailureListener(onFailureListener)
+
+fun getRoomsFromFirestore(
+    onSuccessListener: OnSuccessListener<QuerySnapshot>,
+    onFailureListener: OnFailureListener)
+{
+    val db = Firebase.firestore
+        .collection(RoomModel.COLLECTION_NAME)
+        .orderBy("createdTimestamp", Query.Direction.DESCENDING)
+        .get()
+        .addOnSuccessListener(onSuccessListener)
+        .addOnFailureListener(onFailureListener)
 }

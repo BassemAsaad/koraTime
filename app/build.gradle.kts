@@ -4,6 +4,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
     id("com.google.gms.google-services")
+    id("kotlin-parcelize")
 }
 
 android {
@@ -60,7 +61,8 @@ dependencies {
     //location
     implementation("com.google.android.gms:play-services-maps:18.2.0")
 
-
+    // Glide
+    implementation("com.github.bumptech.glide:glide:4.16.0")
 
     implementation("androidx.core:core-splashscreen:1.0.1")
     implementation("androidx.core:core-ktx:1.12.0")
