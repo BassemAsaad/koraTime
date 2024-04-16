@@ -46,7 +46,7 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.7.4"))
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-auth")
-    implementation ("com.google.firebase:firebase-firestore-ktx:24.11.0")
+    implementation ("com.google.firebase:firebase-firestore-ktx:24.11.1")
     implementation("com.google.firebase:firebase-storage")
 
     implementation ("com.google.android.gms:play-services-location:21.2.0")
@@ -59,6 +59,8 @@ dependencies {
 
     //location
     implementation("com.google.android.gms:play-services-maps:18.2.0")
+
+
 
     implementation("androidx.core:core-splashscreen:1.0.1")
     implementation("androidx.core:core-ktx:1.12.0")
