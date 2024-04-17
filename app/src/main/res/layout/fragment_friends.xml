@@ -56,45 +56,43 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="match_parent"
             app:layout_constraintTop_toBottomOf="@+id/app_bar"
             app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="100dp"
             >
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:paddingHorizontal="10dp"
                 >
-
-
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView_acceptFriends"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_accept_friend"
                 />
             <View
                 android:id="@+id/line"
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
                 android:background="@color/black"
-                app:layout_constraintBottom_toTopOf="@id/recyclerView_addFriends"
                 android:layout_marginVertical="50dp"
                 />
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView_addFriends"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/line"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_add_friend"
                 />
 
             </LinearLayout>
 
-
-
         </androidx.constraintlayout.widget.ConstraintLayout>
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

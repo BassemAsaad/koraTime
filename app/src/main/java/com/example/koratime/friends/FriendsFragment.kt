@@ -37,6 +37,12 @@ class FriendsFragment : Fragment(),FriendsNavigator {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this)[FriendsViewModel::class.java]
 
+
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initView()
     }
     fun initView(){
         dataBinding.vm = viewModel
@@ -50,7 +56,16 @@ class FriendsFragment : Fragment(),FriendsNavigator {
     override fun onStart() {
         super.onStart()
         val userId = Firebase.auth.currentUser?.uid
-
+        getUsersFromFirestore(
+            userId,
+            onSuccessListener = {querySnapShot->
+                val users = querySnapShot.toObjects(UserModel::class.java)
+                adapterAdd.changeData(users)
+            }
+            , onFailureListener = {
+                Toast.makeText(requireContext(), it.localizedMessage,  Toast.LENGTH_SHORT).show()
+            }
+        )
         getUsersFromFirestore(
             userId,
             onSuccessListener = {querySnapShot->
@@ -62,16 +77,8 @@ class FriendsFragment : Fragment(),FriendsNavigator {
             }
         )
 
-        getUsersFromFirestore(
-            userId,
-            onSuccessListener = {querySnapShot->
-                val users = querySnapShot.toObjects(UserModel::class.java)
-                adapterAdd.changeData(users)
-            }
-            , onFailureListener = {
-                Toast.makeText(requireContext(), it.localizedMessage,  Toast.LENGTH_SHORT).show()
-            }
-        )
 
     }
+
+
 }

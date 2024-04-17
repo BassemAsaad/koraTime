@@ -6,8 +6,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.koratime.R
 import com.example.koratime.databinding.ItemAcceptFriendBinding
-import com.example.koratime.databinding.ItemFriendsBinding
-import com.example.koratime.model.RoomModel
 import com.example.koratime.model.UserModel
 
 class AcceptFriendsAdapter  (var usersList : List<UserModel?>?): RecyclerView.Adapter<AcceptFriendsAdapter.ViewHolder>()  {

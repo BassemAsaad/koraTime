@@ -12,8 +12,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:padding="15dp">
+        android:layout_marginTop="20dp"
+
+        >
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/userImage_item"
@@ -44,9 +45,8 @@
             app:layout_constraintBottom_toBottomOf="@id/userImage_item"
             android:backgroundTint="@color/primary"
             android:layout_marginStart="10dp"
-            android:text="Add Friend"
-            android:textColor="@color/white"
-            />
+            android:text="Confirm"
+            android:textColor="@color/white" />
 
         <Button
             android:layout_width="120dp"
