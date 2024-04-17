@@ -16,6 +16,7 @@ import com.example.koratime.basic.BasicActivity
 import com.example.koratime.chat.ChatFragment
 import com.example.koratime.database.updateLocationInFirestore
 import com.example.koratime.databinding.ActivityHomeBinding
+import com.example.koratime.friends.FriendsFragment
 import com.example.koratime.model.RoomModel
 import com.example.koratime.registration.log_in.LoginActivity
 import com.example.koratime.rooms.RoomsFragment
@@ -56,6 +57,9 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>() , HomeN
             }
             if (item.itemId == R.id.rooms_bar){
                 pushFragment(RoomsFragment())
+            }
+            if (item.itemId == R.id.friends_bar){
+                pushFragment(FriendsFragment())
             }
             return@setOnItemSelectedListener true
         }

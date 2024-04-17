@@ -6,13 +6,13 @@
     <data>
         <variable
             name="vm"
-            type="com.example.koratime.friends_messages.FriendsChatViewModel" />
+            type="com.example.koratime.messages.MessagesViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".friends_messages.FriendsChatActivity"
+        tools:context=".messages.MessagesActivity"
         android:background="@drawable/main_bg"
         >
         <TextView

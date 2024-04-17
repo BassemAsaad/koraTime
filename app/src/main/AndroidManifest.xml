@@ -18,7 +18,10 @@
         android:theme="@style/Theme.KoraTime"
         tools:targetApi="31">
         <activity
-            android:name=".friends_messages.FriendsChatActivity"
+            android:name=".friends.FriendsFragment"
+            android:exported="false" />
+        <activity
+            android:name=".messages.MessagesActivity"
             android:exported="false" />
         <activity
             android:name=".rooms.RoomsFragment"

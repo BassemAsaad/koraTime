@@ -9,9 +9,9 @@
         android:title="Rooms"
         android:icon="@drawable/ic_rooms"/>
     <item
-        android:id="@+id/add_friends_bar"
-        android:title="Add Friends"
-        android:icon="@drawable/ic_add_friend"
+        android:id="@+id/friends_bar"
+        android:title="Friends"
+        android:icon="@drawable/ic_friends"
         />
     <item
         android:id="@+id/home_bar"
