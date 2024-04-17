@@ -25,11 +25,12 @@ class RegisterViewModel : BasicViewModel<RegisterNavigator>() {
     val password = ObservableField<String>()
     val passwordError = ObservableField<String>()
 
-    val asManagerRadioButton = ObservableField<Boolean>()
-    val radioButtonsError = ObservableField<String>()
-
     val nationalID = ObservableField<String>()
     val nationalIDError = ObservableField<String>()
+
+    val asManagerRadioButton = ObservableField<Boolean>()
+
+    val imageUrl = MutableLiveData<String>()
 
     private val auth = Firebase.auth
 
@@ -75,7 +76,8 @@ class RegisterViewModel : BasicViewModel<RegisterNavigator>() {
             secondName = secondName.get(),
             userName = userName.get(),
             nationalID= nationalID.get(),
-            email = email.get()
+            email = email.get(),
+            profilePicture = imageUrl.value
         )
         addUser_toFirestore(
             user,

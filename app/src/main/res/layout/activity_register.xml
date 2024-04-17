@@ -212,7 +212,37 @@
                             android:checked="@={registerVM.asManagerRadioButton}"
                             />
                     </RadioGroup>
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        >
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/profilePicture_layout"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:layout_gravity="start"
+                            android:layout_marginTop="12dp"
+                            android:src="@drawable/default_user_pic"
+                            app:civ_border_width="1dp"
+                            app:civ_border_color="@color/primaryVariant"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            />
+                        <TextView
+                            android:id="@+id/profileText_layout"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:text="Add Profile Picture"
+                            android:textColor="@color/black"
+                            android:textSize="20sp"
+                            android:layout_marginStart="10dp"
+                            app:layout_constraintStart_toEndOf="@id/profilePicture_layout"
+                            app:layout_constraintTop_toTopOf="@id/profilePicture_layout"
+                            app:layout_constraintBottom_toBottomOf="@id/profilePicture_layout"
+                            />
 
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <Button
                         android:id="@+id/create_account"

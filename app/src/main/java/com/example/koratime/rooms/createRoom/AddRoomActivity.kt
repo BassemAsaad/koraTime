@@ -16,7 +16,7 @@ import com.example.koratime.databinding.ActivityAddRoomBinding
 @Suppress("DEPRECATION")
 class AddRoomActivity : BasicActivity< ActivityAddRoomBinding, AddRoomViewModel>(), AddRoomNavigator {
 
-    lateinit var pickMedia : ActivityResultLauncher<PickVisualMediaRequest>
+    private lateinit var pickMedia : ActivityResultLauncher<PickVisualMediaRequest>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
