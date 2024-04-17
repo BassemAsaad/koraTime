@@ -9,9 +9,8 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.koratime.Constants
 import com.example.koratime.R
-import com.example.koratime.chat.ChatFragment
+import com.example.koratime.adapters.RoomsAdapter
 import com.example.koratime.database.getRoomsFromFirestore
 import com.example.koratime.rooms.createRoom.AddRoomActivity
 import com.example.koratime.databinding.FragmentRoomsBinding
@@ -51,9 +50,10 @@ class RoomsFragment : Fragment(),RoomsNavigator {
          dataBinding.vm = viewModel
          viewModel.navigator=this
          dataBinding.recyclerView.adapter = adapter
+
          adapter.onItemClickListener = object : RoomsAdapter.OnItemClickListener{
              override fun onItemClick(room: RoomModel?, position: Int) {
-                 (activity as? HomeActivity)?.onDataClicked(room,position)
+                 (activity as? HomeActivity)?.onRoomClick(room,position)
              }
          }
     }
@@ -74,8 +74,8 @@ class RoomsFragment : Fragment(),RoomsNavigator {
             , onFailureListener = {
                 Toast.makeText(requireContext(), it.localizedMessage, Toast.LENGTH_SHORT).show()
             }
-
         )
+
     }
 
 

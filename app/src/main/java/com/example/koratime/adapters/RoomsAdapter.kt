@@ -1,4 +1,4 @@
-package com.example.koratime.rooms
+package com.example.koratime.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -35,6 +35,7 @@ class RoomsAdapter (var rooms : List<RoomModel?>?): RecyclerView.Adapter<RoomsAd
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(rooms!![position])
+
         holder.itemView.setOnClickListener {
             onItemClickListener?.onItemClick(rooms!![position],position)
         }
@@ -45,7 +46,7 @@ class RoomsAdapter (var rooms : List<RoomModel?>?): RecyclerView.Adapter<RoomsAd
     }
 
 
-    var onItemClickListener :OnItemClickListener?=null
+    var onItemClickListener : OnItemClickListener?=null
     interface OnItemClickListener{
         fun onItemClick(room : RoomModel?, position: Int)
     }

@@ -71,23 +71,6 @@ fun addRoomToFirestore(
         .addOnFailureListener(onFailureListener)
 }
 
-fun addStadiumToFirestore(
-    stadium:StadiumModel,
-    onSuccessListener: OnSuccessListener<Void>,
-    onFailureListener: OnFailureListener)
-{
-    val db = Firebase.firestore
-    val collection = db.collection(StadiumModel.COLLECTION_NAME)
-    val document = collection.document()
-    stadium.id = collection.id
-    document.set(stadium)
-        .addOnSuccessListener(onSuccessListener)
-        .addOnFailureListener(onFailureListener)
-    //test
-
-
-}
-
 fun uploadImageToStorage(
     imageUri: Uri?,
     onSuccessListener: OnSuccessListener<Uri>,
@@ -99,20 +82,16 @@ fun uploadImageToStorage(
         onSuccessListener.onSuccess(defaultImageUrl)
         return
     }
-
     // upload the user selected image
     val storage = Firebase.storage
     val storageRef = storage.reference.child("images/${UUID.randomUUID()}")
     val uploadImage = storageRef.putFile(imageUri)
-    uploadImage
-        .addOnSuccessListener {
+    uploadImage.addOnSuccessListener {
         storageRef.downloadUrl.addOnSuccessListener{ uri -> onSuccessListener.onSuccess(uri) }
             .addOnFailureListener(onFailureListener)
         }
         .addOnFailureListener(onFailureListener)
 }
-
-
 fun getRoomsFromFirestore(
     onSuccessListener: OnSuccessListener<QuerySnapshot>,
     onFailureListener: OnFailureListener)
@@ -120,6 +99,17 @@ fun getRoomsFromFirestore(
     val db = Firebase.firestore
         .collection(RoomModel.COLLECTION_NAME)
         .orderBy("createdTimestamp", Query.Direction.DESCENDING)
+        .get()
+        .addOnSuccessListener(onSuccessListener)
+        .addOnFailureListener(onFailureListener)
+}
+fun getUsersFromFirestore(
+    currentUserId: String?,
+    onSuccessListener: OnSuccessListener<QuerySnapshot>,
+    onFailureListener: OnFailureListener)
+{
+    val db = Firebase.firestore
+        .collection(UserModel.collectionName)
         .get()
         .addOnSuccessListener(onSuccessListener)
         .addOnFailureListener(onFailureListener)

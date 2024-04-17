@@ -11,7 +11,6 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.koratime.Constants
 import com.example.koratime.R
 import com.example.koratime.basic.BasicActivity
 import com.example.koratime.chat.ChatFragment
@@ -19,7 +18,6 @@ import com.example.koratime.database.updateLocationInFirestore
 import com.example.koratime.databinding.ActivityHomeBinding
 import com.example.koratime.model.RoomModel
 import com.example.koratime.registration.log_in.LoginActivity
-import com.example.koratime.rooms.RoomsAdapter
 import com.example.koratime.rooms.RoomsFragment
 import com.example.koratime.stadiums_manager.StadiumsManagerFragment
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -28,12 +26,12 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import java.util.Locale
 
+@Suppress("DEPRECATION")
 class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>() , HomeNavigator {
 
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private val auth= Firebase.auth
     private val handler = Handler()
-    val roomsFragment = RoomsFragment()
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 100
     }
@@ -82,7 +80,7 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>() , HomeN
 
 
     }
-    fun onDataClicked(room: RoomModel?, position: Int) {
+    fun onRoomClick(room: RoomModel?, position: Int) {
         dataBinding.homeBar.selectedItemId = R.id.chat_bar
         pushFragment(ChatFragment(room),true)
     }
@@ -91,7 +89,7 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>() , HomeN
     fun pushFragment(fragment: Fragment, addtoBackStack:Boolean=false){
         val push = supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container,fragment)
-        if(addtoBackStack==true){
+        if(addtoBackStack){
             push.addToBackStack("name")
         }
         push.commit()
