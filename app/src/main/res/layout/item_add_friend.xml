@@ -45,7 +45,7 @@
             app:layout_constraintBottom_toBottomOf="@id/userImage_item"
             android:backgroundTint="@color/primary"
             android:layout_marginStart="10dp"
-            android:text="Confirm"
+            android:text="Add Friend"
             android:textColor="@color/white" />
 
         <Button
