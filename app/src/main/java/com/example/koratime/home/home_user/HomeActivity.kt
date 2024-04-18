@@ -21,6 +21,7 @@ import com.example.koratime.model.RoomModel
 import com.example.koratime.registration.log_in.LoginActivity
 import com.example.koratime.rooms.RoomsFragment
 import com.example.koratime.stadiums_manager.StadiumsManagerFragment
+import com.example.koratime.stadiums_user.StadiumsFragment
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.firebase.Firebase
@@ -46,14 +47,14 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>() , HomeN
 
     override fun openActivity() {
         dataBinding.homeBar.selectedItemId = R.id.home_bar
-        pushFragment(StadiumsManagerFragment())
+        pushFragment(StadiumsFragment())
 
         dataBinding.homeBar.setOnItemSelectedListener {item->
             if (item.itemId == R.id.chat_bar){
                 pushFragment(ChatFragment(null))
             }
             if (item.itemId == R.id.home_bar){
-                pushFragment(StadiumsManagerFragment())
+                pushFragment(StadiumsFragment())
             }
             if (item.itemId == R.id.rooms_bar){
                 pushFragment(RoomsFragment())

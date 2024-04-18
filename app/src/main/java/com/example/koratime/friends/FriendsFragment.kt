@@ -1,5 +1,6 @@
 package com.example.koratime.friends
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,7 @@ import com.example.koratime.adapters.AddFriendsAdapter
 import com.example.koratime.adapters.UserAdapter
 import com.example.koratime.database.getUsersFromFirestore
 import com.example.koratime.databinding.FragmentFriendsBinding
+import com.example.koratime.friends.search.SearchActivity
 import com.example.koratime.model.UserModel
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
@@ -53,7 +55,8 @@ class FriendsFragment : Fragment(),FriendsNavigator {
 
 
     override fun openSearchActivity() {
-        TODO("Not yet implemented")
+        val intent = Intent(requireContext(),SearchActivity::class.java)
+        startActivity(intent)
     }
 
 

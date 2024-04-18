@@ -2,6 +2,7 @@ package com.example.koratime.friends.search
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
 import androidx.lifecycle.ViewModelProvider
 import com.example.koratime.R
 import com.example.koratime.basic.BasicActivity
@@ -31,9 +32,24 @@ class SearchActivity : BasicActivity<ActivitySearchBinding,SearchViewModel>(),Se
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
 
+        dataBinding.searchUser.requestFocus()
+
+        dataBinding.searchIcon.setOnClickListener {
+            if (dataBinding.searchUser.text.isNullOrBlank() || dataBinding.searchUser.text.length <3){
+                dataBinding.searchUser.error = "Invalid UserName"
+            } else {
+                searchRecyclerView(dataBinding.searchUser.text.toString())
+            }
+        }
 
 
     }
+
+    private fun searchRecyclerView(search: String) {
+        TODO("Not yet implemented")
+    }
+
+
     override fun onSupportNavigateUp(): Boolean {
         // go to the previous fragment when back button clicked on toolbar
         onBackPressed()
