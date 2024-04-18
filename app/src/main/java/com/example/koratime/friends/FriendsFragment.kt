@@ -44,40 +44,16 @@ class FriendsFragment : Fragment(),FriendsNavigator {
         super.onViewCreated(view, savedInstanceState)
         initView()
     }
-    fun initView(){
+    fun initView() {
         dataBinding.vm = viewModel
-        viewModel.navigator=this
-        dataBinding.recyclerViewAcceptFriends.adapter = adapterAccept
-        dataBinding.recyclerViewAddFriends.adapter = adapterAdd
-
+        viewModel.navigator = this
 
     }
 
-    override fun onStart() {
-        super.onStart()
-        val userId = Firebase.auth.currentUser?.uid
-        getUsersFromFirestore(
-            userId,
-            onSuccessListener = {querySnapShot->
-                val users = querySnapShot.toObjects(UserModel::class.java)
-                adapterAdd.changeData(users)
-            }
-            , onFailureListener = {
-                Toast.makeText(requireContext(), it.localizedMessage,  Toast.LENGTH_SHORT).show()
-            }
-        )
-        getUsersFromFirestore(
-            userId,
-            onSuccessListener = {querySnapShot->
-                val users = querySnapShot.toObjects(UserModel::class.java)
-                adapterAccept.changeData(users)
-            }
-            , onFailureListener = {
-                Toast.makeText(requireContext(), it.localizedMessage,  Toast.LENGTH_SHORT).show()
-            }
-        )
 
 
+    override fun openSearchActivity() {
+        TODO("Not yet implemented")
     }
 
 

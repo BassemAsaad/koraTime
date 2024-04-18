@@ -6,13 +6,13 @@
     <data>
         <variable
             name="vm"
-            type="com.example.koratime.friends.FriendsViewModel" />
+            type="com.example.koratime.friends.search.SearchViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        >
+        tools:context=".friends.search.SearchActivity">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/app_bar"
@@ -44,27 +44,17 @@
                         android:background="@color/transparent"
                         android:gravity="center"
                         android:padding="10dp"
-                        android:text="Add Friends"
+                        android:text="Search People"
                         android:textColor="@color/white"
                         android:textSize="25sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-                    <ImageView
-                        android:layout_width="60dp"
-                        android:layout_height="40dp"
-                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        android:src="@drawable/ic_search"
-                        android:onClick="@={()->vm.openSearch()}"
                         />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.appbar.MaterialToolbar>
 
         </com.google.android.material.appbar.AppBarLayout>
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -72,19 +62,48 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/app_bar"
-            android:layout_marginTop="20dp"
             android:paddingHorizontal="10dp"
             >
+            <EditText
+                android:id="@+id/searchUser"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/searchIcon"
+                android:background="@drawable/rounded_search_edit_text"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="30dp"
+                android:hint="Search For People"
+                android:paddingHorizontal="10dp"
+                />
+            <ImageView
+                android:id="@+id/searchIcon"
+                android:layout_width="60dp"
+                android:layout_height="50dp"
+                app:layout_constraintTop_toTopOf="@id/searchUser"
+                app:layout_constraintBottom_toBottomOf="@id/searchUser"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:src="@drawable/ic_search"
+                android:paddingHorizontal="10dp"
+                />
 
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintTop_toBottomOf="@id/searchUser"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="20dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
 
-
-
+                />
 
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </layout>
