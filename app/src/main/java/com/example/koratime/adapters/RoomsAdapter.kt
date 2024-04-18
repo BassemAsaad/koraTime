@@ -34,10 +34,11 @@ class RoomsAdapter (var rooms : List<RoomModel?>?): RecyclerView.Adapter<RoomsAd
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(rooms!![position])
+        val room = rooms!![position]
+        holder.bind(room)
 
         holder.itemView.setOnClickListener {
-            onItemClickListener?.onItemClick(rooms!![position],position)
+            onItemClickListener?.onItemClick(room,position)
         }
     }
     fun changeData( newRoom : List<RoomModel?>?){
