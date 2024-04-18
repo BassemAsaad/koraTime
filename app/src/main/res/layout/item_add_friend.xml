@@ -5,7 +5,7 @@
 
     <data>
         <variable
-            name="vm"
+            name="userModel"
             type="com.example.koratime.model.UserModel" />
     </data>
 
@@ -20,7 +20,7 @@
             android:id="@+id/userImage_item"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            app:imageUrl="@{vm.profilePicture}"
+            app:imageUrl="@{userModel.profilePicture}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -32,14 +32,13 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="@id/userImage_item"
             app:layout_constraintStart_toEndOf="@id/userImage_item"
-            tools:text="Mohammed Ehab"
-            android:text="@{vm.userName}"
+            android:text="Mohammed Ehab"
             android:layout_marginStart="10dp"
             android:layout_marginTop="15dp"
             android:textSize="20sp" />
 
         <Button
-            android:id="@+id/buttonConfirm_item"
+            android:id="@+id/addFriendButton_item"
             android:layout_width="120dp"
             android:layout_height="50dp"
             app:layout_constraintStart_toEndOf="@id/userImage_item"
@@ -50,9 +49,10 @@
             android:textColor="@color/white" />
 
         <Button
+            android:id="@+id/clearFriendButton_item"
             android:layout_width="120dp"
             android:layout_height="50dp"
-            app:layout_constraintStart_toEndOf="@id/buttonConfirm_item"
+            app:layout_constraintStart_toEndOf="@id/addFriendButton_item"
             app:layout_constraintBottom_toBottomOf="@id/userImage_item"
             android:backgroundTint="@color/primaryVariant"
             android:layout_marginStart="5dp"

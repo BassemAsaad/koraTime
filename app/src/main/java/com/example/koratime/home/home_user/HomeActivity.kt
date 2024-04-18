@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
@@ -113,7 +114,8 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>() , HomeN
     }
     @SuppressLint("MissingPermission")
     private fun getLastKnownLocation() {
-        fusedLocationProviderClient.lastLocation.addOnSuccessListener { location ->
+        fusedLocationProviderClient.lastLocation
+            .addOnSuccessListener { location ->
             if (location != null) {
                 val latitude = location.latitude
                 val longitude = location.longitude
@@ -123,17 +125,29 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>() , HomeN
 
                 // Update user's location in Firestore along with city name
                 val userId = auth.currentUser?.uid
+
                 if (userId != null) {
-                    updateLocationInFirestore(userId, latitude, longitude, cityName)
+                    updateLocationInFirestore(userId, latitude, longitude, cityName,
+                        onSuccessListener = {
+                            Log.e("Firestore", "Location updated in Firestore")
+                        },
+                        onFailureListener = {
+                            Log.e("Firestore", "Error updating location in Firestore")
+                        }
+                    )
                 } else {
-                    Toast.makeText(this, "Failed to update location: User ID is null", Toast.LENGTH_SHORT).show()
+                    Log.e("Firestore", "Failed to update location: User ID is null")
                 }
             } else {
-                Toast.makeText(this, "Last known location is not available.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Last known location is not available.",
+                    Toast.LENGTH_SHORT).show()
+            } }//end of onSuccess
+            .addOnFailureListener {
+            Toast.makeText(this, "Failed to get last known location.",
+                Toast.LENGTH_SHORT).show()
             }
-        }.addOnFailureListener {
-            Toast.makeText(this, "Failed to get last known location.", Toast.LENGTH_SHORT).show()
-        }
+
+
     }
     private fun getCityName(latitude: Double, longitude: Double): String {
         val geocoder = Geocoder(this, Locale.getDefault())
@@ -141,7 +155,7 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>() , HomeN
         return if (addresses!!.isNotEmpty()) {
             addresses[0].locality ?: addresses[0].adminArea ?: ""
         } else {
-            ""
+            "null"
         }
     }
     private fun requestLocationPermissions() {

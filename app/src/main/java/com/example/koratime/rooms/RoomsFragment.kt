@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.koratime.R
 import com.example.koratime.adapters.RoomsAdapter
-import com.example.koratime.database.getRoomsFromFirestore
+import com.example.koratime.database.getAllRoomsFromFirestore
 import com.example.koratime.rooms.createRoom.AddRoomActivity
 import com.example.koratime.databinding.FragmentRoomsBinding
 import com.example.koratime.home.home_user.HomeActivity
@@ -66,7 +66,7 @@ class RoomsFragment : Fragment(),RoomsNavigator {
     override fun onStart() {
         super.onStart()
 
-        getRoomsFromFirestore(
+        getAllRoomsFromFirestore(
             onSuccessListener = {querySnapShot->
                 val rooms = querySnapShot.toObjects(RoomModel::class.java)
                 adapter.changeData(rooms)

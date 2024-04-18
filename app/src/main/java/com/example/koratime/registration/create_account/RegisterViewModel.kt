@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import com.example.koratime.basic.BasicViewModel
-import com.example.koratime.database.addUser_toFirestore
+import com.example.koratime.database.addUserToFirestore
 import com.example.koratime.model.UserModel
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
@@ -79,7 +79,7 @@ class RegisterViewModel : BasicViewModel<RegisterNavigator>() {
             email = email.get(),
             profilePicture = imageUrl.value
         )
-        addUser_toFirestore(
+        addUserToFirestore(
             user,
             //OnSuccessListener
             {

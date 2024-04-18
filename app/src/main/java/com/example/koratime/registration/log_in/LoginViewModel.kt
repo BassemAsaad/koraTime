@@ -4,7 +4,7 @@ package com.example.koratime.registration.log_in
 import android.util.Log
 import androidx.databinding.ObservableField
 import com.example.koratime.basic.BasicViewModel
-import com.example.koratime.database.getUserData_forLogin
+import com.example.koratime.database.getUserForLogin
 import com.example.koratime.model.UserModel
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.*
@@ -52,7 +52,7 @@ class LoginViewModel : BasicViewModel<LoginNavigator>() {
     }
 
     private fun getUserFromFirestore(uid: String?) {
-        getUserData_forLogin(
+        getUserForLogin(
             uid,
             //OnSuccessListener
             onSuccessListener = OnSuccessListener{ docSnapshot->

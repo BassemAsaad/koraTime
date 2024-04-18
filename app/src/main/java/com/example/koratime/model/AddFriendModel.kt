@@ -1,13 +1,12 @@
 package com.example.koratime.model
 
-data class FriendsModel(
+data class AddFriendModel(
     val from : String?=null,
     val to : String?=null,
     val status : String?=null,
-    val id : String?=null,
-    var sentAt : Long?=null,
+    var sentAt : Long?= System.currentTimeMillis()
 ){
     companion object{
-        const val collectionName = "sendFriendRequest"
+        const val collectionName = "FriendRequest"
     }
 }
