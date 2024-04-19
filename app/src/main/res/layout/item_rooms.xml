@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardBackgroundColor="#FFFFFF"
-        app:cardCornerRadius="40dp"
+        app:cardCornerRadius="5dp"
         app:contentPadding="5dp"
         android:layout_marginHorizontal="20dp"
         android:layout_marginVertical="15dp"
@@ -22,42 +22,46 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="10dp"
+            android:layout_margin="5dp"
             >
+
+            <ImageView
+                android:id="@+id/roomImage_item"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                app:imageUrl="@{vm.imageUrl}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/ic_friends" />
+
             <TextView
                 android:id="@+id/roomName_item"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                tools:text="Room Name"
-                android:textSize="20sp"
-                android:textColor="@color/black"
                 android:layout_marginStart="12dp"
                 android:text="@{vm.name}"
-                />
-            <ImageView
-                android:id="@+id/roomImage_item"
-                android:layout_width="300dp"
-                android:layout_height="80dp"
-                app:layout_constraintTop_toBottomOf="@id/roomName_item"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                tools:src="@drawable/ic_friends"
-                app:imageUrl="@{vm.imageUrl}"
-                android:layout_marginTop="5dp"
-                />
+                android:textColor="@color/black"
+                android:layout_marginTop="10dp"
+                android:textSize="20sp"
+                app:layout_constraintStart_toEndOf="@id/roomImage_item"
+                app:layout_constraintTop_toTopOf="@id/roomImage_item"
+                tools:text="Room Name" />
+
 
             <TextView
                 android:id="@+id/roomDescription_item"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/roomImage_item"
-                app:layout_constraintStart_toStartOf="parent"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintTop_toBottomOf="@id/roomName_item"
+                app:layout_constraintStart_toEndOf="@id/roomImage_item"
+                app:layout_constraintBottom_toBottomOf="@id/roomImage_item"
+                app:layout_constraintEnd_toEndOf="parent"
                 tools:text="@tools:sample/lorem/random"
                 android:textSize="15sp"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"
                 android:textColor="#8A8686"
-                android:layout_marginTop="8dp"
                 android:text="@{vm.description}"
                 android:lines="2"
                 android:ellipsize="end"

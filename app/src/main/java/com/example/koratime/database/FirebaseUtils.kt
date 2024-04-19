@@ -1,7 +1,7 @@
 package com.example.koratime.database
 
 import android.net.Uri
-import com.example.koratime.model.AddFriendModel
+import com.example.koratime.model.FriendModel
 import com.example.koratime.model.RoomModel
 import com.example.koratime.model.UserModel
 import com.google.android.gms.tasks.OnFailureListener
@@ -132,9 +132,9 @@ fun addFriendFromFirestore(from: String,
                            onFailureListener: OnFailureListener) {
 
     val db = Firebase.firestore
-    val request = AddFriendModel(from = from, to = to, status = "pending")
+    val request = FriendModel(from = from, to = to, status = "pending")
     // Add the friend request to Firestore
-    val collection = db.collection(AddFriendModel.collectionName)
+    val collection = db.collection(FriendModel.collectionName)
     collection
         .add(request)
         .addOnSuccessListener(onSuccessListener)

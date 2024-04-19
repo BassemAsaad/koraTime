@@ -97,6 +97,8 @@
                         android:layout_height="match_parent"
                         android:hint="Enter Room Name"
                         android:text="@={vm.roomName}"
+                        android:inputType="text|number"
+                        android:lines="1"
                         />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -106,15 +108,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     app:error="@{vm.descriptionError}"
-
+                    android:inputType="text|number"
                     >
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:hint="Enter Room Description"
                         android:text="@={vm.description}"
-                        android:lines="4"
-
+                        android:lines="2"
                         />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -123,7 +124,7 @@
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_gravity="center"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="20dp"
                     android:src="@drawable/group_profile"
                     app:civ_border_width="3dp"
                     app:civ_border_color="@color/primaryVariant"

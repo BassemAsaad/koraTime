@@ -98,6 +98,8 @@
                             android:layout_height="match_parent"
                             android:hint="First Name"
                             android:text="@={registerVM.firstName}"
+                            android:lines="1"
+                            android:inputType="textPersonName"
                             />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -115,6 +117,8 @@
                             android:layout_height="match_parent"
                             android:hint="Second Name"
                             android:text="@={registerVM.secondName}"
+                            android:lines="1"
+                            android:inputType="textPersonName"
                             />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -132,6 +136,8 @@
                             android:layout_height="match_parent"
                             android:hint="User Name"
                             android:text="@={registerVM.userName}"
+                            android:lines="1"
+                            android:inputType="text|number"
 
                             />
                     </com.google.android.material.textfield.TextInputLayout>
@@ -148,6 +154,7 @@
                             android:layout_height="match_parent"
                             android:hint="National ID"
                             android:text="@={registerVM.nationalID}"
+                            android:lines="1"
                             android:inputType="number"
                             />
                     </com.google.android.material.textfield.TextInputLayout>
