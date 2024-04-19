@@ -32,7 +32,9 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="@id/userImage_item"
             app:layout_constraintStart_toEndOf="@id/userImage_item"
-            android:text="Mohammed Ehab"
+            tools:text="Mohammed Ehab"
+            android:text="@{userModel.userName}"
+
             android:layout_marginStart="10dp"
             android:layout_marginTop="15dp"
             android:textSize="20sp" />
