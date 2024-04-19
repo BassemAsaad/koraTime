@@ -17,4 +17,7 @@
     <string name="enter_room_description">Enter Room Description</string>
     <string name="create_new_room">Create New Room</string>
     <string name="create_room">Create Room</string>
+    <string name="remember_me">Remember me</string>
+    <string name="log_in">Log In</string>
+    <string name="you_dont_have_an_account_sign_up">You dont have an account? Sign up</string>
 </resources>

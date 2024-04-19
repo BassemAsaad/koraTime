@@ -42,7 +42,7 @@
                         android:background="@color/transparent"
                         android:gravity="center"
                         android:padding="10dp"
-                        android:text="Log in"
+                        android:text="@string/log_in"
                         android:textColor="@color/white"
                         android:textSize="40sp"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -89,9 +89,10 @@
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:hint="Email"
+                        android:hint="@string/email"
                         android:text="@={loginVM.emailLogin}"
-
+                        android:autofillHints="emailAddress"
+                        android:inputType="textEmailAddress"
                         />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -107,22 +108,27 @@
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:hint="Password"
+                        android:hint="@string/password"
                         android:inputType="textPassword"
                         android:text="@={loginVM.passwordLogin}"
-
-                        />
+                        android:autofillHints="password" />
                 </com.google.android.material.textfield.TextInputLayout>
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="textEnd"
+                    android:text="@string/remember_me"
+
+                    />
 
                 <Button
                     android:id="@+id/create_account"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="10dp"
                     android:onClick="@{()->loginVM.loginIntoAccount()}"
                     android:paddingVertical="10dp"
-                    android:text="Sign In"
+                    android:text="@string/log_in"
                     android:textSize="20sp" />
 
                 <TextView
@@ -131,8 +137,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="10dp"
-                    android:text="You dont have an account? sign up"
-                    android:textColor="@color/primary"
+                    android:text="@string/you_dont_have_an_account_sign_up"
+                    android:textColor="#0277BD"
                     android:textSize="15sp" />
 
 
