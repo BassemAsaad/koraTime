@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="vm"
             type="com.example.koratime.messages.MessagesViewModel" />
@@ -12,9 +13,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".messages.MessagesActivity"
         android:background="@drawable/main_bg"
-        >
+        tools:context=".messages.MessagesActivity">
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"

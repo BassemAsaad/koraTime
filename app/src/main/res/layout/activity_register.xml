@@ -4,32 +4,33 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="android.view.View"/>
+
+        <import type="android.view.View" />
+
         <variable
             name="registerVM"
-            type="com.example.koratime.registration.create_account.RegisterViewModel"
-            />
+            type="com.example.koratime.registration.create_account.RegisterViewModel" />
     </data>
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/main_bg"
             android:fitsSystemWindows="true"
-            tools:context=".registration.RegisterActivity"
-            android:background="@drawable/main_bg">
+            tools:context=".registration.RegisterActivity">
 
             <com.google.android.material.appbar.AppBarLayout
                 android:id="@+id/app_bar"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_height="wrap_content"
                 android:layout_width="match_parent"
-                android:fitsSystemWindows="true"
+                android:layout_height="wrap_content"
                 android:background="@color/transparent"
-                android:elevation="0dp">
+                android:elevation="0dp"
+                android:fitsSystemWindows="true"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <com.google.android.material.appbar.MaterialToolbar
                     android:id="@+id/toolbar"
@@ -39,22 +40,21 @@
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginHorizontal="30dp"
-                        >
+                        android:layout_marginHorizontal="30dp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            android:text= "Create Account"
-                            android:textSize="40sp"
-                            android:textColor="@color/white"
                             android:background="@color/transparent"
                             android:gravity="center"
                             android:padding="10dp"
+                            android:text="@string/create_account"
+                            android:textColor="@color/white"
+                            android:textSize="40sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
 
                             />
                     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -65,8 +65,8 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@+id/app_bar"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/app_bar"
 
                 >
 
@@ -80,27 +80,25 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@id/guide_line"
                     android:orientation="vertical"
                     android:paddingHorizontal="10dp"
-                    >
+                    app:layout_constraintTop_toBottomOf="@id/guide_line">
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/first_name_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:boxBackgroundColor="@color/transparent"
-                        app:error="@{registerVM.firstNameError}"
-                        >
+                        app:error="@{registerVM.firstNameError}">
 
                         <EditText
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:hint="First Name"
-                            android:text="@={registerVM.firstName}"
-                            android:lines="1"
+                            android:autofillHints="first name"
+                            android:hint="@string/first_name"
                             android:inputType="textPersonName"
-                            />
+                            android:lines="1"
+                            android:text="@={registerVM.firstName}" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -112,14 +110,15 @@
                         app:error="@{registerVM.secondNameError}"
 
                         >
+
                         <EditText
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:hint="Second Name"
-                            android:text="@={registerVM.secondName}"
-                            android:lines="1"
+                            android:autofillHints="last name"
+                            android:hint="@string/last_name"
                             android:inputType="textPersonName"
-                            />
+                            android:lines="1"
+                            android:text="@={registerVM.secondName}" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -131,32 +130,33 @@
                         app:error="@{registerVM.userNameError}"
 
                         >
+
                         <EditText
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:hint="User Name"
-                            android:text="@={registerVM.userName}"
-                            android:lines="1"
+                            android:autofillHints="username"
+                            android:hint="@string/user_name"
                             android:inputType="text|number"
-
-                            />
+                            android:lines="1"
+                            android:text="@={registerVM.userName}" />
                     </com.google.android.material.textfield.TextInputLayout>
+
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/nationalID_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:boxBackgroundColor="@color/transparent"
-                        app:error="@{registerVM.nationalIDError}"
                         android:visibility="gone"
-                        >
+                        app:boxBackgroundColor="@color/transparent"
+                        app:error="@{registerVM.nationalIDError}">
+
                         <EditText
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:hint="National ID"
-                            android:text="@={registerVM.nationalID}"
-                            android:lines="1"
+                            android:autofillHints="enter your national id"
+                            android:hint="@string/national_id"
                             android:inputType="number"
-                            />
+                            android:lines="1"
+                            android:text="@={registerVM.nationalID}" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -168,13 +168,14 @@
                         app:error="@{registerVM.emailError}"
 
                         >
+
                         <com.google.android.material.textfield.TextInputEditText
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:hint="Email"
-                            android:text="@={registerVM.email}"
+                            android:autofillHints="emailAddress"
+                            android:hint="@string/email"
                             android:inputType="textEmailAddress"
-                            />
+                            android:text="@={registerVM.email}" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -184,17 +185,15 @@
                         android:layout_marginTop="5dp"
                         app:boxBackgroundColor="@color/transparent"
                         app:error="@{registerVM.passwordError}"
-                        app:passwordToggleEnabled="true"
-                        >
+                        app:passwordToggleEnabled="true">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:hint="Password"
-                            android:text="@={registerVM.password}"
+                            android:autofillHints="password"
+                            android:hint="@string/password"
                             android:inputType="textPassword"
-
-                            />
+                            android:text="@={registerVM.password}" />
                     </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -204,26 +203,27 @@
                         android:layout_height="wrap_content"
 
                         >
+
                         <RadioButton
                             android:id="@+id/asPlayer_layout"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Sign Up As Player"
                             android:layout_marginTop="5dp"
                             android:checked="true"
-                            />
+                            android:text="@string/sign_up_as_player" />
+
                         <RadioButton
                             android:id="@+id/asStadiumManager_layout"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:text="Sign Up As Stadium Manager"
                             android:checked="@={registerVM.asManagerRadioButton}"
-                            />
+                            android:text="@string/sign_up_as_stadium_manager" />
                     </RadioGroup>
+
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        >
+                        android:layout_height="wrap_content">
+
                         <de.hdodenhof.circleimageview.CircleImageView
                             android:id="@+id/profilePicture_layout"
                             android:layout_width="100dp"
@@ -231,24 +231,23 @@
                             android:layout_gravity="start"
                             android:layout_marginTop="12dp"
                             android:src="@drawable/default_user_pic"
-                            app:civ_border_width="1dp"
                             app:civ_border_color="@color/primaryVariant"
-                            app:layout_constraintTop_toTopOf="parent"
+                            app:civ_border_width="1dp"
                             app:layout_constraintStart_toStartOf="parent"
-                            />
+                            app:layout_constraintTop_toTopOf="parent" />
+
                         <TextView
                             android:id="@+id/profileText_layout"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="start"
-                            android:text="Add Profile Picture"
+                            android:layout_marginStart="10dp"
+                            android:text="@string/add_profile_picture"
                             android:textColor="@color/black"
                             android:textSize="20sp"
-                            android:layout_marginStart="10dp"
-                            app:layout_constraintStart_toEndOf="@id/profilePicture_layout"
-                            app:layout_constraintTop_toTopOf="@id/profilePicture_layout"
                             app:layout_constraintBottom_toBottomOf="@id/profilePicture_layout"
-                            />
+                            app:layout_constraintStart_toEndOf="@id/profilePicture_layout"
+                            app:layout_constraintTop_toTopOf="@id/profilePicture_layout" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -257,22 +256,20 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:text="@string/create_account"
-                        android:paddingVertical="10dp"
                         android:onClick="@{()->registerVM.createAccount()}"
-                        />
+                        android:paddingVertical="10dp"
+                        android:text="@string/create_account" />
 
                     <TextView
                         android:id="@+id/log_in"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="You have an account? Sign in"
                         android:layout_gravity="center"
                         android:layout_margin="20dp"
-                        android:textSize="15sp"
-                        android:textColor="@color/primary"
                         android:layout_marginBottom="40dp"
-                        />
+                        android:text="@string/you_have_an_account_sign_in"
+                        android:textColor="@color/primary"
+                        android:textSize="15sp" />
 
                 </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,4 +1,20 @@
 <resources>
     <string name="app_name">Kora Time</string>
     <string name="create_account">Create Account</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="user_name">User Name</string>
+    <string name="national_id">National ID</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="sign_up_as_player">Sign Up As Player</string>
+    <string name="sign_up_as_stadium_manager">Sign Up As Stadium Manager</string>
+    <string name="add_profile_picture">Add Profile Picture</string>
+    <string name="you_have_an_account_sign_in">You have an account? Sign in</string>
+    <string name="add_room">Add Room</string>
+    <string name="add_room_picture">Add Room Picture</string>
+    <string name="enter_room_name">Enter Room Name</string>
+    <string name="enter_room_description">Enter Room Description</string>
+    <string name="create_new_room">Create New Room</string>
+    <string name="create_room">Create Room</string>
 </resources>
