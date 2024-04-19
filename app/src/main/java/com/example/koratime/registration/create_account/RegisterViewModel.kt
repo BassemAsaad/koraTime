@@ -105,6 +105,7 @@ class RegisterViewModel : BasicViewModel<RegisterNavigator>() {
         nationalIDError.set("Enter National ID")
     } else if (asManagerRadioButton.get()==true && nationalID.get()?.length !=14)  {
         nationalIDError.set("Not Correct National ID")
+        valid = false
     } else{
         nationalIDError.set(null)
     }
