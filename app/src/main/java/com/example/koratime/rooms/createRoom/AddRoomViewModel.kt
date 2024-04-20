@@ -14,16 +14,19 @@ class AddRoomViewModel : BasicViewModel<AddRoomNavigator>() {
     val roomNameError = ObservableField<String>()
     val description = ObservableField<String>()
     val descriptionError = ObservableField<String>()
+    val password = ObservableField<String>()
+    val passwordError = ObservableField<String>()
     val imageUrl = MutableLiveData<String>()
     private val user = Firebase.auth.currentUser
 
     fun createRoom(){
         if (validate()){
             val room = RoomModel(
-                name = roomName.get(),
-                description = description.get(),
-                imageUrl = imageUrl.value,
-                userManager = user?.uid
+                    name = roomName.get(),
+                    description = description.get(),
+                    password = password.get(),
+                    imageUrl = imageUrl.value,
+                    userManager = user?.uid
             )
             //add in firebase
             addRoom(room)
@@ -46,7 +49,7 @@ class AddRoomViewModel : BasicViewModel<AddRoomNavigator>() {
             }
         )
     }
-    fun validate():Boolean{
+    private fun validate():Boolean{
         var valid = true
         if (roomName.get().isNullOrBlank()){
             roomNameError.set("Please enter the room name")
@@ -60,7 +63,12 @@ class AddRoomViewModel : BasicViewModel<AddRoomNavigator>() {
         } else{
             descriptionError.set(null)
         }
-
+        if( password.get()!!.length > 10){
+            passwordError.set("Password length should be less than 10")
+            valid=false
+        } else{
+            passwordError.set(null)
+        }
         return valid
     }
 

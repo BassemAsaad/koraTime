@@ -8,6 +8,10 @@
         <variable
             name="vm"
             type="com.example.koratime.model.RoomModel" />
+        <variable
+            name="roomsViewModel"
+            type="com.example.koratime.rooms.RoomsViewModel" />
+        <import type="android.view.View"/>
     </data>
 
     <androidx.cardview.widget.CardView
@@ -32,10 +36,11 @@
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 app:imageUrl="@{vm.imageUrl}"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:src="@drawable/ic_friends" />
+                app:layout_constraintBottom_toTopOf="@id/linearLayout"
+                tools:src="@drawable/ic_friends"
+                android:contentDescription="@string/room_image" />
 
             <TextView
                 android:id="@+id/roomName_item"
@@ -60,13 +65,54 @@
                 android:ellipsize="end"
                 android:lines="2"
                 android:text="@{vm.description}"
-                android:textColor="#8A8686"
+                android:textColor="#757575"
                 android:textSize="15sp"
                 app:layout_constraintBottom_toBottomOf="@id/roomImage_item"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/roomImage_item"
                 app:layout_constraintTop_toBottomOf="@id/roomName_item"
                 tools:text="@tools:sample/lorem/random" />
+
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center"
+                app:layout_constraintTop_toBottomOf="@id/roomImage_item"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+
+                >
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/roomPassowrd_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:inputType="text"
+                android:visibility="@{vm.password != null &amp;&amp; vm.password.length() > 0 ? View.VISIBLE : View.GONE}"
+                >
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:autofillHints="enter room password (optional)"
+                    android:hint="Enter room password to join"
+                    android:inputType="text"
+                    android:lines="1"
+                    android:text="@={roomsViewModel.password}"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
+            <Button
+                android:id="@+id/joinButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Join Room"
+                android:layout_marginTop="8dp"
+                />
+            </LinearLayout>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

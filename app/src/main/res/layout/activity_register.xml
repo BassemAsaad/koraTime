@@ -136,7 +136,7 @@
                             android:layout_height="match_parent"
                             android:autofillHints="username"
                             android:hint="@string/user_name"
-                            android:inputType="text|number"
+                            android:inputType="text"
                             android:lines="1"
                             android:text="@={registerVM.userName}" />
                     </com.google.android.material.textfield.TextInputLayout>

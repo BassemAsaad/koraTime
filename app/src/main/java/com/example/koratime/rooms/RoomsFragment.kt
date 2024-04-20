@@ -53,9 +53,20 @@ class RoomsFragment : Fragment(),RoomsNavigator {
 
          adapter.onItemClickListener = object : RoomsAdapter.OnItemClickListener{
              override fun onItemClick(room: RoomModel?, position: Int) {
+                 viewModel.roomPassword.value = room?.password
                  (activity as? HomeActivity)?.onRoomClick(room,position)
              }
          }
+    }
+
+    //join button
+    override fun openRoomChatActivity(room: RoomModel?, position: Int) {
+
+            if (viewModel.checkRoomPassword()){
+                (activity as? HomeActivity)?.onRoomClick(room,position)
+            }
+
+
     }
 
     override fun openAddRoomActivity() {
