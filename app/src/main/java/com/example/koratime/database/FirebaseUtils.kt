@@ -95,7 +95,6 @@ fun getAllRoomsFromFirestore(onSuccessListener: OnSuccessListener<QuerySnapshot>
 fun getUserRoomsFromFirestore(userId: String,
                               onSuccessListener: OnSuccessListener<QuerySnapshot>,
                               onFailureListener: OnFailureListener) {
-//    = collection.id
     val db = Firebase.firestore
     val collection= db.collection(RoomModel.COLLECTION_NAME)
     collection
@@ -134,7 +133,7 @@ fun addFriendFromFirestore(from: String,
                            onFailureListener: OnFailureListener) {
 
     val db = Firebase.firestore
-    val request = FriendModel(from = from, to = to, status = "pending")
+    val request = FriendModel(from = from, to = to, status = "pending",checkFriendRequest = true)
     // Add the friend request to Firestore
     val collection = db.collection(FriendModel.collectionName)
     collection
