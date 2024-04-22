@@ -1,4 +1,4 @@
-package com.example.koratime.database
+package com.example.koratime
 
 import android.net.Uri
 import android.widget.ImageView

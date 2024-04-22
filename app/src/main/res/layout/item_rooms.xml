@@ -6,7 +6,7 @@
     <data>
 
         <variable
-            name="vm"
+            name="roomModel"
             type="com.example.koratime.model.RoomModel" />
         <variable
             name="roomsViewModel"
@@ -35,7 +35,7 @@
                 android:id="@+id/roomImage_item"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                app:imageUrl="@{vm.imageUrl}"
+                app:imageUrl="@{roomModel.imageUrl}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toTopOf="@id/linearLayout"
@@ -48,7 +48,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="10dp"
-                android:text="@{vm.name}"
+                android:text="@{roomModel.name}"
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 app:layout_constraintStart_toEndOf="@id/roomImage_item"
@@ -64,7 +64,7 @@
                 android:layout_marginTop="10dp"
                 android:ellipsize="end"
                 android:lines="2"
-                android:text="@{vm.description}"
+                android:text="@{roomModel.description}"
                 android:textColor="#757575"
                 android:textSize="15sp"
                 app:layout_constraintBottom_toBottomOf="@id/roomImage_item"
@@ -91,8 +91,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:inputType="text"
-                android:visibility="@{vm.password != null &amp;&amp; vm.password.length() > 0 ? View.VISIBLE : View.GONE}"
+                android:visibility="@{roomModel.password != null &amp;&amp; roomModel.password.length() > 0 ? View.VISIBLE : View.GONE}"
+
                 >
 
                 <EditText
@@ -100,10 +100,8 @@
                     android:layout_height="match_parent"
                     android:autofillHints="enter room password (optional)"
                     android:hint="Enter room password to join"
-                    android:inputType="text"
-                    android:lines="1"
                     android:text="@={roomsViewModel.password}"
-                    />
+                    android:inputType="text" />
             </com.google.android.material.textfield.TextInputLayout>
             <Button
                 android:id="@+id/joinButton"

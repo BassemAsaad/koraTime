@@ -63,12 +63,7 @@ class AddRoomViewModel : BasicViewModel<AddRoomNavigator>() {
         } else{
             descriptionError.set(null)
         }
-        if( password.get()!!.length > 10){
-            passwordError.set("Password length should be less than 10")
-            valid=false
-        } else{
-            passwordError.set(null)
-        }
+
         return valid
     }
 

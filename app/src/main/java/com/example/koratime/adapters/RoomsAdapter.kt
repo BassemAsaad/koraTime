@@ -12,7 +12,7 @@ class RoomsAdapter (var rooms : List<RoomModel?>?): RecyclerView.Adapter<RoomsAd
 
     class ViewHolder(val dataBinding :ItemRoomsBinding): RecyclerView.ViewHolder(dataBinding.root){
         fun bind(room : RoomModel?){
-            dataBinding.vm = room
+            dataBinding.roomModel = room
             dataBinding.invalidateAll()
         }
 
@@ -37,7 +37,7 @@ class RoomsAdapter (var rooms : List<RoomModel?>?): RecyclerView.Adapter<RoomsAd
         val room = rooms!![position]
         holder.bind(room)
 
-        holder.itemView.setOnClickListener {
+        holder.dataBinding.joinButton.setOnClickListener {
             onItemClickListener?.onItemClick(room,position)
         }
     }

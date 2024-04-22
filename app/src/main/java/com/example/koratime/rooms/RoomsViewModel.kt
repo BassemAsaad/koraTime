@@ -9,13 +9,14 @@ class RoomsViewModel : BasicViewModel<RoomsNavigator>() {
 
     val password = ObservableField<String>()
     val passwordError = ObservableField<String>()
-    val roomPassword = MutableLiveData<String?>()
+    val roomPassword = MutableLiveData<String>()
+
     fun checkRoomPassword():Boolean{
         var check = true
         if (password.get() != roomPassword.value){
             passwordError.set("Wrong Password")
             check = false
-        }else{
+        }else {
             passwordError.set(null)
         }
         return check

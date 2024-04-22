@@ -1,6 +1,6 @@
 package com.example.koratime.rooms.createRoom
 
-import android.annotation.SuppressLint
+
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -54,7 +54,7 @@ class AddRoomActivity : BasicActivity< ActivityAddRoomBinding, AddRoomViewModel>
 
     }
 
-    fun openImagePicker(){
+    private fun openImagePicker(){
         // Registers a photo picker activity launcher in single-select mode.
          pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             // photo picker

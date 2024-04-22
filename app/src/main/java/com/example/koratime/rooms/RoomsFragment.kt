@@ -54,20 +54,17 @@ class RoomsFragment : Fragment(),RoomsNavigator {
          adapter.onItemClickListener = object : RoomsAdapter.OnItemClickListener{
              override fun onItemClick(room: RoomModel?, position: Int) {
                  viewModel.roomPassword.value = room?.password
-                 (activity as? HomeActivity)?.onRoomClick(room,position)
+                 (activity as? HomeActivity)?.onRoomClick(room)
+
+//                 if (viewModel.checkRoomPassword()) {
+//                     (activity as? HomeActivity)?.onRoomClick(room)
+//                 } else {
+//                     Toast.makeText(context, viewModel.roomPassword.value, Toast.LENGTH_SHORT).show()
+//                 }
              }
          }
     }
 
-    //join button
-    override fun openRoomChatActivity(room: RoomModel?, position: Int) {
-
-            if (viewModel.checkRoomPassword()){
-                (activity as? HomeActivity)?.onRoomClick(room,position)
-            }
-
-
-    }
 
     override fun openAddRoomActivity() {
             val intent = Intent(requireContext(), AddRoomActivity::class.java)

@@ -86,7 +86,7 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>() , HomeN
 
 
     }
-    fun onRoomClick(room: RoomModel?, position: Int) {
+    fun onRoomClick(room: RoomModel?) {
         dataBinding.homeBar.selectedItemId = R.id.chat_bar
         pushFragment(ChatFragment(room),true)
     }
