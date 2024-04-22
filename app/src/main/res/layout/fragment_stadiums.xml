@@ -38,7 +38,7 @@
                         android:layout_width="60dp"
                         android:layout_height="55dp"
                         android:padding="5dp"
-                        android:src="@drawable/default_user_pic"
+                        android:src="@drawable/ic_default_user_pic"
                         app:layout_constraintBottom_toBottomOf="parent"
 
                         app:layout_constraintStart_toStartOf="parent"

@@ -22,7 +22,8 @@
             android:text="DDDDDDDDDDDDDDDD"
             android:textSize="50dp"
 
-            />
+            tools:layout_editor_absoluteX="-76dp"
+            tools:layout_editor_absoluteY="0dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

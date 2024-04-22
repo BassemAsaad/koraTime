@@ -23,7 +23,7 @@
             app:imageUrl="@{vm.profilePicture}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/stadium_img" />
+            tools:src="@drawable/ic_stadium_img" />
 
         <TextView
             android:id="@+id/textView"

@@ -2,11 +2,13 @@ package com.example.koratime.database
 
 import android.net.Uri
 import com.example.koratime.model.FriendModel
+import com.example.koratime.model.MessageModel
 import com.example.koratime.model.RoomModel
 import com.example.koratime.model.UserModel
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.Firebase
+import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
@@ -73,7 +75,7 @@ fun addRoomToFirestore(room:RoomModel,
     val db = Firebase.firestore
     val collection = db.collection(RoomModel.COLLECTION_NAME)
     val document = collection.document()
-    room.id = collection.id
+    room.id = document.id
     document.set(room)
         .addOnSuccessListener(onSuccessListener)
         .addOnFailureListener(onFailureListener)
@@ -141,3 +143,23 @@ fun addFriendFromFirestore(from: String,
         .addOnFailureListener(onFailureListener)
 }
 
+fun addMessageToFirestore(
+    message: MessageModel,
+    onSuccessListener: OnSuccessListener<Void>,
+    onFailureListener: OnFailureListener){
+
+    val db = Firebase.firestore
+    val collection = db.collection(RoomModel.COLLECTION_NAME)
+        .document(message.roomID!!)
+        .collection(MessageModel.collectionName)
+    val messageRef = collection.document()
+    message.messageID =messageRef.id
+    messageRef.set(message)
+        .addOnSuccessListener(onSuccessListener)
+        .addOnFailureListener(onFailureListener)
+}
+fun getMessageFromFirestore(roomId : String): CollectionReference {
+    val collectionRef = Firebase.firestore.collection(RoomModel.COLLECTION_NAME)
+    val roomRef = collectionRef.document(roomId)
+    return roomRef.collection(MessageModel.collectionName)
+}

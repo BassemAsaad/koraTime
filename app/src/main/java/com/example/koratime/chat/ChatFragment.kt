@@ -23,7 +23,7 @@ import com.google.firebase.auth.auth
 class ChatFragment (room: RoomModel?,): Fragment(),ChatNavigator {
     lateinit var dataBinding : FragmentChatBinding
     private lateinit var viewModel : ChatViewModel
-    val adapter = UserAdapter(null)
+    private val adapter = UserAdapter(null)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -35,7 +35,7 @@ class ChatFragment (room: RoomModel?,): Fragment(),ChatNavigator {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel =  ViewModelProvider(this).get(ChatViewModel::class.java)
+        viewModel = ViewModelProvider(this)[ChatViewModel::class.java]
 
     }
 

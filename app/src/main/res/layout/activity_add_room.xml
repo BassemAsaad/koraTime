@@ -143,7 +143,7 @@
                     android:layout_height="100dp"
                     android:layout_gravity="center"
                     android:layout_marginTop="20dp"
-                    android:src="@drawable/group_profile"
+                    android:src="@drawable/ic_group_profile"
                     app:civ_border_color="@color/primaryVariant"
                     app:civ_border_width="3dp" />
 
