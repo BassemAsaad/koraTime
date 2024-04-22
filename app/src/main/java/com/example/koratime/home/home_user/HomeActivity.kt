@@ -21,7 +21,6 @@ import com.example.koratime.friends.FriendsFragment
 import com.example.koratime.model.RoomModel
 import com.example.koratime.registration.log_in.LoginActivity
 import com.example.koratime.rooms.RoomsFragment
-import com.example.koratime.stadiums_manager.StadiumsManagerFragment
 import com.example.koratime.stadiums_user.StadiumsFragment
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -32,7 +31,7 @@ import java.util.Locale
 @Suppress("DEPRECATION")
 class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>() , HomeNavigator {
 
-    lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private val auth= Firebase.auth
     private val handler = Handler()
     companion object {
