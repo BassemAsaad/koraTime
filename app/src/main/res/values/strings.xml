@@ -21,4 +21,5 @@
     <string name="log_in">Log In</string>
     <string name="you_dont_have_an_account_sign_up">You dont have an account? Sign up</string>
     <string name="room_image">Room Image</string>
+    <string name="title_activity_maps">maps</string>
 </resources>
