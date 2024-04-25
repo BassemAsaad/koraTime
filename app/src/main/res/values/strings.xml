@@ -22,4 +22,10 @@
     <string name="you_dont_have_an_account_sign_up">You dont have an account? Sign up</string>
     <string name="room_image">Room Image</string>
     <string name="title_activity_maps">maps</string>
+    <string name="add_stadium">Add Stadium</string>
+    <string name="create_new_stadium">Create Stadium</string>
+    <string name="enter_stadium_name">Enter Stadium Name</string>
+    <string name="enter_stadium_description">Enter Stadium Description</string>
+    <string name="add_stadium_pictures">Add Stadium Pictures</string>
+    <string name="create_stadium">Create Stadium</string>
 </resources>
