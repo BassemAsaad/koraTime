@@ -55,8 +55,6 @@ class LocationPickerActivity : BasicActivity<ActivityLocationPickerBinding,Locat
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        dataBinding = ActivityLocationPickerBinding.inflate(layoutInflater)
-        setContentView(dataBinding.root)
 
         initView()
     }
@@ -72,8 +70,8 @@ class LocationPickerActivity : BasicActivity<ActivityLocationPickerBinding,Locat
 
 
     override fun initView() {
-
         // Enable back button on Toolbar
+        setSupportActionBar(dataBinding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
@@ -149,7 +147,6 @@ class LocationPickerActivity : BasicActivity<ActivityLocationPickerBinding,Locat
             finish()
 
         }
-
 
 
     }
@@ -330,11 +327,6 @@ class LocationPickerActivity : BasicActivity<ActivityLocationPickerBinding,Locat
         }
 
     }
-
-
-
-
-
 
 
 

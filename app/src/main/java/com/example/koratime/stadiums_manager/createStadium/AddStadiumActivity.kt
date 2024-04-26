@@ -40,7 +40,7 @@ class AddStadiumActivity : BasicActivity<ActivityAddStadiumBinding,AddStadiumVie
     override fun initView() {
         dataBinding.vm = viewModel
         viewModel.navigator=this
-
+        setSupportActionBar(dataBinding.toolbar)
         // Enable back button on Toolbar
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
