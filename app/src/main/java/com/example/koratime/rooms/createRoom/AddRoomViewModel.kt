@@ -1,5 +1,6 @@
 package com.example.koratime.rooms.createRoom
 
+import android.util.Log
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import com.example.koratime.basic.BasicViewModel
@@ -39,7 +40,7 @@ class AddRoomViewModel : BasicViewModel<AddRoomNavigator>() {
             room,
             onSuccessListener = {
                 showLoading.value=false
-
+                Log.e("Firebase","Room Added to Firestore")
                 //navigate
                 navigator?.roomsFragment()
             },

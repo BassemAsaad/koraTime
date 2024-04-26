@@ -1,7 +1,7 @@
 package com.example.koratime.model
 
 data class StadiumModel(
-    val id: String?=null,
+    var id: String?=null,
     val stadiumName: String?=null,
     val stadiumDescription: String?=null,
     val stadiumImageUrl :String?=null,

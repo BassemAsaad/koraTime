@@ -7,6 +7,8 @@
         <variable
             name="vm"
             type="com.example.koratime.stadiums_manager.createStadium.AddStadiumViewModel" />
+        <import type="android.view.View"/>
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -41,9 +43,9 @@
                         android:background="@color/transparent"
                         android:text="@string/add_stadium"
                         android:textColor="@color/white"
-                        android:textSize="40sp"
+                        android:textSize="30sp"
+                        android:layout_marginStart="20dp"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -89,16 +91,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    app:error="@{vm.}">
+                    app:error="@{vm.stadiumNameError}">
 
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:autofillHints="enter room name"
+                        android:autofillHints="enter stadium name"
                         android:hint="@string/enter_stadium_name"
                         android:inputType="text"
                         android:lines="1"
-                        android:text="@={vm.}" />
+                        android:text="@={vm.stadiumName}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -107,19 +109,17 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     android:inputType="text|number"
-                    app:error="@{vm.}">
+                    app:error="@{vm.descriptionError}">
 
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:autofillHints="enter room description"
+                        android:autofillHints="enter stadium description"
                         android:hint="@string/enter_stadium_description"
                         android:inputType="text"
-                        android:lines="2"
-                        android:text="@={vm.}" />
+                        android:lines="3"
+                        android:text="@={vm.description}" />
                 </com.google.android.material.textfield.TextInputLayout>
-
-
                 <ImageView
                     android:id="@+id/stadiumImages_layout"
                     android:layout_width="250dp"
@@ -127,8 +127,19 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="20dp"
                     android:src="@drawable/ic_stadium_img"
-                    app:civ_border_color="@color/primaryVariant"
-                    app:civ_border_width="3dp" />
+                    android:contentDescription="@string/add_stadium_picture" />
+                <TextView
+                    android:id="@+id/imageText_error"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+
+                    tools:text="Set Stadium Image"
+                    android:text="@={vm.imageError}"
+                    android:textColor="@color/red"
+                    android:textSize="12sp"
+                    android:visibility="@{vm.imageError != null ? View.VISIBLE : View.GONE}"
+                    />
 
                 <TextView
                     android:id="@+id/stadiumImagesText_layout"
@@ -136,9 +147,10 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="5dp"
-                    android:text="@string/add_stadium_pictures"
+                    android:text="@string/add_stadium_picture"
                     android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    />
 
                 <Button
                     android:id="@+id/stadiumButton_layout"
@@ -148,7 +160,7 @@
                     android:layout_margin="20dp"
                     android:layout_marginTop="20dp"
                     android:backgroundTint="@color/primary"
-                    android:onClick="@{()->vm.}"
+                    android:onClick="@{()->vm.createStadium()}"
                     android:text="@string/create_stadium"
                     android:textColor="@color/white" />
 

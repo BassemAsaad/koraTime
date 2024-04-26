@@ -16,7 +16,7 @@
         tools:context=".home.home_user.HomeActivity">
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/add_bottom_nav_bar"
+            android:id="@+id/create_Stadium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/blue_light"
@@ -27,7 +27,9 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/managerHome_bar"
-            app:shapeAppearance="@style/Theme.AppCompat.Light" />
+            app:shapeAppearance="@style/Theme.AppCompat.Light"
+            android:onClick="@{()->vm.createStadium()}"
+            />
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/managerHome_bar"

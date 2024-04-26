@@ -4,6 +4,7 @@ import android.net.Uri
 import com.example.koratime.model.FriendModel
 import com.example.koratime.model.MessageModel
 import com.example.koratime.model.RoomModel
+import com.example.koratime.model.StadiumModel
 import com.example.koratime.model.UserModel
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
@@ -22,7 +23,7 @@ fun addUserToFirestore(user : UserModel,
                        onSuccessListener: OnSuccessListener<Void>,
                        onFailureListener: OnFailureListener){
     val db = Firebase.firestore
-    val collection = db.collection(UserModel.collectionName)
+    val collection = db.collection(UserModel.COLLECTION_NAME)
     collection
         .document(user.id!!)
         .set(user)
@@ -34,7 +35,7 @@ fun getUserForLogin(uid: String?,
                     onSuccessListener: OnSuccessListener<DocumentSnapshot>,
                     onFailureListener: OnFailureListener){
     val db = Firebase.firestore
-    val collection = db.collection(UserModel.collectionName)
+    val collection = db.collection(UserModel.COLLECTION_NAME)
     collection
         .document(uid!!)
         .get()
@@ -47,7 +48,7 @@ fun getUsersFromFirestore(currentUserId: String?,
                           onFailureListener: OnFailureListener)
 {
     val db = Firebase.firestore
-    val collection =db.collection(UserModel.collectionName)
+    val collection =db.collection(UserModel.COLLECTION_NAME)
     collection
         .whereNotEqualTo("id", currentUserId)
         .get()
@@ -59,7 +60,7 @@ fun updateLocationInFirestore(userId: String, latitude: Double, longitude: Doubl
                               onSuccessListener: OnSuccessListener<Void>,
                               onFailureListener: OnFailureListener) {
     val db = FirebaseFirestore.getInstance()
-    val userRef = db.collection(UserModel.collectionName).document(userId)
+    val userRef = db.collection(UserModel.COLLECTION_NAME).document(userId)
     userRef.update(mapOf(
             "latitude" to latitude,
             "longitude" to longitude,
@@ -104,6 +105,7 @@ fun getUserRoomsFromFirestore(userId: String,
         .addOnSuccessListener(onSuccessListener)
         .addOnFailureListener(onFailureListener)
 }
+
 
 fun uploadImageToStorage(imageUri: Uri?,
                          onSuccessListener: OnSuccessListener<Uri>,
@@ -150,7 +152,7 @@ fun addMessageToFirestore(
     val db = Firebase.firestore
     val collection = db.collection(RoomModel.COLLECTION_NAME)
         .document(message.roomID!!)
-        .collection(MessageModel.collectionName)
+        .collection(MessageModel.COLLECTION_NAME)
     val messageRef = collection.document()
     message.messageID =messageRef.id
     messageRef.set(message)
@@ -160,5 +162,51 @@ fun addMessageToFirestore(
 fun getMessageFromFirestore(roomId : String): CollectionReference {
     val collectionRef = Firebase.firestore.collection(RoomModel.COLLECTION_NAME)
     val roomRef = collectionRef.document(roomId)
-    return roomRef.collection(MessageModel.collectionName)
+    return roomRef.collection(MessageModel.COLLECTION_NAME)
+}
+
+
+
+
+
+
+
+
+
+
+
+fun addStadiumToFirestore(stadium:StadiumModel,
+                          onSuccessListener: OnSuccessListener<Void>,
+                          onFailureListener: OnFailureListener) {
+    val db = Firebase.firestore
+    val collection = db.collection(StadiumModel.COLLECTION_NAME)
+    val document = collection.document()
+    stadium.id = document.id
+    document.set(stadium)
+        .addOnSuccessListener(onSuccessListener)
+        .addOnFailureListener(onFailureListener)
+}
+
+fun getAllStadiumsFromFirestore(onSuccessListener: OnSuccessListener<QuerySnapshot>,
+                                onFailureListener: OnFailureListener) {
+    val db = Firebase.firestore
+    val collection = db.collection(StadiumModel.COLLECTION_NAME)
+    collection
+        .orderBy("createdTimestamp", Query.Direction.DESCENDING)
+        .get()
+        .addOnSuccessListener(onSuccessListener)
+        .addOnFailureListener(onFailureListener)
+}
+
+fun getUserStadiumFromFirestore(userId: String,
+                                onSuccessListener: OnSuccessListener<QuerySnapshot>,
+                                onFailureListener: OnFailureListener) {
+    val db = Firebase.firestore
+    val collection= db.collection(StadiumModel.COLLECTION_NAME)
+    collection
+        .whereEqualTo("userManager", userId)
+        .orderBy("createdTimestamp", Query.Direction.ASCENDING)
+        .get()
+        .addOnSuccessListener(onSuccessListener)
+        .addOnFailureListener(onFailureListener)
 }

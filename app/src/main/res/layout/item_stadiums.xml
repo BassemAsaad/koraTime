@@ -1,50 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="20dp">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:id="@+id/stadium_name_item"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingHorizontal="10dp"
-        android:textColor="@color/grey"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@id/stadium_img_item"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:text="Stadium Name" />
+    <data>
+        <variable
+            name="stadiumModel"
+            type="com.example.koratime.model.StadiumModel" />
 
-    <ProgressBar
-        android:id="@+id/progressBar_item"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@id/stadium_img_item"
-        app:layout_constraintEnd_toEndOf="@id/stadium_img_item"
-        app:layout_constraintStart_toStartOf="@id/stadium_img_item"
-        app:layout_constraintTop_toTopOf="@id/stadium_img_item" />
+    </data>
 
-    <ImageView
-        android:id="@+id/stadium_img_item"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="160dp"
-        android:scaleType="centerCrop"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/stadium_name_item"
-        tools:src="@drawable/ic_stadium_img" />
-
-    <TextView
-        android:id="@+id/stadium_title_item"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:paddingHorizontal="5dp"
-        android:textColor="@color/dark_grey"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/stadium_img_item"
-        tools:text="Why are football's biggest clubs starting a new tournament?" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_marginTop="30dp">
+
+        <TextView
+            android:id="@+id/stadium_name_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="10dp"
+            android:text="@{stadiumModel.stadiumName}"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@id/stadium_img_item"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Stadium Name" />
+
+
+        <ImageView
+            android:id="@+id/stadium_img_item"
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/stadium_name_item"
+            app:layout_constraintBottom_toTopOf="@id/stadium_description_item"
+            tools:src="@drawable/ic_stadium_img"
+            app:imageUrl="@{stadiumModel.stadiumImageUrl}"
+            />
+
+        <TextView
+            android:id="@+id/stadium_description_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:paddingHorizontal="5dp"
+            android:text="@{stadiumModel.stadiumDescription}"
+            android:textColor="@color/dark_grey"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/stadium_img_item"
+            tools:text="Why are football's biggest clubs starting a new tournament?" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</layout>

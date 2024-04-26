@@ -15,6 +15,6 @@ data class UserModel(
     val friends: List<String> = emptyList()
 ){
     companion object{
-        const val collectionName = "User"
+        const val COLLECTION_NAME = "User"
     }
 }

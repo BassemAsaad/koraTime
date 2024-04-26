@@ -13,7 +13,7 @@ data class MessageModel(
     val roomID: String?=null,
 ){
     companion object{
-        const val collectionName = "Message"
+        const val COLLECTION_NAME = "Messages"
     }
     fun formatTime():String{
         val date = Date(dateTime!!)
