@@ -5,7 +5,8 @@ data class StadiumModel(
     val stadiumName: String?=null,
     val stadiumDescription: String?=null,
     val stadiumImageUrl :String?=null,
-    val userManager: String? =null
+    val userManager: String? =null,
+    val createdTimestamp: Long? = System.currentTimeMillis()
 ) {
     companion object {
         const val COLLECTION_NAME = "Stadiums"

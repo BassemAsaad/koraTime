@@ -205,7 +205,6 @@ fun getUserStadiumFromFirestore(userId: String?,
     val collection= db.collection(StadiumModel.COLLECTION_NAME)
     collection
         .whereEqualTo("userManager", userId)
-        .orderBy("createdTimestamp", Query.Direction.ASCENDING)
         .get()
         .addOnSuccessListener(onSuccessListener)
         .addOnFailureListener(onFailureListener)

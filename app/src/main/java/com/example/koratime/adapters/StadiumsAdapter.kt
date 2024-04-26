@@ -5,19 +5,15 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.koratime.R
-import com.example.koratime.databinding.ItemRoomsBinding
 import com.example.koratime.databinding.ItemStadiumsBinding
-import com.example.koratime.model.RoomModel
 import com.example.koratime.model.StadiumModel
 
 class StadiumsAdapter (var stadiumsList : List<StadiumModel?>?): RecyclerView.Adapter<StadiumsAdapter.ViewHolder>() {
 
-
-
     inner class ViewHolder(val dataBinding : ItemStadiumsBinding): RecyclerView.ViewHolder(dataBinding.root){
         fun bind(stadium : StadiumModel?){
             dataBinding.stadiumModel = stadium
-            dataBinding.executePendingBindings()
+            dataBinding.invalidateAll()
         }
 
     }
@@ -35,13 +31,17 @@ class StadiumsAdapter (var stadiumsList : List<StadiumModel?>?): RecyclerView.Ad
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+
         val stadium = stadiumsList!![position]
         holder.bind(stadium)
         holder.itemView.setOnClickListener {
             onItemClickListener?.onItemClick(stadium,position)
         }
     }
-
+    fun changeData( newStadium : List<StadiumModel?>?){
+        stadiumsList = newStadium
+        notifyDataSetChanged()
+    }
 
 
     var onItemClickListener : OnItemClickListener?=null
@@ -49,9 +49,6 @@ class StadiumsAdapter (var stadiumsList : List<StadiumModel?>?): RecyclerView.Ad
         fun onItemClick(stadium : StadiumModel?,position: Int)
     }
 
-    fun changeData( newStadium : List<StadiumModel?>?){
-        stadiumsList = newStadium
-        notifyDataSetChanged()
-    }
+
 
 }

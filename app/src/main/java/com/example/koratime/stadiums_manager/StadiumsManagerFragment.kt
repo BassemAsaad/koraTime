@@ -1,6 +1,7 @@
 package com.example.koratime.stadiums_manager
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -48,20 +49,7 @@ class StadiumsManagerFragment : Fragment(),StadiumsManagerNavigator{
     fun initView() {
         dataBinding.vm = viewModel
         viewModel.navigator=this
-
-        getUserStadiumFromFirestore(
-            userId,
-            onSuccessListener = {querySnapShot->
-                val stadiums = querySnapShot.toObjects(StadiumModel::class.java)
-                adapter.changeData(stadiums)
-
-            },
-            onFailureListener = {
-                Toast.makeText(requireContext(), it.localizedMessage, Toast.LENGTH_SHORT).show()
-            }
-        )
         dataBinding.recyclerView.adapter = adapter
-
 
         adapter.onItemClickListener = object :StadiumsAdapter.OnItemClickListener{
             override fun onItemClick(stadium: StadiumModel?, position: Int) {
@@ -75,6 +63,22 @@ class StadiumsManagerFragment : Fragment(),StadiumsManagerNavigator{
 
     }
 
+    override fun onStart() {
+        super.onStart()
 
+        getUserStadiumFromFirestore(
+            userId,
+            onSuccessListener = {querySnapShot->
+                val stadiums = querySnapShot.toObjects(StadiumModel::class.java)
+                adapter.changeData(stadiums)
+
+            },
+            onFailureListener = {
+                Log.e("Stadiums Adapter: ", it.localizedMessage!!.toString())
+                Toast.makeText(requireContext(), it.localizedMessage, Toast.LENGTH_SHORT).show()
+            }
+        )
+
+    }
 
 }

@@ -45,6 +45,7 @@ class ManagerHomeActivity : BasicActivity<ActivityManagerHomeBinding,ManagerHome
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initView()
+        openActivity()
     }
 
     override fun initView() {
