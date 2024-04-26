@@ -10,7 +10,7 @@ import com.example.koratime.model.RoomModel
 
 class RoomsAdapter (var rooms : List<RoomModel?>?): RecyclerView.Adapter<RoomsAdapter.ViewHolder>() {
 
-    class ViewHolder(val dataBinding :ItemRoomsBinding): RecyclerView.ViewHolder(dataBinding.root){
+    inner class ViewHolder(val dataBinding :ItemRoomsBinding): RecyclerView.ViewHolder(dataBinding.root){
         fun bind(room : RoomModel?){
             dataBinding.roomModel = room
             dataBinding.invalidateAll()

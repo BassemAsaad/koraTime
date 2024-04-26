@@ -198,7 +198,7 @@ fun getAllStadiumsFromFirestore(onSuccessListener: OnSuccessListener<QuerySnapsh
         .addOnFailureListener(onFailureListener)
 }
 
-fun getUserStadiumFromFirestore(userId: String,
+fun getUserStadiumFromFirestore(userId: String?,
                                 onSuccessListener: OnSuccessListener<QuerySnapshot>,
                                 onFailureListener: OnFailureListener) {
     val db = Firebase.firestore

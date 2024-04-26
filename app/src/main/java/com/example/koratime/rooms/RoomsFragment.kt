@@ -49,6 +49,18 @@ class RoomsFragment : Fragment(),RoomsNavigator {
      fun initView() {
          dataBinding.vm = viewModel
          viewModel.navigator=this
+
+         getAllRoomsFromFirestore(
+             onSuccessListener = {querySnapShot->
+                 val rooms = querySnapShot.toObjects(RoomModel::class.java)
+                 adapter.changeData(rooms)
+             }
+             , onFailureListener = {
+                 Toast.makeText(requireContext(), it.localizedMessage, Toast.LENGTH_SHORT).show()
+             }
+         )
+
+
          dataBinding.recyclerView.adapter = adapter
 
          adapter.onItemClickListener = object : RoomsAdapter.OnItemClickListener{
@@ -61,9 +73,10 @@ class RoomsFragment : Fragment(),RoomsNavigator {
 //                 } else {
 //                     Toast.makeText(context, viewModel.roomPassword.value, Toast.LENGTH_SHORT).show()
 //                 }
+
              }
          }
-    }
+    }//end init
 
 
     override fun openAddRoomActivity() {
@@ -71,20 +84,7 @@ class RoomsFragment : Fragment(),RoomsNavigator {
             startActivity(intent)
     }
 
-    override fun onStart() {
-        super.onStart()
 
-        getAllRoomsFromFirestore(
-            onSuccessListener = {querySnapShot->
-                val rooms = querySnapShot.toObjects(RoomModel::class.java)
-                adapter.changeData(rooms)
-            }
-            , onFailureListener = {
-                Toast.makeText(requireContext(), it.localizedMessage, Toast.LENGTH_SHORT).show()
-            }
-        )
-
-    }
 
 
 }
