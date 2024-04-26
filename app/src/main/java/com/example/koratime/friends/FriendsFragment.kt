@@ -5,25 +5,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.koratime.R
-import com.example.koratime.adapters.AcceptFriendsAdapter
+import com.example.koratime.adapters.PendingFriendsAdapter
 import com.example.koratime.adapters.AddFriendsAdapter
-import com.example.koratime.adapters.UserAdapter
-import com.example.koratime.database.getUsersFromFirestore
 import com.example.koratime.databinding.FragmentFriendsBinding
 import com.example.koratime.friends.search.SearchActivity
-import com.example.koratime.model.UserModel
-import com.google.firebase.Firebase
-import com.google.firebase.auth.auth
 
 class FriendsFragment : Fragment(),FriendsNavigator {
     lateinit var dataBinding : FragmentFriendsBinding
     private lateinit var viewModel : FriendsViewModel
-    val adapterAccept = AcceptFriendsAdapter(null)
+    val adapterAccept = PendingFriendsAdapter(null)
     val adapterAdd = AddFriendsAdapter(null)
 
     override fun onCreateView(

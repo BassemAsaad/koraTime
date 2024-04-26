@@ -34,9 +34,9 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>() , HomeN
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private val auth= Firebase.auth
     private val handler = Handler()
-    companion object {
-        private const val LOCATION_PERMISSION_REQUEST_CODE = 100
-    }
+
+    private val LOCATION_PERMISSION_REQUEST_CODE = 100
+
 
     override fun getLayoutID(): Int {
         return R.layout.activity_home

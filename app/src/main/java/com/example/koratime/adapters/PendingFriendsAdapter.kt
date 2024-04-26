@@ -8,7 +8,7 @@ import com.example.koratime.R
 import com.example.koratime.databinding.ItemAcceptFriendBinding
 import com.example.koratime.model.UserModel
 
-class AcceptFriendsAdapter  (var usersList : List<UserModel?>?): RecyclerView.Adapter<AcceptFriendsAdapter.ViewHolder>()  {
+class PendingFriendsAdapter  (var usersList : List<UserModel?>?): RecyclerView.Adapter<PendingFriendsAdapter.ViewHolder>()  {
     class ViewHolder(val dataBinding : ItemAcceptFriendBinding): RecyclerView.ViewHolder(dataBinding.root){
         fun bind(user : UserModel){
             dataBinding.vm = user
