@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.get
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -64,16 +65,19 @@ class RoomsFragment : Fragment(),RoomsNavigator {
          dataBinding.recyclerView.adapter = adapter
 
          adapter.onItemClickListener = object : RoomsAdapter.OnItemClickListener{
-             override fun onItemClick(room: RoomModel?, position: Int) {
+             override fun onItemClick(
+                 room: RoomModel?,
+                 position: Int,
+                 holder: RoomsAdapter.ViewHolder
+             ) {
                  viewModel.roomPassword.value = room?.password
-                 (activity as? HomeActivity)?.onRoomClick(room)
+                 viewModel.password.value = holder.dataBinding.roomPasswordLayout.editText?.text.toString()
 
-//                 if (viewModel.checkRoomPassword()) {
-//                     (activity as? HomeActivity)?.onRoomClick(room)
-//                 } else {
-//                     Toast.makeText(context, viewModel.roomPassword.value, Toast.LENGTH_SHORT).show()
-//                 }
-
+                     if (viewModel.checkRoomPassword()) {
+                     (activity as? HomeActivity)?.onRoomClick(room)
+                 } else {
+                     holder.dataBinding.roomPasswordLayout.error = viewModel.passwordError.value
+                 }
              }
          }
     }//end init

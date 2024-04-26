@@ -38,7 +38,7 @@ class RoomsAdapter (var rooms : List<RoomModel?>?): RecyclerView.Adapter<RoomsAd
         holder.bind(room)
 
         holder.dataBinding.joinButton.setOnClickListener {
-            onItemClickListener?.onItemClick(room,position)
+            onItemClickListener?.onItemClick(room,position,holder)
         }
 
 
@@ -54,6 +54,6 @@ class RoomsAdapter (var rooms : List<RoomModel?>?): RecyclerView.Adapter<RoomsAd
 
     var onItemClickListener : OnItemClickListener?=null
     interface OnItemClickListener{
-        fun onItemClick(room : RoomModel?, position: Int)
+        fun onItemClick(room : RoomModel?, position: Int,holder:ViewHolder)
     }
 }

@@ -8,9 +8,7 @@
         <variable
             name="roomModel"
             type="com.example.koratime.model.RoomModel" />
-        <variable
-            name="roomsViewModel"
-            type="com.example.koratime.rooms.RoomsViewModel" />
+
         <import type="android.view.View"/>
     </data>
 
@@ -92,7 +90,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:visibility="@{roomModel.password != null &amp;&amp; roomModel.password.length() > 0 ? View.VISIBLE : View.GONE}"
-
                 >
 
                 <EditText
@@ -100,8 +97,7 @@
                     android:layout_height="match_parent"
                     android:autofillHints="enter room password (optional)"
                     android:hint="Enter room password to join"
-                    android:text="@={roomsViewModel.password}"
-                    android:inputType="text" />
+                     />
             </com.google.android.material.textfield.TextInputLayout>
             <Button
                 android:id="@+id/joinButton"

@@ -7,17 +7,17 @@ import com.example.koratime.model.RoomModel
 
 class RoomsViewModel : BasicViewModel<RoomsNavigator>() {
 
-    val password = ObservableField<String>()
-    val passwordError = ObservableField<String>()
+    val password = MutableLiveData<String>()
+    val passwordError = MutableLiveData<String>()
     val roomPassword = MutableLiveData<String>()
 
     fun checkRoomPassword():Boolean{
         var check = true
-        if (password.get() != roomPassword.value){
-            passwordError.set("Wrong Password")
+        if (password.value != roomPassword.value){
+            passwordError.value=("Wrong Password")
             check = false
         }else {
-            passwordError.set(null)
+            passwordError.value=(null)
         }
         return check
     }
