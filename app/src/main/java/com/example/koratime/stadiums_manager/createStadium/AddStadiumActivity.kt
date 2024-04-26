@@ -1,5 +1,7 @@
 package com.example.koratime.stadiums_manager.createStadium
 
+import android.app.Activity
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -12,11 +14,15 @@ import com.example.koratime.R
 import com.example.koratime.basic.BasicActivity
 import com.example.koratime.database.uploadImageToStorage
 import com.example.koratime.databinding.ActivityAddStadiumBinding
+import com.example.koratime.location.LocationPickerActivity
 
 @Suppress("DEPRECATION")
 class AddStadiumActivity : BasicActivity<ActivityAddStadiumBinding,AddStadiumViewModel>(), AddStadiumNavigator {
 
     private lateinit var pickMedia : ActivityResultLauncher<PickVisualMediaRequest>
+    private var latitude = 0.0
+    private var longitude = 0.0
+    private var address = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +50,38 @@ class AddStadiumActivity : BasicActivity<ActivityAddStadiumBinding,AddStadiumVie
             // Launch the photo picker and let the user choose only images.
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
+
+        dataBinding.locationPickerEditText.setOnClickListener {
+            val intent = Intent(this,LocationPickerActivity::class.java)
+            locationPickerActivityResultLauncher.launch(intent)
+        }
+
     }
+
+
+    private val locationPickerActivityResultLauncher =
+        registerForActivityResult( ActivityResultContracts.StartActivityForResult()){result->
+            Log.e("Add Stadium","locationPickerActivityResultLauncher: ")
+            //get result from location picked from location picker activity
+            if (result.resultCode== Activity.RESULT_OK){
+                //get data Intent from result param
+                val data = result.data
+                // if data not null assign data
+                if ( data !=null ){
+                    latitude = data.getDoubleExtra("latitude",0.0)
+                    longitude = data.getDoubleExtra("longitude",0.0)
+                    address = data.getStringExtra("address")?:""
+                    Log.e("Add Stadium","locationPickerActivityResultLauncher: latitude: $latitude")
+                    Log.e("Add Stadium","locationPickerActivityResultLauncher: longitude: $longitude")
+                    Log.e("Add Stadium","locationPickerActivityResultLauncher: address: $address")
+
+                    dataBinding.locationPickerEditText.setText(address)
+                }
+            }else{
+                Log.e("Add Stadium","locationPickerActivityResultLauncher: cancelled ")
+                Toast.makeText(this, "Cancelled", Toast.LENGTH_SHORT).show()
+            }
+        }
 
     override fun onSupportNavigateUp(): Boolean {
         // go to the previous fragment when back button clicked on toolbar

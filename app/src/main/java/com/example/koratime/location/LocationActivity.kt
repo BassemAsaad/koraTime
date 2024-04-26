@@ -15,13 +15,13 @@ import com.google.android.gms.location.LocationServices
 import java.io.IOException
 import java.util.Locale
 
-class LocationActivity : BasicActivity<ActivityLocationBinding, LocationViewModel>() {
+class LocationActivity : BasicActivity<ActivityLocationBinding, LocationPickerViewModel>() {
 
     override fun getLayoutID(): Int {
         return R.layout.activity_location
     }
-    override fun initViewModel(): LocationViewModel {
-        return ViewModelProvider(this)[LocationViewModel::class.java]
+    override fun initViewModel(): LocationPickerViewModel {
+        return ViewModelProvider(this)[LocationPickerViewModel::class.java]
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

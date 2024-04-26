@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Kora Time</string>
+    <string name="google_api_key">AIzaSyCGVONQzIxP8r_Vb9c1KhIlSQADRMYYaSk</string>
+
     <string name="create_account">Create Account</string>
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>

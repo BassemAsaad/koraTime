@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.example.koratime.Constants
 import com.example.koratime.R
 import com.example.koratime.basic.BasicActivity
 import com.example.koratime.chat.ChatFragment
@@ -119,6 +120,8 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>() , HomeN
                 val latitude = location.latitude
                 val longitude = location.longitude
 
+                Constants.LATITUDE = latitude
+                Constants.LONGITUDE = longitude
                 // Retrieve city name based on latitude and longitude
                 val cityName = getCityName(latitude, longitude)
 

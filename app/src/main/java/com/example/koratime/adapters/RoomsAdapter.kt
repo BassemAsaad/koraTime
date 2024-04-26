@@ -40,6 +40,11 @@ class RoomsAdapter (var rooms : List<RoomModel?>?): RecyclerView.Adapter<RoomsAd
         holder.dataBinding.joinButton.setOnClickListener {
             onItemClickListener?.onItemClick(room,position)
         }
+
+
+
+
+
     }
     fun changeData( newRoom : List<RoomModel?>?){
         rooms = newRoom
