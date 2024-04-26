@@ -36,7 +36,7 @@
             android:value="AIzaSyCGVONQzIxP8r_Vb9c1KhIlSQADRMYYaSk" />
 
         <activity
-            android:name=".location.maps"
+            android:name=".location.LocationPickerActivity"
             android:exported="true"
             android:label="@string/title_activity_maps" />
         <activity
