@@ -1,12 +1,12 @@
 package com.example.koratime.rooms
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.view.get
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -73,7 +73,7 @@ class RoomsFragment : Fragment(),RoomsNavigator {
                  viewModel.roomPassword.value = room?.password
                  viewModel.password.value = holder.dataBinding.roomPasswordLayout.editText?.text.toString()
 
-                     if (viewModel.checkRoomPassword()) {
+                     if (viewModel.checkRoomPassword() ) {
                      (activity as? HomeActivity)?.onRoomClick(room)
                  } else {
                      holder.dataBinding.roomPasswordLayout.error = viewModel.passwordError.value

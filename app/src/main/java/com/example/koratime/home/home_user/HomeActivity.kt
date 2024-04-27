@@ -36,7 +36,10 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>() , HomeN
     private val auth= Firebase.auth
     private val handler = Handler()
 
-    private val LOCATION_PERMISSION_REQUEST_CODE = 100
+    companion object{
+        private const val LOCATION_PERMISSION_REQUEST_CODE = 100
+
+    }
 
 
     override fun getLayoutID(): Int {
@@ -52,7 +55,7 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>() , HomeN
 
         dataBinding.homeBar.setOnItemSelectedListener {item->
             if (item.itemId == R.id.chat_bar){
-                pushFragment(ChatFragment(null))
+                pushFragment(ChatFragment())
             }
             if (item.itemId == R.id.home_bar){
                 pushFragment(StadiumsFragment())
@@ -88,7 +91,7 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>() , HomeN
     }
     fun onRoomClick(room: RoomModel?) {
         dataBinding.homeBar.selectedItemId = R.id.chat_bar
-        pushFragment(ChatFragment(room),true)
+        pushFragment(ChatFragment(),true)
     }
 
     @SuppressLint("SuspiciousIndentation")

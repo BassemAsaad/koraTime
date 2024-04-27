@@ -137,7 +137,7 @@ fun addFriendFromFirestore(from: String,
     val db = Firebase.firestore
     val request = FriendModel(from = from, to = to, status = "pending",checkFriendRequest = true)
     // Add the friend request to Firestore
-    val collection = db.collection(FriendModel.collectionName)
+    val collection = db.collection(FriendModel.COLLECTION_NAME)
     collection
         .add(request)
         .addOnSuccessListener(onSuccessListener)

@@ -13,9 +13,12 @@ class RoomsViewModel : BasicViewModel<RoomsNavigator>() {
 
     fun checkRoomPassword():Boolean{
         var check = true
-        if (password.value != roomPassword.value){
-            passwordError.value=("Wrong Password")
+        if (password.value == null){
             check = false
+            passwordError.value=("Enter the room password")
+        } else if (password.value != roomPassword.value){
+            check = false
+            passwordError.value=("Wrong Password")
         }else {
             passwordError.value=(null)
         }

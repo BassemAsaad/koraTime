@@ -8,6 +8,6 @@ data class FriendModel(
     val sentAt : Long?= System.currentTimeMillis()
 ){
     companion object{
-        const val collectionName = "FriendRequest"
+        const val COLLECTION_NAME = "FriendRequests"
     }
 }

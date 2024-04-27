@@ -20,7 +20,7 @@ import com.example.koratime.model.UserModel
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 
-class ChatFragment (room: RoomModel?,): Fragment(),ChatNavigator {
+class ChatFragment (): Fragment(),ChatNavigator {
     lateinit var dataBinding : FragmentChatBinding
     private lateinit var viewModel : ChatViewModel
     private val adapter = UserAdapter(null)
