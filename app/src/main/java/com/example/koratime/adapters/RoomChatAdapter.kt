@@ -10,9 +10,8 @@ import com.example.koratime.databinding.ItemSendMessageBinding
 import com.example.koratime.model.MessageModel
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
-import com.google.firebase.firestore.firestore
 
-class MessagesAdapter :  RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class RoomChatAdapter :  RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     var item = mutableListOf<MessageModel?>()
 
     inner class SendMessageViewHolder (val itemSendBinding : ItemSendMessageBinding): RecyclerView.ViewHolder(itemSendBinding.root){
