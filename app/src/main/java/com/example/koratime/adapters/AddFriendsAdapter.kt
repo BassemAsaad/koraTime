@@ -37,7 +37,7 @@ class AddFriendsAdapter  (private var usersList : List<UserModel?>?): RecyclerVi
 
 
         holder.dataBinding.addFriendButtonItem.setOnClickListener {
-            onAddClickListener?.onClick(usersList,holder, position)
+            onAddClickListener?.onClick(user,holder, position)
         }
 
 
@@ -46,7 +46,7 @@ class AddFriendsAdapter  (private var usersList : List<UserModel?>?): RecyclerVi
 
     var onAddClickListener:OnAddClickListener?=null
     interface OnAddClickListener{
-        fun onClick(usersList : List<UserModel?>?,holder: ViewHolder, position: Int)
+        fun onClick(user : UserModel,holder: ViewHolder, position: Int)
     }
 
     fun changeData( newUser : List<UserModel?>?){

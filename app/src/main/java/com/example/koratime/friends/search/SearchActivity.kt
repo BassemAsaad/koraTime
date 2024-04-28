@@ -86,24 +86,24 @@ class SearchActivity : BasicActivity<ActivitySearchBinding,SearchViewModel>(),Se
 
         adapter.onAddClickListener=object : AddFriendsAdapter.OnAddClickListener{
             override fun onClick(
-                usersList: List<UserModel?>?,
+                user : UserModel,
                 holder: AddFriendsAdapter.ViewHolder,
                 position: Int
             ) {
                 val currentUserId= Firebase.auth.currentUser?.uid
-                val recipientUserId = usersList!![position]?.id
+                val recipientUserId = user.id
 
                 if (currentUserId != null && recipientUserId != null) {
                     addFriendFromFirestore(
-                        from = currentUserId,
-                        to = recipientUserId,
+                        sender = currentUserId,
+                        receiver = recipientUserId,
                         onSuccessListener = { documentReference ->
                             holder.dataBinding.addFriendButtonItem.text= "Pending"
                             holder.dataBinding.addFriendButtonItem.isEnabled = false
-                            Log.e("Firebase", "Friend request sent with ID: ${documentReference.id}")
+                            Log.e("Firebase", "Friend request sent :")
                         },
                         onFailureListener = { e ->
-                            Log.e("Firebase", "Error sending friend request", e)
+                            Log.e("Firebase", "Error sending friend request: ", e)
                         }
                     )
                 } else {

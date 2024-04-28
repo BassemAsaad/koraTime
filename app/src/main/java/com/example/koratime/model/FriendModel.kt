@@ -1,13 +1,15 @@
 package com.example.koratime.model
 
 data class FriendModel(
-    val from : String?=null,
-    val to : String?=null,
+    var requestID : String?=null,
+    val sender : String?=null,
+    val receiver : String?=null,
     val status : String?=null,
     val checkFriendRequest: Boolean =false,
     val sentAt : Long?= System.currentTimeMillis()
 ){
     companion object{
-        const val COLLECTION_NAME = "FriendRequests"
+        const val COLLECTION_NAME_SENDER = "AddedFriends"
+        const val COLLECTION_NAME_RECEIVER = "PendingFriends"
     }
 }

@@ -10,7 +10,6 @@ import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -114,11 +113,12 @@ fun uploadImageToStorage(imageUri: Uri?,
         // default image URL
         val defaultImageUrl = Uri.parse("https://firebasestorage.googleapis.com/v0/b/kora-time-d21c3.appspot.com/o/images%2Fgroup_profile.png?alt=media&token=68cbdd0e-43f2-4634-9ba9-bdcdec71555d")
         onSuccessListener.onSuccess(defaultImageUrl)
-    }else{
+    } else{
         // upload the user selected image
         val storage = Firebase.storage
         val storageRef = storage.reference.child("images/${UUID.randomUUID()}")
         val uploadImage = storageRef.putFile(imageUri)
+
         uploadImage
             .addOnSuccessListener {
                 storageRef.downloadUrl
@@ -129,20 +129,43 @@ fun uploadImageToStorage(imageUri: Uri?,
     }
 }
 
-fun addFriendFromFirestore(from: String,
-                           to: String,
-                           onSuccessListener: OnSuccessListener<DocumentReference>,
+
+
+
+fun addFriendFromFirestore(sender: String,
+                           receiver: String,
+                           onSuccessListener: OnSuccessListener<Void>,
                            onFailureListener: OnFailureListener) {
 
     val db = Firebase.firestore
-    val request = FriendModel(from = from, to = to, status = "pending",checkFriendRequest = true)
-    // Add the friend request to Firestore
-    val collection = db.collection(FriendModel.COLLECTION_NAME)
-    collection
-        .add(request)
+    val request = FriendModel(sender = sender, receiver = receiver, status = "pending",checkFriendRequest = true)
+
+    // Add the friend request to receiverUser
+    val receiverRef = db.collection(UserModel.COLLECTION_NAME)
+        .document(receiver)
+        .collection(FriendModel.COLLECTION_NAME_RECEIVER)
+        .document()
+    request.requestID = receiverRef.id
+
+    // Add the friend request to senderUser
+    val senderRef = db.collection(UserModel.COLLECTION_NAME)
+        .document(sender)
+        .collection(FriendModel.COLLECTION_NAME_SENDER)
+        .document()
+    request.requestID = senderRef.id
+
+    // batch write can improve performance and reduce the risk of data inconsistency.
+    val batch = db.batch()
+    batch.set(senderRef, request)
+    batch.set(receiverRef, request)
+
+    batch.commit()
         .addOnSuccessListener(onSuccessListener)
         .addOnFailureListener(onFailureListener)
+
 }
+
+
 
 fun addMessageToFirestore(
     message: MessageModel,
@@ -160,7 +183,8 @@ fun addMessageToFirestore(
         .addOnFailureListener(onFailureListener)
 }
 fun getMessageFromFirestore(roomId : String): CollectionReference {
-    val collectionRef = Firebase.firestore.collection(RoomModel.COLLECTION_NAME)
+    val db = Firebase.firestore
+    val collectionRef = db.collection(RoomModel.COLLECTION_NAME)
     val roomRef = collectionRef.document(roomId)
     return roomRef.collection(MessageModel.COLLECTION_NAME)
 }
