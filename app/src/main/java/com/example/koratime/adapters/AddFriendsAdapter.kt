@@ -5,17 +5,36 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.koratime.R
+import com.example.koratime.database.checkFriendRequestStatus
 import com.example.koratime.databinding.ItemAddFriendBinding
 import com.example.koratime.model.UserModel
 
 
-class AddFriendsAdapter  (private var usersList : List<UserModel?>?): RecyclerView.Adapter<AddFriendsAdapter.ViewHolder>()  {
-    class ViewHolder(val dataBinding : ItemAddFriendBinding): RecyclerView.ViewHolder(dataBinding.root){
-        fun bind(user : UserModel){
+class AddFriendsAdapter  (private var usersList : List<UserModel?>?, private val currentUserId: String?)
+    : RecyclerView.Adapter<AddFriendsAdapter.ViewHolder>()  {
+
+
+    class ViewHolder(val dataBinding: ItemAddFriendBinding) : RecyclerView.ViewHolder(dataBinding.root) {
+        fun bind(user: UserModel, currentUserId: String?) {
             dataBinding.userModel = user
             dataBinding.invalidateAll()
-        }
 
+            // Check friend request status dynamically
+            currentUserId?.let { userId ->
+                checkFriendRequestStatus(userId, user.id!!) { status ->
+                    if (status == "pending") {
+                        dataBinding.addFriendButtonItem.text = "Pending"
+                        dataBinding.addFriendButtonItem.isEnabled = false
+                    } else {
+                        dataBinding.addFriendButtonItem.text = "Add Friend"
+                        dataBinding.addFriendButtonItem.isEnabled = true
+                    }
+                }
+            }
+
+
+
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -33,7 +52,7 @@ class AddFriendsAdapter  (private var usersList : List<UserModel?>?): RecyclerVi
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val user = usersList!![position]!!
-        holder.bind(user)
+        holder.bind(user, currentUserId)
 
 
         holder.dataBinding.addFriendButtonItem.setOnClickListener {

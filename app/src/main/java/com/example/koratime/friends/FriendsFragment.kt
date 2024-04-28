@@ -17,8 +17,7 @@ import com.example.koratime.friends.search.SearchActivity
 class FriendsFragment : Fragment(),FriendsNavigator {
     lateinit var dataBinding : FragmentFriendsBinding
     private lateinit var viewModel : FriendsViewModel
-    val adapterAccept = PendingFriendsAdapter(null)
-    val adapterAdd = AddFriendsAdapter(null)
+
 
     override fun onCreateView(
         inflater: LayoutInflater,

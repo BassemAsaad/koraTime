@@ -1,6 +1,7 @@
 package com.example.koratime.database
 
 import android.net.Uri
+import android.util.Log
 import com.example.koratime.model.FriendModel
 import com.example.koratime.model.MessageModel
 import com.example.koratime.model.RoomModel
@@ -132,10 +133,10 @@ fun uploadImageToStorage(imageUri: Uri?,
 
 
 
-fun addFriendFromFirestore(sender: String,
-                           receiver: String,
-                           onSuccessListener: OnSuccessListener<Void>,
-                           onFailureListener: OnFailureListener) {
+fun addFriendToFirestore(sender: String,
+                         receiver: String,
+                         onSuccessListener: OnSuccessListener<Void>,
+                         onFailureListener: OnFailureListener) {
 
     val db = Firebase.firestore
     val request = FriendModel(sender = sender, receiver = receiver, status = "pending",checkFriendRequest = true)
@@ -164,6 +165,32 @@ fun addFriendFromFirestore(sender: String,
         .addOnFailureListener(onFailureListener)
 
 }
+
+fun checkFriendRequestStatus(sender: String, receiver: String, callback: (String) -> Unit ) {
+    val db = Firebase.firestore
+    val receiverRef = db.collection(UserModel.COLLECTION_NAME)
+        .document(sender)
+        .collection(FriendModel.COLLECTION_NAME_SENDER)
+        .whereEqualTo("sender", sender)
+        .whereEqualTo("receiver", receiver)
+        .whereEqualTo("status", "pending")
+        .get()
+        .addOnSuccessListener { querySnapshot ->
+            if (!querySnapshot.isEmpty) {
+                // There's a pending friend request from current user to target user
+                callback("pending")
+            } else {
+                // No pending friend request found
+                callback("not_pending")
+            }
+        }
+        .addOnFailureListener { exception ->
+            // Error handling
+            Log.e("Firestore", "Error checking friend request status", exception)
+            callback("error")
+        }
+}
+
 
 
 

@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.koratime.R
 import com.example.koratime.adapters.AddFriendsAdapter
 import com.example.koratime.basic.BasicActivity
-import com.example.koratime.database.addFriendFromFirestore
+import com.example.koratime.database.addFriendToFirestore
 import com.example.koratime.database.getUsersFromFirestore
 import com.example.koratime.databinding.ActivitySearchBinding
 import com.example.koratime.model.UserModel
@@ -19,7 +19,8 @@ import com.google.firebase.auth.auth
 @Suppress("DEPRECATION")
 class SearchActivity : BasicActivity<ActivitySearchBinding,SearchViewModel>(),SearchNavigator {
     private val usersList = mutableListOf<UserModel?>()
-    private val adapter = AddFriendsAdapter(usersList)
+    val currentUserId= Firebase.auth.currentUser?.uid
+    private val adapter = AddFriendsAdapter(usersList,currentUserId )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initView()
@@ -58,43 +59,15 @@ class SearchActivity : BasicActivity<ActivitySearchBinding,SearchViewModel>(),Se
                 return true
             }
         })
-
-
-
-    }
-
-    override fun onStart() {
-        super.onStart()
-        val userId = Firebase.auth.currentUser?.uid
-        getUsersFromFirestore(
-            userId,
-            onSuccessListener = { querySnapshot ->
-                for (document in querySnapshot.documents) {
-                    val user = document.toObject(UserModel::class.java)
-                    usersList.add(user)
-                }
-                adapter.changeData(usersList)
-            },
-            onFailureListener = {
-                Toast.makeText(this, it.localizedMessage, Toast.LENGTH_SHORT).show()
-            }
-        )
-
-
-
-
-
         adapter.onAddClickListener=object : AddFriendsAdapter.OnAddClickListener{
             override fun onClick(
                 user : UserModel,
                 holder: AddFriendsAdapter.ViewHolder,
                 position: Int
             ) {
-                val currentUserId= Firebase.auth.currentUser?.uid
                 val recipientUserId = user.id
-
                 if (currentUserId != null && recipientUserId != null) {
-                    addFriendFromFirestore(
+                    addFriendToFirestore(
                         sender = currentUserId,
                         receiver = recipientUserId,
                         onSuccessListener = { documentReference ->
@@ -112,9 +85,23 @@ class SearchActivity : BasicActivity<ActivitySearchBinding,SearchViewModel>(),Se
             }
         }
 
+    }
 
-
-
+    override fun onStart() {
+        super.onStart()
+        getUsersFromFirestore(
+            currentUserId,
+            onSuccessListener = { querySnapshot ->
+                for (document in querySnapshot.documents) {
+                    val user = document.toObject(UserModel::class.java)
+                    usersList.add(user)
+                }
+                adapter.changeData(usersList)
+            },
+            onFailureListener = {
+                Toast.makeText(this, it.localizedMessage, Toast.LENGTH_SHORT).show()
+            }
+        )
 
     }
 

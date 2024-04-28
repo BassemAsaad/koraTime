@@ -44,9 +44,9 @@ class LocationPickerActivity : BasicActivity<ActivityLocationPickerBinding,Locat
        private const val DEFAULT_ZOOM=15
     }
     private var mMap : GoogleMap?=null
-    private var mPlace : PlacesClient?=null
+    private var myPlace : PlacesClient?=null
     private var mFusedLocationProvider :FusedLocationProviderClient?=null
-    private var mLastKnownLocation : Location?=null
+    private var myLastKnownLocation : Location?=null
     private var selectedLatitude :Double?=null
     private var selectedLongitude:Double?= null
     private var selectedAddress =""
@@ -76,8 +76,10 @@ class LocationPickerActivity : BasicActivity<ActivityLocationPickerBinding,Locat
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
 
+        //hide container
+        dataBinding.container.visibility= View.GONE
 
-        dataBinding.doneL1.visibility= View.GONE
+        // get map
         val mapFragment = supportFragmentManager.findFragmentById(R.id.mapFragment) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
@@ -85,16 +87,21 @@ class LocationPickerActivity : BasicActivity<ActivityLocationPickerBinding,Locat
         Places.initialize(this,getString(R.string.google_api_key))
 
         // create new places client instance
-        mPlace= Places.createClient(this)
+        myPlace= Places.createClient(this)
         mFusedLocationProvider = LocationServices.getFusedLocationProviderClient(this)
 
-
+        //search
         // initialize autoCompleteSupportFragmentManager to search places on map
         val autoCompleteSupportFragmentManager = supportFragmentManager.findFragmentById(R.id.autocomplete_fragment )
                 as AutocompleteSupportFragment
 
         // list of location fields we need in search result
-        val placesList = arrayOf(Place.Field.ID,Place.Field.NAME,Place.Field.ADDRESS,Place.Field.LAT_LNG)
+        val placesList = arrayOf(
+            Place.Field.ID,
+            Place.Field.NAME,
+            Place.Field.ADDRESS,
+            Place.Field.LAT_LNG
+        )
 
         // set placesList to autoCompleteSupportFragmentManager
         autoCompleteSupportFragmentManager.setPlaceFields(listOf(*placesList))
@@ -102,26 +109,27 @@ class LocationPickerActivity : BasicActivity<ActivityLocationPickerBinding,Locat
         // listener for place selections
         autoCompleteSupportFragmentManager.setOnPlaceSelectedListener(object : PlaceSelectionListener{
             override fun onPlaceSelected(place: Place) {
-                Log.e(TAG,"onPlaceSelected")
+                Log.e(TAG,"onPlaceSelected: ")
                 val id = place.id
                 val name = place.name
                 val latLng = place.latLng
                 selectedLatitude = latLng?.latitude
                 selectedLongitude = latLng?.longitude
                 selectedAddress = place.address?:""
+
+
                 Log.e(TAG,"onPlaceSelected id: $id")
                 Log.e(TAG,"onPlaceSelected name: $name")
                 Log.e(TAG,"onPlaceSelected selectedLatitude: $selectedLatitude")
                 Log.e(TAG,"onPlaceSelected selectedLongitude: $selectedLongitude")
                 Log.e(TAG,"onPlaceSelected selectedAddress: $selectedAddress")
 
-                addMarker(latLng!!,name,selectedAddress)
+                addMarker(latLng!!,name!!,selectedAddress)
             }
 
             override fun onError(status: Status) {
-                TODO("Not yet implemented")
+                //
             }
-
         })
 
 
@@ -175,7 +183,7 @@ class LocationPickerActivity : BasicActivity<ActivityLocationPickerBinding,Locat
                 .newLatLngZoom(latLng, DEFAULT_ZOOM.toFloat())
             )
             //show doneL1 so user can go back with selected location
-            dataBinding.doneL1.visibility = View.VISIBLE
+            dataBinding.container.visibility = View.VISIBLE
 
             //set complete address
             dataBinding.selectedPlace.text = address
@@ -198,7 +206,7 @@ class LocationPickerActivity : BasicActivity<ActivityLocationPickerBinding,Locat
             locationResult.addOnSuccessListener {location->
                 if (location!=null){
                     //save location
-                    mLastKnownLocation=location
+                    myLastKnownLocation=location
                     //get latitude and longitude
                     selectedLatitude= location.latitude
                     selectedLongitude = location.longitude

@@ -51,20 +51,12 @@ class RoomsFragment : Fragment(),RoomsNavigator {
          dataBinding.vm = viewModel
          viewModel.navigator=this
 
-         getAllRoomsFromFirestore(
-             onSuccessListener = {querySnapShot->
-                 val rooms = querySnapShot.toObjects(RoomModel::class.java)
-                 adapter.changeData(rooms)
-             }
-             , onFailureListener = {
-                 Toast.makeText(requireContext(), it.localizedMessage, Toast.LENGTH_SHORT).show()
-             }
-         )
 
 
          dataBinding.recyclerView.adapter = adapter
 
          adapter.onItemClickListener = object : RoomsAdapter.OnItemClickListener{
+             @SuppressLint("SuspiciousIndentation")
              override fun onItemClick(
                  room: RoomModel?,
                  position: Int,
@@ -88,6 +80,18 @@ class RoomsFragment : Fragment(),RoomsNavigator {
             startActivity(intent)
     }
 
+    override fun onStart() {
+        super.onStart()
+        getAllRoomsFromFirestore(
+            onSuccessListener = {querySnapShot->
+                val rooms = querySnapShot.toObjects(RoomModel::class.java)
+                adapter.changeData(rooms)
+            }
+            , onFailureListener = {
+                Toast.makeText(requireContext(), it.localizedMessage, Toast.LENGTH_SHORT).show()
+            }
+        )
+    }
 
 
 
