@@ -5,7 +5,6 @@ data class FriendModel(
     val sender : String?=null,
     val receiver : String?=null,
     val status : String?=null,
-    val checkFriendRequest: Boolean =false,
     val sentAt : Long?= System.currentTimeMillis()
 ){
     companion object{

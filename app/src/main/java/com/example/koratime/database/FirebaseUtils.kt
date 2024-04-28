@@ -106,7 +106,6 @@ fun getUserRoomsFromFirestore(userId: String,
         .addOnFailureListener(onFailureListener)
 }
 
-
 fun uploadImageToStorage(imageUri: Uri?,
                          onSuccessListener: OnSuccessListener<Uri>,
                          onFailureListener: OnFailureListener) {
@@ -131,15 +130,13 @@ fun uploadImageToStorage(imageUri: Uri?,
 }
 
 
-
-
 fun addFriendToFirestore(sender: String,
                          receiver: String,
                          onSuccessListener: OnSuccessListener<Void>,
                          onFailureListener: OnFailureListener) {
 
     val db = Firebase.firestore
-    val request = FriendModel(sender = sender, receiver = receiver, status = "pending",checkFriendRequest = true)
+    val request = FriendModel(sender = sender, receiver = receiver, status = "pending")
 
     // Add the friend request to receiverUser
     val receiverRef = db.collection(UserModel.COLLECTION_NAME)
@@ -184,15 +181,12 @@ fun checkFriendRequestStatus(sender: String, receiver: String, callback: (String
                 callback("not_pending")
             }
         }
-        .addOnFailureListener { exception ->
+        .addOnFailureListener { e ->
             // Error handling
-            Log.e("Firestore", "Error checking friend request status", exception)
+            Log.e("Firestore", "Error checking friend request status", e)
             callback("error")
         }
 }
-
-
-
 
 fun addMessageToFirestore(
     message: MessageModel,
@@ -215,16 +209,6 @@ fun getMessageFromFirestore(roomId : String): CollectionReference {
     val roomRef = collectionRef.document(roomId)
     return roomRef.collection(MessageModel.COLLECTION_NAME)
 }
-
-
-
-
-
-
-
-
-
-
 
 fun addStadiumToFirestore(stadium:StadiumModel,
                           onSuccessListener: OnSuccessListener<Void>,

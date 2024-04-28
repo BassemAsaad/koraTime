@@ -13,8 +13,7 @@ import com.example.koratime.model.UserModel
 class AddFriendsAdapter  (private var usersList : List<UserModel?>?, private val currentUserId: String?)
     : RecyclerView.Adapter<AddFriendsAdapter.ViewHolder>()  {
 
-
-    class ViewHolder(val dataBinding: ItemAddFriendBinding) : RecyclerView.ViewHolder(dataBinding.root) {
+     class ViewHolder(val dataBinding: ItemAddFriendBinding) : RecyclerView.ViewHolder(dataBinding.root) {
         fun bind(user: UserModel, currentUserId: String?) {
             dataBinding.userModel = user
             dataBinding.invalidateAll()
@@ -31,8 +30,6 @@ class AddFriendsAdapter  (private var usersList : List<UserModel?>?, private val
                     }
                 }
             }
-
-
 
         }
     }
@@ -54,13 +51,11 @@ class AddFriendsAdapter  (private var usersList : List<UserModel?>?, private val
         val user = usersList!![position]!!
         holder.bind(user, currentUserId)
 
-
         holder.dataBinding.addFriendButtonItem.setOnClickListener {
             onAddClickListener?.onClick(user,holder, position)
         }
-
-
     }
+
 
 
     var onAddClickListener:OnAddClickListener?=null
