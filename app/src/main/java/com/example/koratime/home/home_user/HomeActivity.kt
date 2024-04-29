@@ -16,7 +16,7 @@ import com.example.koratime.Constants
 import com.example.koratime.R
 import com.example.koratime.basic.BasicActivity
 import com.example.koratime.chat.ChatFragment
-import com.example.koratime.database.updateLocationInFirestore
+import com.example.koratime.database.updateUserLocationInFirestore
 import com.example.koratime.databinding.ActivityHomeBinding
 import com.example.koratime.friends.FriendsFragment
 import com.example.koratime.model.RoomModel
@@ -132,7 +132,7 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>() , HomeN
                 val userId = auth.currentUser?.uid
 
                 if (userId != null) {
-                    updateLocationInFirestore(userId, latitude, longitude, cityName,
+                    updateUserLocationInFirestore(userId, latitude, longitude, cityName,
                         onSuccessListener = {
                             Log.e("Firestore", "Location updated in Firestore")
                         },

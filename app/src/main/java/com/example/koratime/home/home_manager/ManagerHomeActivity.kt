@@ -11,10 +11,9 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.koratime.Constants
 import com.example.koratime.R
 import com.example.koratime.basic.BasicActivity
-import com.example.koratime.database.updateLocationInFirestore
+import com.example.koratime.database.updateUserLocationInFirestore
 import com.example.koratime.databinding.ActivityManagerHomeBinding
 import com.example.koratime.stadiums_manager.StadiumsManagerFragment
 import com.example.koratime.stadiums_manager.createStadium.AddStadiumActivity
@@ -106,7 +105,7 @@ class ManagerHomeActivity : BasicActivity<ActivityManagerHomeBinding,ManagerHome
                     val userId = Firebase.auth.currentUser?.uid
 
                     if (userId != null) {
-                        updateLocationInFirestore(userId, latitude, longitude, cityName,
+                        updateUserLocationInFirestore(userId, latitude, longitude, cityName,
                             onSuccessListener = {
                                 Log.e("Firestore", "Location updated in Firestore")
                             },

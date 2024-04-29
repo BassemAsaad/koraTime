@@ -61,7 +61,6 @@ class AddStadiumActivity : BasicActivity<ActivityAddStadiumBinding,AddStadiumVie
 
     private val locationPickerActivityResultLauncher =
         registerForActivityResult( ActivityResultContracts.StartActivityForResult()){result->
-            Log.e("Add Stadium","locationPickerActivityResultLauncher: ")
             //get result from location picked from location picker activity
             if (result.resultCode== Activity.RESULT_OK){
                 //get data Intent from result param
@@ -71,10 +70,9 @@ class AddStadiumActivity : BasicActivity<ActivityAddStadiumBinding,AddStadiumVie
                     latitude = data.getDoubleExtra("latitude",0.0)
                     longitude = data.getDoubleExtra("longitude",0.0)
                     address = data.getStringExtra("address")?:""
-                    Log.e("Add Stadium","locationPickerActivityResultLauncher: latitude: $latitude")
-                    Log.e("Add Stadium","locationPickerActivityResultLauncher: longitude: $longitude")
-                    Log.e("Add Stadium","locationPickerActivityResultLauncher: address: $address")
-
+                    viewModel.latitudeLiveData.value = latitude
+                    viewModel.longitudeLiveData.value=longitude
+                    viewModel.addressLiveData.value = address
                     dataBinding.locationPickerEditText.setText(address)
                 }
             }else{

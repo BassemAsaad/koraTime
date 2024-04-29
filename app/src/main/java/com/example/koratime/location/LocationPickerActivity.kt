@@ -1,10 +1,8 @@
 package com.example.koratime.location
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
@@ -12,8 +10,6 @@ import android.util.Log
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.koratime.R
 import com.example.koratime.basic.BasicActivity
@@ -34,16 +30,15 @@ import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 import java.lang.Exception
 
 @Suppress("DEPRECATION")
 class LocationPickerActivity : BasicActivity<ActivityLocationPickerBinding,LocationPickerViewModel>(),OnMapReadyCallback{
-
-
-
     companion object{
         private const val TAG="LOCATION_PICKER_TAG"
-       private const val DEFAULT_ZOOM=14.5
+        private const val DEFAULT_ZOOM=13.8
     }
     private var mMap : GoogleMap?=null
     private var myPlace : PlacesClient?=null
@@ -108,23 +103,15 @@ class LocationPickerActivity : BasicActivity<ActivityLocationPickerBinding,Locat
         // set placesList to autoCompleteSupportFragmentManager
         autoCompleteSupportFragmentManager.setPlaceFields(listOf(*placesList))
 
-        // listener for place selections
+// listener for place selections
         autoCompleteSupportFragmentManager.setOnPlaceSelectedListener(object : PlaceSelectionListener{
             override fun onPlaceSelected(place: Place) {
                 Log.e(TAG,"onPlaceSelected: ")
-                val id = place.id
                 val name = place.name
                 val latLng = place.latLng
                 selectedLatitude = latLng?.latitude
                 selectedLongitude = latLng?.longitude
                 selectedAddress = place.address?:""
-
-
-                Log.e(TAG,"onPlaceSelected id: $id")
-                Log.e(TAG,"onPlaceSelected name: $name")
-                Log.e(TAG,"onPlaceSelected selectedLatitude: $selectedLatitude")
-                Log.e(TAG,"onPlaceSelected selectedLongitude: $selectedLongitude")
-                Log.e(TAG,"onPlaceSelected selectedAddress: $selectedAddress")
 
                 addMarker(latLng!!,name!!,selectedAddress)
             }
@@ -142,6 +129,7 @@ class LocationPickerActivity : BasicActivity<ActivityLocationPickerBinding,Locat
             intent.putExtra("longitude",selectedLongitude)
             intent.putExtra("address",selectedAddress)
             setResult(Activity.RESULT_OK,intent)
+
             finish()
 
         }
@@ -162,8 +150,8 @@ class LocationPickerActivity : BasicActivity<ActivityLocationPickerBinding,Locat
             //setup marker options with latLng,title and full address
             val markerOptions = MarkerOptions()
             markerOptions.position(latLng)
-            markerOptions.title(title)
-            markerOptions.snippet(address)
+            markerOptions.title("$title")
+            markerOptions.snippet("$address")
             markerOptions.icon(BitmapDescriptorFactory
                 .defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
 
@@ -201,9 +189,6 @@ class LocationPickerActivity : BasicActivity<ActivityLocationPickerBinding,Locat
                     selectedLatitude= location.latitude
                     selectedLongitude = location.longitude
 
-                    Log.e(TAG,"detectAndShowDeviceLocationMap: selectedLatitude: $selectedLatitude")
-                    Log.e(TAG,"detectAndShowDeviceLocationMap: selectedLongitude: $selectedLongitude")
-
                     // setUp latLng
                     val latLng = LatLng(selectedLatitude!!,selectedLongitude!!)
                     mMap!!.moveCamera(CameraUpdateFactory
@@ -219,12 +204,12 @@ class LocationPickerActivity : BasicActivity<ActivityLocationPickerBinding,Locat
 
             }
                 .addOnFailureListener {e->
-                    Log.e(TAG,"detectAndShowDeviceLocationMap: ",e)
+                    Log.e(TAG," location is null: : ",e)
 
                 }
 
         }catch (e : Exception){
-            Log.e(TAG,"detectAndShowDeviceLocationMap: ",e)
+            Log.e(TAG," couldn't access location: ",e)
 
         }
 
@@ -246,81 +231,32 @@ class LocationPickerActivity : BasicActivity<ActivityLocationPickerBinding,Locat
                 mMap!!.isMyLocationEnabled= true
                 pickCurrentPlace()
 
-
             }
 
         }
 
     private fun pickCurrentPlace() {
-        Log.e(TAG,"pickCurrentPlace: ")
         if (mMap == null){
             return
         }
         detectAndShowDeviceLocationMap()
     }
 
-    private fun permission() : Boolean {
-        return ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-    }
-    private fun location() {
-        if (permission()) {
-            if (ActivityCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                return
-            }
-            mMap!!.isMyLocationEnabled = true
-        }
-        else {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                1
-            )
-        }
-    }
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == 1) {
-            if (grantResults.contains(PackageManager.PERMISSION_GRANTED)) {
-                location()
-            }
-        }
-    }
-
     override fun onMapReady(googleMap: GoogleMap) {
-        Log.e(TAG,"onMapReady")
         mMap = googleMap
 
         //ask user for permission
-        requestLocationPermission.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+        requestLocationPermission.launch(android.Manifest.permission.ACCESS_FINE_LOCATION)
 
         // get latitude and longitude when ever user click on map
         mMap!!.setOnMapClickListener {latLng->
             selectedLatitude=latLng.latitude
             selectedLongitude=latLng.longitude
 
-            Log.e(TAG,"onMapReady selectedLatitude: $selectedLatitude")
-            Log.e(TAG,"onMapReady selectedLongitude: $selectedLongitude")
-
-
             // function to get address details from latLng
             addressFromLatLng(latLng)
 
-
-
         }
-        location()
 
     }
 
@@ -335,18 +271,16 @@ class LocationPickerActivity : BasicActivity<ActivityLocationPickerBinding,Locat
             val addressLine=address.getAddressLine(0)
             val subLocality = address.subLocality
 
-            selectedAddress = addressLine
-            addMarker(latLng, subLocality, addressLine)
+            selectedAddress = "$addressLine"
+            addMarker(latLng,"$subLocality","$addressLine")
 
 
         } catch (e : Exception){
-            Log.e(TAG,"address from latLng: ",e)
+            Log.e(TAG," address from latitude and longitude: ",e)
 
         }
 
     }
-
-
 
     override fun onSupportNavigateUp(): Boolean {
         // go to the previous fragment when back button clicked on toolbar

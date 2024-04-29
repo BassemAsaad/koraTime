@@ -56,9 +56,12 @@ fun getUsersFromFirestore(currentUserId: String?,
         .addOnFailureListener(onFailureListener)
 }
 
-fun updateLocationInFirestore(userId: String, latitude: Double, longitude: Double, cityName: String,
-                              onSuccessListener: OnSuccessListener<Void>,
-                              onFailureListener: OnFailureListener) {
+fun updateUserLocationInFirestore(userId: String,
+                                  latitude: Double,
+                                  longitude: Double,
+                                  cityName: String,
+                                  onSuccessListener: OnSuccessListener<Void>,
+                                  onFailureListener: OnFailureListener) {
     val db = FirebaseFirestore.getInstance()
     val userRef = db.collection(UserModel.COLLECTION_NAME).document(userId)
     userRef.update(mapOf(
@@ -163,7 +166,9 @@ fun addFriendToFirestore(sender: String,
 
 }
 
-fun checkFriendRequestStatus(sender: String, receiver: String, callback: (String) -> Unit ) {
+fun checkFriendRequestStatus(sender: String,
+                             receiver: String,
+                             callback: (String) -> Unit ) {
     val db = Firebase.firestore
     val receiverRef = db.collection(UserModel.COLLECTION_NAME)
         .document(sender)
@@ -187,7 +192,6 @@ fun checkFriendRequestStatus(sender: String, receiver: String, callback: (String
             callback("error")
         }
 }
-
 fun addMessageToFirestore(
     message: MessageModel,
     onSuccessListener: OnSuccessListener<Void>,

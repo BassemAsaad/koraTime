@@ -16,9 +16,13 @@ class AddStadiumViewModel : BasicViewModel<AddStadiumNavigator>() {
     val description = ObservableField<String>()
     val descriptionError = ObservableField<String>()
     val imageError = ObservableField<String>()
-
     val imageUrl = MutableLiveData<String>()
     private val user = Firebase.auth.currentUser
+
+    val latitudeLiveData = MutableLiveData<Double>()
+    val longitudeLiveData = MutableLiveData<Double>()
+    val addressLiveData = MutableLiveData<String>()
+    val locationError= ObservableField<String>()
 
     fun createStadium(){
         if (validate()){
@@ -26,8 +30,13 @@ class AddStadiumViewModel : BasicViewModel<AddStadiumNavigator>() {
                 stadiumName = stadiumName.get(),
                 stadiumDescription = description.get(),
                 userManager = user?.uid,
-                stadiumImageUrl = imageUrl.value
+                stadiumImageUrl = imageUrl.value,
+                latitude = latitudeLiveData.value,
+                longitude = longitudeLiveData.value,
+                address = addressLiveData.value
             )
+            Log.e("Firebase: ","address:  ${addressLiveData.value}")
+
             //add in firebase
             addStadium(stadium)
             navigator?.closeActivity()
@@ -69,12 +78,17 @@ class AddStadiumViewModel : BasicViewModel<AddStadiumNavigator>() {
         } else{
             descriptionError.set(null)
         }
-
         if ( imageUrl.value==null){
-            imageError.set("Set Image Error")
+            imageError.set("Add The Stadium Image")
             valid = false
         }else{
             imageError.set(null)
+        }
+        if (addressLiveData.value == null){
+            locationError.set("Add The Stadium Location")
+            valid = false
+        } else{
+            locationError.set(null)
         }
 
         return valid

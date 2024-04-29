@@ -30,4 +30,5 @@
     <string name="enter_stadium_description">Enter Stadium Description</string>
     <string name="add_stadium_picture">Add Stadium Picture</string>
     <string name="create_stadium">Create Stadium</string>
+    <string name="add_stadium_location">Add Stadium Location</string>
 </resources>
