@@ -1,18 +1,19 @@
 package com.example.koratime.location
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.location.Location
-import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.koratime.R
 import com.example.koratime.basic.BasicActivity
@@ -35,13 +36,14 @@ import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import java.lang.Exception
 
+@Suppress("DEPRECATION")
 class LocationPickerActivity : BasicActivity<ActivityLocationPickerBinding,LocationPickerViewModel>(),OnMapReadyCallback{
 
 
 
     companion object{
         private const val TAG="LOCATION_PICKER_TAG"
-       private const val DEFAULT_ZOOM=15
+       private const val DEFAULT_ZOOM=14.5
     }
     private var mMap : GoogleMap?=null
     private var myPlace : PlacesClient?=null
@@ -133,18 +135,6 @@ class LocationPickerActivity : BasicActivity<ActivityLocationPickerBinding,Locat
         })
 
 
-        dataBinding.gpsButton.setOnClickListener {
-            if ( isGpsEnabled() ){
-                //location enabled
-                requestLocationPermission.launch(android.Manifest.permission.ACCESS_FINE_LOCATION  )
-
-            } else{
-                Toast.makeText(this, "Location is not enabled !! Turn it on to show current Location",
-                    Toast.LENGTH_SHORT).show()
-            }
-        }
-
-
         // done Button click
         dataBinding.doneButton.setOnClickListener {
             val intent = Intent()
@@ -172,8 +162,8 @@ class LocationPickerActivity : BasicActivity<ActivityLocationPickerBinding,Locat
             //setup marker options with latLng,title and full address
             val markerOptions = MarkerOptions()
             markerOptions.position(latLng)
-            markerOptions.title("$title")
-            markerOptions.snippet("$address")
+            markerOptions.title(title)
+            markerOptions.snippet(address)
             markerOptions.icon(BitmapDescriptorFactory
                 .defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
 
@@ -241,26 +231,7 @@ class LocationPickerActivity : BasicActivity<ActivityLocationPickerBinding,Locat
     }
 
 
-    private fun isGpsEnabled(): Boolean {
 
-        val lm = getSystemService(Context.LOCATION_SERVICE) as  LocationManager
-        var gpsEnabled = false
-        var networkEnabled = false
-        try {
-            gpsEnabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER)
-        } catch (e : Exception){
-            Log.e(TAG,"isGpsEnabled: ",e)
-        }
-
-        try {
-            networkEnabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
-        } catch (e : Exception){
-            Log.e(TAG,"isNetworkEnabled: ",e)
-        }
-
-        return  !(!gpsEnabled && !networkEnabled)
-
-    }
 
 
     @SuppressLint("MissingPermission")
@@ -288,12 +259,51 @@ class LocationPickerActivity : BasicActivity<ActivityLocationPickerBinding,Locat
         detectAndShowDeviceLocationMap()
     }
 
+    private fun permission() : Boolean {
+        return ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+    }
+    private fun location() {
+        if (permission()) {
+            if (ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                return
+            }
+            mMap!!.isMyLocationEnabled = true
+        }
+        else {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                1
+            )
+        }
+    }
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == 1) {
+            if (grantResults.contains(PackageManager.PERMISSION_GRANTED)) {
+                location()
+            }
+        }
+    }
+
     override fun onMapReady(googleMap: GoogleMap) {
         Log.e(TAG,"onMapReady")
         mMap = googleMap
 
         //ask user for permission
-        requestLocationPermission.launch(android.Manifest.permission.ACCESS_FINE_LOCATION)
+        requestLocationPermission.launch(Manifest.permission.ACCESS_FINE_LOCATION)
 
         // get latitude and longitude when ever user click on map
         mMap!!.setOnMapClickListener {latLng->
@@ -310,7 +320,7 @@ class LocationPickerActivity : BasicActivity<ActivityLocationPickerBinding,Locat
 
 
         }
-
+        location()
 
     }
 
@@ -325,8 +335,8 @@ class LocationPickerActivity : BasicActivity<ActivityLocationPickerBinding,Locat
             val addressLine=address.getAddressLine(0)
             val subLocality = address.subLocality
 
-            selectedAddress = "$addressLine"
-            addMarker(latLng,"$subLocality","$addressLine")
+            selectedAddress = addressLine
+            addMarker(latLng, subLocality, addressLine)
 
 
         } catch (e : Exception){
