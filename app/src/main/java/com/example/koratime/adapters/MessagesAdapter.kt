@@ -37,7 +37,7 @@ class MessagesAdapter : RecyclerView.Adapter<ViewHolder>() {
     val RECEIVED = 1
     val SEND = 2
     override fun getItemViewType(position: Int): Int {
-        val message = item.get(position)
+        val message = item[position]
         if (message?.senderID==DataUtils.user?.id){
             return SEND
         } else{
@@ -45,7 +45,7 @@ class MessagesAdapter : RecyclerView.Adapter<ViewHolder>() {
         }
 
     }
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         if (viewType==RECEIVED){
             val itemBinding : ItemReceiveMessageBinding = DataBindingUtil.inflate(
                 LayoutInflater.from(parent.context),
@@ -63,7 +63,7 @@ class MessagesAdapter : RecyclerView.Adapter<ViewHolder>() {
         return item.size
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if ( holder is SendMessageViewHolder){
             holder.bind(item[position]!!)
         } else if ( holder is ReceiveMessageViewHolder){

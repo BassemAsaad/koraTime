@@ -19,7 +19,6 @@ import com.example.koratime.chat.ChatFragment
 import com.example.koratime.database.updateUserLocationInFirestore
 import com.example.koratime.databinding.ActivityHomeBinding
 import com.example.koratime.friends.FriendsFragment
-import com.example.koratime.model.RoomModel
 import com.example.koratime.registration.log_in.LoginActivity
 import com.example.koratime.rooms.RoomsFragment
 import com.example.koratime.stadiums_user.StadiumsFragment
