@@ -55,6 +55,7 @@ fun getUsersFromFirestore(currentUserId: String?,
         .addOnFailureListener(onFailureListener)
 }
 
+
 fun updateUserLocationInFirestore(userId: String,
                                   latitude: Double,
                                   longitude: Double,
@@ -134,11 +135,19 @@ fun uploadImageToStorage(imageUri: Uri?,
 
 fun addFriendRequestToFirestore(sender: String,
                                 receiver: String,
+                                senderPicture : String?,
+                                senderUserName : String?,
                                 onSuccessListener: OnSuccessListener<Void>,
                                 onFailureListener: OnFailureListener) {
 
     val db = Firebase.firestore
-    val request = FriendModel(sender = sender, receiver = receiver, status = "pending")
+    val request = FriendModel(
+        senderID = sender,
+        receiverID = receiver,
+        status = "pending",
+        senderName = senderUserName,
+        senderProfilePicture = senderPicture
+        )
 
     // Add the friend request to receiverUser
     val receiverRef = db.collection(UserModel.COLLECTION_NAME)
@@ -161,7 +170,6 @@ fun addFriendRequestToFirestore(sender: String,
     batch.commit()
         .addOnSuccessListener(onSuccessListener)
         .addOnFailureListener(onFailureListener)
-
 }
 
 fun checkFriendRequestStatus(sender: String,
@@ -172,8 +180,8 @@ fun checkFriendRequestStatus(sender: String,
     receiverRef
         .document(sender)
         .collection(FriendModel.COLLECTION_NAME_SENDER)
-        .whereEqualTo("sender", sender)
-        .whereEqualTo("receiver", receiver)
+        .whereEqualTo("senderID", sender)
+        .whereEqualTo("receiverID", receiver)
         .whereEqualTo("status", "pending")
         .get()
         .addOnSuccessListener { querySnapshot ->
@@ -191,18 +199,54 @@ fun checkFriendRequestStatus(sender: String,
             callback("error")
         }
 }
+fun getFriendRequestsFromFirestore(receiver: String?,
+                                   onSuccessListener: OnSuccessListener<QuerySnapshot>,
+                                   onFailureListener: OnFailureListener){
+    val db = Firebase.firestore
+    val collectionRef = db.collection(UserModel.COLLECTION_NAME)
+    val receiverRef = collectionRef.document(receiver!!)
+    receiverRef.collection(FriendModel.COLLECTION_NAME_RECEIVER)
+        .get()
+        .addOnSuccessListener(onSuccessListener)
+        .addOnFailureListener(onFailureListener)
 
-fun getFriendRequestFromFirestore(sender: String,
-                                receiver: String,
-                                onSuccessListener: OnSuccessListener<Void>,
-                                onFailureListener: OnFailureListener) {
+}
+fun removeFriendRequestFromFirestore(sender: String, receiver: String, onSuccessListener: OnSuccessListener<Void>, onFailureListener: OnFailureListener) {
 
     val db = Firebase.firestore
 
+    // Create a query to find the friend request document in the receiver's collection of pending friend requests
+    val receiverQuery = db.collection(UserModel.COLLECTION_NAME)
+        .document(receiver)
+        .collection(FriendModel.COLLECTION_NAME_RECEIVER)
+        .whereEqualTo("senderID", sender)
+        .whereEqualTo("status", "pending")
 
+    // Create a query to find the friend request document in the sender's collection of sent friend requests
+    val senderQuery = db.collection(UserModel.COLLECTION_NAME)
+        .document(sender)
+        .collection(FriendModel.COLLECTION_NAME_SENDER)
+        .whereEqualTo("receiverID", receiver)
+        .whereEqualTo("status", "pending")
+
+    // Delete the friend request documents
+    receiverQuery.get()
+        .addOnSuccessListener { receiverDocuments ->
+            for (receiverDocument in receiverDocuments) {
+                receiverDocument.reference.delete()
+            }
+
+            senderQuery.get()
+                .addOnSuccessListener { senderDocuments ->
+                    for (senderDocument in senderDocuments) {
+                        senderDocument.reference.delete()
+                    }
+                    onSuccessListener.onSuccess(null)
+                }
+                .addOnFailureListener(onFailureListener)
+        }
+        .addOnFailureListener(onFailureListener)
 }
-
-
 
 fun addMessageToFirestore(
     message: MessageModel,
@@ -225,9 +269,6 @@ fun getMessageFromFirestore(roomId : String): CollectionReference {
     val roomRef = collectionRef.document(roomId)
     return roomRef.collection(MessageModel.COLLECTION_NAME)
 }
-
-
-
 
 
 fun addStadiumToFirestore(stadium:StadiumModel,

@@ -8,9 +8,6 @@
         <variable
             name="userModel"
             type="com.example.koratime.model.UserModel" />
-        <variable
-            name="friendModel"
-            type="com.example.koratime.model.FriendModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -52,13 +49,13 @@
             tools:text="Add Friend"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="@id/userImage_item"
-            app:layout_constraintEnd_toStartOf="@id/clearFriendButton_item"
+            app:layout_constraintEnd_toStartOf="@id/removeFriendButton_item"
             app:layout_constraintStart_toEndOf="@id/userImage_item"
             app:layout_constraintTop_toBottomOf="@+id/userName"
              />
 
         <Button
-            android:id="@+id/clearFriendButton_item"
+            android:id="@+id/removeFriendButton_item"
             android:layout_width="120dp"
             android:layout_height="50dp"
             android:layout_marginStart="5dp"

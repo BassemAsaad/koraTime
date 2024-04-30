@@ -5,23 +5,23 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.koratime.R
-import com.example.koratime.databinding.ItemAcceptFriendBinding
-import com.example.koratime.model.UserModel
+import com.example.koratime.databinding.ItemPendingFriendBinding
+import com.example.koratime.model.FriendModel
 
-class PendingFriendsAdapter  (var usersList : List<UserModel?>?): RecyclerView.Adapter<PendingFriendsAdapter.ViewHolder>()  {
-    class ViewHolder(val dataBinding : ItemAcceptFriendBinding): RecyclerView.ViewHolder(dataBinding.root){
-        fun bind(user : UserModel){
-            dataBinding.vm = user
+class PendingFriendsAdapter  (var usersList : List<FriendModel?>?): RecyclerView.Adapter<PendingFriendsAdapter.ViewHolder>()  {
+    inner class ViewHolder(val dataBinding : ItemPendingFriendBinding): RecyclerView.ViewHolder(dataBinding.root){
+        fun bind(friendModel : FriendModel){
+            dataBinding.friendModel = friendModel
             dataBinding.invalidateAll()
         }
 
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val dataBinding : ItemAcceptFriendBinding =
+        val dataBinding : ItemPendingFriendBinding =
             DataBindingUtil.inflate(
                 LayoutInflater.from(parent.context)
-                , R.layout.item_accept_friend, parent,false)
+                , R.layout.item_pending_friend, parent,false)
 
         return ViewHolder(dataBinding)
     }
@@ -36,7 +36,7 @@ class PendingFriendsAdapter  (var usersList : List<UserModel?>?): RecyclerView.A
 
     }
 
-    fun changeData( newUser : List<UserModel?>?){
+    fun changeData( newUser : List<FriendModel?>?){
         usersList = newUser
         notifyDataSetChanged()
     }

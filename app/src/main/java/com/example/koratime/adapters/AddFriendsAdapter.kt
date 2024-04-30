@@ -52,17 +52,24 @@ class AddFriendsAdapter  (private var usersList : List<UserModel?>?, private val
         holder.bind(user, currentUserId)
 
         holder.dataBinding.addFriendButtonItem.setOnClickListener {
-            onAddClickListener?.onClick(user,holder, position)
+            onAddFriendButtonClickListener?.onClick(user,holder, position)
+        }
+        holder.dataBinding.removeFriendButtonItem.setOnClickListener {
+            onRemoveFriendButtonClickListener?.onClick(user,holder,position)
         }
     }
 
 
 
-    var onAddClickListener:OnAddClickListener?=null
-    interface OnAddClickListener{
+    var onAddFriendButtonClickListener:OnAddFriendButtonClickListener?=null
+    interface OnAddFriendButtonClickListener{
         fun onClick(user : UserModel,holder: ViewHolder, position: Int)
     }
 
+    var onRemoveFriendButtonClickListener:OnRemoveFriendButtonClickListener?=null
+    interface OnRemoveFriendButtonClickListener{
+        fun onClick(user : UserModel,holder: ViewHolder, position: Int)
+    }
     fun changeData( newUser : List<UserModel?>?){
         usersList = newUser
         notifyDataSetChanged()

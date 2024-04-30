@@ -5,11 +5,13 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
+import com.example.koratime.DataUtils
 import com.example.koratime.R
 import com.example.koratime.adapters.AddFriendsAdapter
 import com.example.koratime.basic.BasicActivity
 import com.example.koratime.database.addFriendRequestToFirestore
 import com.example.koratime.database.getUsersFromFirestore
+import com.example.koratime.database.removeFriendRequestFromFirestore
 import com.example.koratime.databinding.ActivitySearchBinding
 import com.example.koratime.model.UserModel
 import com.google.firebase.Firebase
@@ -20,6 +22,8 @@ import com.google.firebase.auth.auth
 class SearchActivity : BasicActivity<ActivitySearchBinding,SearchViewModel>(),SearchNavigator {
     private val usersList = mutableListOf<UserModel?>()
     val currentUserId= Firebase.auth.currentUser?.uid
+    private val currentUserPicture= DataUtils.user!!.profilePicture
+    private val currentUserName= DataUtils.user!!.userName
     private val adapter = AddFriendsAdapter(usersList,currentUserId )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,7 +64,7 @@ class SearchActivity : BasicActivity<ActivitySearchBinding,SearchViewModel>(),Se
                 return true
             }
         })
-        adapter.onAddClickListener=object : AddFriendsAdapter.OnAddClickListener{
+        adapter.onAddFriendButtonClickListener=object : AddFriendsAdapter.OnAddFriendButtonClickListener{
             override fun onClick(
                 user : UserModel,
                 holder: AddFriendsAdapter.ViewHolder,
@@ -71,7 +75,9 @@ class SearchActivity : BasicActivity<ActivitySearchBinding,SearchViewModel>(),Se
                     addFriendRequestToFirestore(
                         sender = currentUserId,
                         receiver = recipientUserId,
-                        onSuccessListener = { documentReference ->
+                        senderPicture = currentUserPicture,
+                        senderUserName = currentUserName,
+                        onSuccessListener = {
                             holder.dataBinding.addFriendButtonItem.text= "Pending"
                             holder.dataBinding.addFriendButtonItem.isEnabled = false
                             Log.e("Firebase", "Friend request sent :")
@@ -82,6 +88,34 @@ class SearchActivity : BasicActivity<ActivitySearchBinding,SearchViewModel>(),Se
                     )
                 } else {
                     Log.e("Firebase", "Current user ID or recipient user ID is null")
+                }
+
+            }
+        }
+
+        adapter.onRemoveFriendButtonClickListener = object :AddFriendsAdapter.OnRemoveFriendButtonClickListener{
+            override fun onClick(
+                user: UserModel,
+                holder: AddFriendsAdapter.ViewHolder,
+                position: Int
+            ) {
+                val recipientUserId = user.id
+                if (currentUserId != null && recipientUserId != null){
+                    removeFriendRequestFromFirestore(
+                        sender = currentUserId,
+                        receiver = recipientUserId,
+                        onSuccessListener = {
+                            holder.dataBinding.addFriendButtonItem.text= "Add Friend"
+                            holder.dataBinding.addFriendButtonItem.isEnabled = true
+                            Log.e("firebase","request removed")
+                        },
+                        onFailureListener = {
+                            Log.e("firebase","error removing request ")
+
+                        }
+                    )
+                } else{
+
                 }
             }
         }
