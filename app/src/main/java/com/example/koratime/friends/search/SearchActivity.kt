@@ -44,7 +44,8 @@ class SearchActivity : BasicActivity<ActivitySearchBinding,SearchViewModel>(),Se
         // Enable back button on Toolbar
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
-
+        supportActionBar?.title= "Search For People"
+        supportActionBar?.setDisplayShowTitleEnabled(true)
         dataBinding.searchUser.requestFocus()
 
 
