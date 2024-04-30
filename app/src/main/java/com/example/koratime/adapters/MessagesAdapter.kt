@@ -38,6 +38,7 @@ class MessagesAdapter : RecyclerView.Adapter<ViewHolder>() {
     val SEND = 2
     override fun getItemViewType(position: Int): Int {
         val message = item[position]
+
         if (message?.senderID==DataUtils.user?.id){
             return SEND
         } else{

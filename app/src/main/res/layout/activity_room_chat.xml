@@ -50,7 +50,7 @@
                 app:layout_constraintStart_toEndOf="@+id/type_message"
                 app:layout_constraintTop_toBottomOf="@id/recyclerView"
                 android:layout_margin="15dp"
-                android:text="Send"
+                android:text="@string/send"
                 android:textSize="20sp"
                 android:paddingVertical="10dp"
                 android:paddingHorizontal="25dp"
@@ -67,10 +67,10 @@
                 app:layout_constraintBottom_toBottomOf="@id/sendButton"
                 android:background="@drawable/shape_type_message"
                 android:padding="15dp"
-                android:hint="Type a message"
+                android:hint="@string/type_a_message"
                 android:text="@={vm.messageField}"
-
-                />
+                android:inputType="text"
+                android:autofillHints="type a message" />
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"

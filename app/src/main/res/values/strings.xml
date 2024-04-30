@@ -32,4 +32,7 @@
     <string name="create_stadium">Create Stadium</string>
     <string name="add_stadium_location">Add Stadium Location</string>
     <string name="kora_time">Kora Time</string>
+    <string name="send">Send</string>
+    <string name="type_a_message">Type a message</string>
+    <string name="password_optional">Password ( optional )</string>
 </resources>

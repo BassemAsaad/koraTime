@@ -132,7 +132,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:autofillHints="enter room password (optional)"
-                        android:hint="Password ( optional )"
+                        android:hint="@string/password_optional"
                         android:inputType="text"
                         android:lines="1"
                         android:text="@={vm.password}" />
