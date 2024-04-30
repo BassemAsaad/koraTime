@@ -10,13 +10,14 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.example.koratime.Constants
 import com.example.koratime.R
 import com.example.koratime.adapters.RoomsAdapter
 import com.example.koratime.database.getAllRoomsFromFirestore
 import com.example.koratime.rooms.createRoom.AddRoomActivity
 import com.example.koratime.databinding.FragmentRoomsBinding
-import com.example.koratime.home.home_user.HomeActivity
 import com.example.koratime.model.RoomModel
+import com.example.koratime.rooms.room_chat.RoomChatActivity
 
 class RoomsFragment : Fragment(),RoomsNavigator {
 
@@ -66,7 +67,9 @@ class RoomsFragment : Fragment(),RoomsNavigator {
                  viewModel.password.value = holder.dataBinding.roomPasswordLayout.editText?.text.toString()
 
                      if (viewModel.checkRoomPassword() ) {
-                     (activity as? HomeActivity)?.onRoomClick(room)
+                         val intent = Intent(requireContext(),RoomChatActivity::class.java)
+                         intent.putExtra(Constants.ROOM_NAME,room)
+                         startActivity(intent)
                  } else {
                      holder.dataBinding.roomPasswordLayout.error = viewModel.passwordError.value
                  }

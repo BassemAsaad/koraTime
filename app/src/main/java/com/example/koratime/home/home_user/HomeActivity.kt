@@ -89,11 +89,6 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>() , HomeN
 
 
     }
-    fun onRoomClick(room: RoomModel?) {
-        dataBinding.homeBar.selectedItemId = R.id.chat_bar
-        pushFragment(ChatFragment(),true)
-    }
-
     @SuppressLint("SuspiciousIndentation")
     fun pushFragment(fragment: Fragment, addtoBackStack:Boolean=false){
         val push = supportFragmentManager.beginTransaction()

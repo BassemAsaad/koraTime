@@ -3,6 +3,7 @@ package com.example.koratime.registration.log_in
 
 import android.util.Log
 import androidx.databinding.ObservableField
+import com.example.koratime.DataUtils
 import com.example.koratime.basic.BasicViewModel
 import com.example.koratime.database.getUserForLogin
 import com.example.koratime.model.UserModel
@@ -64,6 +65,7 @@ class LoginViewModel : BasicViewModel<LoginNavigator>() {
 
                 }else{
                     Log.e("Firebase: ", "Successful Login")
+                    DataUtils.user = user
                     if (user.nationalID==null){
                         navigator?.openHomeActivity()
                     } else {
