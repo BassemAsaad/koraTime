@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.koratime.R
 import com.example.koratime.adapters.AddFriendsAdapter
 import com.example.koratime.basic.BasicActivity
-import com.example.koratime.database.addFriendToFirestore
+import com.example.koratime.database.addFriendRequestToFirestore
 import com.example.koratime.database.getUsersFromFirestore
 import com.example.koratime.databinding.ActivitySearchBinding
 import com.example.koratime.model.UserModel
@@ -68,7 +68,7 @@ class SearchActivity : BasicActivity<ActivitySearchBinding,SearchViewModel>(),Se
             ) {
                 val recipientUserId = user.id
                 if (currentUserId != null && recipientUserId != null) {
-                    addFriendToFirestore(
+                    addFriendRequestToFirestore(
                         sender = currentUserId,
                         receiver = recipientUserId,
                         onSuccessListener = { documentReference ->

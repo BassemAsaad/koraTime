@@ -12,7 +12,6 @@ import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.firestore
@@ -62,7 +61,7 @@ fun updateUserLocationInFirestore(userId: String,
                                   cityName: String,
                                   onSuccessListener: OnSuccessListener<Void>,
                                   onFailureListener: OnFailureListener) {
-    val db = FirebaseFirestore.getInstance()
+    val db = Firebase.firestore
     val userRef = db.collection(UserModel.COLLECTION_NAME).document(userId)
     userRef.update(mapOf(
             "latitude" to latitude,
@@ -133,10 +132,10 @@ fun uploadImageToStorage(imageUri: Uri?,
 }
 
 
-fun addFriendToFirestore(sender: String,
-                         receiver: String,
-                         onSuccessListener: OnSuccessListener<Void>,
-                         onFailureListener: OnFailureListener) {
+fun addFriendRequestToFirestore(sender: String,
+                                receiver: String,
+                                onSuccessListener: OnSuccessListener<Void>,
+                                onFailureListener: OnFailureListener) {
 
     val db = Firebase.firestore
     val request = FriendModel(sender = sender, receiver = receiver, status = "pending")
@@ -146,13 +145,12 @@ fun addFriendToFirestore(sender: String,
         .document(receiver)
         .collection(FriendModel.COLLECTION_NAME_RECEIVER)
         .document()
-    request.requestID = receiverRef.id
-
     // Add the friend request to senderUser
     val senderRef = db.collection(UserModel.COLLECTION_NAME)
         .document(sender)
         .collection(FriendModel.COLLECTION_NAME_SENDER)
         .document()
+    // set id
     request.requestID = senderRef.id
 
     // batch write can improve performance and reduce the risk of data inconsistency.
@@ -171,6 +169,7 @@ fun checkFriendRequestStatus(sender: String,
                              callback: (String) -> Unit ) {
     val db = Firebase.firestore
     val receiverRef = db.collection(UserModel.COLLECTION_NAME)
+    receiverRef
         .document(sender)
         .collection(FriendModel.COLLECTION_NAME_SENDER)
         .whereEqualTo("sender", sender)
@@ -192,6 +191,19 @@ fun checkFriendRequestStatus(sender: String,
             callback("error")
         }
 }
+
+fun getFriendRequestFromFirestore(sender: String,
+                                receiver: String,
+                                onSuccessListener: OnSuccessListener<Void>,
+                                onFailureListener: OnFailureListener) {
+
+    val db = Firebase.firestore
+
+
+}
+
+
+
 fun addMessageToFirestore(
     message: MessageModel,
     onSuccessListener: OnSuccessListener<Void>,
@@ -213,6 +225,10 @@ fun getMessageFromFirestore(roomId : String): CollectionReference {
     val roomRef = collectionRef.document(roomId)
     return roomRef.collection(MessageModel.COLLECTION_NAME)
 }
+
+
+
+
 
 fun addStadiumToFirestore(stadium:StadiumModel,
                           onSuccessListener: OnSuccessListener<Void>,
