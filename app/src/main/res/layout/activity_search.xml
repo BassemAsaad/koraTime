@@ -68,7 +68,7 @@
                 android:layout_height="50dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="30dp"
-                android:background="@drawable/rounded_search_edit_text"
+                android:background="@drawable/shape_rounded_search"
                 app:iconifiedByDefault="false"
                 app:layout_constraintBottom_toTopOf="@id/recyclerView"
                 app:layout_constraintEnd_toEndOf="parent"

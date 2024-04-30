@@ -18,7 +18,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/send_message_shape"
+            android:background="@drawable/shape_send_message"
             android:elevation="4dp"
             android:padding="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
