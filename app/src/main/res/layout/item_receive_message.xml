@@ -12,7 +12,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
+        android:layout_marginTop="10dp"
         >
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/shape_receive_message"
             android:elevation="4dp"
-            android:padding="5dp"
+            android:paddingHorizontal="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.001"
@@ -36,7 +36,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="start"
-                android:padding="8dp"
+                android:paddingHorizontal="8dp"
                 android:text="@{messageModel.content}"
                 android:textColor="@color/white"
                 android:textSize="16sp"
@@ -44,7 +44,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="Hi Ahmed, this is me i love biasda sdasnj kndlf,g asdkmnalsd" />
+                tools:text="Hi Ahmed, this is me i love biasda sdasnj kndlf,g " />
 
             <!-- Text view for the time of the message -->
             <TextView
@@ -74,9 +74,11 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintHorizontal_bias="0.001"
-                app:layout_constraintVertical_bias="0.0"
-                tools:text="Bassem Asaad" />
+                app:layout_constraintHorizontal_bias="0.030"
+                android:layout_marginVertical="5dp"
+                tools:text="Bassem Asaad"
+                android:layout_marginHorizontal="5dp"
+                />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

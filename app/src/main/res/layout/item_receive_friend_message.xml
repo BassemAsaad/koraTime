@@ -18,25 +18,24 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/shape_send_message"
+            android:background="@drawable/shape_receive_message"
             android:elevation="4dp"
             android:paddingHorizontal="5dp"
-
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1"
+            app:layout_constraintHorizontal_bias="0.001"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0"
-            >
 
+            >
 
             <!-- Text view for the message content -->
             <TextView
                 android:id="@+id/message_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="end"
+                android:gravity="start"
                 android:paddingHorizontal="8dp"
                 android:text="@{messageModel.content}"
                 android:textColor="@color/white"
@@ -45,7 +44,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="Hi Ahmed, thi" />
+                tools:text="Hi Ahmed, this is me i love biasda sdasnj kndlf,g " />
 
             <!-- Text view for the time of the message -->
             <TextView
@@ -59,11 +58,11 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/message_content"
-                tools:text="3:18 PM"
-                android:layout_marginVertical="5dp"
-                />
+                tools:text="3:18 PM" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>
