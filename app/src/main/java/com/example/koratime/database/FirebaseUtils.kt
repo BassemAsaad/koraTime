@@ -2,6 +2,7 @@ package com.example.koratime.database
 
 import android.net.Uri
 import android.util.Log
+import com.example.koratime.model.FriendModel
 import com.example.koratime.model.FriendRequestModel
 import com.example.koratime.model.MessageModel
 import com.example.koratime.model.RoomModel
@@ -139,7 +140,6 @@ fun addFriendRequestToFirestore(sender: String,
                                 senderUserName : String?, onSuccessListener: OnSuccessListener<Void>,
                                 onFailureListener: OnFailureListener) {
 
-    val db = Firebase.firestore
     val request = FriendRequestModel(
         senderID = sender,
         receiverID = receiver,
@@ -148,6 +148,7 @@ fun addFriendRequestToFirestore(sender: String,
         senderProfilePicture = senderPicture
         )
 
+    val db = Firebase.firestore
     // create a unique ID for the friend request
     val requestId = db.collection(UserModel.COLLECTION_NAME)
         .document().id
@@ -184,15 +185,25 @@ fun checkFriendRequestStatus(sender: String,
         .collection(FriendRequestModel.COLLECTION_NAME_SENDER)
         .whereEqualTo("senderID", sender)
         .whereEqualTo("receiverID", receiver)
-        .whereEqualTo("status", "pending")
         .get()
         .addOnSuccessListener { querySnapshot ->
             if (!querySnapshot.isEmpty) {
-                // There's a pending friend request from current user to target user
-                callback("pending")
+                // Iterate over the documents in the query snapshot
+                for (document in querySnapshot.documents) {
+                    // Get the status of the friend request
+                    val status = document.getString("status")
+                    if (status == "pending") {
+                        // callback function to handle the result of the asynchronous operation.
+                        callback("pending")
+                    } else if (status == "accepted") {
+                        callback("accepted")
+                    }
+                }
+                // No pending or accepted friend request found
+                callback("not_pending")
             }
             else {
-                // No pending friend request found
+                // No friend request found
                 callback("not_pending")
             }
         }
@@ -202,13 +213,14 @@ fun checkFriendRequestStatus(sender: String,
             callback("error")
         }
 }
-fun getFriendRequestsFromFirestore(receiver: String?,
+fun getFriendRequestsFromFirestore(receiver: String,
                                    onSuccessListener: OnSuccessListener<QuerySnapshot>,
                                    onFailureListener: OnFailureListener){
     val db = Firebase.firestore
     val collectionRef = db.collection(UserModel.COLLECTION_NAME)
-    val receiverRef = collectionRef.document(receiver!!)
+    val receiverRef = collectionRef.document(receiver)
     receiverRef.collection(FriendRequestModel.COLLECTION_NAME_RECEIVER)
+        .whereEqualTo("status","pending")
         .get()
         .addOnSuccessListener(onSuccessListener)
         .addOnFailureListener(onFailureListener)
@@ -218,22 +230,18 @@ fun removeFriendRequestFromFirestoreWithoutRequestID(sender: String,
                                                      receiver: String,
                                                      onSuccessListener: OnSuccessListener<Void>,
                                                      onFailureListener: OnFailureListener) {
-
     val db = Firebase.firestore
-
     // Create a query to find the friend request document in the receiver's collection of pending friend requests
     val receiverQuery = db.collection(UserModel.COLLECTION_NAME)
         .document(receiver)
         .collection(FriendRequestModel.COLLECTION_NAME_RECEIVER)
         .whereEqualTo("senderID", sender)
-        .whereEqualTo("status", "pending")
 
     // Create a query to find the friend request document in the sender's collection of sent friend requests
     val senderQuery = db.collection(UserModel.COLLECTION_NAME)
         .document(sender)
         .collection(FriendRequestModel.COLLECTION_NAME_SENDER)
         .whereEqualTo("receiverID", receiver)
-        .whereEqualTo("status", "pending")
 
     // Delete the friend request documents
     receiverQuery.get()
@@ -251,6 +259,8 @@ fun removeFriendRequestFromFirestoreWithoutRequestID(sender: String,
                 .addOnFailureListener(onFailureListener)
         }
         .addOnFailureListener(onFailureListener)
+
+
 }
 
 fun removeFriendRequestFromFirestoreWithRequestID(sender: String,
@@ -280,6 +290,90 @@ fun removeFriendRequestFromFirestoreWithRequestID(sender: String,
     batch.commit()
         .addOnSuccessListener(onSuccessListener)
         .addOnFailureListener(onFailureListener)
+}
+fun updateFriendRequestStatusToAccepted(sender: String,
+                                        receiver: String,
+                                        requestId: String,
+                                        onSuccessListener: OnSuccessListener<Void>,
+                                        onFailureListener: OnFailureListener) {
+
+    val db = Firebase.firestore
+    // create a unique ID for the friend request
+    val receiverRef = db.collection(UserModel.COLLECTION_NAME)
+        .document(receiver)
+        .collection(FriendRequestModel.COLLECTION_NAME_RECEIVER)
+        .document(requestId)
+    // Add the friend request to senderUser
+    val senderRef = db.collection(UserModel.COLLECTION_NAME)
+        .document(sender)
+        .collection(FriendRequestModel.COLLECTION_NAME_SENDER)
+        .document(requestId)
+
+    // batch write can improve performance and reduce the risk of data inconsistency.
+    val batch = db.batch()
+    batch.update(senderRef, "status", "accepted")
+    batch.update(receiverRef, "status", "accepted")
+
+    batch.commit()
+        .addOnSuccessListener(onSuccessListener)
+        .addOnFailureListener(onFailureListener)
+}
+
+fun acceptFriendRequest(sender: FriendRequestModel,
+                        receiver: UserModel,
+                        requestID: String,
+                        onSuccessListener: OnSuccessListener<Void>,
+                        onFailureListener: OnFailureListener){
+    val friendSender = FriendModel(
+        friendID = receiver.id,
+        friendPicture = receiver.profilePicture,
+        friendName = receiver.userName,
+    )
+    val friendReceiver = FriendModel(
+        friendID = sender.senderID,
+        friendPicture = sender.senderProfilePicture,
+        friendName = sender.senderName,
+    )
+    val db = Firebase.firestore
+
+    // create a unique ID for the friend request
+    val friendshipID = db.collection(UserModel.COLLECTION_NAME)
+        .document().id
+
+    // create friend collection for receiver
+    val friendReceiverRef = db.collection(UserModel.COLLECTION_NAME)
+        .document(receiver.id!!)
+        .collection(FriendModel.COLLECTION_NAME)
+        .document(friendshipID)
+
+    // create friend collection for sender
+    val friendSenderRef = db.collection(UserModel.COLLECTION_NAME)
+        .document(sender.senderID!!)
+        .collection(FriendModel.COLLECTION_NAME)
+        .document(friendshipID)
+
+    // set id
+    friendSender.friendshipID = friendshipID
+    friendReceiver.friendshipID = friendshipID
+    // batch write can improve performance and reduce the risk of data inconsistency.
+    val batch = db.batch()
+    batch.set(friendReceiverRef, friendReceiver)
+    batch.set(friendSenderRef, friendSender)
+
+    batch.commit()
+        .addOnSuccessListener{
+            updateFriendRequestStatusToAccepted(
+                sender = sender.senderID,
+                receiver = receiver.id,
+                requestId = requestID,
+                onSuccessListener = onSuccessListener,
+                onFailureListener = onFailureListener
+            )
+        }
+        .addOnFailureListener(onFailureListener)
+
+
+
 }
 
 fun addMessageToFirestore(

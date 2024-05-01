@@ -24,10 +24,17 @@ class AddFriendsAdapter  (private var usersList : List<UserModel?>?, private val
                     if (status == "pending") {
                         dataBinding.addFriendButtonItem.text = "Pending"
                         dataBinding.addFriendButtonItem.isEnabled = false
-                    } else {
+                    }else if (status == "accepted") {
+                        dataBinding.addFriendButtonItem.text = "Friends"
+                        dataBinding.addFriendButtonItem.isEnabled = false
+                    }
+                    else {
                         dataBinding.addFriendButtonItem.text = "Add Friend"
                         dataBinding.addFriendButtonItem.isEnabled = true
                     }
+
+
+
                 }
             }
 

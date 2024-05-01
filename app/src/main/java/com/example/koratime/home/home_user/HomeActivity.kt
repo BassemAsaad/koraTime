@@ -15,7 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.koratime.Constants
 import com.example.koratime.R
 import com.example.koratime.basic.BasicActivity
-import com.example.koratime.chat.ChatFragment
+import com.example.koratime.chat.FriendsFriendsChatFragment
 import com.example.koratime.database.updateUserLocationInFirestore
 import com.example.koratime.databinding.ActivityHomeBinding
 import com.example.koratime.friends.FriendsFragment
@@ -54,7 +54,7 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>() , HomeN
 
         dataBinding.homeBar.setOnItemSelectedListener {item->
             if (item.itemId == R.id.chat_bar){
-                pushFragment(ChatFragment())
+                pushFragment(FriendsFriendsChatFragment())
             }
             if (item.itemId == R.id.home_bar){
                 pushFragment(StadiumsFragment())

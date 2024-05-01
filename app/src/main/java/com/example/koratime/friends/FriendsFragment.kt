@@ -13,13 +13,12 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.koratime.DataUtils
 import com.example.koratime.R
 import com.example.koratime.adapters.PendingFriendsAdapter
+import com.example.koratime.database.acceptFriendRequest
 import com.example.koratime.database.getFriendRequestsFromFirestore
 import com.example.koratime.database.removeFriendRequestFromFirestoreWithRequestID
 import com.example.koratime.databinding.FragmentFriendsBinding
 import com.example.koratime.friends.search.SearchActivity
 import com.example.koratime.model.FriendRequestModel
-import com.google.firebase.Firebase
-import com.google.firebase.auth.auth
 
 class FriendsFragment : Fragment(),FriendsNavigator {
     lateinit var dataBinding : FragmentFriendsBinding
@@ -60,6 +59,17 @@ class FriendsFragment : Fragment(),FriendsNavigator {
                 position: Int
             ) {
 
+                acceptFriendRequest(
+                    sender = user,
+                    receiver = DataUtils.user!!,
+                    requestID = user.requestID!!,
+                    onSuccessListener = {
+                        Log.e("Firebase"," ${user.senderName} Accepted Successfully ")
+                    },
+                    onFailureListener = {
+                        Log.e("Firebase"," Error Accepting  ${user.senderName} ")
+                    }
+                )
             }
         }
         adapter.onRemoveButtonClickListener = object :PendingFriendsAdapter.OnRemoveButtonClickListener{
@@ -70,10 +80,10 @@ class FriendsFragment : Fragment(),FriendsNavigator {
             ) {
                 val requestId =user.requestID
                 val senderID = user.senderID
-                val receiverID = Firebase.auth.currentUser!!.uid
+                val receiverID = DataUtils.user!!.id
                 removeFriendRequestFromFirestoreWithRequestID(
                     sender = senderID!!,
-                    receiver = receiverID,
+                    receiver = receiverID!!,
                     request = requestId!!,
                     onSuccessListener = {
                         Log.e("Firebase: "," Request has been removed successfully $requestId")
@@ -92,7 +102,7 @@ class FriendsFragment : Fragment(),FriendsNavigator {
         super.onStart()
 
         getFriendRequestsFromFirestore(
-            DataUtils.user!!.id,
+            DataUtils.user!!.id!!,
             onSuccessListener = {querySnapshot->
                 val user = querySnapshot.toObjects(FriendRequestModel::class.java)
                 adapter.changeData(user)
