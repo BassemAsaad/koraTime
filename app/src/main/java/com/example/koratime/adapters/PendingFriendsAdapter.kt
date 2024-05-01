@@ -6,12 +6,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.koratime.R
 import com.example.koratime.databinding.ItemPendingFriendBinding
-import com.example.koratime.model.FriendModel
+import com.example.koratime.model.FriendRequestModel
 
-class PendingFriendsAdapter  (var usersList : List<FriendModel?>?): RecyclerView.Adapter<PendingFriendsAdapter.ViewHolder>()  {
+class PendingFriendsAdapter  (var usersList : MutableList<FriendRequestModel?>?): RecyclerView.Adapter<PendingFriendsAdapter.ViewHolder>()  {
     inner class ViewHolder(val dataBinding : ItemPendingFriendBinding): RecyclerView.ViewHolder(dataBinding.root){
-        fun bind(friendModel : FriendModel){
-            dataBinding.friendModel = friendModel
+        fun bind(friendRequestModel : FriendRequestModel){
+            dataBinding.friendModel = friendRequestModel
             dataBinding.invalidateAll()
         }
 
@@ -31,14 +31,34 @@ class PendingFriendsAdapter  (var usersList : List<FriendModel?>?): RecyclerView
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(usersList!![position]!!)
-
+        val user= usersList!![position]!!
+        holder.bind(user)
+        holder.dataBinding.confirmFriendButtonItem.setOnClickListener {
+            onAddButtonClickListener?.onClick(user,holder,position)
+        }
+        holder.dataBinding.removeFriendButtonItem.setOnClickListener {
+            onRemoveButtonClickListener?.onClick(user,holder,position)
+        }
 
     }
 
-    fun changeData( newUser : List<FriendModel?>?){
+    var onRemoveButtonClickListener :OnRemoveButtonClickListener?=null
+    interface OnRemoveButtonClickListener{
+        fun onClick(user:FriendRequestModel, holder: ViewHolder, position: Int)
+    }
+
+    var onAddButtonClickListener :OnAddButtonClickListener?=null
+    interface OnAddButtonClickListener{
+        fun onClick(user:FriendRequestModel, holder: ViewHolder, position: Int)
+    }
+
+    fun changeData( newUser : MutableList<FriendRequestModel?>?){
         usersList = newUser
         notifyDataSetChanged()
     }
 
+    fun removeData( newUser : FriendRequestModel){
+        usersList!!.remove(newUser)
+        notifyDataSetChanged()
+    }
 }

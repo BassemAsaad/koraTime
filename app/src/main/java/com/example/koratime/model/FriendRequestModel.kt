@@ -1,6 +1,6 @@
 package com.example.koratime.model
 
-data class FriendModel(
+data class FriendRequestModel(
     var requestID : String?=null,
     val senderID : String?=null,
     val senderProfilePicture : String?=null,

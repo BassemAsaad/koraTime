@@ -2,7 +2,6 @@ package com.example.koratime.friends.search
 
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
 import com.example.koratime.DataUtils
@@ -11,7 +10,7 @@ import com.example.koratime.adapters.AddFriendsAdapter
 import com.example.koratime.basic.BasicActivity
 import com.example.koratime.database.addFriendRequestToFirestore
 import com.example.koratime.database.getUsersFromFirestore
-import com.example.koratime.database.removeFriendRequestFromFirestore
+import com.example.koratime.database.removeFriendRequestFromFirestoreWithoutRequestID
 import com.example.koratime.databinding.ActivitySearchBinding
 import com.example.koratime.model.UserModel
 import com.google.firebase.Firebase
@@ -64,59 +63,55 @@ class SearchActivity : BasicActivity<ActivitySearchBinding,SearchViewModel>(),Se
                 return true
             }
         })
+        // send friend request
         adapter.onAddFriendButtonClickListener=object : AddFriendsAdapter.OnAddFriendButtonClickListener{
             override fun onClick(
                 user : UserModel,
                 holder: AddFriendsAdapter.ViewHolder,
                 position: Int
             ) {
-                val recipientUserId = user.id
-                if (currentUserId != null && recipientUserId != null) {
+                val receiverUserId = user.id
                     addFriendRequestToFirestore(
-                        sender = currentUserId,
-                        receiver = recipientUserId,
+                        sender = currentUserId!!,
+                        receiver = receiverUserId!!,
                         senderPicture = currentUserPicture,
                         senderUserName = currentUserName,
                         onSuccessListener = {
                             holder.dataBinding.addFriendButtonItem.text= "Pending"
                             holder.dataBinding.addFriendButtonItem.isEnabled = false
-                            Log.e("Firebase", "Friend request sent :")
+                            Log.e("Firebase", "Friend request sent to: $receiverUserId" )
                         },
                         onFailureListener = { e ->
                             Log.e("Firebase", "Error sending friend request: ", e)
                         }
                     )
-                } else {
-                    Log.e("Firebase", "Current user ID or recipient user ID is null")
-                }
+
 
             }
         }
 
+        //remove friend request
         adapter.onRemoveFriendButtonClickListener = object :AddFriendsAdapter.OnRemoveFriendButtonClickListener{
             override fun onClick(
                 user: UserModel,
                 holder: AddFriendsAdapter.ViewHolder,
                 position: Int
             ) {
-                val recipientUserId = user.id
-                if (currentUserId != null && recipientUserId != null){
-                    removeFriendRequestFromFirestore(
-                        sender = currentUserId,
-                        receiver = recipientUserId,
+                val receiverUserId = user.id
+                    removeFriendRequestFromFirestoreWithoutRequestID(
+                        sender = currentUserId!!,
+                        receiver = receiverUserId!!,
                         onSuccessListener = {
                             holder.dataBinding.addFriendButtonItem.text= "Add Friend"
                             holder.dataBinding.addFriendButtonItem.isEnabled = true
-                            Log.e("firebase","request removed")
+                            Log.e("firebase","Friend request removed")
                         },
-                        onFailureListener = {
-                            Log.e("firebase","error removing request ")
+                        onFailureListener = {e->
+                            Log.e("firebase","error removing friend request: ",e)
 
                         }
                     )
-                } else{
 
-                }
             }
         }
 
@@ -132,9 +127,10 @@ class SearchActivity : BasicActivity<ActivitySearchBinding,SearchViewModel>(),Se
                     usersList.add(user)
                 }
                 adapter.changeData(usersList)
+                Log.e("Firebase"," Data has been added to adapter successfully ")
             },
-            onFailureListener = {
-                Toast.makeText(this, it.localizedMessage, Toast.LENGTH_SHORT).show()
+            onFailureListener = {e->
+                Log.e("Firebase"," Error adding Data to adapter: ",e)
             }
         )
 

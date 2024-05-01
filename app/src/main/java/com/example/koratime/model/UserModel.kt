@@ -11,8 +11,7 @@ data class UserModel(
     val longitude: Double?=null,
     val city : String?=null,
     val profilePicture :String?=null,
-    var createdAt : Long = System.currentTimeMillis(),
-    val friends: List<String> = emptyList()
+    var createdAt : Long = System.currentTimeMillis()
 ){
     companion object{
         const val COLLECTION_NAME = "User"

@@ -2,6 +2,7 @@ package com.example.koratime.friends
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,15 +14,18 @@ import com.example.koratime.DataUtils
 import com.example.koratime.R
 import com.example.koratime.adapters.PendingFriendsAdapter
 import com.example.koratime.database.getFriendRequestsFromFirestore
+import com.example.koratime.database.removeFriendRequestFromFirestoreWithRequestID
 import com.example.koratime.databinding.FragmentFriendsBinding
 import com.example.koratime.friends.search.SearchActivity
-import com.example.koratime.model.FriendModel
+import com.example.koratime.model.FriendRequestModel
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 
 class FriendsFragment : Fragment(),FriendsNavigator {
-    private val usersList = mutableListOf<FriendModel?>()
+    private val usersList = mutableListOf<FriendRequestModel?>()
     lateinit var dataBinding : FragmentFriendsBinding
     private lateinit var viewModel : FriendsViewModel
-    private val adapter = PendingFriendsAdapter(null)
+    private val adapter = PendingFriendsAdapter(usersList)
 
 
     override fun onCreateView(
@@ -50,6 +54,16 @@ class FriendsFragment : Fragment(),FriendsNavigator {
 
         dataBinding.recyclerView.adapter = adapter
 
+        adapter.onAddButtonClickListener = object :PendingFriendsAdapter.OnAddButtonClickListener{
+            override fun onClick(
+                user: FriendRequestModel,
+                holder: PendingFriendsAdapter.ViewHolder,
+                position: Int
+            ) {
+
+            }
+        }
+
     }
 
     override fun onStart() {
@@ -60,8 +74,9 @@ class FriendsFragment : Fragment(),FriendsNavigator {
             DataUtils.user!!.id,
             onSuccessListener = {querySnapshot->
                 for (document in querySnapshot.documents){
-                    val user = document.toObject(FriendModel::class.java)
+                    val user = document.toObject(FriendRequestModel::class.java)
                     usersList.add(user)
+                    Log.e("Firebase: "," user that sent friend request, ${user?.senderID}")
                 }
                 adapter.changeData(usersList)
 
@@ -71,19 +86,32 @@ class FriendsFragment : Fragment(),FriendsNavigator {
             }
 
         )
+        adapter.onRemoveButtonClickListener = object :PendingFriendsAdapter.OnRemoveButtonClickListener{
+            override fun onClick(
+                user: FriendRequestModel,
+                holder: PendingFriendsAdapter.ViewHolder,
+                position: Int
+            ) {
+                val requestId =user.requestID
+                val senderID = user.senderID
+                val receiverID = Firebase.auth.currentUser!!.uid
+                removeFriendRequestFromFirestoreWithRequestID(
+                    sender = senderID!!,
+                    receiver = receiverID,
+                    request = requestId!!,
+                    onSuccessListener = {
+                        Log.e("Firebase: "," Request has been removed successfully $requestId")
+                        adapter.removeData(user)
+                    },
+                    onFailureListener = {
+                        Log.e("Firebase: "," Error removing request")
 
+                    }
+                )
+            }
+        }
 
     }
-
-
-
-
-
-
-
-
-
-
 
 
     override fun openSearchActivity() {
