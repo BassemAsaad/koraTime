@@ -28,12 +28,12 @@
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/userImage_item"
             android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_height="70dp"
             app:imageUrl="@{friendModel.friendPicture}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/ic_stadium_img" />
+            tools:src="@drawable/ic_account_circle_" />
 
         <TextView
             android:id="@+id/textView"
