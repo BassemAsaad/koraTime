@@ -5,8 +5,8 @@ import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import com.example.koratime.DataUtils
 import com.example.koratime.basic.BasicViewModel
-import com.example.koratime.database.addMessageToFirestore
-import com.example.koratime.model.MessageModel
+import com.example.koratime.database.addRoomMessageToFirestore
+import com.example.koratime.model.RoomMessageModel
 import com.example.koratime.model.RoomModel
 import java.util.Date
 
@@ -16,7 +16,7 @@ class RoomChatViewModel : BasicViewModel<RoomChatNavigator>() {
     val toastLiveData = MutableLiveData<String>()
 
     fun sendMessage(){
-        val messageModel = MessageModel(
+        val roomMessageModel = RoomMessageModel(
             content = messageField.get(),
             roomID = room?.id,
             senderID = DataUtils.user?.id,
@@ -24,7 +24,8 @@ class RoomChatViewModel : BasicViewModel<RoomChatNavigator>() {
             dateTime = Date().time
         )
 
-        addMessageToFirestore(messageModel,
+        addRoomMessageToFirestore(
+            message = roomMessageModel,
             onSuccessListener = {
                 Log.e("Firebase","message sent successfully")
                 messageField.set("")

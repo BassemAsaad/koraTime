@@ -4,13 +4,13 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-data class MessageModel(
+data class FriendMessageModel(
     var messageID: String?=null,
     val content: String?=null,
     val senderName: String?=null,
     val senderID: String?=null,
+    val receiverID:String?=null,
     val dateTime: Long?=null,
-    val roomID: String?=null,
 ){
     companion object{
         const val COLLECTION_NAME = "Messages"

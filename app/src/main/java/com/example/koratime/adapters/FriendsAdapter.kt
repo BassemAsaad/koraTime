@@ -6,12 +6,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.koratime.R
 import com.example.koratime.databinding.ItemFriendsBinding
-import com.example.koratime.model.UserModel
+import com.example.koratime.model.FriendModel
 
-class UserAdapter  (var usersList : List<UserModel?>?): RecyclerView.Adapter<UserAdapter.ViewHolder>()  {
+class FriendsAdapter  (var friendsList : List<FriendModel?>?): RecyclerView.Adapter<FriendsAdapter.ViewHolder>()  {
     class ViewHolder(val dataBinding : ItemFriendsBinding): RecyclerView.ViewHolder(dataBinding.root){
-        fun bind(user : UserModel){
-            dataBinding.vm = user
+        fun bind(friend : FriendModel){
+            dataBinding.friendModel = friend
             dataBinding.invalidateAll()
         }
 
@@ -27,22 +27,22 @@ class UserAdapter  (var usersList : List<UserModel?>?): RecyclerView.Adapter<Use
     }
 
     override fun getItemCount(): Int {
-        return usersList?.size?:0
+        return friendsList?.size?:0
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(usersList!![position]!!)
+        holder.bind(friendsList!![position]!!)
         holder.itemView.setOnClickListener {
-            onUserClickListener?.onItemClick(usersList!![position]!!,position)
+            onUserClickListener?.onItemClick(friendsList!![position]!!,holder,position)
         }
 
     }
     var onUserClickListener : OnUserClickListener?=null
     interface OnUserClickListener{
-        fun onItemClick(user : UserModel?, position: Int)
+        fun onItemClick(user : FriendModel?,holder: ViewHolder, position: Int)
     }
-    fun changeData( newUser : List<UserModel?>?){
-        usersList = newUser
+    fun changeData( newFriend : List<FriendModel?>?){
+        friendsList = newFriend
         notifyDataSetChanged()
     }
 

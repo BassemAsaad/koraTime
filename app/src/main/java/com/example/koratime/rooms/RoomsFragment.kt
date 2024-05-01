@@ -66,7 +66,7 @@ class RoomsFragment : Fragment(),RoomsNavigator {
                  viewModel.roomPassword.value = room?.password
                  viewModel.password.value = holder.dataBinding.roomPasswordLayout.editText?.text.toString()
                  val intent = Intent(requireContext(),RoomChatActivity::class.java)
-                 intent.putExtra(Constants.ROOM_NAME,room)
+                 intent.putExtra(Constants.ROOM,room)
 
                  if (room!!.password!=null){
                      if (viewModel.checkRoomPassword() ) {

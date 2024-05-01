@@ -70,7 +70,9 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:listitem="@layout/item_friends" />
+                tools:listitem="@layout/item_friends"
+                android:layout_marginHorizontal="10dp"
+                />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

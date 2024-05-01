@@ -6,7 +6,7 @@
     <data>
         <variable
             name="messageModel"
-            type="com.example.koratime.model.MessageModel" />
+            type="com.example.koratime.model.FriendMessageModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

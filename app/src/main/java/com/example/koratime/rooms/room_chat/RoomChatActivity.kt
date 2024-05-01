@@ -6,18 +6,18 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.example.koratime.Constants
 import com.example.koratime.R
-import com.example.koratime.adapters.MessagesAdapter
+import com.example.koratime.adapters.RoomMessagesAdapter
 import com.example.koratime.basic.BasicActivity
-import com.example.koratime.database.getMessageFromFirestore
+import com.example.koratime.database.getRoomMessageFromFirestore
 import com.example.koratime.databinding.ActivityRoomChatBinding
-import com.example.koratime.model.MessageModel
+import com.example.koratime.model.RoomMessageModel
 import com.example.koratime.model.RoomModel
 import com.google.firebase.firestore.DocumentChange
 
 @Suppress("DEPRECATION")
 class RoomChatActivity : BasicActivity<ActivityRoomChatBinding,RoomChatViewModel>(),RoomChatNavigator{
     lateinit var room : RoomModel
-    private val messageAdapter = MessagesAdapter()
+    private val messageAdapter = RoomMessagesAdapter()
     override fun getLayoutID(): Int {
         return R.layout.activity_room_chat
     }
@@ -34,13 +34,14 @@ class RoomChatActivity : BasicActivity<ActivityRoomChatBinding,RoomChatViewModel
     override fun initView() {
         dataBinding.vm = viewModel
         viewModel.navigator = this
-        room = intent.getParcelableExtra(Constants.ROOM_NAME)!!
+        room = intent.getParcelableExtra(Constants.ROOM)!!
         viewModel.room = room
-        setSupportActionBar(dataBinding.toolbar)
 
+        setSupportActionBar(dataBinding.toolbar)
         // Enable back button on Toolbar
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
+
         // Enable title on Toolbar
         supportActionBar?.title = room.name
         supportActionBar?.setDisplayShowTitleEnabled(true)
@@ -51,16 +52,16 @@ class RoomChatActivity : BasicActivity<ActivityRoomChatBinding,RoomChatViewModel
 
     }
     private fun listenForMessageUpdate (){
-        getMessageFromFirestore(room.id!!)
+        getRoomMessageFromFirestore(room.id!!)
             .addSnapshotListener { snapshots , error ->
                 if (error!=null){
                     Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
                 }else{
-                    val newMessageList = mutableListOf<MessageModel?>()
+                    val newMessageList = mutableListOf<RoomMessageModel?>()
                     for (dc in snapshots!!.documentChanges) {
                         when (dc.type) {
                             DocumentChange.Type.ADDED -> {
-                                val message = dc.document.toObject(MessageModel::class.java)
+                                val message = dc.document.toObject(RoomMessageModel::class.java)
                                 newMessageList.add(message)
                             }
                             DocumentChange.Type.MODIFIED -> Log.e("Firebase", "Error")

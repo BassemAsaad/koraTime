@@ -4,47 +4,51 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import com.example.koratime.DataUtils
 import com.example.koratime.R
 import com.example.koratime.databinding.ItemReceiveMessageBinding
 import com.example.koratime.databinding.ItemSendMessageBinding
-import com.example.koratime.model.MessageModel
-import com.google.firebase.Firebase
-import com.google.firebase.auth.auth
+import com.example.koratime.model.RoomMessageModel
 
-class RoomChatAdapter :  RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    var item = mutableListOf<MessageModel?>()
+class RoomMessagesAdapter : RecyclerView.Adapter<ViewHolder>() {
 
-    inner class SendMessageViewHolder (val itemSendBinding : ItemSendMessageBinding): RecyclerView.ViewHolder(itemSendBinding.root){
-        fun bind(messageModel: MessageModel){
-            itemSendBinding.messageModel = messageModel
-            itemSendBinding.executePendingBindings()
+    private var item = mutableListOf<RoomMessageModel?>()
+
+
+
+    inner class SendMessageViewHolder (private val itemSendMessageBinding: ItemSendMessageBinding)
+        :ViewHolder (itemSendMessageBinding.root){
+            fun bind (roomMessageModel: RoomMessageModel){
+                itemSendMessageBinding.messageModel = roomMessageModel
+                itemSendMessageBinding.executePendingBindings()
+            }
+        }
+
+    inner class ReceiveMessageViewHolder (private val receiveMessageBinding: ItemReceiveMessageBinding)
+        :ViewHolder (receiveMessageBinding.root){
+        fun bind (roomMessageModel: RoomMessageModel){
+            receiveMessageBinding.messageModel = roomMessageModel
+            receiveMessageBinding.executePendingBindings()
         }
     }
-    inner class ReceiveMessageViewHolder (val itemReceiveBinding: ItemReceiveMessageBinding): RecyclerView.ViewHolder(itemReceiveBinding.root){
-        fun bind(messageModel: MessageModel){
-            itemReceiveBinding.messageModel =  messageModel
-            itemReceiveBinding.executePendingBindings()
-        }
+
+    companion object{
+        private const val RECEIVED = 1
+        private const val SEND = 2
     }
 
-
-
-
-    // to inflate receive and send viewHolders
-    val RECEIVED = 1
-    val SEND = 2
     override fun getItemViewType(position: Int): Int {
-        val message = item.get(position)
-        val user = Firebase.auth.currentUser?.uid
-        if (message?.senderID==user){
+        val message = item[position]
+
+        if (message?.senderID==DataUtils.user?.id){
             return SEND
         } else{
             return RECEIVED
         }
 
     }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         if (viewType==RECEIVED){
             val itemBinding : ItemReceiveMessageBinding = DataBindingUtil.inflate(
                 LayoutInflater.from(parent.context),
@@ -62,7 +66,7 @@ class RoomChatAdapter :  RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         return item.size
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if ( holder is SendMessageViewHolder){
             holder.bind(item[position]!!)
         } else if ( holder is ReceiveMessageViewHolder){
@@ -71,9 +75,9 @@ class RoomChatAdapter :  RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
     }
 
-
-    fun changeData( newItem: MutableList<MessageModel?> ){
+    fun changeData( newItem: MutableList<RoomMessageModel?> ){
         item.addAll(newItem)
         notifyItemRangeInserted(item.size+1,newItem.size)
     }
+
 }

@@ -4,68 +4,79 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="friendModel"
             type="com.example.koratime.model.FriendModel" />
     </data>
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardBackgroundColor="#B3FFFFFF"
-        app:cardCornerRadius="15dp"
-        android:elevation="10dp"
-        >
-
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:padding="15dp"
+        android:layout_marginTop="10dp"
+        android:elevation="12dp"
         >
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/userImage_item"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            app:imageUrl="@{friendModel.friendPicture}"
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:cardBackgroundColor="#FFFFFF"
+            app:cardCornerRadius="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/ic_stadium_img" />
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="15dp"
-            android:text="@{friendModel.friendName}"
-            android:textSize="20sp"
-            app:layout_constraintStart_toEndOf="@id/userImage_item"
-            app:layout_constraintTop_toTopOf="@id/userImage_item"
-            tools:text="Mohammed Ehab" />
+            >
 
 
-        <TextView
-            android:id="@+id/lastMessage_item"
-            android:layout_width="0dp"
-            android:layout_height="35dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="5dp"
-            tools:text="sssssssssss"
-            android:ellipsize="end"
-            android:lines="1"
-            android:padding="10dp"
-            app:layout_constraintBottom_toBottomOf="@id/userImage_item"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/userImage_item"
-            app:layout_constraintTop_toBottomOf="@+id/textView"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="5dp"
+                >
 
-            />
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/userImage_item"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    app:imageUrl="@{friendModel.friendPicture}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:src="@drawable/ic_account_circle_" />
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="15dp"
+                    android:text="@{friendModel.friendName}"
+                    android:textSize="20sp"
+                    app:layout_constraintStart_toEndOf="@id/userImage_item"
+                    app:layout_constraintTop_toTopOf="@id/userImage_item"
+                    tools:text="Mohammed Ehab" />
 
 
+                <TextView
+                    android:id="@+id/lastMessage_item"
+                    android:layout_width="0dp"
+                    android:layout_height="35dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="5dp"
+                    android:ellipsize="end"
+                    android:lines="1"
+                    android:padding="10dp"
+                    app:layout_constraintBottom_toBottomOf="@id/userImage_item"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/userImage_item"
+                    app:layout_constraintTop_toBottomOf="@+id/textView"
+                    tools:text="sssssssssss"
+
+                    />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
+
 </layout>
