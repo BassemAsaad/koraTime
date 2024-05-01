@@ -9,20 +9,20 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.example.koratime.DataUtils
 import com.example.koratime.R
 import com.example.koratime.adapters.StadiumsAdapter
 import com.example.koratime.database.getUserStadiumFromFirestore
 import com.example.koratime.databinding.FragmentStadiumsManagerBinding
 import com.example.koratime.model.StadiumModel
-import com.google.firebase.Firebase
-import com.google.firebase.auth.auth
+
 
 class StadiumsManagerFragment : Fragment(),StadiumsManagerNavigator{
 
     lateinit var dataBinding : FragmentStadiumsManagerBinding
     lateinit var viewModel : StadiumsManagerViewModel
     val adapter = StadiumsAdapter(null)
-    val userId = Firebase.auth.currentUser?.uid
+    private val userId = DataUtils.user!!.id
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -71,11 +71,10 @@ class StadiumsManagerFragment : Fragment(),StadiumsManagerNavigator{
             onSuccessListener = {querySnapShot->
                 val stadiums = querySnapShot.toObjects(StadiumModel::class.java)
                 adapter.changeData(stadiums)
-
             },
             onFailureListener = {
                 Log.e("Stadiums Adapter: ", it.localizedMessage!!.toString())
-                Toast.makeText(requireContext(), it.localizedMessage, Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Error Loading Stadiums", Toast.LENGTH_SHORT).show()
             }
         )
 

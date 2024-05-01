@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <variable
+            name="vm"
+            type="com.example.koratime.stadiums_user.StadiumsViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -73,13 +75,23 @@
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/stadiums_container"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/user_container">
+            app:layout_constraintTop_toBottomOf="@+id/app_bar">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toBottomOf="parent"
+
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:listitem="@layout/item_stadiums" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

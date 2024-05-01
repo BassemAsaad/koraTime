@@ -22,10 +22,9 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 
 class FriendsFragment : Fragment(),FriendsNavigator {
-    private val usersList = mutableListOf<FriendRequestModel?>()
     lateinit var dataBinding : FragmentFriendsBinding
     private lateinit var viewModel : FriendsViewModel
-    private val adapter = PendingFriendsAdapter(usersList)
+    private val adapter = PendingFriendsAdapter(null)
 
 
     override fun onCreateView(
@@ -51,8 +50,8 @@ class FriendsFragment : Fragment(),FriendsNavigator {
     fun initView() {
         dataBinding.vm = viewModel
         viewModel.navigator = this
-
         dataBinding.recyclerView.adapter = adapter
+
 
         adapter.onAddButtonClickListener = object :PendingFriendsAdapter.OnAddButtonClickListener{
             override fun onClick(
@@ -63,29 +62,6 @@ class FriendsFragment : Fragment(),FriendsNavigator {
 
             }
         }
-
-    }
-
-    override fun onStart() {
-        super.onStart()
-
-        usersList.clear()
-        getFriendRequestsFromFirestore(
-            DataUtils.user!!.id,
-            onSuccessListener = {querySnapshot->
-                for (document in querySnapshot.documents){
-                    val user = document.toObject(FriendRequestModel::class.java)
-                    usersList.add(user)
-                    Log.e("Firebase: "," user that sent friend request, ${user?.senderID}")
-                }
-                adapter.changeData(usersList)
-
-            },
-            onFailureListener = {
-                Toast.makeText(requireContext(), it.localizedMessage, Toast.LENGTH_SHORT).show()
-            }
-
-        )
         adapter.onRemoveButtonClickListener = object :PendingFriendsAdapter.OnRemoveButtonClickListener{
             override fun onClick(
                 user: FriendRequestModel,
@@ -110,6 +86,26 @@ class FriendsFragment : Fragment(),FriendsNavigator {
                 )
             }
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        getFriendRequestsFromFirestore(
+            DataUtils.user!!.id,
+            onSuccessListener = {querySnapshot->
+                val user = querySnapshot.toObjects(FriendRequestModel::class.java)
+                adapter.changeData(user)
+                Log.e("Firebase: "," Friend requests loaded successfully")
+
+            },
+            onFailureListener = {e->
+                Log.e("Firebase: "," Error loading friend requests: ",e)
+                Toast.makeText(requireContext(), "Error Loading Friend Requests", Toast.LENGTH_SHORT).show()
+            }
+
+        )
+
 
     }
 

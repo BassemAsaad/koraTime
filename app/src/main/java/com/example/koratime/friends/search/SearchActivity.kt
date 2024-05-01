@@ -51,7 +51,7 @@ class SearchActivity : BasicActivity<ActivitySearchBinding,SearchViewModel>(),Se
         supportActionBar?.setDisplayShowTitleEnabled(true)
         dataBinding.searchUser.requestFocus()
 
-
+        // filter users for search
         dataBinding.searchUser.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 // Handle query submission if needed
@@ -63,6 +63,8 @@ class SearchActivity : BasicActivity<ActivitySearchBinding,SearchViewModel>(),Se
                 return true
             }
         })
+
+
         // send friend request
         adapter.onAddFriendButtonClickListener=object : AddFriendsAdapter.OnAddFriendButtonClickListener{
             override fun onClick(
@@ -122,11 +124,9 @@ class SearchActivity : BasicActivity<ActivitySearchBinding,SearchViewModel>(),Se
         getUsersFromFirestore(
             currentUserId,
             onSuccessListener = { querySnapshot ->
-                for (document in querySnapshot.documents) {
-                    val user = document.toObject(UserModel::class.java)
-                    usersList.add(user)
-                }
-                adapter.changeData(usersList)
+                val user = querySnapshot.toObjects(UserModel::class.java)
+                adapter.changeData(user)
+
                 Log.e("Firebase"," Data has been added to adapter successfully ")
             },
             onFailureListener = {e->

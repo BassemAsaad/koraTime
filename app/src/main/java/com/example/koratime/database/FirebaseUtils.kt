@@ -148,7 +148,7 @@ fun addFriendRequestToFirestore(sender: String,
         senderProfilePicture = senderPicture
         )
 
-    // Generate a unique ID for the friend request
+    // create a unique ID for the friend request
     val requestId = db.collection(UserModel.COLLECTION_NAME)
         .document().id
     // Add the friend request to receiverUser

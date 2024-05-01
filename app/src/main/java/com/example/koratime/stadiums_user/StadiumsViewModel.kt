@@ -1,7 +1,7 @@
 package com.example.koratime.stadiums_user
 
-import androidx.lifecycle.ViewModel
+import com.example.koratime.basic.BasicViewModel
 
-class StadiumsViewModel : ViewModel() {
-    // TODO: Implement the ViewModel
+class StadiumsViewModel : BasicViewModel<StadiumNavigator>(){
+
 }
