@@ -13,12 +13,11 @@ import com.example.koratime.database.getFriendMessagesFromFirestore
 import com.example.koratime.databinding.ActivityChatFriendsBinding
 import com.example.koratime.model.FriendMessageModel
 import com.example.koratime.model.FriendModel
-import com.example.koratime.model.RoomMessageModel
 import com.google.firebase.firestore.DocumentChange
 
 @Suppress("DEPRECATION")
 class ChatFriendsActivity : BasicActivity<ActivityChatFriendsBinding,ChatFriendsViewModel>(),ChatFriendsNavigator {
-    lateinit var friendModel : FriendModel
+    private lateinit var friendModel : FriendModel
     private val messageAdapter = FriendMessagesAdapter()
     override fun getLayoutID(): Int {
         return R.layout.activity_chat_friends

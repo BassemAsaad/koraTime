@@ -51,11 +51,12 @@
                 android:layout_marginTop="30dp"
                 android:background="@drawable/shape_rounded_search"
                 app:iconifiedByDefault="false"
+                app:queryHint="Search For People"
                 app:layout_constraintBottom_toTopOf="@id/recyclerView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:queryHint="Search For People" />
+                />
 
 
             <androidx.recyclerview.widget.RecyclerView

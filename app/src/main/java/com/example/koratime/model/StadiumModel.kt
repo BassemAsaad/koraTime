@@ -1,5 +1,9 @@
 package com.example.koratime.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class StadiumModel(
     var stadiumID: String?=null,
     val stadiumName: String?=null,
@@ -10,7 +14,7 @@ data class StadiumModel(
     val longitude: Double?=null,
     val address : String?=null,
     val createdTimestamp: Long? = System.currentTimeMillis()
-) {
+) : Parcelable {
     companion object {
         const val COLLECTION_NAME = "Stadiums"
     }

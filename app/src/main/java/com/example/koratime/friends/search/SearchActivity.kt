@@ -94,6 +94,7 @@ class SearchActivity : BasicActivity<ActivitySearchBinding,SearchViewModel>(),Se
 
         //remove friend request
         adapter.onRemoveFriendButtonClickListener = object :AddFriendsAdapter.OnRemoveFriendButtonClickListener{
+            @SuppressLint("SuspiciousIndentation")
             override fun onClick(
                 user: UserModel,
                 holder: AddFriendsAdapter.ViewHolder,

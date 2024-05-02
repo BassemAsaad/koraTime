@@ -1,5 +1,6 @@
 package com.example.koratime.stadiums_manager
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,12 +10,14 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.example.koratime.Constants
 import com.example.koratime.DataUtils
 import com.example.koratime.R
 import com.example.koratime.adapters.StadiumsAdapter
 import com.example.koratime.database.getUserStadiumFromFirestore
 import com.example.koratime.databinding.FragmentStadiumsManagerBinding
 import com.example.koratime.model.StadiumModel
+import com.example.koratime.stadiums_manager.manageStadium.ManagingStadiumActivity
 
 
 class StadiumsManagerFragment : Fragment(),StadiumsManagerNavigator{
@@ -53,7 +56,9 @@ class StadiumsManagerFragment : Fragment(),StadiumsManagerNavigator{
 
         adapter.onItemClickListener = object :StadiumsAdapter.OnItemClickListener{
             override fun onItemClick(stadium: StadiumModel?, position: Int) {
-
+                val intent = Intent(requireContext(),ManagingStadiumActivity::class.java)
+                intent.putExtra(Constants.STADIUM_MANAGER,stadium)
+                startActivity(intent)
             }
         }
 
