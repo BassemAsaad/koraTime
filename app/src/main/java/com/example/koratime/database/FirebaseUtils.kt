@@ -9,7 +9,6 @@ import com.example.koratime.model.RoomMessageModel
 import com.example.koratime.model.RoomModel
 import com.example.koratime.model.StadiumModel
 import com.example.koratime.model.UserModel
-import com.google.android.gms.common.api.Batch
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.Firebase
@@ -409,8 +408,8 @@ fun getRoomMessageFromFirestore(roomId : String): CollectionReference {
     val db = Firebase.firestore
     val roomRef = db.collection(RoomModel.COLLECTION_NAME)
         .document(roomId)
-        .collection(RoomMessageModel.COLLECTION_NAME)
-    return roomRef
+
+    return roomRef.collection(RoomMessageModel.COLLECTION_NAME)
 }
 fun addFriendMessageToFirestore(
     message: FriendMessageModel,
