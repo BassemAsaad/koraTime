@@ -465,7 +465,7 @@ fun addStadiumToFirestore(stadium:StadiumModel,
     val db = Firebase.firestore
     val collection = db.collection(StadiumModel.COLLECTION_NAME)
     val document = collection.document()
-    stadium.id = document.id
+    stadium.stadiumID = document.id
     document.set(stadium)
         .addOnSuccessListener(onSuccessListener)
         .addOnFailureListener(onFailureListener)
@@ -489,6 +489,17 @@ fun getUserStadiumFromFirestore(userId: String?,
     val collection= db.collection(StadiumModel.COLLECTION_NAME)
     collection
         .whereEqualTo("userManager", userId)
+        .get()
+        .addOnSuccessListener(onSuccessListener)
+        .addOnFailureListener(onFailureListener)
+}
+fun getUserSpecificStadiumFromFirestore(stadiumID: String,
+                                        onSuccessListener: OnSuccessListener<QuerySnapshot>,
+                                        onFailureListener: OnFailureListener) {
+    val db = Firebase.firestore
+    val collection= db.collection(StadiumModel.COLLECTION_NAME)
+    collection
+        .whereEqualTo("stadiumID",stadiumID)
         .get()
         .addOnSuccessListener(onSuccessListener)
         .addOnFailureListener(onFailureListener)
