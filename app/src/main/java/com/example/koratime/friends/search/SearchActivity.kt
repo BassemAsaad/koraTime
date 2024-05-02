@@ -1,5 +1,6 @@
 package com.example.koratime.friends.search
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.widget.SearchView
@@ -13,17 +14,15 @@ import com.example.koratime.database.getUsersFromFirestore
 import com.example.koratime.database.removeFriendRequestFromFirestoreWithoutRequestID
 import com.example.koratime.databinding.ActivitySearchBinding
 import com.example.koratime.model.UserModel
-import com.google.firebase.Firebase
-import com.google.firebase.auth.auth
+
 
 
 @Suppress("DEPRECATION")
 class SearchActivity : BasicActivity<ActivitySearchBinding,SearchViewModel>(),SearchNavigator {
     private val usersList = mutableListOf<UserModel?>()
-    val currentUserId= Firebase.auth.currentUser?.uid
     private val currentUserPicture= DataUtils.user!!.profilePicture
     private val currentUserName= DataUtils.user!!.userName
-    private val adapter = AddFriendsAdapter(usersList,currentUserId )
+    private val adapter = AddFriendsAdapter(usersList,DataUtils.user!!.id )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initView()
@@ -67,6 +66,7 @@ class SearchActivity : BasicActivity<ActivitySearchBinding,SearchViewModel>(),Se
 
         // send friend request
         adapter.onAddFriendButtonClickListener=object : AddFriendsAdapter.OnAddFriendButtonClickListener{
+            @SuppressLint("SuspiciousIndentation")
             override fun onClick(
                 user : UserModel,
                 holder: AddFriendsAdapter.ViewHolder,
@@ -74,7 +74,7 @@ class SearchActivity : BasicActivity<ActivitySearchBinding,SearchViewModel>(),Se
             ) {
                 val receiverUserId = user.id
                     addFriendRequestToFirestore(
-                        sender = currentUserId!!,
+                        sender = DataUtils.user!!.id!!,
                         receiver = receiverUserId!!,
                         senderPicture = currentUserPicture,
                         senderUserName = currentUserName,
@@ -99,10 +99,10 @@ class SearchActivity : BasicActivity<ActivitySearchBinding,SearchViewModel>(),Se
                 holder: AddFriendsAdapter.ViewHolder,
                 position: Int
             ) {
-                val receiverUserId = user.id
+                val receiverUserId = user.id!!
                     removeFriendRequestFromFirestoreWithoutRequestID(
-                        sender = currentUserId!!,
-                        receiver = receiverUserId!!,
+                        sender = DataUtils.user!!.id!!,
+                        receiver = receiverUserId,
                         onSuccessListener = {
                             holder.dataBinding.addFriendButtonItem.text= "Add Friend"
                             holder.dataBinding.addFriendButtonItem.isEnabled = true
@@ -122,10 +122,13 @@ class SearchActivity : BasicActivity<ActivitySearchBinding,SearchViewModel>(),Se
     override fun onStart() {
         super.onStart()
         getUsersFromFirestore(
-            currentUserId,
+            DataUtils.user!!.id,
             onSuccessListener = { querySnapshot ->
-                val user = querySnapshot.toObjects(UserModel::class.java)
-                adapter.changeData(user)
+                for (doc in querySnapshot.documents){
+                    val user = doc.toObject(UserModel::class.java)
+                    usersList.add(user)
+                }
+                adapter.changeData(usersList)
 
                 Log.e("Firebase"," Data has been added to adapter successfully ")
             },

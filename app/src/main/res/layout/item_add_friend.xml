@@ -35,7 +35,6 @@
             android:layout_marginTop="15dp"
             android:text="@{userModel.userName}"
             android:textSize="20sp"
-
             app:layout_constraintStart_toEndOf="@id/userImage_item"
             app:layout_constraintTop_toTopOf="@id/userImage_item"
             tools:text="Mohammed Ehab" />
@@ -52,6 +51,7 @@
             app:layout_constraintEnd_toStartOf="@id/removeFriendButton_item"
             app:layout_constraintStart_toEndOf="@id/userImage_item"
             app:layout_constraintTop_toBottomOf="@+id/userName"
+            android:enabled="false"
              />
 
         <Button
@@ -64,7 +64,8 @@
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="@id/userImage_item"
             app:layout_constraintStart_toEndOf="@id/addFriendButton_item"
-            app:layout_constraintTop_toBottomOf="@+id/userName" />
+            app:layout_constraintTop_toBottomOf="@+id/userName"
+            android:enabled="false"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

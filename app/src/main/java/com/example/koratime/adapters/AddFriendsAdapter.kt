@@ -1,5 +1,6 @@
 package com.example.koratime.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -21,12 +22,16 @@ class AddFriendsAdapter  (private var usersList : List<UserModel?>?, private val
             // Check friend request status dynamically
             currentUserId?.let { userId ->
                 checkFriendRequestStatus(userId, user.id!!) { status ->
+                    Log.e("Firebase"," $status")
+                    Log.e("Firebase"," ${user.userName}")
                     if (status == "pending") {
                         dataBinding.addFriendButtonItem.text = "Pending"
                         dataBinding.addFriendButtonItem.isEnabled = false
+                        dataBinding.removeFriendButtonItem.isEnabled = true
                     }else if (status == "accepted") {
                         dataBinding.addFriendButtonItem.text = "Friends"
                         dataBinding.addFriendButtonItem.isEnabled = false
+                        dataBinding.removeFriendButtonItem.isEnabled = true
                     }
                     else {
                         dataBinding.addFriendButtonItem.text = "Add Friend"

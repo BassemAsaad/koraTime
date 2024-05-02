@@ -200,8 +200,6 @@ fun checkFriendRequestStatus(sender: String,
                         callback("accepted")
                     }
                 }
-                // No pending or accepted friend request found
-                callback("not_pending")
             }
             else {
                 // No friend request found
@@ -214,6 +212,7 @@ fun checkFriendRequestStatus(sender: String,
             callback("error")
         }
 }
+
 fun getFriendRequestsFromFirestore(receiver: String,
                                    onSuccessListener: OnSuccessListener<QuerySnapshot>,
                                    onFailureListener: OnFailureListener){
