@@ -9,10 +9,7 @@ import com.example.koratime.DataUtils
 import com.example.koratime.R
 import com.example.koratime.databinding.ItemFriendReceiveMessageBinding
 import com.example.koratime.databinding.ItemFriendSendMessageBinding
-import com.example.koratime.databinding.ItemReceiveMessageBinding
-import com.example.koratime.databinding.ItemSendMessageBinding
 import com.example.koratime.model.FriendMessageModel
-import com.example.koratime.model.RoomMessageModel
 
 class FriendMessagesAdapter : RecyclerView.Adapter<ViewHolder>() {
 

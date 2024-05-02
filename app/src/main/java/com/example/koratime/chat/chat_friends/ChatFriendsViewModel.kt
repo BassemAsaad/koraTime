@@ -24,6 +24,7 @@ class ChatFriendsViewModel : BasicViewModel<ChatFriendsNavigator>() {
         )
         addFriendMessageToFirestore(
             message = friendMessageModel,
+            friendshipID= friend!!.friendshipID!!,
             onSuccessListener = {
                 Log.e("Firebase"," Message sent successfully")
             },

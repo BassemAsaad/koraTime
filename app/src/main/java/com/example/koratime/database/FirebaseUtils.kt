@@ -407,12 +407,14 @@ fun addRoomMessageToFirestore(
 }
 fun getRoomMessageFromFirestore(roomId : String): CollectionReference {
     val db = Firebase.firestore
-    val collectionRef = db.collection(RoomModel.COLLECTION_NAME)
-    val roomRef = collectionRef.document(roomId)
-    return roomRef.collection(RoomMessageModel.COLLECTION_NAME)
+    val roomRef = db.collection(RoomModel.COLLECTION_NAME)
+        .document(roomId)
+        .collection(RoomMessageModel.COLLECTION_NAME)
+    return roomRef
 }
 fun addFriendMessageToFirestore(
     message: FriendMessageModel,
+    friendshipID:String,
     onSuccessListener: OnSuccessListener<Void>,
     onFailureListener: OnFailureListener){
 
@@ -425,14 +427,14 @@ fun addFriendMessageToFirestore(
     val senderRef = db.collection(UserModel.COLLECTION_NAME)
         .document(message.senderID!!)
         .collection(FriendModel.COLLECTION_NAME)
-        .document(message.receiverID!!)
+        .document(friendshipID)
         .collection(FriendMessageModel.COLLECTION_NAME)
         .document(messageID)
 
     val receiverRef = db.collection(UserModel.COLLECTION_NAME)
-        .document(message.receiverID)
+        .document(message.receiverID!!)
         .collection(FriendModel.COLLECTION_NAME)
-        .document(message.senderID)
+        .document(friendshipID)
         .collection(FriendMessageModel.COLLECTION_NAME)
         .document(messageID)
 
@@ -446,24 +448,17 @@ fun addFriendMessageToFirestore(
         .addOnFailureListener(onFailureListener)
 
 }
-fun getFriendMessagesFromFirestore(senderID: String, receiverID: String): CollectionReference {
+fun getFriendMessagesFromFirestore(senderID: String, friendshipID: String): CollectionReference {
     val db = Firebase.firestore
 
     val senderRef = db.collection(UserModel.COLLECTION_NAME)
         .document(senderID)
         .collection(FriendModel.COLLECTION_NAME)
-        .document(receiverID)
-        .collection(FriendMessageModel.COLLECTION_NAME)
+        .document(friendshipID)
 
+    return senderRef.collection(FriendMessageModel.COLLECTION_NAME)
+}
 
-    return senderRef.document().collection(FriendMessageModel.COLLECTION_NAME)
-}
-fun getFriendMessageFromFirestore(currentUserID:String, friendID : String): CollectionReference {
-    val db = Firebase.firestore
-    val collectionRef = db.collection(UserModel.COLLECTION_NAME)
-    val roomRef = collectionRef.document(friendID)
-    return roomRef.collection(RoomMessageModel.COLLECTION_NAME)
-}
 
 fun addStadiumToFirestore(stadium:StadiumModel,
                           onSuccessListener: OnSuccessListener<Void>,

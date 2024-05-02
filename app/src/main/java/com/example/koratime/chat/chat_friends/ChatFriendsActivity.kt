@@ -1,13 +1,20 @@
 package com.example.koratime.chat.chat_friends
 
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.example.koratime.Constants
+import com.example.koratime.DataUtils
 import com.example.koratime.R
 import com.example.koratime.adapters.FriendMessagesAdapter
 import com.example.koratime.basic.BasicActivity
+import com.example.koratime.database.getFriendMessagesFromFirestore
 import com.example.koratime.databinding.ActivityChatFriendsBinding
+import com.example.koratime.model.FriendMessageModel
 import com.example.koratime.model.FriendModel
+import com.example.koratime.model.RoomMessageModel
+import com.google.firebase.firestore.DocumentChange
 
 @Suppress("DEPRECATION")
 class ChatFriendsActivity : BasicActivity<ActivityChatFriendsBinding,ChatFriendsViewModel>(),ChatFriendsNavigator {
@@ -42,7 +49,7 @@ class ChatFriendsActivity : BasicActivity<ActivityChatFriendsBinding,ChatFriends
         // Enable title on Toolbar
         supportActionBar?.title = friendModel.friendName
         supportActionBar?.setDisplayShowTitleEnabled(true)
-
+        listenForMessageUpdate()
         dataBinding.recyclerView.adapter=messageAdapter
     }
     override fun onSupportNavigateUp(): Boolean {
@@ -50,8 +57,30 @@ class ChatFriendsActivity : BasicActivity<ActivityChatFriendsBinding,ChatFriends
         onBackPressed()
         return true
     }
-    override fun onStart() {
-        super.onStart()
 
+    private fun listenForMessageUpdate (){
+        getFriendMessagesFromFirestore(
+            senderID =DataUtils.user!!.id!!,
+            friendshipID = friendModel.friendshipID!!,
+        ).addSnapshotListener { snapshots , error ->
+            if (error!=null){
+                Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
+            }else{
+                val newMessageList = mutableListOf<FriendMessageModel?>()
+                for (dc in snapshots!!.documentChanges) {
+                    when (dc.type) {
+                        DocumentChange.Type.ADDED -> {
+                            val message = dc.document.toObject(FriendMessageModel::class.java)
+                            newMessageList.add(message)
+                        }
+                        DocumentChange.Type.MODIFIED -> Log.e("Firebase", "Error")
+                        DocumentChange.Type.REMOVED -> Log.e("Firebase", "Error")
+                    }
+                }
+                messageAdapter.changeData(newMessageList)
+            }
+        }
     }
+
+
 }

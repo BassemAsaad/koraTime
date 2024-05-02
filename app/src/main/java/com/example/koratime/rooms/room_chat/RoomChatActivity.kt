@@ -34,6 +34,7 @@ class RoomChatActivity : BasicActivity<ActivityRoomChatBinding,RoomChatViewModel
     override fun initView() {
         dataBinding.vm = viewModel
         viewModel.navigator = this
+
         room = intent.getParcelableExtra(Constants.ROOM)!!
         viewModel.room = room
 
