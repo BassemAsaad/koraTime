@@ -1,4 +1,4 @@
-package com.example.koratime.aa.test2
+package com.example.koratime.adapters
 
 import android.view.LayoutInflater
 import android.view.View
@@ -28,9 +28,9 @@ class TimeSlotAdapter(private val timeSlots: List<String>) : RecyclerView.Adapte
     }
 
 
-    var onBookClickListener:OnBookClickListener?=null
+    var onBookClickListener: OnBookClickListener?=null
     interface OnBookClickListener{
-        fun onclick(slot:String,holder: ViewHolder,position: Int)
+        fun onclick(slot:String, holder: ViewHolder, position: Int)
     }
 
 }

@@ -27,7 +27,8 @@ class AddStadiumActivity : BasicActivity<ActivityAddStadiumBinding,AddStadiumVie
     private var latitude = 0.0
     private var longitude = 0.0
     private var address = ""
-
+    private var openingTimeIndex:Int?=null
+    private var closingTimeIndex:Int?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initView()
@@ -97,10 +98,12 @@ class AddStadiumActivity : BasicActivity<ActivityAddStadiumBinding,AddStadiumVie
         dataBinding.opening.adapter = adapterSlots
         dataBinding.closing.adapter = adapterSlots
 
-
         // Add listeners to update closing time spinner based on opening time spinner selection
         dataBinding.opening.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                // Update opening time index
+                openingTimeIndex = position
+                viewModel.openingTime.value = openingTimeIndex
                 updateClosingTimeSpinner(dataBinding.opening, dataBinding.closing)
             }
 
@@ -109,16 +112,27 @@ class AddStadiumActivity : BasicActivity<ActivityAddStadiumBinding,AddStadiumVie
             }
         }
 
+        // Add listener for closing time spinner
+        dataBinding.closing.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                // Update closing time index
+                closingTimeIndex = position
+                viewModel.closingTime.value = closingTimeIndex!! + 1 // Add +1 to represent the actual closing time
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                // Do nothing
+            }
+        }
     }
 
     // Update closing time spinner based on opening time spinner
     private fun updateClosingTimeSpinner(openingSpinner: Spinner, closingSpinner: Spinner) {
         val openingTime = openingSpinner.selectedItem.toString()
-        val openingIndex = openingSpinner.selectedItemPosition
         val timeSlots= resources.getStringArray(R.array.time_slots)
 
         // Generate closing time slots starting from one hour after the opening time
-        val closingTimeSlots = timeSlots.sliceArray((openingIndex + 1) until timeSlots.size).toMutableList()
+        val closingTimeSlots = timeSlots.sliceArray((openingTimeIndex!! + 1) until timeSlots.size).toMutableList()
 
         val closingAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, closingTimeSlots)
         closingAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -131,6 +145,9 @@ class AddStadiumActivity : BasicActivity<ActivityAddStadiumBinding,AddStadiumVie
             0
         }
         closingSpinner.setSelection(selectedClosingTimeIndex)
+
+        // Update closing time index
+        closingTimeIndex = selectedClosingTimeIndex
     }
 
 

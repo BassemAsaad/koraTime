@@ -3,6 +3,7 @@ package com.example.koratime.stadiums_manager.createStadium
 import android.util.Log
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
+import com.example.koratime.DataUtils
 import com.example.koratime.basic.BasicViewModel
 import com.example.koratime.database.addStadiumToFirestore
 import com.example.koratime.model.StadiumModel
@@ -17,7 +18,9 @@ class AddStadiumViewModel : BasicViewModel<AddStadiumNavigator>() {
     val descriptionError = ObservableField<String>()
     val imageError = ObservableField<String>()
     val imageUrl = MutableLiveData<String>()
-    private val user = Firebase.auth.currentUser
+
+    val openingTime = MutableLiveData<Int>()
+    val closingTime = MutableLiveData<Int>()
 
     val latitudeLiveData = MutableLiveData<Double>()
     val longitudeLiveData = MutableLiveData<Double>()
@@ -29,8 +32,10 @@ class AddStadiumViewModel : BasicViewModel<AddStadiumNavigator>() {
             val stadium= StadiumModel(
                 stadiumName = stadiumName.get(),
                 stadiumDescription = description.get(),
-                userManager = user?.uid,
+                userManager = DataUtils.user!!.id,
                 stadiumImageUrl = imageUrl.value,
+                opening = openingTime.value,
+                closing = closingTime.value,
                 latitude = latitudeLiveData.value,
                 longitude = longitudeLiveData.value,
                 address = addressLiveData.value
