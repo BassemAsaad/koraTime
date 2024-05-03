@@ -10,6 +10,8 @@ data class StadiumModel(
     val stadiumDescription: String?=null,
     val stadiumImageUrl :String?=null,
     val userManager: String? =null,
+    val opening : Int ?=null,
+    val closing : Int ?=null,
     val latitude: Double?=null,
     val longitude: Double?=null,
     val address : String?=null,

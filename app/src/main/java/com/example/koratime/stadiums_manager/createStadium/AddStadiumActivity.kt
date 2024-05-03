@@ -5,6 +5,10 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
@@ -45,6 +49,8 @@ class AddStadiumActivity : BasicActivity<ActivityAddStadiumBinding,AddStadiumVie
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
+        setupSpinners()
+
         openImagePicker()
         dataBinding.stadiumImagesLayout.setOnClickListener {
             // Launch the photo picker and let the user choose only images.
@@ -80,6 +86,53 @@ class AddStadiumActivity : BasicActivity<ActivityAddStadiumBinding,AddStadiumVie
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_SHORT).show()
             }
         }
+
+
+    private fun setupSpinners() {
+        val timeSlots = resources.getStringArray(R.array.time_slots)
+
+        val adapterSlots = ArrayAdapter(this, android.R.layout.simple_spinner_item, timeSlots)
+        adapterSlots.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+        dataBinding.opening.adapter = adapterSlots
+        dataBinding.closing.adapter = adapterSlots
+
+
+        // Add listeners to update closing time spinner based on opening time spinner selection
+        dataBinding.opening.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                updateClosingTimeSpinner(dataBinding.opening, dataBinding.closing)
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                // Do nothing
+            }
+        }
+
+    }
+
+    // Update closing time spinner based on opening time spinner
+    private fun updateClosingTimeSpinner(openingSpinner: Spinner, closingSpinner: Spinner) {
+        val openingTime = openingSpinner.selectedItem.toString()
+        val openingIndex = openingSpinner.selectedItemPosition
+        val timeSlots= resources.getStringArray(R.array.time_slots)
+
+        // Generate closing time slots starting from one hour after the opening time
+        val closingTimeSlots = timeSlots.sliceArray((openingIndex + 1) until timeSlots.size).toMutableList()
+
+        val closingAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, closingTimeSlots)
+        closingAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        closingSpinner.adapter = closingAdapter
+
+        // Adjust selection if closing time is at the end of time slots array
+        val selectedClosingTimeIndex = if (closingTimeSlots.contains(openingTime)) {
+            closingTimeSlots.indexOf(openingTime) + 1
+        } else {
+            0
+        }
+        closingSpinner.setSelection(selectedClosingTimeIndex)
+    }
+
 
     override fun onSupportNavigateUp(): Boolean {
         // go to the previous fragment when back button clicked on toolbar
