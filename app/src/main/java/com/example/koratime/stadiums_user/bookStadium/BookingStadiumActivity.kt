@@ -4,6 +4,7 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.example.koratime.Constants
 import com.example.koratime.DataUtils
@@ -23,7 +24,7 @@ import java.util.Locale
 class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,BookingStadiumViewModel>(),BookingStadiumNavigator {
 
     private lateinit var stadiumModel : StadiumModel
-    private lateinit var adapter : TimeSlotAdapter
+    private  var adapter = TimeSlotAdapter(emptyList())
     private lateinit var timeSlotsList :List<String>
     private var selectedDate: String? = null
 
@@ -54,15 +55,15 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
         supportActionBar?.title = stadiumModel.stadiumName + " Stadium"
         supportActionBar?.setDisplayShowTitleEnabled(true)
 
+
+
         //select date
         selectedDate = SimpleDateFormat("MM_dd_yyyy", Locale.getDefault()).format(Date())
 
         // create opening and closing list
-        timeSlotsList = viewModel.generateAvailableTimeSlots(stadiumModel.opening!!,stadiumModel.closing!!,resources.getStringArray(R.array.time_slots))
+        timeSlotsList = viewModel.createListForOpeningTimes(stadiumModel.opening!!,stadiumModel.closing!!,resources.getStringArray(R.array.time_slots))
 
-        adapter = TimeSlotAdapter(emptyList())
         getBookedTimes(selectedDate!!)
-
 
         // Add an OnDateChangeListener to the CalendarView
         dataBinding.calendarView.setOnDateChangeListener { view, year, month, dayOfMonth ->
@@ -84,6 +85,11 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
                         holder.dataBinding.btnBook.isEnabled=false
                         holder.dataBinding.btnBook.text= "Booked"
                         holder.dataBinding.btnBook.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
+                        Toast.makeText(this@BookingStadiumActivity,
+                            "${holder.dataBinding.tvTimeSlot} Booked Successfully",
+                            Toast.LENGTH_LONG
+                        ).show()
+
                         Log.e("Firebase"," ${holder.dataBinding.tvTimeSlot.text} booked on  $selectedDate" +
                                 " from userId: ${DataUtils.user!!.id!!} to the stadiumID: ${stadiumModel.stadiumID}") },
                     onFailureListener = {e->
@@ -101,15 +107,16 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
         getBookedTimesFromFirestore(
             stadiumID = stadiumModel.stadiumID!!,
             date = date,
-            onSuccessListener = { slotNames ->
+            onSuccessListener = { bookedList ->
+                Log.e("Firebase"," Booked times $bookedList")
                 bookedTimesList.clear()
-                bookedTimesList = slotNames.toMutableList()
-                val availableSlots= viewModel.filterBookedTimes(timeSlotsList,bookedTimesList)
+                bookedTimesList = bookedList.toMutableList()
+                val availableSlots= viewModel.removeBookedListFromOpeningTimes(timeSlotsList,bookedTimesList)
                 adapter.updateTimeSlots(availableSlots)
                 dataBinding.recyclerView.adapter=adapter
             },
-            onFailureListener = { exception ->
-                Log.e("Firebase", "Error fetching booked times", exception)
+            onFailureListener = { e->
+                Log.e("Firebase", "Error fetching booked times", e)
             }
         )
     }
