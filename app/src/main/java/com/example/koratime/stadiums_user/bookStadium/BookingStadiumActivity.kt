@@ -15,8 +15,10 @@ import com.example.koratime.databinding.ActivityBookingStadiumBinding
 import com.example.koratime.model.StadiumModel
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
 
 
+@Suppress("DEPRECATION")
 class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,BookingStadiumViewModel>(),BookingStadiumNavigator {
 
     private lateinit var stadiumModel : StadiumModel
@@ -57,24 +59,20 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
 
         dataBinding.recyclerView.adapter =adapter
 
-        selectedDate = SimpleDateFormat("MM_dd_yyyy").format(Date())
+        selectedDate = SimpleDateFormat("MM_dd_yyyy", Locale.getDefault()).format(Date())
         // Add an OnDateChangeListener to the CalendarView
         dataBinding.calendarView.setOnDateChangeListener { view, year, month, dayOfMonth ->
             selectedDate = String.format("%02d_%02d_%04d", month + 1, dayOfMonth, year)
-            Log.e("Firebase","$selectedDate from userId: ${DataUtils.user!!.id!!} ")
-
-            // Retrieve available time slots for the selected date
-//            val timeList = generateAvailableTimeSlotsForDate(selectedDate)
+            Log.e("Firebase"," Date selected: $selectedDate  ")
 
             // Update the RecyclerView with the available time slots
-            adapter.timeSlots = timeList
-            adapter.notifyDataSetChanged()
+            adapter.updateTimeSlots(timeList)
+            dataBinding.recyclerView.adapter =adapter
         }
 
         // Set up click listener for booking button in the adapter
         adapter.onBookClickListener = object : TimeSlotAdapter.OnBookClickListener {
             override fun onclick(slot: String, holder: TimeSlotAdapter.ViewHolder, position: Int) {
-
 
                 addBookingToFirestore(timeSlot = holder.tvTimeSlot.text.toString(),
                     stadiumID = stadiumModel.stadiumID!!,
@@ -89,7 +87,6 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
                     onFailureListener = {e->
                         Log.e("Firebase"," Error:  ${holder.tvTimeSlot.text} booked on  $selectedDate from userId: ${DataUtils.user!!.id!!} ",e) }
                 )
-
 
             }
         }
