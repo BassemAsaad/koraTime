@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.koratime.R
 
-class TimeSlotAdapter(private val timeSlots: List<String>) : RecyclerView.Adapter<TimeSlotAdapter.ViewHolder>() {
+class TimeSlotAdapter( var timeSlots: List<String>) : RecyclerView.Adapter<TimeSlotAdapter.ViewHolder>() {
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val tvTimeSlot: TextView = view.findViewById(R.id.tvTimeSlot)
         val btnBook: TextView = view.findViewById(R.id.btnBook)
@@ -31,6 +31,10 @@ class TimeSlotAdapter(private val timeSlots: List<String>) : RecyclerView.Adapte
     var onBookClickListener: OnBookClickListener?=null
     interface OnBookClickListener{
         fun onclick(slot:String, holder: ViewHolder, position: Int)
+    }
+    fun updateTimeSlots(newTimeSlots: List<String>) {
+        timeSlots = newTimeSlots
+        notifyDataSetChanged()
     }
 
 }

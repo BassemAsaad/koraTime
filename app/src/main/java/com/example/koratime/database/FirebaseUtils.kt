@@ -8,6 +8,7 @@ import com.example.koratime.model.FriendRequestModel
 import com.example.koratime.model.RoomMessageModel
 import com.example.koratime.model.RoomModel
 import com.example.koratime.model.StadiumModel
+import com.example.koratime.model.TimeSlotsModel
 import com.example.koratime.model.UserModel
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
@@ -18,6 +19,9 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.firestore
 import com.google.firebase.storage.storage
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import java.util.UUID
 
 fun addUserToFirestore(user : UserModel,
@@ -492,14 +496,27 @@ fun getUserStadiumFromFirestore(userId: String?,
         .addOnSuccessListener(onSuccessListener)
         .addOnFailureListener(onFailureListener)
 }
-fun getUserSpecificStadiumFromFirestore(stadiumID: String,
-                                        onSuccessListener: OnSuccessListener<QuerySnapshot>,
-                                        onFailureListener: OnFailureListener) {
+
+fun addBookingToFirestore(timeSlot: String,
+                          stadiumID:String,
+                          date: String,
+                          userId: String,
+                          onSuccessListener: OnSuccessListener<Void>,
+                          onFailureListener: OnFailureListener) {
+
     val db = Firebase.firestore
-    val collection= db.collection(StadiumModel.COLLECTION_NAME)
-    collection
-        .whereEqualTo("stadiumID",stadiumID)
-        .get()
+    // Add the booking details to Firestore under the respective date document
+    val bookingRef = db.collection(StadiumModel.COLLECTION_NAME).document(stadiumID)
+        .collection("bookings")
+        .document(date)
+        .collection("slots")
+        .document(timeSlot)
+
+    val bookingData = hashMapOf(
+        "userId" to userId
+        // Add other booking details as needed
+    )
+    bookingRef.set(bookingData)
         .addOnSuccessListener(onSuccessListener)
         .addOnFailureListener(onFailureListener)
 }

@@ -1,5 +1,7 @@
 package com.example.koratime.model
 
 data class TimeSlotsModel(
-val ss :String
+    val slotTime: String? = null,
+    val booked: Boolean = false,
+    val userId: String? = null
 )
