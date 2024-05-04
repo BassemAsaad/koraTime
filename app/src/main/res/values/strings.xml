@@ -37,30 +37,30 @@
     <string name="password_optional">Password ( optional )</string>
 
     <string-array name="time_slots">
-        <item>12PM</item>
-        <item>1PM</item>
-        <item>2PM</item>
-        <item>3PM</item>
-        <item>4PM</item>
-        <item>5PM</item>
-        <item>6PM</item>
-        <item>7PM</item>
-        <item>8PM</item>
-        <item>9PM</item>
-        <item>10PM</item>
-        <item>11PM</item>
-        <item>12AM</item>
-        <item>1AM</item>
-        <item>2AM</item>
-        <item>3AM</item>
-        <item>4AM</item>
-        <item>5AM</item>
-        <item>6AM</item>
-        <item>7AM</item>
-        <item>8AM</item>
-        <item>9AM</item>
-        <item>10AM</item>
-        <item>11AM</item>
+        <item> 12PM</item>
+        <item> 1PM</item>
+        <item> 2PM</item>
+        <item> 3PM</item>
+        <item> 4PM</item>
+        <item> 5PM</item>
+        <item> 6PM</item>
+        <item> 7PM</item>
+        <item> 8PM</item>
+        <item> 9PM</item>
+        <item> 10PM</item>
+        <item> 11PM</item>
+        <item> 12AM</item>
+        <item> 1AM</item>
+        <item> 2AM</item>
+        <item> 3AM</item>
+        <item> 4AM</item>
+        <item> 5AM</item>
+        <item> 6AM</item>
+        <item> 7AM</item>
+        <item> 8AM</item>
+        <item> 9AM</item>
+        <item> 10AM</item>
+        <item> 11AM</item>
     </string-array>
 
 </resources>

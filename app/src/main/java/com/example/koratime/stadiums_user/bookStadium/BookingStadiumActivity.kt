@@ -24,8 +24,10 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
 
     private lateinit var stadiumModel : StadiumModel
     private lateinit var adapter : TimeSlotAdapter
-    private lateinit var timeList :List<String>
+    private lateinit var timeSlotsList :List<String>
     private var selectedDate: String? = null
+
+    private  var bookedTimesList = mutableListOf<String>()
     override fun getLayoutID(): Int {
         return R.layout.activity_booking_stadium
     }
@@ -52,50 +54,42 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
         supportActionBar?.title = stadiumModel.stadiumName + " Stadium"
         supportActionBar?.setDisplayShowTitleEnabled(true)
 
+        //select date
+        selectedDate = SimpleDateFormat("MM_dd_yyyy", Locale.getDefault()).format(Date())
+        // create opening and closing list
+        timeSlotsList = generateAvailableTimeSlots(stadiumModel.opening!!,stadiumModel.closing!!,resources.getStringArray(R.array.time_slots))
 
         // get booked times i didn't use it yet
-        getBookedTimesFromFirestore(stadiumID = stadiumModel.stadiumID!!, date = selectedDate!!,
-            onSuccessListener = { slotNames ->
-                // Handle the successful retrieval of slot names
-            },
-            onFailureListener = { exception ->
-                // Handle the failure
-            }
-        )
+        adapter = TimeSlotAdapter(emptyList())
+//        dataBinding.recyclerView.adapter =adapter
+        getBookedTimes(selectedDate!!)
 
-         timeList = generateAvailableTimeSlots(stadiumModel.opening!!,stadiumModel.closing!!,resources.getStringArray(R.array.time_slots))
 
-        adapter = TimeSlotAdapter(timeList)
-
-        dataBinding.recyclerView.adapter =adapter
-
-        selectedDate = SimpleDateFormat("MM_dd_yyyy", Locale.getDefault()).format(Date())
         // Add an OnDateChangeListener to the CalendarView
         dataBinding.calendarView.setOnDateChangeListener { view, year, month, dayOfMonth ->
             selectedDate = String.format("%02d_%02d_%04d", month + 1, dayOfMonth, year)
             Log.e("Firebase"," Date selected: $selectedDate  ")
-
-            // Update the RecyclerView when day changes
-            adapter.updateTimeSlots(timeList)
-            dataBinding.recyclerView.adapter =adapter
+            getBookedTimes(selectedDate!!)
         }
 
         // Set up click listener for booking button in the adapter
         adapter.onBookClickListener = object : TimeSlotAdapter.OnBookClickListener {
             override fun onclick(slot: String, holder: TimeSlotAdapter.ViewHolder, position: Int) {
 
-                addBookingToFirestore(timeSlot = holder.tvTimeSlot.text.toString(),
+                addBookingToFirestore(timeSlot = holder.dataBinding.tvTimeSlot.text.toString(),
                     stadiumID = stadiumModel.stadiumID!!,
                     date = selectedDate!!, userId = DataUtils.user!!.id!!,
                     onSuccessListener = {
-                        holder.tvTimeSlot.isEnabled=false
-                        holder.tvTimeSlot.setTextColor((Color.GRAY))
-                        holder.btnBook.isEnabled=false
-                        holder.btnBook.text= "Booked"
-                        holder.btnBook.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
-                        Log.e("Firebase"," ${holder.tvTimeSlot.text} booked on  $selectedDate from userId: ${DataUtils.user!!.id!!} to the stadiumID: ${stadiumModel.stadiumID}") },
+                        holder.dataBinding.tvTimeSlot.isEnabled=false
+                        holder.dataBinding.tvTimeSlot.setTextColor((Color.GRAY))
+                        holder.dataBinding.btnBook.isEnabled=false
+                        holder.dataBinding.btnBook.text= "Booked"
+                        holder.dataBinding.btnBook.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
+                        Log.e("Firebase"," ${holder.dataBinding.tvTimeSlot.text} booked on  $selectedDate" +
+                                " from userId: ${DataUtils.user!!.id!!} to the stadiumID: ${stadiumModel.stadiumID}") },
                     onFailureListener = {e->
-                        Log.e("Firebase"," Error:  ${holder.tvTimeSlot.text} booked on  $selectedDate from userId: ${DataUtils.user!!.id!!} ",e) }
+                        Log.e("Firebase"," Error:  ${holder.dataBinding.tvTimeSlot.text}" +
+                                " booked on  $selectedDate from userId: ${DataUtils.user!!.id!!} ",e) }
                 )
 
             }
@@ -103,15 +97,26 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
 
 
     }
-
-
-    override fun onSupportNavigateUp(): Boolean {
-        // go to the previous fragment when back button clicked on toolbar
-        onBackPressed()
-        return true
+    fun filterBookedTimes(allTimeSlots: List<String>, bookedTimeSlots: List<String>): List<String> {
+        return allTimeSlots.filterNot { it in bookedTimeSlots }
     }
-
-    fun generateAvailableTimeSlots(openingIndex: Int, closingIndex: Int, timeSlotsArray: Array<String>): List<String> {
+    private fun getBookedTimes(date: String) {
+        getBookedTimesFromFirestore(
+            stadiumID = stadiumModel.stadiumID!!,
+            date = date,
+            onSuccessListener = { slotNames ->
+                bookedTimesList.clear()
+                bookedTimesList = slotNames.toMutableList()
+                val availableSlots=filterBookedTimes(timeSlotsList,bookedTimesList)
+                adapter.updateTimeSlots(availableSlots)
+                dataBinding.recyclerView.adapter=adapter
+            },
+            onFailureListener = { exception ->
+                Log.e("Firebase", "Error fetching booked times", exception)
+            }
+        )
+    }
+    private fun generateAvailableTimeSlots(openingIndex: Int, closingIndex: Int, timeSlotsArray: Array<String>): List<String> {
         val availableTimeSlots = mutableListOf<String>()
 
         // Ensure closing index is greater than opening index and within bounds
@@ -122,5 +127,11 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
         }
 
         return availableTimeSlots
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        // go to the previous fragment when back button clicked on toolbar
+        onBackPressed()
+        return true
     }
 }

@@ -45,7 +45,7 @@ class ManagingStadiumActivity : BasicActivity<ActivityManagingStadiumBinding,Man
         val timeList = generateAvailableTimeSlots(stadiumModel.opening!!,stadiumModel.closing!!
             ,resources.getStringArray(R.array.time_slots))
 
-        adapter = TimeSlotAdapter(timeList)
+//        adapter = TimeSlotAdapter(timeList,b)
 
         dataBinding.recyclerView.adapter =adapter
 

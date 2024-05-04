@@ -515,7 +515,8 @@ fun addBookingToFirestore(timeSlot: String,
         .document(timeSlot)
 
     val bookingData = hashMapOf(
-        "userId" to userId
+        "userId" to userId,
+        "status" to false
         // Add other booking details as needed
     )
     bookingRef.set(bookingData)
