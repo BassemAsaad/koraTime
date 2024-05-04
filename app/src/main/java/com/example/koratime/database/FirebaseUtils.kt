@@ -497,6 +497,8 @@ fun getUserStadiumFromFirestore(userId: String?,
         .addOnFailureListener(onFailureListener)
 }
 
+
+
 fun addBookingToFirestore(timeSlot: String,
                           stadiumID:String,
                           date: String,
@@ -518,5 +520,23 @@ fun addBookingToFirestore(timeSlot: String,
     )
     bookingRef.set(bookingData)
         .addOnSuccessListener(onSuccessListener)
+        .addOnFailureListener(onFailureListener)
+}
+
+fun getBookedTimesFromFirestore(stadiumID: String, date: String, onSuccessListener: OnSuccessListener<List<String>>, onFailureListener: OnFailureListener) {
+    val db = Firebase.firestore
+    val slotsRef = db.collection(StadiumModel.COLLECTION_NAME).document(stadiumID)
+        .collection("bookings")
+        .document(date)
+        .collection("slots")
+
+    slotsRef.get()
+        .addOnSuccessListener { documents ->
+            val slotNames = mutableListOf<String>()
+            for (document in documents) {
+                slotNames.add(document.id)
+            }
+            onSuccessListener.onSuccess(slotNames)
+        }
         .addOnFailureListener(onFailureListener)
 }

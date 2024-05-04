@@ -11,6 +11,7 @@ import com.example.koratime.R
 import com.example.koratime.adapters.TimeSlotAdapter
 import com.example.koratime.basic.BasicActivity
 import com.example.koratime.database.addBookingToFirestore
+import com.example.koratime.database.getBookedTimesFromFirestore
 import com.example.koratime.databinding.ActivityBookingStadiumBinding
 import com.example.koratime.model.StadiumModel
 import java.text.SimpleDateFormat
@@ -37,23 +38,32 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
         initView()
     }
     override fun initView() {
-
         viewModel.navigator=this
         dataBinding.vm = viewModel
+
         stadiumModel = intent.getParcelableExtra(Constants.STADIUM_USER)!!
         viewModel.stadium = stadiumModel
 
         setSupportActionBar(dataBinding.toolbar)
-        // Enable back button on Toolbar
+        // Enable back button on Toolbar and title
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
-
         // Enable title on Toolbar
         supportActionBar?.title = stadiumModel.stadiumName + " Stadium"
         supportActionBar?.setDisplayShowTitleEnabled(true)
 
-         timeList = generateAvailableTimeSlots(stadiumModel.opening!!,stadiumModel.closing!!
-            ,resources.getStringArray(R.array.time_slots))
+
+        // get booked times i didn't use it yet
+        getBookedTimesFromFirestore(stadiumID = stadiumModel.stadiumID!!, date = selectedDate!!,
+            onSuccessListener = { slotNames ->
+                // Handle the successful retrieval of slot names
+            },
+            onFailureListener = { exception ->
+                // Handle the failure
+            }
+        )
+
+         timeList = generateAvailableTimeSlots(stadiumModel.opening!!,stadiumModel.closing!!,resources.getStringArray(R.array.time_slots))
 
         adapter = TimeSlotAdapter(timeList)
 
@@ -65,7 +75,7 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
             selectedDate = String.format("%02d_%02d_%04d", month + 1, dayOfMonth, year)
             Log.e("Firebase"," Date selected: $selectedDate  ")
 
-            // Update the RecyclerView with the available time slots
+            // Update the RecyclerView when day changes
             adapter.updateTimeSlots(timeList)
             dataBinding.recyclerView.adapter =adapter
         }
@@ -101,12 +111,11 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
         return true
     }
 
-
     fun generateAvailableTimeSlots(openingIndex: Int, closingIndex: Int, timeSlotsArray: Array<String>): List<String> {
         val availableTimeSlots = mutableListOf<String>()
 
         // Ensure closing index is greater than opening index and within bounds
-        if (openingIndex >= 0 && closingIndex >= openingIndex && closingIndex < timeSlotsArray.size) {
+        if ((openingIndex >= 0) && (closingIndex >= openingIndex) && (closingIndex < timeSlotsArray.size)) {
             for (i in openingIndex..closingIndex) {
                 availableTimeSlots.add(timeSlotsArray[i])
             }
