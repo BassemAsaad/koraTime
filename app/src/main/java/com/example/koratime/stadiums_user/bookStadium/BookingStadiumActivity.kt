@@ -56,12 +56,11 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
 
         //select date
         selectedDate = SimpleDateFormat("MM_dd_yyyy", Locale.getDefault()).format(Date())
-        // create opening and closing list
-        timeSlotsList = generateAvailableTimeSlots(stadiumModel.opening!!,stadiumModel.closing!!,resources.getStringArray(R.array.time_slots))
 
-        // get booked times i didn't use it yet
+        // create opening and closing list
+        timeSlotsList = viewModel.generateAvailableTimeSlots(stadiumModel.opening!!,stadiumModel.closing!!,resources.getStringArray(R.array.time_slots))
+
         adapter = TimeSlotAdapter(emptyList())
-//        dataBinding.recyclerView.adapter =adapter
         getBookedTimes(selectedDate!!)
 
 
@@ -97,9 +96,7 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
 
 
     }
-    fun filterBookedTimes(allTimeSlots: List<String>, bookedTimeSlots: List<String>): List<String> {
-        return allTimeSlots.filterNot { it in bookedTimeSlots }
-    }
+
     private fun getBookedTimes(date: String) {
         getBookedTimesFromFirestore(
             stadiumID = stadiumModel.stadiumID!!,
@@ -107,7 +104,7 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
             onSuccessListener = { slotNames ->
                 bookedTimesList.clear()
                 bookedTimesList = slotNames.toMutableList()
-                val availableSlots=filterBookedTimes(timeSlotsList,bookedTimesList)
+                val availableSlots= viewModel.filterBookedTimes(timeSlotsList,bookedTimesList)
                 adapter.updateTimeSlots(availableSlots)
                 dataBinding.recyclerView.adapter=adapter
             },
@@ -115,18 +112,6 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
                 Log.e("Firebase", "Error fetching booked times", exception)
             }
         )
-    }
-    private fun generateAvailableTimeSlots(openingIndex: Int, closingIndex: Int, timeSlotsArray: Array<String>): List<String> {
-        val availableTimeSlots = mutableListOf<String>()
-
-        // Ensure closing index is greater than opening index and within bounds
-        if ((openingIndex >= 0) && (closingIndex >= openingIndex) && (closingIndex < timeSlotsArray.size)) {
-            for (i in openingIndex..closingIndex) {
-                availableTimeSlots.add(timeSlotsArray[i])
-            }
-        }
-
-        return availableTimeSlots
     }
 
     override fun onSupportNavigateUp(): Boolean {
