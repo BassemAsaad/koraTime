@@ -8,7 +8,6 @@ import com.example.koratime.model.FriendRequestModel
 import com.example.koratime.model.RoomMessageModel
 import com.example.koratime.model.RoomModel
 import com.example.koratime.model.StadiumModel
-import com.example.koratime.model.TimeSlotsModel
 import com.example.koratime.model.UserModel
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
@@ -18,11 +17,10 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.firestore
+import com.google.firebase.storage.UploadTask
 import com.google.firebase.storage.storage
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 import java.util.UUID
+import com.google.firebase.firestore.SetOptions
 
 fun addUserToFirestore(user : UserModel,
                        onSuccessListener: OnSuccessListener<Void>,
@@ -138,6 +136,74 @@ fun uploadImageToStorage(imageUri: Uri?,
     }
 }
 
+
+fun uploadMultipleImages(uris: List<Uri>, stadiumID: String, onSuccessListener: OnSuccessListener<List<String>>, onFailureListener: OnFailureListener) {
+    val imageUrls = mutableListOf<String>()
+    val storageRef = Firebase.storage.reference
+    val imagesRef = storageRef.child("stadiums/$stadiumID")
+
+    for ((index, uri) in uris.withIndex()) {
+        val imageRef = imagesRef.child("image$index")
+        imageRef.putFile(uri)
+            .addOnSuccessListener { taskSnapshot ->
+                // Get a URL to the uploaded content
+                taskSnapshot.storage.downloadUrl.addOnSuccessListener { uri ->
+                    val imageUrl = uri.toString()
+                    Log.e("ImagePicker", "Image uploaded successfully: $imageUrl")
+                    imageUrls.add(imageUrl)
+                    if (index == uris.lastIndex) {
+                        onSuccessListener.onSuccess(imageUrls)
+                    }
+                }
+
+            }
+            .addOnFailureListener {
+                // Handle unsuccessful uploads
+                Log.e("ImagePicker", "Image upload failed: ${it.message}")
+                onFailureListener.onFailure(it)
+            }
+    }
+
+}
+fun uploadMultipleImageToFirestore(imageUris: List<String>,
+                                   stadiumID:String,
+                                   onSuccessListener: OnSuccessListener<Void>,
+                                   onFailureListener: OnFailureListener) {
+    val db = Firebase.firestore
+    val stadiumImagesRef = db.collection(StadiumModel.COLLECTION_NAME).document(stadiumID)
+        .collection(StadiumModel.COLLECTION_IMAGES).document("imageLinks")
+    val data = hashMapOf<String, String>()
+    imageUris.forEachIndexed { index, imageUri ->
+        data["image${index}"] = imageUri
+    }
+    stadiumImagesRef.set(data, SetOptions.merge())
+        .addOnSuccessListener(onSuccessListener)
+        .addOnFailureListener(onFailureListener)
+}
+
+fun getMultipleImageFromFirestore(stadiumID: String,
+                                  onSuccessListener: OnSuccessListener<List<String>>,
+                                  onFailureListener: OnFailureListener) {
+    val db = Firebase.firestore
+    val stadiumImagesRef = db.collection(StadiumModel.COLLECTION_NAME).document(stadiumID)
+        .collection(StadiumModel.COLLECTION_IMAGES).document("imageLinks")
+    stadiumImagesRef.get()
+        .addOnSuccessListener { documentSnapshot ->
+            if (documentSnapshot.exists()) {
+                val imageUris = mutableListOf<String>()
+                for (i in 0 until documentSnapshot.data!!.size) {
+                    val imageUri = documentSnapshot.data!!["image$i"] as String
+                    imageUris.add(imageUri)
+                }
+                onSuccessListener.onSuccess(imageUris)
+            } else {
+                onFailureListener.onFailure(Exception("Document does not exist"))
+            }
+        }
+        .addOnFailureListener { exception ->
+            onFailureListener.onFailure(exception)
+        }
+}
 
 fun addFriendRequestToFirestore(sender: String,
                                 receiver: String,

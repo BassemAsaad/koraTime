@@ -5,9 +5,15 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
+import com.denzcoskun.imageslider.constants.ScaleTypes
+import com.denzcoskun.imageslider.models.SlideModel
 import com.example.koratime.Constants
 import com.example.koratime.DataUtils
 import com.example.koratime.R
@@ -15,6 +21,9 @@ import com.example.koratime.adapters.TimeSlotsForManagerAdapter
 import com.example.koratime.basic.BasicActivity
 import com.example.koratime.database.addBookingToFirestore
 import com.example.koratime.database.getBookedTimesFromFirestore
+import com.example.koratime.database.getMultipleImageFromFirestore
+import com.example.koratime.database.uploadMultipleImageToFirestore
+import com.example.koratime.database.uploadMultipleImages
 import com.example.koratime.databinding.ActivityManagingStadiumBinding
 import com.example.koratime.model.StadiumModel
 import java.text.SimpleDateFormat
@@ -29,6 +38,10 @@ class ManagingStadiumActivity : BasicActivity<ActivityManagingStadiumBinding,Man
     private lateinit var availableSlots: List<String>
     private lateinit var bookedTimesList : List<String>
     private lateinit var selectedDate: String
+    private  var imgsListUrl= mutableListOf <String>()
+
+    private lateinit var pickMedia : ActivityResultLauncher<PickVisualMediaRequest>
+
     override fun getLayoutID(): Int {
         return R.layout.activity_managing_stadium
     }
@@ -45,6 +58,8 @@ class ManagingStadiumActivity : BasicActivity<ActivityManagingStadiumBinding,Man
     override fun initView() {
         viewModel.navigator=this
         dataBinding.vm = viewModel
+        dataBinding.imageSlider.visibility =View.GONE
+        dataBinding.stadiumImages.visibility =View.GONE
 
         dataBinding.calendarView.minDate = System.currentTimeMillis()
         dataBinding.calendarView.startAnimation(AnimationUtils.loadAnimation(this, androidx.appcompat.R.anim.abc_slide_out_top))
@@ -103,6 +118,33 @@ class ManagingStadiumActivity : BasicActivity<ActivityManagingStadiumBinding,Man
             }
         }
 
+        openImagePicker()
+        dataBinding.imagePicker.setOnClickListener {
+            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        }
+        var r = mutableListOf<String>()
+        getMultipleImageFromFirestore(
+            stadiumID = stadiumModel.stadiumID!!,
+            onSuccessListener = {urls->
+                r.clear()
+                r.addAll(urls)
+                Log.e("Firebase"," List of $urls")
+                val imageList = ArrayList<SlideModel>()
+                for ( i in r ){
+                    imageList.add(SlideModel(i, ""))
+                }
+
+                if (imageList.isNotEmpty()){
+                    dataBinding.stadiumImages.visibility =View.VISIBLE
+                    dataBinding.imageSlider.visibility =View.VISIBLE
+                    dataBinding.imageSlider.setImageList(imageList,ScaleTypes.FIT)
+                }
+
+            },
+            onFailureListener = {}
+        )
+
+
 
     }
 
@@ -130,10 +172,54 @@ class ManagingStadiumActivity : BasicActivity<ActivityManagingStadiumBinding,Man
             }
         )
     }
+    private fun openImagePicker(){
+        Log.e("StadiumID","${stadiumModel.stadiumID}")
+        // Registers a photo picker activity launcher in single-select mode.
+        pickMedia = registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(3)) { uris ->
+            // photo picker
+            if (uris != null) {
+                viewModel.showLoading.value=true
+                Log.e("PhotoPicker", "Selected URI: $uris")
+                uploadMultipleImages(uris = uris, stadiumID = stadiumModel.stadiumID!!,
+                    onSuccessListener = {imagesList->
+                        Log.e("Firebase","Images uploaded successfully to storage")
+                        imgsListUrl.addAll(imagesList)
+                        uploadMultipleImageToFirestore(
+                            imgsListUrl,stadiumModel.stadiumID!!,
+                            onSuccessListener = {
+                                Log.e("Firebase","Images uploaded successfully to firestore")
+                                viewModel.showLoading.value=false
+                            },
+                            onFailureListener = {
+                                viewModel.showLoading.value=false
 
+                                Log.e("Firebase","Error uploading images to firestore")
+
+                            }
+                        )
+                },
+                    onFailureListener = {
+                        viewModel.showLoading.value=false
+                        Log.e("Firebase","Error uploading images to storage")
+                    }
+                )
+
+
+            } else {
+                viewModel.showLoading.value=false
+                dataBinding.imagePickerTextView.text = " No Image Selected"
+                Toast.makeText(this, "No image selected", Toast.LENGTH_SHORT).show()
+                Log.e("PhotoPicker", "No image selected")
+            }
+            viewModel.showLoading.value=false
+
+
+        }
+    }
     override fun onSupportNavigateUp(): Boolean {
         // go to the previous fragment when back button clicked on toolbar
         onBackPressed()
         return true
     }
 }
+

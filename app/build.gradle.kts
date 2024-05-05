@@ -62,6 +62,9 @@ dependencies {
     //location
     implementation("com.google.android.gms:play-services-maps:18.2.0")
 
+    //image slider
+    implementation("com.github.denzcoskun:ImageSlideshow:0.1.2")
+
     // Glide
     implementation("com.github.bumptech.glide:glide:4.16.0")
     implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.8.0"))
