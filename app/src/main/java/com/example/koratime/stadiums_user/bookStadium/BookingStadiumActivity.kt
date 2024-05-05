@@ -26,11 +26,13 @@ import java.util.Locale
 class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,BookingStadiumViewModel>(),BookingStadiumNavigator {
 
     private lateinit var stadiumModel : StadiumModel
-    private  var adapter = TimeSlotAdapter(emptyList())
+    private  var adapter = TimeSlotAdapter(emptyList(), emptyList())
     private lateinit var timeSlotsList :List<String>
+    private lateinit var availableSlots: List<String>
+
     private var selectedDate: String? = null
 
-    private  var bookedTimesList = mutableListOf<String>()
+    private lateinit var bookedTimesList : List<String>
     override fun getLayoutID(): Int {
         return R.layout.activity_booking_stadium
     }
@@ -46,7 +48,7 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
         viewModel.navigator=this
         dataBinding.vm = viewModel
         dataBinding.calendarView.minDate = System.currentTimeMillis()
-        dataBinding.calendarView.startAnimation(AnimationUtils.loadAnimation(this, androidx.appcompat.R.anim.abc_fade_in))
+        dataBinding.calendarView.startAnimation(AnimationUtils.loadAnimation(this, androidx.appcompat.R.anim.abc_slide_out_top))
 
         stadiumModel = intent.getParcelableExtra(Constants.STADIUM_USER)!!
         viewModel.stadium = stadiumModel
@@ -77,23 +79,29 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
         // Set up click listener for booking button in the adapter
         adapter.onBookClickListener = object : TimeSlotAdapter.OnBookClickListener {
             override fun onclick(slot: String, holder: TimeSlotAdapter.ViewHolder, position: Int) {
-
                 addBookingToFirestore(timeSlot = holder.dataBinding.tvTimeSlot.text.toString(),
                     stadiumID = stadiumModel.stadiumID!!,
                     date = selectedDate!!, userId = DataUtils.user!!.id!!,
                     onSuccessListener = {
+
                         holder.dataBinding.tvTimeSlot.isEnabled=false
                         holder.dataBinding.tvTimeSlot.setTextColor((Color.GRAY))
                         holder.dataBinding.btnBook.isEnabled=false
                         holder.dataBinding.btnBook.text= "Booked"
                         holder.dataBinding.btnBook.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
-                        Toast.makeText(this@BookingStadiumActivity,
-                            "${holder.dataBinding.tvTimeSlot} Booked Successfully",
-                            Toast.LENGTH_LONG
-                        ).show()
 
                         Log.e("Firebase"," ${holder.dataBinding.tvTimeSlot.text} booked on  $selectedDate" +
-                                " from userId: ${DataUtils.user!!.id!!} to the stadiumID: ${stadiumModel.stadiumID}") },
+                                " from userId: ${DataUtils.user!!.id!!} to the stadiumID: ${stadiumModel.stadiumID}")
+
+                        Toast.makeText(this@BookingStadiumActivity,
+                            "${holder.dataBinding.tvTimeSlot.text} Booked Successfully",
+                            Toast.LENGTH_SHORT
+                        ).show()
+
+
+                        getBookedTimes(selectedDate!!)
+
+                         },
                     onFailureListener = {e->
                         Log.e("Firebase"," Error:  ${holder.dataBinding.tvTimeSlot.text}" +
                                 " booked on  $selectedDate from userId: ${DataUtils.user!!.id!!} ",e) }
@@ -111,10 +119,12 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
             date = date,
             onSuccessListener = { bookedList ->
                 Log.e("Firebase"," Booked times $bookedList")
-                bookedTimesList.clear()
-                bookedTimesList = bookedList.toMutableList()
-                val availableSlots= viewModel.removeBookedListFromOpeningTimes(timeSlotsList,bookedTimesList)
-                adapter.updateTimeSlots(availableSlots)
+                bookedTimesList = bookedList
+                availableSlots= viewModel.removeBookedListFromOpeningTimes(timeSlotsList,bookedTimesList)
+                Log.e("TimeSlots List","$timeSlotsList")
+                Log.e("AvailableSlots List","$availableSlots")
+                Log.e("BookedSlots List","$bookedTimesList")
+                adapter.updateTimeSlots(timeSlotsList,availableSlots)
                 dataBinding.recyclerView.adapter=adapter
             },
             onFailureListener = { e->
