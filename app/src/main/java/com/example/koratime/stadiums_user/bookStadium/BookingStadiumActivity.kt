@@ -4,6 +4,7 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.example.koratime.Constants
@@ -16,6 +17,7 @@ import com.example.koratime.database.getBookedTimesFromFirestore
 import com.example.koratime.databinding.ActivityBookingStadiumBinding
 import com.example.koratime.model.StadiumModel
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
@@ -43,6 +45,8 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
     override fun initView() {
         viewModel.navigator=this
         dataBinding.vm = viewModel
+        dataBinding.calendarView.minDate = System.currentTimeMillis()
+        dataBinding.calendarView.startAnimation(AnimationUtils.loadAnimation(this, androidx.appcompat.R.anim.abc_fade_in))
 
         stadiumModel = intent.getParcelableExtra(Constants.STADIUM_USER)!!
         viewModel.stadium = stadiumModel
@@ -54,8 +58,6 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
         // Enable title on Toolbar
         supportActionBar?.title = stadiumModel.stadiumName + " Stadium"
         supportActionBar?.setDisplayShowTitleEnabled(true)
-
-
 
         //select date
         selectedDate = SimpleDateFormat("MM_dd_yyyy", Locale.getDefault()).format(Date())
