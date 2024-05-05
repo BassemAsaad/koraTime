@@ -5,9 +5,6 @@ import com.example.koratime.model.StadiumModel
 
 class BookingStadiumViewModel : BasicViewModel<BookingStadiumNavigator>() {
     var stadium : StadiumModel?=null
-
-
-
     fun createListForOpeningTimes(openingIndex: Int, closingIndex: Int, timeSlotsArray: Array<String>): List<String> {
         val availableTimeSlots = mutableListOf<String>()
 

@@ -10,14 +10,13 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.koratime.Constants
 import com.example.koratime.DataUtils
 import com.example.koratime.R
-import com.example.koratime.adapters.TimeSlotAdapter
+import com.example.koratime.adapters.TimeSlotsForUserAdapter
 import com.example.koratime.basic.BasicActivity
 import com.example.koratime.database.addBookingToFirestore
 import com.example.koratime.database.getBookedTimesFromFirestore
 import com.example.koratime.databinding.ActivityBookingStadiumBinding
 import com.example.koratime.model.StadiumModel
 import java.text.SimpleDateFormat
-import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
@@ -26,13 +25,12 @@ import java.util.Locale
 class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,BookingStadiumViewModel>(),BookingStadiumNavigator {
 
     private lateinit var stadiumModel : StadiumModel
-    private  var adapter = TimeSlotAdapter(emptyList(), emptyList())
+    private var adapter = TimeSlotsForUserAdapter(emptyList())
     private lateinit var timeSlotsList :List<String>
     private lateinit var availableSlots: List<String>
-
-    private var selectedDate: String? = null
-
     private lateinit var bookedTimesList : List<String>
+    private lateinit var selectedDate: String
+
     override fun getLayoutID(): Int {
         return R.layout.activity_booking_stadium
     }
@@ -47,8 +45,9 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
     override fun initView() {
         viewModel.navigator=this
         dataBinding.vm = viewModel
+
         dataBinding.calendarView.minDate = System.currentTimeMillis()
-        dataBinding.calendarView.startAnimation(AnimationUtils.loadAnimation(this, androidx.appcompat.R.anim.abc_slide_out_top))
+        dataBinding.calendarView.startAnimation(AnimationUtils.loadAnimation(this, androidx.appcompat.R.anim.abc_popup_enter))
 
         stadiumModel = intent.getParcelableExtra(Constants.STADIUM_USER)!!
         viewModel.stadium = stadiumModel
@@ -64,24 +63,21 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
         //select date
         selectedDate = SimpleDateFormat("MM_dd_yyyy", Locale.getDefault()).format(Date())
 
-        // create opening and closing list
-        timeSlotsList = viewModel.createListForOpeningTimes(stadiumModel.opening!!,stadiumModel.closing!!,resources.getStringArray(R.array.time_slots))
-
-        getBookedTimes(selectedDate!!)
+        getAvailableTimes(selectedDate)
 
         // Add an OnDateChangeListener to the CalendarView
         dataBinding.calendarView.setOnDateChangeListener { view, year, month, dayOfMonth ->
             selectedDate = String.format("%02d_%02d_%04d", month + 1, dayOfMonth, year)
             Log.e("Firebase"," Date selected: $selectedDate  ")
-            getBookedTimes(selectedDate!!)
+            getAvailableTimes(selectedDate)
         }
 
         // Set up click listener for booking button in the adapter
-        adapter.onBookClickListener = object : TimeSlotAdapter.OnBookClickListener {
-            override fun onclick(slot: String, holder: TimeSlotAdapter.ViewHolder, position: Int) {
+        adapter.onBookClickListener = object : TimeSlotsForUserAdapter.OnBookClickListener {
+            override fun onclick(slot: String, holder: TimeSlotsForUserAdapter.ViewHolder, position: Int) {
                 addBookingToFirestore(timeSlot = holder.dataBinding.tvTimeSlot.text.toString(),
                     stadiumID = stadiumModel.stadiumID!!,
-                    date = selectedDate!!, userId = DataUtils.user!!.id!!,
+                    date = selectedDate, userId = DataUtils.user!!.id!!,
                     onSuccessListener = {
 
                         holder.dataBinding.tvTimeSlot.isEnabled=false
@@ -90,15 +86,12 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
                         holder.dataBinding.btnBook.text= "Booked"
                         holder.dataBinding.btnBook.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
 
-                        Log.e("Firebase"," ${holder.dataBinding.tvTimeSlot.text} booked on  $selectedDate" +
-                                " from userId: ${DataUtils.user!!.id!!} to the stadiumID: ${stadiumModel.stadiumID}")
+                        Log.e("Firebase"," ${holder.dataBinding.tvTimeSlot.text} booked on  $selectedDate from userId: ${DataUtils.user!!.id!!} to the stadiumID: ${stadiumModel.stadiumID}")
 
-                        Toast.makeText(this@BookingStadiumActivity,
-                            "${holder.dataBinding.tvTimeSlot.text} Booked Successfully",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        Toast.makeText(this@BookingStadiumActivity,"${holder.dataBinding.tvTimeSlot.text} Booked Successfully", Toast.LENGTH_SHORT).show()
 
-                        getBookedTimes(selectedDate!!)
+                        //and refresh adapter and recycler view
+                        getAvailableTimes(selectedDate)
 
                          },
                     onFailureListener = {e->
@@ -112,24 +105,32 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
 
     }
 
-    private fun getBookedTimes(date: String) {
+    private fun getAvailableTimes(date: String) {
         getBookedTimesFromFirestore(
             stadiumID = stadiumModel.stadiumID!!,
             date = date,
             onSuccessListener = { bookedList ->
-                Log.e("Firebase"," Booked times $bookedList")
                 bookedTimesList = bookedList
-                availableSlots= viewModel.removeBookedListFromOpeningTimes(timeSlotsList,bookedTimesList)
-                Log.e("TimeSlots List","$timeSlotsList")
-                Log.e("AvailableSlots List","$availableSlots")
-                Log.e("BookedSlots List","$bookedTimesList")
-                adapter.updateTimeSlots(timeSlotsList,bookedTimesList)
-                dataBinding.recyclerView.adapter=adapter
+                Log.e("Firebase"," Booked times $bookedTimesList")
+
+                // create opening and closing list
+                timeSlotsList = viewModel.createListForOpeningTimes(stadiumModel.opening!!,stadiumModel.closing!!,resources.getStringArray(R.array.time_slots))
+
+                // create list of available times
+                availableSlots = viewModel.removeBookedListFromOpeningTimes(timeSlotsList,bookedTimesList)
+                Log.e("Available Slots","$availableSlots")
+
+                initializeRecyclerView(availableSlots)
             },
             onFailureListener = { e->
                 Log.e("Firebase", "Error fetching booked times", e)
             }
         )
+    }
+
+    private fun initializeRecyclerView(availableList : List<String>){
+        adapter.updateTimeSlots(availableList)
+        dataBinding.recyclerView.adapter=adapter
     }
 
     override fun onSupportNavigateUp(): Boolean {

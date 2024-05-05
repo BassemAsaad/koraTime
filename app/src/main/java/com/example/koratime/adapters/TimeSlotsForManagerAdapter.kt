@@ -4,14 +4,14 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.koratime.R
 import com.example.koratime.databinding.ItemBookBinding
 
-class TimeSlotAdapter(private  var timeSlots: List<String> , private  var bookedTimesList: List<String>) : RecyclerView.Adapter<TimeSlotAdapter.ViewHolder>() {
+class TimeSlotsForManagerAdapter (private  var timeSlots: List<String>, private  var bookedTimesList: List<String>) : RecyclerView.Adapter<TimeSlotsForManagerAdapter.ViewHolder>(){
+
     class ViewHolder(val dataBinding: ItemBookBinding) : RecyclerView.ViewHolder(dataBinding.root) {
         fun bind(timeSlot: String, bookedTimesList: List<String>) {
             dataBinding.tvTimeSlot.text = timeSlot
@@ -81,4 +81,6 @@ class TimeSlotAdapter(private  var timeSlots: List<String> , private  var booked
         bookedTimesList = newBookedList
         notifyDataSetChanged()
     }
+
+
 }
