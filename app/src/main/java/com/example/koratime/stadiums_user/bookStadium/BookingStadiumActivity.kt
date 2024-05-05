@@ -98,7 +98,6 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
                             Toast.LENGTH_SHORT
                         ).show()
 
-
                         getBookedTimes(selectedDate!!)
 
                          },
@@ -124,7 +123,7 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
                 Log.e("TimeSlots List","$timeSlotsList")
                 Log.e("AvailableSlots List","$availableSlots")
                 Log.e("BookedSlots List","$bookedTimesList")
-                adapter.updateTimeSlots(timeSlotsList,availableSlots)
+                adapter.updateTimeSlots(timeSlotsList,bookedTimesList)
                 dataBinding.recyclerView.adapter=adapter
             },
             onFailureListener = { e->
