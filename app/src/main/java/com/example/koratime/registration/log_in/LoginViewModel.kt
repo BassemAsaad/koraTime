@@ -44,7 +44,6 @@ class LoginViewModel : BasicViewModel<LoginNavigator>() {
                 }else{
 
                     Log.e("Firebase: ", "Successful Login")
-                    showLoading.value = false
                     messageLiveData.value = "Successful Login"
                     getUserFromFirestore(task.result.user?.uid)
                 }
@@ -60,10 +59,12 @@ class LoginViewModel : BasicViewModel<LoginNavigator>() {
                 val user = docSnapshot.toObject(UserModel::class.java)
                 if (user == null){
                     messageLiveData.value = "Invalid Email or Password"
-                    Log.e("Firebase: ", "Not successful Login")
+                    Log.e("Firebase: ", "Not a successful Login")
+                    showLoading.value = false
                     return@OnSuccessListener
 
                 }else{
+                    showLoading.value = false
                     Log.e("Firebase: ", "Successful Login")
                     DataUtils.user = user
                     if (user.nationalID==null){

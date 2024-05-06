@@ -39,11 +39,6 @@ class RegisterViewModel : BasicViewModel<RegisterNavigator>() {
 
 
 
-
-
-
-
-
     fun createAccount(){
         //validation
         if (validation()){
@@ -61,8 +56,7 @@ class RegisterViewModel : BasicViewModel<RegisterNavigator>() {
                     showLoading.value = false
                     Log.e("Firebase: ",task.exception?.localizedMessage.toString())
                 } else{
-                    showLoading.value = false
-                    Log.e("Firebase: ", "account added to firestore")
+                    Log.e("Firebase: ", "Account added successfully to firestore")
                     createFirestore_User(task.result.user?.uid)
                 }
 
@@ -83,13 +77,14 @@ class RegisterViewModel : BasicViewModel<RegisterNavigator>() {
             user,
             //OnSuccessListener
             {
+                showLoading.value = false
                 Log.e("Firebase: ", "account added to firestore")
-                messageLiveData.value = "Successful Register"
+                navigator?.openLoginActivity()
             },
             //OnFailureListener
             {
                 showLoading.value=false
-                messageLiveData.value = it.localizedMessage
+                Log.e("Firebase: ", "error adding account to firestore")
             })
     }
 

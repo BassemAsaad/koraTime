@@ -41,7 +41,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/stadium_name_item"
             app:layout_constraintBottom_toTopOf="@id/stadium_description_item"
-            tools:src="@drawable/ic_stadium_img"
+            tools:src="@drawable/stadium_img"
             app:imageUrl="@{stadiumModel.stadiumImageUrl}"
             />
 

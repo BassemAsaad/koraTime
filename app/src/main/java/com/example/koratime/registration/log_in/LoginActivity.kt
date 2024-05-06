@@ -36,20 +36,20 @@ class LoginActivity
     override fun openHomeActivity() {
         val intent = Intent(this, HomeActivity::class.java)
         startActivity(intent)
-        viewModel.showLoading.value=true
+        finish()
+
     }
 
     override fun openHomeManagerActivity() {
         val intent = Intent(this, ManagerHomeActivity::class.java)
         startActivity(intent)
-        viewModel.showLoading.value=true
+        finish()
     }
 
     override fun openRegisterActivity() {
         dataBinding.signUp.setOnClickListener{
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
-            viewModel.showLoading.value=true
         }
     }
 

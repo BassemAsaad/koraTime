@@ -186,7 +186,7 @@
                     android:layout_height="150dp"
                     android:layout_gravity="center"
                     android:layout_marginTop="20dp"
-                    android:src="@drawable/ic_stadium_img"
+                    android:src="@drawable/stadium_img"
                     android:contentDescription="@string/add_stadium_picture" />
                 <TextView
                     android:id="@+id/imageText_error"

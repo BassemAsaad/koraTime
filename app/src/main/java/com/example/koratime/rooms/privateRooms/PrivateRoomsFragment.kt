@@ -1,8 +1,9 @@
-package com.example.koratime.rooms
+package com.example.koratime.rooms.privateRooms
 
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,18 +12,21 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.koratime.Constants
+import com.example.koratime.DataUtils
 import com.example.koratime.R
 import com.example.koratime.adapters.RoomsAdapter
 import com.example.koratime.database.getAllRoomsFromFirestore
+import com.example.koratime.database.getUserRoomsFromFirestore
+import com.example.koratime.databinding.FragmentPrivateRoomsBinding
+import com.example.koratime.databinding.FragmentPublicRoomsBinding
 import com.example.koratime.rooms.createRoom.AddRoomActivity
-import com.example.koratime.databinding.FragmentRoomsBinding
 import com.example.koratime.model.RoomModel
 import com.example.koratime.rooms.room_chat.RoomChatActivity
 
-class RoomsFragment : Fragment(),RoomsNavigator {
+class PrivateRoomsFragment : Fragment(), PrivateRoomsNavigator {
 
-    private lateinit var dataBinding : FragmentRoomsBinding
-    private lateinit var viewModel : RoomsViewModel
+    private lateinit var dataBinding : FragmentPrivateRoomsBinding
+    private lateinit var viewModel : PrivateRoomsViewModel
     private val adapter = RoomsAdapter(null)
 
     override fun onCreateView(
@@ -30,13 +34,13 @@ class RoomsFragment : Fragment(),RoomsNavigator {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        dataBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_rooms,container,false)
+        dataBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_private_rooms,container,false)
         return dataBinding.root
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(this)[RoomsViewModel::class.java]
+        viewModel = ViewModelProvider(this)[PrivateRoomsViewModel::class.java]
 
 
     }
@@ -51,8 +55,6 @@ class RoomsFragment : Fragment(),RoomsNavigator {
      fun initView() {
          dataBinding.vm = viewModel
          viewModel.navigator=this
-
-
 
          dataBinding.recyclerView.adapter = adapter
 
@@ -91,13 +93,16 @@ class RoomsFragment : Fragment(),RoomsNavigator {
 
     override fun onStart() {
         super.onStart()
-        getAllRoomsFromFirestore(
+        getUserRoomsFromFirestore(
+            userId = DataUtils.user!!.id!!,
             onSuccessListener = {querySnapShot->
                 val rooms = querySnapShot.toObjects(RoomModel::class.java)
                 adapter.changeData(rooms)
+                Log.e("Firebase"," Private rooms loaded successfully ")
+
             }
-            , onFailureListener = {
-                Toast.makeText(requireContext(), it.localizedMessage, Toast.LENGTH_SHORT).show()
+            , onFailureListener = {e->
+                Log.e("Firebase"," Private rooms error: ",e)
             }
         )
     }

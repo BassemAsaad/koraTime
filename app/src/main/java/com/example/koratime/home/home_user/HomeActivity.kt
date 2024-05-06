@@ -1,9 +1,6 @@
 package com.example.koratime.home.home_user
 
 import android.Manifest
-import android.annotation.SuppressLint
-import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -17,12 +14,9 @@ import com.example.koratime.chat.FriendsChatFragment
 import com.example.koratime.databinding.ActivityHomeBinding
 import com.example.koratime.friends.FriendsFragment
 import com.example.koratime.registration.log_in.LoginActivity
-import com.example.koratime.rooms.RoomsFragment
+import com.example.koratime.rooms.TabsFragment
+import com.example.koratime.rooms.publicRooms.PublicRoomsFragment
 import com.example.koratime.stadiums_user.StadiumsFragment
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
-import com.google.firebase.Firebase
-import com.google.firebase.auth.auth
 
 @Suppress("DEPRECATION")
 class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>() , HomeNavigator {
@@ -49,7 +43,7 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>() , HomeN
                 pushFragment(StadiumsFragment())
             }
             if (item.itemId == R.id.rooms_bar){
-                pushFragment(RoomsFragment())
+                pushFragment(TabsFragment())
             }
             if (item.itemId == R.id.friends_bar){
                 pushFragment(FriendsFragment())

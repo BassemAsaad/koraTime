@@ -13,8 +13,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.koratime.R
 import com.example.koratime.basic.BasicActivity
+import com.example.koratime.chat.FriendsChatFragment
 import com.example.koratime.database.updateUserLocationInFirestore
-import com.example.koratime.databinding.ActivityManagerHomeBinding
+import com.example.koratime.databinding.ActivityHomeManagerBinding
+import com.example.koratime.friends.FriendsFragment
+import com.example.koratime.rooms.TabsFragment
 import com.example.koratime.stadiums_manager.StadiumsManagerFragment
 import com.example.koratime.stadiums_manager.createStadium.AddStadiumActivity
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -22,13 +25,13 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import java.util.Locale
 
-class ManagerHomeActivity : BasicActivity<ActivityManagerHomeBinding,ManagerHomeViewModel>(),ManagerHomeNavigator {
+class ManagerHomeActivity : BasicActivity<ActivityHomeManagerBinding,ManagerHomeViewModel>(),ManagerHomeNavigator {
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
         private val LOCATION_PERMISSION_REQUEST_CODE = 100
 
     override fun getLayoutID(): Int {
-        return R.layout.activity_manager_home
+        return R.layout.activity_home_manager
     }
 
     override fun initViewModel(): ManagerHomeViewModel {
@@ -42,8 +45,14 @@ class ManagerHomeActivity : BasicActivity<ActivityManagerHomeBinding,ManagerHome
             if (item.itemId == R.id.stadium_bar){
                 pushFragment(StadiumsManagerFragment())
             }
-            if (item.itemId == R.id.notification_bar){
-                pushFragment(StadiumsManagerFragment())
+            if (item.itemId == R.id.rooms_bar){
+                pushFragment(TabsFragment())
+            }
+            if (item.itemId == R.id.friends_bar){
+                pushFragment(FriendsFragment())
+            }
+            if (item.itemId == R.id.chat_bar){
+                pushFragment(FriendsChatFragment())
             }
             return@setOnItemSelectedListener true
         }

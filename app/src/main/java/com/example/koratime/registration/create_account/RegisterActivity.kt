@@ -1,5 +1,6 @@
 package com.example.koratime.registration.create_account
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -19,7 +20,12 @@ import com.example.koratime.home.home_user.HomeActivity
 
 class RegisterActivity : BasicActivity<ActivityRegisterBinding, RegisterViewModel>(),RegisterNavigator {
     private lateinit var pickMedia : ActivityResultLauncher<PickVisualMediaRequest>
-
+    override fun getLayoutID(): Int {
+        return R.layout.activity_register
+    }
+    override fun initViewModel(): RegisterViewModel {
+        return ViewModelProvider(this)[RegisterViewModel::class.java]
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initView()
@@ -29,8 +35,16 @@ class RegisterActivity : BasicActivity<ActivityRegisterBinding, RegisterViewMode
     override fun initView() {
         dataBinding.registerVM = viewModel
         viewModel.navigator = this
-        openLoginActivity()
 
+        setSupportActionBar(dataBinding.toolbar)
+
+        // Enable back button on Toolbar
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+
+        dataBinding.logIn.setOnClickListener {
+            openLoginActivity()
+        }
         dataBinding.radioGroupLayout.setOnCheckedChangeListener { group, checkedId ->
             when (checkedId) {
                 R.id.asPlayer_layout -> {
@@ -59,6 +73,7 @@ class RegisterActivity : BasicActivity<ActivityRegisterBinding, RegisterViewMode
 
 
 
+    @SuppressLint("SetTextI18n")
     fun openImagePicker(){
         // Registers a photo picker activity launcher in single-select mode.
         pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
@@ -89,24 +104,16 @@ class RegisterActivity : BasicActivity<ActivityRegisterBinding, RegisterViewMode
     }
 
 
+    override fun onSupportNavigateUp(): Boolean {
+        // go to the previous fragment when back button clicked on toolbar
+        onBackPressed()
+        return true
+    }
 
-    override fun getLayoutID(): Int {
-        return R.layout.activity_register
-    }
-    override fun initViewModel(): RegisterViewModel {
-        return ViewModelProvider(this).get(RegisterViewModel::class.java)
-    }
     override fun openLoginActivity() {
-        dataBinding.logIn.setOnClickListener {
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
-            viewModel.showLoading.value=true
-        }
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 
-    override fun openHomeActivity() {
-        val intent = Intent(this, HomeActivity::class.java)
-        startActivity(intent)
-        viewModel.showLoading.value=true
-    }
 }

@@ -1,11 +1,10 @@
-package com.example.koratime.rooms
+package com.example.koratime.rooms.privateRooms
 
-import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import com.example.koratime.basic.BasicViewModel
-import com.example.koratime.model.RoomModel
+import com.example.koratime.rooms.publicRooms.PublicRoomsNavigator
 
-class RoomsViewModel : BasicViewModel<RoomsNavigator>() {
+class PrivateRoomsViewModel : BasicViewModel<PrivateRoomsFragment>() {
 
     val password = MutableLiveData<String>()
     val passwordError = MutableLiveData<String>()

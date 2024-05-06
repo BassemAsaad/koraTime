@@ -18,9 +18,8 @@
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/home_bar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="1dp"
-            android:background="@color/primary"
+            android:layout_height="70dp"
+            android:background="@drawable/shape_bottom_navigation_bar"
             app:itemIconTint="@color/white"
             app:itemTextColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"

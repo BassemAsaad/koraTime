@@ -97,7 +97,6 @@ fun getAllRoomsFromFirestore(onSuccessListener: OnSuccessListener<QuerySnapshot>
         .addOnSuccessListener(onSuccessListener)
         .addOnFailureListener(onFailureListener)
 }
-
 fun getUserRoomsFromFirestore(userId: String,
                               onSuccessListener: OnSuccessListener<QuerySnapshot>,
                               onFailureListener: OnFailureListener) {
@@ -110,7 +109,6 @@ fun getUserRoomsFromFirestore(userId: String,
         .addOnSuccessListener(onSuccessListener)
         .addOnFailureListener(onFailureListener)
 }
-
 fun uploadImageToStorage(imageUri: Uri?,
                          onSuccessListener: OnSuccessListener<Uri>,
                          onFailureListener: OnFailureListener) {
@@ -585,7 +583,6 @@ fun getUserStadiumFromFirestore(userId: String?,
         .addOnSuccessListener(onSuccessListener)
         .addOnFailureListener(onFailureListener)
 }
-
 
 
 fun addBookingToFirestore(timeSlot: String,

@@ -40,6 +40,7 @@
     <string name="stadium_images">Stadium Images</string>
     <string name="stadium_book_times">Stadium Book Times</string>
     <string name="stadium_available_times">Stadium Available Times</string>
+    <string name="search_for_people">search for people</string>
 
     <string-array name="time_slots">
         <item> 12PM</item>

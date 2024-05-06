@@ -12,14 +12,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:elevation="12dp"
         >
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:cardBackgroundColor="#80FFFFFF"
-            app:cardCornerRadius="20dp"
+            app:cardBackgroundColor="#1AE1E1E1"
+            app:cardCornerRadius="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -37,7 +36,7 @@
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/userImage_item"
                     android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_height="80dp"
                     app:imageUrl="@{friendModel.friendPicture}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

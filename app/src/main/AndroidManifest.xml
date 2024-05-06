@@ -50,7 +50,7 @@
             android:name=".messages.MessagesActivity"
             android:exported="false" />
         <activity
-            android:name=".rooms.RoomsFragment"
+            android:name=".rooms.publicRooms.PublicRoomsFragment"
             android:exported="false" />
         <activity
             android:name=".rooms.createRoom.AddRoomActivity"
