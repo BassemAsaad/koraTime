@@ -15,26 +15,26 @@ import com.example.koratime.R
 import com.example.koratime.adapters.FriendsAdapter
 import com.example.koratime.chat.chat_friends.ChatFriendsActivity
 import com.example.koratime.database.getFriendsFromFirestore
-import com.example.koratime.databinding.FragmentFriendsChatBinding
+import com.example.koratime.databinding.FragmentChatBinding
 import com.example.koratime.model.FriendModel
 
 
-class FriendsChatFragment : Fragment(),FriendsChatNavigator {
-    lateinit var dataBinding : FragmentFriendsChatBinding
-    private lateinit var viewModel : FriendsChatViewModel
+class ChatFragment : Fragment(),ChatNavigator {
+    lateinit var dataBinding : FragmentChatBinding
+    private lateinit var viewModel : ChatViewModel
     val adapter = FriendsAdapter(null)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        dataBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_friends_chat,container,false)
+        dataBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_chat,container,false)
         return dataBinding.root
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(this)[FriendsChatViewModel::class.java]
+        viewModel = ViewModelProvider(this)[ChatViewModel::class.java]
 
     }
 

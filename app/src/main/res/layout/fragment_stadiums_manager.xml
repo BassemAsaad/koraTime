@@ -73,6 +73,20 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:listitem="@layout/item_stadiums" />
 
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/create_Stadium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/primary"
+                android:contentDescription="@string/create_stadium"
+                android:elevation="12dp"
+                android:src="@drawable/ic_add"
+                app:shapeAppearance="@style/Theme.AppCompat.Light"
+                android:onClick="@{()->vm.createStadium()}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_margin="20dp"
+                />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

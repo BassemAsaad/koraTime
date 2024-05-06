@@ -6,7 +6,7 @@ import com.example.koratime.basic.BasicViewModel
 import com.example.koratime.database.addMultipleImagesToFirestore
 import com.example.koratime.model.StadiumModel
 
-class ManagingStadiumViewModel : BasicViewModel<ManagingStadiumNavigator>() {
+class ManageStadiumViewModel : BasicViewModel<ManageStadiumNavigator>() {
     var stadium : StadiumModel?=null
     var listOfUrls = MutableLiveData<List<String>>()
     fun createListForOpeningTimes(openingIndex: Int, closingIndex: Int, timeSlotsArray: Array<String>): List<String> {

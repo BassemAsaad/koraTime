@@ -10,12 +10,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.koratime.R
 import com.example.koratime.basic.BasicActivity
-import com.example.koratime.chat.FriendsChatFragment
+import com.example.koratime.chat.ChatFragment
 import com.example.koratime.databinding.ActivityHomeBinding
-import com.example.koratime.friends.FriendsFragment
+import com.example.koratime.friends.FriendsRequestsFragment
 import com.example.koratime.registration.log_in.LoginActivity
 import com.example.koratime.rooms.TabsFragment
-import com.example.koratime.rooms.publicRooms.PublicRoomsFragment
 import com.example.koratime.stadiums_user.StadiumsFragment
 
 @Suppress("DEPRECATION")
@@ -37,7 +36,7 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>() , HomeN
 
         dataBinding.homeBar.setOnItemSelectedListener {item->
             if (item.itemId == R.id.chat_bar){
-                pushFragment(FriendsChatFragment())
+                pushFragment(ChatFragment())
             }
             if (item.itemId == R.id.home_bar){
                 pushFragment(StadiumsFragment())
@@ -46,7 +45,7 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>() , HomeN
                 pushFragment(TabsFragment())
             }
             if (item.itemId == R.id.friends_bar){
-                pushFragment(FriendsFragment())
+                pushFragment(FriendsRequestsFragment())
             }
             return@setOnItemSelectedListener true
         }

@@ -16,13 +16,13 @@ import com.example.koratime.adapters.PendingFriendsAdapter
 import com.example.koratime.database.acceptFriendRequest
 import com.example.koratime.database.getFriendRequestsFromFirestore
 import com.example.koratime.database.removeFriendRequestWithRequestID
-import com.example.koratime.databinding.FragmentFriendsBinding
+import com.example.koratime.databinding.FragmentFriendsRequestsBinding
 import com.example.koratime.friends.search.SearchActivity
 import com.example.koratime.model.FriendRequestModel
 
-class FriendsFragment : Fragment(),FriendsNavigator {
-    lateinit var dataBinding : FragmentFriendsBinding
-    private lateinit var viewModel : FriendsViewModel
+class FriendsRequestsFragment : Fragment(),FriendsRequestsNavigator {
+    lateinit var dataBinding : FragmentFriendsRequestsBinding
+    private lateinit var viewModel : FriendsRequestsViewModel
     private val adapter = PendingFriendsAdapter(null)
 
 
@@ -31,13 +31,13 @@ class FriendsFragment : Fragment(),FriendsNavigator {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        dataBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_friends,container,false)
+        dataBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_friends_requests,container,false)
         return dataBinding.root
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(this)[FriendsViewModel::class.java]
+        viewModel = ViewModelProvider(this)[FriendsRequestsViewModel::class.java]
 
 
     }

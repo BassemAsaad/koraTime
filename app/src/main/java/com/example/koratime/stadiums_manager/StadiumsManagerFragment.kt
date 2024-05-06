@@ -17,7 +17,8 @@ import com.example.koratime.adapters.StadiumsAdapter
 import com.example.koratime.database.getUserStadiumFromFirestore
 import com.example.koratime.databinding.FragmentStadiumsManagerBinding
 import com.example.koratime.model.StadiumModel
-import com.example.koratime.stadiums_manager.manageStadium.ManagingStadiumActivity
+import com.example.koratime.stadiums_manager.createStadium.AddStadiumActivity
+import com.example.koratime.stadiums_manager.manageStadium.ManageStadiumActivity
 
 
 class StadiumsManagerFragment : Fragment(),StadiumsManagerNavigator{
@@ -56,7 +57,7 @@ class StadiumsManagerFragment : Fragment(),StadiumsManagerNavigator{
 
         adapter.onItemClickListener = object :StadiumsAdapter.OnItemClickListener{
             override fun onItemClick(stadium: StadiumModel?, position: Int) {
-                val intent = Intent(requireContext(),ManagingStadiumActivity::class.java)
+                val intent = Intent(requireContext(),ManageStadiumActivity::class.java)
                 intent.putExtra(Constants.STADIUM_MANAGER,stadium)
                 startActivity(intent)
             }
@@ -67,7 +68,10 @@ class StadiumsManagerFragment : Fragment(),StadiumsManagerNavigator{
     override fun addStadiumActivity() {
 
     }
-
+    override fun createStadiumActivity() {
+        val intent = Intent(requireContext(), AddStadiumActivity::class.java)
+        startActivity(intent)
+    }
     override fun onStart() {
         super.onStart()
 

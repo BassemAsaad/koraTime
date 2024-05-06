@@ -1,5 +1,5 @@
 package com.example.koratime.friends
 
-interface FriendsNavigator {
+interface FriendsRequestsNavigator {
     fun openSearchActivity()
 }

@@ -23,14 +23,14 @@ import com.example.koratime.database.addBookingToFirestore
 import com.example.koratime.database.getBookedTimesFromFirestore
 import com.example.koratime.database.getMultipleImagesFromFirestore
 import com.example.koratime.database.uploadMultipleImagesToStorage
-import com.example.koratime.databinding.ActivityManagingStadiumBinding
+import com.example.koratime.databinding.ActivityManageStadiumBinding
 import com.example.koratime.model.StadiumModel
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
 @Suppress("DEPRECATION")
-class ManagingStadiumActivity : BasicActivity<ActivityManagingStadiumBinding,ManagingStadiumViewModel>(),ManagingStadiumNavigator{
+class ManageStadiumActivity : BasicActivity<ActivityManageStadiumBinding,ManageStadiumViewModel>(),ManageStadiumNavigator{
     private lateinit var stadiumModel : StadiumModel
     private  var adapter = TimeSlotsForManagerAdapter(emptyList(), emptyList())
     private lateinit var timeSlotsList :List<String>
@@ -41,11 +41,11 @@ class ManagingStadiumActivity : BasicActivity<ActivityManagingStadiumBinding,Man
     private lateinit var pickMedia : ActivityResultLauncher<PickVisualMediaRequest>
 
     override fun getLayoutID(): Int {
-        return R.layout.activity_managing_stadium
+        return R.layout.activity_manage_stadium
     }
 
-    override fun initViewModel(): ManagingStadiumViewModel {
-        return ViewModelProvider(this)[ManagingStadiumViewModel::class.java]
+    override fun initViewModel(): ManageStadiumViewModel {
+        return ViewModelProvider(this)[ManageStadiumViewModel::class.java]
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -105,7 +105,7 @@ class ManagingStadiumActivity : BasicActivity<ActivityManagingStadiumBinding,Man
 
 
                         Log.e("Firebase"," ${holder.dataBinding.tvTimeSlot.text} booked on  $selectedDate from userId: ${DataUtils.user!!.id!!} to the stadiumID: ${stadiumModel.stadiumID}")
-                        Toast.makeText(this@ManagingStadiumActivity,"${holder.dataBinding.tvTimeSlot.text} Booked Successfully", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@ManageStadiumActivity,"${holder.dataBinding.tvTimeSlot.text} Booked Successfully", Toast.LENGTH_SHORT).show()
 
                         getBookedTimes(selectedDate)
 

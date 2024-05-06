@@ -1,5 +1,6 @@
 package com.example.koratime.adapters
 
+import android.annotation.SuppressLint
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -15,6 +16,7 @@ class AddFriendsAdapter  (private var usersList : List<UserModel?>?, private val
     : RecyclerView.Adapter<AddFriendsAdapter.ViewHolder>()  {
 
      class ViewHolder(val dataBinding: ItemAddFriendBinding) : RecyclerView.ViewHolder(dataBinding.root) {
+        @SuppressLint("SetTextI18n")
         fun bind(user: UserModel, currentUserId: String?) {
             dataBinding.userModel = user
             dataBinding.invalidateAll()
@@ -24,18 +26,21 @@ class AddFriendsAdapter  (private var usersList : List<UserModel?>?, private val
                 checkFriendRequestStatusFromFirestore(userId, user.id!!) { status ->
                     Log.e("Firebase"," $status")
                     Log.e("Firebase"," ${user.userName}")
-                    if (status == "pending") {
-                        dataBinding.addFriendButtonItem.text = "Pending"
-                        dataBinding.addFriendButtonItem.isEnabled = false
-                        dataBinding.removeFriendButtonItem.isEnabled = true
-                    }else if (status == "accepted") {
-                        dataBinding.addFriendButtonItem.text = "Friends"
-                        dataBinding.addFriendButtonItem.isEnabled = false
-                        dataBinding.removeFriendButtonItem.isEnabled = true
-                    }
-                    else {
-                        dataBinding.addFriendButtonItem.text = "Add Friend"
-                        dataBinding.addFriendButtonItem.isEnabled = true
+                    when (status) {
+                        "pending" -> {
+                            dataBinding.addFriendButtonItem.text = "Pending"
+                            dataBinding.addFriendButtonItem.isEnabled = false
+                            dataBinding.removeFriendButtonItem.isEnabled = true
+                        }
+                        "accepted" -> {
+                            dataBinding.addFriendButtonItem.text = "Friends"
+                            dataBinding.addFriendButtonItem.isEnabled = false
+                            dataBinding.removeFriendButtonItem.isEnabled = true
+                        }
+                        else -> {
+                            dataBinding.addFriendButtonItem.text = "Add Friend"
+                            dataBinding.addFriendButtonItem.isEnabled = true
+                        }
                     }
 
 

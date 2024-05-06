@@ -2,7 +2,6 @@ package com.example.koratime.home.home_manager
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.os.Bundle
@@ -13,19 +12,18 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.koratime.R
 import com.example.koratime.basic.BasicActivity
-import com.example.koratime.chat.FriendsChatFragment
+import com.example.koratime.chat.ChatFragment
 import com.example.koratime.database.updateUserLocationInFirestore
 import com.example.koratime.databinding.ActivityHomeManagerBinding
-import com.example.koratime.friends.FriendsFragment
+import com.example.koratime.friends.FriendsRequestsFragment
 import com.example.koratime.rooms.TabsFragment
 import com.example.koratime.stadiums_manager.StadiumsManagerFragment
-import com.example.koratime.stadiums_manager.createStadium.AddStadiumActivity
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import java.util.Locale
 
-class ManagerHomeActivity : BasicActivity<ActivityHomeManagerBinding,ManagerHomeViewModel>(),ManagerHomeNavigator {
+class HomeManagerActivity : BasicActivity<ActivityHomeManagerBinding,HomeManagerViewModel>(),HomeManagerNavigator {
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
         private val LOCATION_PERMISSION_REQUEST_CODE = 100
@@ -34,8 +32,8 @@ class ManagerHomeActivity : BasicActivity<ActivityHomeManagerBinding,ManagerHome
         return R.layout.activity_home_manager
     }
 
-    override fun initViewModel(): ManagerHomeViewModel {
-        return ViewModelProvider(this)[ManagerHomeViewModel::class.java]
+    override fun initViewModel(): HomeManagerViewModel {
+        return ViewModelProvider(this)[HomeManagerViewModel::class.java]
     }
     override fun openActivity() {
         dataBinding.managerHomeBar.selectedItemId = R.id.stadium_bar
@@ -49,10 +47,10 @@ class ManagerHomeActivity : BasicActivity<ActivityHomeManagerBinding,ManagerHome
                 pushFragment(TabsFragment())
             }
             if (item.itemId == R.id.friends_bar){
-                pushFragment(FriendsFragment())
+                pushFragment(FriendsRequestsFragment())
             }
             if (item.itemId == R.id.chat_bar){
-                pushFragment(FriendsChatFragment())
+                pushFragment(ChatFragment())
             }
             return@setOnItemSelectedListener true
         }
@@ -62,10 +60,7 @@ class ManagerHomeActivity : BasicActivity<ActivityHomeManagerBinding,ManagerHome
         TODO("Not yet implemented")
     }
 
-    override fun createStadiumActivity() {
-        val intent = Intent(this,AddStadiumActivity::class.java)
-        startActivity(intent)
-    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

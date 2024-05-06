@@ -21,7 +21,7 @@
             android:name=".stadiums_user.bookStadium.BookingStadiumActivity"
             android:exported="false" />
         <activity
-            android:name=".stadiums_manager.manageStadium.ManagingStadiumActivity"
+            android:name=".stadiums_manager.manageStadium.ManageStadiumActivity"
             android:exported="false" />
         <activity
             android:name=".chat.chat_friends.ChatFriendsActivity"
@@ -44,7 +44,7 @@
             android:name=".friends.search.SearchActivity"
             android:exported="false" />
         <activity
-            android:name=".friends.FriendsFragment"
+            android:name=".friends.FriendsRequestsFragment"
             android:exported="false" />
         <activity
             android:name=".messages.MessagesActivity"
@@ -68,7 +68,7 @@
             android:name=".home.home_user.HomeActivity"
             android:exported="true" />
         <activity
-            android:name=".home.home_manager.ManagerHomeActivity"
+            android:name=".home.home_manager.HomeManagerActivity"
             android:exported="true" />
         <activity
             android:name=".splash.SplashActivity"
