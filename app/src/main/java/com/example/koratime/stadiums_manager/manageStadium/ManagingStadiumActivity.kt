@@ -39,7 +39,7 @@ class ManagingStadiumActivity : BasicActivity<ActivityManagingStadiumBinding,Man
     private lateinit var bookedTimesList : List<String>
     private lateinit var selectedDate: String
     private  var imgsListUrl= mutableListOf <String>()
-
+    val r = mutableListOf<String>()
     private lateinit var pickMedia : ActivityResultLauncher<PickVisualMediaRequest>
 
     override fun getLayoutID(): Int {
@@ -122,10 +122,10 @@ class ManagingStadiumActivity : BasicActivity<ActivityManagingStadiumBinding,Man
         dataBinding.imagePicker.setOnClickListener {
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
-        var r = mutableListOf<String>()
         getMultipleImageFromFirestore(
             stadiumID = stadiumModel.stadiumID!!,
             onSuccessListener = {urls->
+                dataBinding.imagePickerTextView.text = "Images Selected"
                 r.clear()
                 r.addAll(urls)
                 Log.e("Firebase"," List of $urls")
@@ -179,6 +179,8 @@ class ManagingStadiumActivity : BasicActivity<ActivityManagingStadiumBinding,Man
             // photo picker
             if (uris != null) {
                 viewModel.showLoading.value=true
+                dataBinding.imagePickerTextView.text = "Uploading Images.."
+
                 Log.e("PhotoPicker", "Selected URI: $uris")
                 uploadMultipleImages(uris = uris, stadiumID = stadiumModel.stadiumID!!,
                     onSuccessListener = {imagesList->
@@ -192,7 +194,6 @@ class ManagingStadiumActivity : BasicActivity<ActivityManagingStadiumBinding,Man
                             },
                             onFailureListener = {
                                 viewModel.showLoading.value=false
-
                                 Log.e("Firebase","Error uploading images to firestore")
 
                             }

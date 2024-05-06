@@ -19,6 +19,6 @@ data class StadiumModel(
 ) : Parcelable {
     companion object {
         const val COLLECTION_NAME = "Stadiums"
-        const val COLLECTION_IMAGES = "Images"
+        const val COLLECTION_IMAGES = "StadiumImages"
     }
 }
