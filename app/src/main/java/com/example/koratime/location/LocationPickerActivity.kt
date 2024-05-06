@@ -3,6 +3,7 @@ package com.example.koratime.location
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
+import android.location.Address
 import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
@@ -10,6 +11,7 @@ import android.util.Log
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
 import com.example.koratime.R
 import com.example.koratime.basic.BasicActivity
@@ -30,29 +32,26 @@ import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
-import com.google.firebase.Firebase
-import com.google.firebase.auth.auth
+import java.io.IOException
 import java.lang.Exception
 
 @Suppress("DEPRECATION")
 class LocationPickerActivity : BasicActivity<ActivityLocationPickerBinding,LocationPickerViewModel>(),OnMapReadyCallback{
     companion object{
-        private const val TAG="LOCATION_PICKER_TAG"
+        private const val TAG="LOCATION_PICKER"
         private const val DEFAULT_ZOOM=13.8
     }
     private var mMap : GoogleMap?=null
-    private var myPlace : PlacesClient?=null
-    private var mFusedLocationProvider :FusedLocationProviderClient?=null
+    private var placeClient : PlacesClient?=null
+    private var fusedLocationProvider :FusedLocationProviderClient?=null
     private var myLastKnownLocation : Location?=null
     private var selectedLatitude :Double?=null
     private var selectedLongitude:Double?= null
-    private var selectedAddress =""
-
+    private var address = ""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         initView()
     }
 
@@ -65,13 +64,11 @@ class LocationPickerActivity : BasicActivity<ActivityLocationPickerBinding,Locat
     }
 
 
-
     override fun initView() {
         // Enable back button on Toolbar
         setSupportActionBar(dataBinding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
-
 
         //hide container
         dataBinding.container.visibility= View.GONE
@@ -84,42 +81,9 @@ class LocationPickerActivity : BasicActivity<ActivityLocationPickerBinding,Locat
         Places.initialize(this,getString(R.string.google_api_key))
 
         // create new places client instance
-        myPlace= Places.createClient(this)
-        mFusedLocationProvider = LocationServices.getFusedLocationProviderClient(this)
+        placeClient= Places.createClient(this)
+        fusedLocationProvider = LocationServices.getFusedLocationProviderClient(this)
 
-        //search
-        // initialize autoCompleteSupportFragmentManager to search places on map
-        val autoCompleteSupportFragmentManager = supportFragmentManager.findFragmentById(R.id.autocomplete_fragment )
-                as AutocompleteSupportFragment
-
-        // list of location fields we need in search result
-        val placesList = arrayOf(
-            Place.Field.ID,
-            Place.Field.NAME,
-            Place.Field.ADDRESS,
-            Place.Field.LAT_LNG
-        )
-
-        // set placesList to autoCompleteSupportFragmentManager
-        autoCompleteSupportFragmentManager.setPlaceFields(listOf(*placesList))
-
-// listener for place selections
-        autoCompleteSupportFragmentManager.setOnPlaceSelectedListener(object : PlaceSelectionListener{
-            override fun onPlaceSelected(place: Place) {
-                Log.e(TAG,"onPlaceSelected: ")
-                val name = place.name
-                val latLng = place.latLng
-                selectedLatitude = latLng?.latitude
-                selectedLongitude = latLng?.longitude
-                selectedAddress = place.address?:""
-
-                addMarker(latLng!!,name!!,selectedAddress)
-            }
-
-            override fun onError(status: Status) {
-                //
-            }
-        })
 
 
         // done Button click
@@ -127,9 +91,8 @@ class LocationPickerActivity : BasicActivity<ActivityLocationPickerBinding,Locat
             val intent = Intent()
             intent.putExtra("latitude",selectedLatitude)
             intent.putExtra("longitude",selectedLongitude)
-            intent.putExtra("address",selectedAddress)
+            intent.putExtra("address",address)
             setResult(Activity.RESULT_OK,intent)
-
             finish()
 
         }
@@ -138,11 +101,6 @@ class LocationPickerActivity : BasicActivity<ActivityLocationPickerBinding,Locat
     }
 
     private fun addMarker(latLng: LatLng, title: String, address: String) {
-        Log.e(TAG,"addMarker: latitude: ${latLng.latitude}")
-        Log.e(TAG,"addMarker: longitude: ${latLng.longitude}")
-        Log.e(TAG,"addMarker: title: $title")
-        Log.e(TAG,"addMarker: address: $address")
-
         //we only need one location marker so if there is one clear it
         mMap!!.clear()
         try {
@@ -150,8 +108,8 @@ class LocationPickerActivity : BasicActivity<ActivityLocationPickerBinding,Locat
             //setup marker options with latLng,title and full address
             val markerOptions = MarkerOptions()
             markerOptions.position(latLng)
-            markerOptions.title("$title")
-            markerOptions.snippet("$address")
+            markerOptions.title(" $title ")
+            markerOptions.snippet(" $address ")
             markerOptions.icon(BitmapDescriptorFactory
                 .defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
 
@@ -177,11 +135,8 @@ class LocationPickerActivity : BasicActivity<ActivityLocationPickerBinding,Locat
     // get location of device and position the map's camera
     @SuppressLint("MissingPermission")
     private fun detectAndShowDeviceLocationMap(){
-
-        try {
-            val locationResult =mFusedLocationProvider!!.lastLocation
-
-            locationResult.addOnSuccessListener {location->
+        fusedLocationProvider!!.lastLocation
+            .addOnSuccessListener {location->
                 if (location!=null){
                     //save location
                     myLastKnownLocation=location
@@ -194,39 +149,21 @@ class LocationPickerActivity : BasicActivity<ActivityLocationPickerBinding,Locat
                     mMap!!.moveCamera(CameraUpdateFactory
                         .newLatLngZoom(latLng, DEFAULT_ZOOM.toFloat())
                     )
-
                     mMap!!.animateCamera(CameraUpdateFactory.zoomTo(DEFAULT_ZOOM.toFloat()))
 
                     // function to get address details from latLng
-                    addressFromLatLng(latLng)
-
-                }
-
-            }
-                .addOnFailureListener {e->
-                    Log.e(TAG," location is null: : ",e)
-
-                }
-
-        }catch (e : Exception){
-            Log.e(TAG," couldn't access location: ",e)
-
-        }
-
+                    addressFromLatLng(latLng) }
+            }.addOnFailureListener {e->
+                Log.e(TAG," location is null: : ",e) }
     }
-
-
-
 
 
     @SuppressLint("MissingPermission")
     private val requestLocationPermission : ActivityResultLauncher<String> =
         registerForActivityResult( ActivityResultContracts.RequestPermission() ){isGranted->
-            Log.e( TAG,"requestLocationPermission IsGranted: $isGranted")
-
             //check if permission is granted
             if (isGranted){
-
+                Log.e( TAG,"requestLocationPermission IsGranted: $isGranted")
                 // enable gps button to set location on map
                 mMap!!.isMyLocationEnabled= true
                 pickCurrentPlace()
@@ -255,31 +192,27 @@ class LocationPickerActivity : BasicActivity<ActivityLocationPickerBinding,Locat
 
             // function to get address details from latLng
             addressFromLatLng(latLng)
-
         }
 
     }
 
     private fun addressFromLatLng(latLng: LatLng) {
 
-
         val geoCoder = Geocoder(this)
         try {
             val addressList = geoCoder.getFromLocation(latLng.latitude,latLng.longitude,1)
-            val address =addressList!![0]
+            val firstAddress =addressList!![0]
 
-            val addressLine=address.getAddressLine(0)
-            val subLocality = address.subLocality
+            val addressLine = firstAddress.getAddressLine(0)
+            val subLocality = firstAddress.subLocality
 
-            selectedAddress = "$addressLine"
-            addMarker(latLng,"$subLocality","$addressLine")
+            address = " $addressLine"
+            addMarker(latLng," $subLocality "," $addressLine ")
 
 
         } catch (e : Exception){
             Log.e(TAG," address from latitude and longitude: ",e)
-
         }
-
     }
 
     override fun onSupportNavigateUp(): Boolean {

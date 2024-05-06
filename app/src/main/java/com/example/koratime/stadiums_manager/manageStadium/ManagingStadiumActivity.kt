@@ -21,8 +21,8 @@ import com.example.koratime.adapters.TimeSlotsForManagerAdapter
 import com.example.koratime.basic.BasicActivity
 import com.example.koratime.database.addBookingToFirestore
 import com.example.koratime.database.getBookedTimesFromFirestore
-import com.example.koratime.database.getMultipleImageFromFirestore
-import com.example.koratime.database.uploadMultipleImages
+import com.example.koratime.database.getMultipleImagesFromFirestore
+import com.example.koratime.database.uploadMultipleImagesToStorage
 import com.example.koratime.databinding.ActivityManagingStadiumBinding
 import com.example.koratime.model.StadiumModel
 import java.text.SimpleDateFormat
@@ -123,7 +123,7 @@ class ManagingStadiumActivity : BasicActivity<ActivityManagingStadiumBinding,Man
         }
 
 
-        getMultipleImageFromFirestore(
+        getMultipleImagesFromFirestore(
             stadiumID = stadiumModel.stadiumID!!,
             onSuccessListener = {urls->
                 dataBinding.imagePickerTextView.text = "Images Selected"
@@ -148,7 +148,7 @@ class ManagingStadiumActivity : BasicActivity<ActivityManagingStadiumBinding,Man
         )
         dataBinding.swipeRefresh.setOnRefreshListener {
             dataBinding.swipeRefresh.isRefreshing = false
-            getMultipleImageFromFirestore(
+            getMultipleImagesFromFirestore(
                 stadiumID = stadiumModel.stadiumID!!,
                 onSuccessListener = {urls->
                     slideImageList.clear()
@@ -211,7 +211,7 @@ class ManagingStadiumActivity : BasicActivity<ActivityManagingStadiumBinding,Man
                 dataBinding.imagePickerTextView.text = "Uploading Images.."
                 Log.e("PhotoPicker", "Selected URI: $uris")
                 //upload images to storage
-                uploadMultipleImages(uris = uris, stadiumID = stadiumModel.stadiumID!!,
+                uploadMultipleImagesToStorage(uris = uris, stadiumID = stadiumModel.stadiumID!!,
                     onSuccessListener = {imagesList->
                         Log.e("Firebase","Images uploaded successfully to storage")
                         viewModel.listOfUrls.value = imagesList

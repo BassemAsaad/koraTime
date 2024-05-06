@@ -63,23 +63,6 @@
             map:layout_constraintStart_toStartOf="parent"
             map:layout_constraintTop_toBottomOf="@id/app_bar" />
 
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="340dp"
-            android:layout_height="wrap_content"
-            map:cardCornerRadius="8dp"
-            map:cardUseCompatPadding="true"
-            map:layout_constraintStart_toStartOf="parent"
-            map:layout_constraintTop_toBottomOf="@id/app_bar">
-
-            <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/autocomplete_fragment"
-                android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                />
-
-        </com.google.android.material.card.MaterialCardView>
-
         <LinearLayout
             android:id="@+id/container"
             android:layout_width="404dp"

@@ -11,7 +11,7 @@ import com.example.koratime.adapters.AddFriendsAdapter
 import com.example.koratime.basic.BasicActivity
 import com.example.koratime.database.addFriendRequestToFirestore
 import com.example.koratime.database.getUsersFromFirestore
-import com.example.koratime.database.removeFriendRequestFromFirestoreWithoutRequestID
+import com.example.koratime.database.removeFriendRequestWithoutRequestID
 import com.example.koratime.databinding.ActivitySearchBinding
 import com.example.koratime.model.UserModel
 
@@ -101,7 +101,7 @@ class SearchActivity : BasicActivity<ActivitySearchBinding,SearchViewModel>(),Se
                 position: Int
             ) {
                 val receiverUserId = user.id!!
-                    removeFriendRequestFromFirestoreWithoutRequestID(
+                    removeFriendRequestWithoutRequestID(
                         sender = DataUtils.user!!.id!!,
                         receiver = receiverUserId,
                         onSuccessListener = {

@@ -3,6 +3,7 @@ package com.example.koratime.chat.chat_friends
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.koratime.Constants
 import com.example.koratime.DataUtils
@@ -50,6 +51,11 @@ class ChatFriendsActivity : BasicActivity<ActivityChatFriendsBinding,ChatFriends
         supportActionBar?.setDisplayShowTitleEnabled(true)
         listenForMessageUpdate()
         dataBinding.recyclerView.adapter=messageAdapter
+
+        viewModel.toastMessage.observe(this, Observer { message ->
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        })
+
     }
     override fun onSupportNavigateUp(): Boolean {
         // go to the previous fragment when back button clicked on toolbar

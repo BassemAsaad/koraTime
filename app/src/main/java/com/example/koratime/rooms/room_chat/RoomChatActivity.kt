@@ -8,7 +8,7 @@ import com.example.koratime.Constants
 import com.example.koratime.R
 import com.example.koratime.adapters.RoomMessagesAdapter
 import com.example.koratime.basic.BasicActivity
-import com.example.koratime.database.getRoomMessageFromFirestore
+import com.example.koratime.database.getRoomMessagesFromFirestore
 import com.example.koratime.databinding.ActivityRoomChatBinding
 import com.example.koratime.model.RoomMessageModel
 import com.example.koratime.model.RoomModel
@@ -53,7 +53,7 @@ class RoomChatActivity : BasicActivity<ActivityRoomChatBinding,RoomChatViewModel
 
     }
     private fun listenForMessageUpdate (){
-        getRoomMessageFromFirestore(room.id!!)
+        getRoomMessagesFromFirestore(room.id!!)
             .addSnapshotListener { snapshots , error ->
                 if (error!=null){
                     Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()

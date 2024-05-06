@@ -32,9 +32,9 @@ fun addUserToFirestore(user : UserModel,
         .addOnFailureListener(onFailureListener)
 }
 
-fun getUserForLogin(uid: String?,
-                    onSuccessListener: OnSuccessListener<DocumentSnapshot>,
-                    onFailureListener: OnFailureListener){
+fun getUserFromFirestore(uid: String?,
+                         onSuccessListener: OnSuccessListener<DocumentSnapshot>,
+                         onFailureListener: OnFailureListener){
     val db = Firebase.firestore
     val collection = db.collection(UserModel.COLLECTION_NAME)
     collection
@@ -135,7 +135,7 @@ fun uploadImageToStorage(imageUri: Uri?,
 }
 
 
-fun uploadMultipleImages(uris: List<Uri>, stadiumID: String, onSuccessListener: OnSuccessListener<List<String>>, onFailureListener: OnFailureListener) {
+fun uploadMultipleImagesToStorage(uris: List<Uri>, stadiumID: String, onSuccessListener: OnSuccessListener<List<String>>, onFailureListener: OnFailureListener) {
     val imageUrls = mutableListOf<String>()
     val storageRef = Firebase.storage.reference
     val imagesRef = storageRef.child("stadiums/$stadiumID")
@@ -161,10 +161,10 @@ fun uploadMultipleImages(uris: List<Uri>, stadiumID: String, onSuccessListener: 
     }
 
 }
-fun uploadMultipleImageToFirestore(imageUris: List<String>,
-                                   stadiumID:String,
-                                   onSuccessListener: OnSuccessListener<Void>,
-                                   onFailureListener: OnFailureListener) {
+fun addMultipleImagesToFirestore(imageUris: List<String>,
+                                 stadiumID:String,
+                                 onSuccessListener: OnSuccessListener<Void>,
+                                 onFailureListener: OnFailureListener) {
     val db = Firebase.firestore
     val stadiumImagesRef = db.collection(StadiumModel.COLLECTION_NAME).document(stadiumID)
         .collection(StadiumModel.COLLECTION_IMAGES).document("ImageLinks")
@@ -177,9 +177,9 @@ fun uploadMultipleImageToFirestore(imageUris: List<String>,
         .addOnFailureListener(onFailureListener)
 }
 
-fun getMultipleImageFromFirestore(stadiumID: String,
-                                  onSuccessListener: OnSuccessListener<List<String>>,
-                                  onFailureListener: OnFailureListener) {
+fun getMultipleImagesFromFirestore(stadiumID: String,
+                                   onSuccessListener: OnSuccessListener<List<String>>,
+                                   onFailureListener: OnFailureListener) {
     val db = Firebase.firestore
     val stadiumImagesRef = db.collection(StadiumModel.COLLECTION_NAME).document(stadiumID)
         .collection(StadiumModel.COLLECTION_IMAGES).document("imageLinks")
@@ -242,9 +242,9 @@ fun addFriendRequestToFirestore(sender: String,
         .addOnFailureListener(onFailureListener)
 }
 
-fun checkFriendRequestStatus(sender: String,
-                             receiver: String,
-                             callback: (String) -> Unit ) {
+fun checkFriendRequestStatusFromFirestore(sender: String,
+                                          receiver: String,
+                                          callback: (String) -> Unit ) {
     val db = Firebase.firestore
     val receiverRef = db.collection(UserModel.COLLECTION_NAME)
     receiverRef
@@ -292,10 +292,10 @@ fun getFriendRequestsFromFirestore(receiver: String,
         .addOnFailureListener(onFailureListener)
 
 }
-fun removeFriendRequestFromFirestoreWithoutRequestID(sender: String,
-                                                     receiver: String,
-                                                     onSuccessListener: OnSuccessListener<Void>,
-                                                     onFailureListener: OnFailureListener) {
+fun removeFriendRequestWithoutRequestID(sender: String,
+                                        receiver: String,
+                                        onSuccessListener: OnSuccessListener<Void>,
+                                        onFailureListener: OnFailureListener) {
     val db = Firebase.firestore
     // Create a query to find the friend request document in the receiver's collection of pending friend requests
     val receiverQuery = db.collection(UserModel.COLLECTION_NAME)
@@ -329,11 +329,11 @@ fun removeFriendRequestFromFirestoreWithoutRequestID(sender: String,
 
 }
 
-fun removeFriendRequestFromFirestoreWithRequestID(sender: String,
-                                                  receiver: String,
-                                                  request: String,
-                                                  onSuccessListener: OnSuccessListener<Void>,
-                                                  onFailureListener: OnFailureListener) {
+fun removeFriendRequestWithRequestID(sender: String,
+                                     receiver: String,
+                                     request: String,
+                                     onSuccessListener: OnSuccessListener<Void>,
+                                     onFailureListener: OnFailureListener) {
 
     val db = Firebase.firestore
 
@@ -469,7 +469,7 @@ fun addRoomMessageToFirestore(
         .addOnSuccessListener(onSuccessListener)
         .addOnFailureListener(onFailureListener)
 }
-fun getRoomMessageFromFirestore(roomId : String): CollectionReference {
+fun getRoomMessagesFromFirestore(roomId : String): CollectionReference {
     val db = Firebase.firestore
     val roomRef = db.collection(RoomModel.COLLECTION_NAME)
         .document(roomId)

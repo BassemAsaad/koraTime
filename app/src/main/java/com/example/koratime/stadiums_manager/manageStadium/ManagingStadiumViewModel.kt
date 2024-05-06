@@ -3,8 +3,7 @@ package com.example.koratime.stadiums_manager.manageStadium
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.koratime.basic.BasicViewModel
-import com.example.koratime.database.uploadMultipleImageToFirestore
-import com.example.koratime.database.uploadMultipleImages
+import com.example.koratime.database.addMultipleImagesToFirestore
 import com.example.koratime.model.StadiumModel
 
 class ManagingStadiumViewModel : BasicViewModel<ManagingStadiumNavigator>() {
@@ -24,7 +23,7 @@ class ManagingStadiumViewModel : BasicViewModel<ManagingStadiumNavigator>() {
     }
 
     fun addImageUrlsToFirestore(){
-        uploadMultipleImageToFirestore(
+        addMultipleImagesToFirestore(
             listOfUrls.value!!.toMutableList(),
             stadium!!.stadiumID!!,
             onSuccessListener = {

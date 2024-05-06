@@ -18,7 +18,7 @@ import com.example.koratime.adapters.TimeSlotsForUserAdapter
 import com.example.koratime.basic.BasicActivity
 import com.example.koratime.database.addBookingToFirestore
 import com.example.koratime.database.getBookedTimesFromFirestore
-import com.example.koratime.database.getMultipleImageFromFirestore
+import com.example.koratime.database.getMultipleImagesFromFirestore
 import com.example.koratime.databinding.ActivityBookingStadiumBinding
 import com.example.koratime.model.StadiumModel
 import java.text.SimpleDateFormat
@@ -115,7 +115,7 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
 
         dataBinding.swipeRefresh.setOnRefreshListener {
             dataBinding.swipeRefresh.isRefreshing = false
-            getMultipleImageFromFirestore(
+            getMultipleImagesFromFirestore(
                 stadiumID = stadiumModel.stadiumID!!,
                 onSuccessListener = {urls->
                     slideImageList.clear()
@@ -139,7 +139,7 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
             )
         }
 
-        getMultipleImageFromFirestore(
+        getMultipleImagesFromFirestore(
             stadiumID = stadiumModel.stadiumID!!,
             onSuccessListener = {urls->
                 slideImageList.clear()

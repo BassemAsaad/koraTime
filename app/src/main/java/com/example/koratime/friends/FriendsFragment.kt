@@ -15,7 +15,7 @@ import com.example.koratime.R
 import com.example.koratime.adapters.PendingFriendsAdapter
 import com.example.koratime.database.acceptFriendRequest
 import com.example.koratime.database.getFriendRequestsFromFirestore
-import com.example.koratime.database.removeFriendRequestFromFirestoreWithRequestID
+import com.example.koratime.database.removeFriendRequestWithRequestID
 import com.example.koratime.databinding.FragmentFriendsBinding
 import com.example.koratime.friends.search.SearchActivity
 import com.example.koratime.model.FriendRequestModel
@@ -81,7 +81,7 @@ class FriendsFragment : Fragment(),FriendsNavigator {
                 val requestId =user.requestID
                 val senderID = user.senderID
                 val receiverID = DataUtils.user!!.id
-                removeFriendRequestFromFirestoreWithRequestID(
+                removeFriendRequestWithRequestID(
                     sender = senderID!!,
                     receiver = receiverID!!,
                     request = requestId!!,

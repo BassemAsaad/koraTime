@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.koratime.R
-import com.example.koratime.database.checkFriendRequestStatus
+import com.example.koratime.database.checkFriendRequestStatusFromFirestore
 import com.example.koratime.databinding.ItemAddFriendBinding
 import com.example.koratime.model.UserModel
 
@@ -21,7 +21,7 @@ class AddFriendsAdapter  (private var usersList : List<UserModel?>?, private val
 
             // Check friend request status dynamically
             currentUserId?.let { userId ->
-                checkFriendRequestStatus(userId, user.id!!) { status ->
+                checkFriendRequestStatusFromFirestore(userId, user.id!!) { status ->
                     Log.e("Firebase"," $status")
                     Log.e("Firebase"," ${user.userName}")
                     if (status == "pending") {

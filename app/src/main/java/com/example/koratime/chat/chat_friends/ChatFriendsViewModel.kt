@@ -13,7 +13,7 @@ import java.util.Date
 class ChatFriendsViewModel : BasicViewModel<ChatFriendsNavigator>() {
     val messageField = ObservableField<String>()
     var friend : FriendModel?=null
-    val toastLiveData = MutableLiveData<String>()
+    val toastMessage = MutableLiveData<String>()
     fun sendMessage(){
         val friendMessageModel = FriendMessageModel(
             content = messageField.get(),
@@ -30,7 +30,7 @@ class ChatFriendsViewModel : BasicViewModel<ChatFriendsNavigator>() {
                 messageField.set("")
             },
             onFailureListener = {
-                toastLiveData.value = "message was not sent"
+                toastMessage.value= "Message was not sent "
             }
         )
     }
