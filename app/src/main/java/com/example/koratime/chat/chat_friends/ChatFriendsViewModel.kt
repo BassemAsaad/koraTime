@@ -27,6 +27,7 @@ class ChatFriendsViewModel : BasicViewModel<ChatFriendsNavigator>() {
             friendshipID= friend!!.friendshipID!!,
             onSuccessListener = {
                 Log.e("Firebase"," Message sent successfully")
+                messageField.set("")
             },
             onFailureListener = {
                 toastLiveData.value = "message was not sent"

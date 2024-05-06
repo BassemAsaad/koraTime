@@ -57,9 +57,7 @@ class FriendsChatFragment : Fragment(),FriendsChatNavigator {
                 position: Int
             ) {
                 val intent = Intent(requireContext(),ChatFriendsActivity::class.java)
-//                intent.putExtra("friendID",user!!.friendID)
                 intent.putExtra(Constants.FRIEND,user)
-//                intent.putExtra("friendPicture",user.friendPicture)
                 startActivity(intent)
             }
         }

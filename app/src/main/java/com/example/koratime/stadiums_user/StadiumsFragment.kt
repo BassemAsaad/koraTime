@@ -10,7 +10,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.example.koratime.Constants
+import com.example.koratime.DataUtils
 import com.example.koratime.R
 import com.example.koratime.adapters.StadiumsAdapter
 import com.example.koratime.database.getAllStadiumsFromFirestore
@@ -58,6 +60,14 @@ class StadiumsFragment : Fragment(),StadiumNavigator {
                 startActivity(intent)
             }
         }
+
+        Glide.with(requireContext())
+            .load(DataUtils.user!!.profilePicture)
+            .into(dataBinding.profilePicture)
+
+        dataBinding.userName.text = DataUtils.user!!.userName
+
+
 
     }
 

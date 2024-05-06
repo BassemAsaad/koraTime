@@ -512,7 +512,7 @@ fun addFriendMessageToFirestore(
         .addOnFailureListener(onFailureListener)
 
 }
-fun getFriendMessagesFromFirestore(senderID: String, friendshipID: String): CollectionReference {
+fun getFriendMessagesFromFirestore(senderID: String, friendshipID: String): Query {
     val db = Firebase.firestore
 
     val senderRef = db.collection(UserModel.COLLECTION_NAME)
@@ -520,7 +520,34 @@ fun getFriendMessagesFromFirestore(senderID: String, friendshipID: String): Coll
         .collection(FriendModel.COLLECTION_NAME)
         .document(friendshipID)
 
+
     return senderRef.collection(FriendMessageModel.COLLECTION_NAME)
+        .orderBy("dateTime",Query.Direction.ASCENDING)
+}
+fun getLastMessageFromFirestore(userID:String,
+                                friendshipID: String,
+                                onSuccessListener: OnSuccessListener<String>,
+                                onFailureListener: OnFailureListener){
+
+    val db = Firebase.firestore
+    val query = db.collection(UserModel.COLLECTION_NAME)
+        .document(userID)
+        .collection(FriendModel.COLLECTION_NAME)
+        .document(friendshipID)
+        .collection(FriendMessageModel.COLLECTION_NAME)
+        .orderBy("dateTime", Query.Direction.DESCENDING)
+        .limit(1)
+
+    query
+        .get()
+        .addOnSuccessListener { documents ->
+        for (document in documents) {
+            val message = document.toObject(FriendMessageModel::class.java)
+            // Access the last content sent
+            onSuccessListener.onSuccess(message.content) }
+        }
+        .addOnFailureListener(onFailureListener)
+
 }
 
 
