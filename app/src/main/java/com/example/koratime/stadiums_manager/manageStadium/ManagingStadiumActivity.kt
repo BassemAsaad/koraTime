@@ -53,6 +53,7 @@ class ManagingStadiumActivity : BasicActivity<ActivityManagingStadiumBinding,Man
         initView()
 
     }
+    @SuppressLint("SetTextI18n")
     override fun initView() {
         viewModel.navigator=this
         dataBinding.vm = viewModel
@@ -198,6 +199,7 @@ class ManagingStadiumActivity : BasicActivity<ActivityManagingStadiumBinding,Man
             }
         )
     }
+    @SuppressLint("SetTextI18n")
     private fun openImagePicker(){
         Log.e("StadiumID","${stadiumModel.stadiumID}")
         // Registers a photo picker activity launcher in single-select mode.
@@ -214,7 +216,7 @@ class ManagingStadiumActivity : BasicActivity<ActivityManagingStadiumBinding,Man
                         Log.e("Firebase","Images uploaded successfully to storage")
                         viewModel.listOfUrls.value = imagesList
                         viewModel.addImageUrlsToFirestore()
-
+                        dataBinding.imagePickerTextView.text = "Images Selected"
                 },
                     onFailureListener = {
                         viewModel.showLoading.value=false

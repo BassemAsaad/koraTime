@@ -86,14 +86,14 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/image_picker_textView"
-                android:contentDescription="Add Multiple images" />
+                android:contentDescription="@string/add_multiple_stadium_pictures" />
 
                 <TextView
                     android:id="@+id/image_picker_textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="Add Multiple Stadium Pictures "
+                    android:text="@string/add_multiple_stadium_pictures"
                     android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@id/image_picker"
@@ -104,7 +104,7 @@
                 android:id="@+id/stadium_images"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Stadium Images"
+                android:text="@string/stadium_images"
                 android:layout_gravity="center"
                 android:textSize="20sp"
                 android:layout_marginTop="10dp"
@@ -136,7 +136,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginVertical="20dp"
-                android:text="Stadium Time Slots"
+                android:text="@string/stadium_book_times"
                 android:textSize="20sp" />
 
             <androidx.recyclerview.widget.RecyclerView

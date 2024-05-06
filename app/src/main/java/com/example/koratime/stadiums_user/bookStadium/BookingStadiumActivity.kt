@@ -1,5 +1,6 @@
 package com.example.koratime.stadiums_user.bookStadium
 
+import android.annotation.SuppressLint
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
@@ -81,6 +82,7 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
 
         // Set up click listener for booking button in the adapter
         adapter.onBookClickListener = object : TimeSlotsForUserAdapter.OnBookClickListener {
+            @SuppressLint("SetTextI18n")
             override fun onclick(slot: String, holder: TimeSlotsForUserAdapter.ViewHolder, position: Int) {
                 addBookingToFirestore(timeSlot = holder.dataBinding.tvTimeSlot.text.toString(),
                     stadiumID = stadiumModel.stadiumID!!,
