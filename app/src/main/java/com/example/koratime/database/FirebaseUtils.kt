@@ -17,10 +17,8 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.firestore
-import com.google.firebase.storage.UploadTask
 import com.google.firebase.storage.storage
 import java.util.UUID
-import com.google.firebase.firestore.SetOptions
 
 fun addUserToFirestore(user : UserModel,
                        onSuccessListener: OnSuccessListener<Void>,
@@ -149,11 +147,9 @@ fun uploadMultipleImages(uris: List<Uri>, stadiumID: String, onSuccessListener: 
                 // Get a URL to the uploaded content
                 taskSnapshot.storage.downloadUrl.addOnSuccessListener { uri ->
                     val imageUrl = uri.toString()
-                    Log.e("ImagePicker", "Image uploaded successfully: $imageUrl")
                     imageUrls.add(imageUrl)
-                    if (index == uris.lastIndex) {
+                }.addOnSuccessListener {
                         onSuccessListener.onSuccess(imageUrls)
-                    }
                 }
 
             }
@@ -171,12 +167,12 @@ fun uploadMultipleImageToFirestore(imageUris: List<String>,
                                    onFailureListener: OnFailureListener) {
     val db = Firebase.firestore
     val stadiumImagesRef = db.collection(StadiumModel.COLLECTION_NAME).document(stadiumID)
-        .collection(StadiumModel.COLLECTION_IMAGES).document("imageLinks")
+        .collection(StadiumModel.COLLECTION_IMAGES).document("ImageLinks")
     val data = hashMapOf<String, String>()
     imageUris.forEachIndexed { index, imageUri ->
         data["image${index}"] = imageUri
     }
-    stadiumImagesRef.set(data, SetOptions.merge())
+    stadiumImagesRef.set(data)
         .addOnSuccessListener(onSuccessListener)
         .addOnFailureListener(onFailureListener)
 }

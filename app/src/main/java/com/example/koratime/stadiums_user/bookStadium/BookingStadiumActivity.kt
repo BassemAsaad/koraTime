@@ -4,9 +4,12 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import com.denzcoskun.imageslider.constants.ScaleTypes
+import com.denzcoskun.imageslider.models.SlideModel
 import com.example.koratime.Constants
 import com.example.koratime.DataUtils
 import com.example.koratime.R
@@ -14,6 +17,7 @@ import com.example.koratime.adapters.TimeSlotsForUserAdapter
 import com.example.koratime.basic.BasicActivity
 import com.example.koratime.database.addBookingToFirestore
 import com.example.koratime.database.getBookedTimesFromFirestore
+import com.example.koratime.database.getMultipleImageFromFirestore
 import com.example.koratime.databinding.ActivityBookingStadiumBinding
 import com.example.koratime.model.StadiumModel
 import java.text.SimpleDateFormat
@@ -29,6 +33,7 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
     private lateinit var timeSlotsList :List<String>
     private lateinit var availableSlots: List<String>
     private lateinit var bookedTimesList : List<String>
+    val slideImageList = mutableListOf<String>()
     private lateinit var selectedDate: String
 
     override fun getLayoutID(): Int {
@@ -45,6 +50,8 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
     override fun initView() {
         viewModel.navigator=this
         dataBinding.vm = viewModel
+        dataBinding.imageSlider.visibility =View.GONE
+        dataBinding.stadiumImages.visibility =View.GONE
 
         dataBinding.calendarView.minDate = System.currentTimeMillis()
         dataBinding.calendarView.startAnimation(AnimationUtils.loadAnimation(this, androidx.appcompat.R.anim.abc_popup_enter))
@@ -102,6 +109,30 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
             }
         }
 
+
+
+        getMultipleImageFromFirestore(
+            stadiumID = stadiumModel.stadiumID!!,
+            onSuccessListener = {urls->
+                slideImageList.clear()
+                slideImageList.addAll(urls)
+                Log.e("Firebase"," List of $urls")
+                val imageList = ArrayList<SlideModel>()
+                for ( i in slideImageList ){
+                    imageList.add(SlideModel(i, ""))
+                }
+
+                if (imageList.isNotEmpty()){
+                    dataBinding.stadiumImages.visibility = View.VISIBLE
+                    dataBinding.imageSlider.visibility = View.VISIBLE
+                    dataBinding.imageSlider.setImageList(imageList, ScaleTypes.FIT)
+                }
+
+            },
+            onFailureListener = {
+                Log.e("Firebase","Failed To get Images From firestore")
+            }
+        )
 
     }
 

@@ -34,7 +34,7 @@
             </com.google.android.material.appbar.MaterialToolbar>
         </com.google.android.material.appbar.AppBarLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:paddingHorizontal="10dp"
@@ -43,47 +43,77 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/app_bar">
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_line"
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_begin="10dp" />
+                >
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingHorizontal="10dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/guide_line">
-                <CalendarView
-                    android:id="@+id/calendarView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:dateTextAppearance="@style/MyCustomDateTextAppearance"
-                    />
-                <TextView
-                    android:id="@+id/bookingTimes_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginVertical="20dp"
-                    android:text="Booking Times"
-                    android:textSize="20sp" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerView"
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guide_line"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-            </LinearLayout>
+                    android:orientation="horizontal"
+                    app:layout_constraintGuide_begin="10dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/guide_line">
 
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                    <TextView
+                        android:id="@+id/stadium_images"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Stadium Images"
+                        android:layout_gravity="center"
+                        android:textSize="20sp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="5dp"
+                        />
+                    <com.denzcoskun.imageslider.ImageSlider
+                        android:id="@+id/image_slider"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        app:iss_auto_cycle="true"
+                        app:iss_period="1500"
+                        app:iss_delay="1000"
+                        android:layout_marginBottom="15dp"
+                        />
+
+                    <CalendarView
+                        android:id="@+id/calendarView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:dateTextAppearance="@style/MyCustomDateTextAppearance"
+                        android:layout_marginTop="10dp"
+                        />
+                    <TextView
+                        android:id="@+id/bookingTimes_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginVertical="20dp"
+                        android:text="Stadium Time Slots"
+                        android:textSize="20sp" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="400dp"
+                        android:layout_gravity="center"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </ScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

@@ -22,7 +22,6 @@ import com.example.koratime.basic.BasicActivity
 import com.example.koratime.database.addBookingToFirestore
 import com.example.koratime.database.getBookedTimesFromFirestore
 import com.example.koratime.database.getMultipleImageFromFirestore
-import com.example.koratime.database.uploadMultipleImageToFirestore
 import com.example.koratime.database.uploadMultipleImages
 import com.example.koratime.databinding.ActivityManagingStadiumBinding
 import com.example.koratime.model.StadiumModel
@@ -38,8 +37,7 @@ class ManagingStadiumActivity : BasicActivity<ActivityManagingStadiumBinding,Man
     private lateinit var availableSlots: List<String>
     private lateinit var bookedTimesList : List<String>
     private lateinit var selectedDate: String
-    private  var imgsListUrl= mutableListOf <String>()
-    val r = mutableListOf<String>()
+    val slideImageList = mutableListOf<String>()
     private lateinit var pickMedia : ActivityResultLauncher<PickVisualMediaRequest>
 
     override fun getLayoutID(): Int {
@@ -122,15 +120,19 @@ class ManagingStadiumActivity : BasicActivity<ActivityManagingStadiumBinding,Man
         dataBinding.imagePicker.setOnClickListener {
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
+
+
+
+
         getMultipleImageFromFirestore(
             stadiumID = stadiumModel.stadiumID!!,
             onSuccessListener = {urls->
                 dataBinding.imagePickerTextView.text = "Images Selected"
-                r.clear()
-                r.addAll(urls)
+                slideImageList.clear()
+                slideImageList.addAll(urls)
                 Log.e("Firebase"," List of $urls")
                 val imageList = ArrayList<SlideModel>()
-                for ( i in r ){
+                for ( i in slideImageList ){
                     imageList.add(SlideModel(i, ""))
                 }
 
@@ -141,7 +143,9 @@ class ManagingStadiumActivity : BasicActivity<ActivityManagingStadiumBinding,Man
                 }
 
             },
-            onFailureListener = {}
+            onFailureListener = {
+                Log.e("Firebase","Failed To get Images From firestore")
+            }
         )
 
 
@@ -176,28 +180,19 @@ class ManagingStadiumActivity : BasicActivity<ActivityManagingStadiumBinding,Man
         Log.e("StadiumID","${stadiumModel.stadiumID}")
         // Registers a photo picker activity launcher in single-select mode.
         pickMedia = registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(3)) { uris ->
+
             // photo picker
             if (uris != null) {
                 viewModel.showLoading.value=true
                 dataBinding.imagePickerTextView.text = "Uploading Images.."
-
                 Log.e("PhotoPicker", "Selected URI: $uris")
+                //upload images to storage
                 uploadMultipleImages(uris = uris, stadiumID = stadiumModel.stadiumID!!,
                     onSuccessListener = {imagesList->
                         Log.e("Firebase","Images uploaded successfully to storage")
-                        imgsListUrl.addAll(imagesList)
-                        uploadMultipleImageToFirestore(
-                            imgsListUrl,stadiumModel.stadiumID!!,
-                            onSuccessListener = {
-                                Log.e("Firebase","Images uploaded successfully to firestore")
-                                viewModel.showLoading.value=false
-                            },
-                            onFailureListener = {
-                                viewModel.showLoading.value=false
-                                Log.e("Firebase","Error uploading images to firestore")
+                        viewModel.listOfUrls.value = imagesList
+                        viewModel.addImageUrlsToFirestore()
 
-                            }
-                        )
                 },
                     onFailureListener = {
                         viewModel.showLoading.value=false
@@ -212,11 +207,11 @@ class ManagingStadiumActivity : BasicActivity<ActivityManagingStadiumBinding,Man
                 Toast.makeText(this, "No image selected", Toast.LENGTH_SHORT).show()
                 Log.e("PhotoPicker", "No image selected")
             }
-            viewModel.showLoading.value=false
 
 
         }
     }
+
     override fun onSupportNavigateUp(): Boolean {
         // go to the previous fragment when back button clicked on toolbar
         onBackPressed()
