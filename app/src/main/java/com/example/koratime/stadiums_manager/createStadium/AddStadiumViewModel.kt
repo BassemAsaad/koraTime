@@ -7,8 +7,7 @@ import com.example.koratime.DataUtils
 import com.example.koratime.basic.BasicViewModel
 import com.example.koratime.database.addStadiumToFirestore
 import com.example.koratime.model.StadiumModel
-import com.google.firebase.Firebase
-import com.google.firebase.auth.auth
+
 
 class AddStadiumViewModel : BasicViewModel<AddStadiumNavigator>() {
 

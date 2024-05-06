@@ -54,7 +54,7 @@
                     android:textSize="20sp"
                     app:layout_constraintStart_toEndOf="@id/userImage_item"
                     app:layout_constraintTop_toTopOf="@id/userImage_item"
-                    tools:text="Mohammed Ehab" />
+                    tools:text="@string/user_name" />
 
 
                 <TextView
@@ -64,14 +64,14 @@
                     android:layout_marginStart="10dp"
                     android:ellipsize="end"
                     android:lines="1"
-                    android:textSize="18dp"
+                    android:textSize="18sp"
                     android:paddingVertical="4dp"
                     android:paddingHorizontal="8dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/userImage_item"
                     app:layout_constraintTop_toBottomOf="@+id/textView"
-                    tools:text="sssssssssss"
+                    tools:text="@string/last_message_sent"
 
                     />
 

@@ -16,11 +16,8 @@ import com.example.koratime.DataUtils
 import com.example.koratime.R
 import com.example.koratime.adapters.StadiumsAdapter
 import com.example.koratime.database.getAllStadiumsFromFirestore
-import com.example.koratime.database.getUserStadiumFromFirestore
 import com.example.koratime.databinding.FragmentStadiumsBinding
 import com.example.koratime.model.StadiumModel
-import com.example.koratime.stadiums_manager.StadiumsManagerViewModel
-import com.example.koratime.stadiums_manager.manageStadium.ManagingStadiumActivity
 import com.example.koratime.stadiums_user.bookStadium.BookingStadiumActivity
 
 class StadiumsFragment : Fragment(),StadiumNavigator {
@@ -32,7 +29,7 @@ class StadiumsFragment : Fragment(),StadiumNavigator {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         dataBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_stadiums,container,false)
         return dataBinding.root
     }

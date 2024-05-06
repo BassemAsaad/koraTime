@@ -1,5 +1,6 @@
 package com.example.koratime.adapters
 
+import android.annotation.SuppressLint
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -57,7 +58,8 @@ class FriendsAdapter  (var friendsList : List<FriendModel?>?): RecyclerView.Adap
     interface OnUserClickListener{
         fun onItemClick(user : FriendModel?,holder: ViewHolder, position: Int)
     }
-    fun changeData( newFriend : List<FriendModel?>?){
+    @SuppressLint("NotifyDataSetChanged")
+    fun changeData(newFriend : List<FriendModel?>?){
         friendsList = newFriend
         notifyDataSetChanged()
     }
