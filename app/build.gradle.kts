@@ -65,6 +65,8 @@ dependencies {
     //image slider
     implementation("com.github.denzcoskun:ImageSlideshow:0.1.2")
 
+    //swipe for refresh
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     // Glide
     implementation("com.github.bumptech.glide:glide:4.16.0")
     implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.8.0"))

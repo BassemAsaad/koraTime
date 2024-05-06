@@ -35,7 +35,7 @@ class AddStadiumViewModel : BasicViewModel<AddStadiumNavigator>() {
                 userManager = DataUtils.user!!.id,
                 stadiumImageUrl = imageUrl.value,
                 opening = openingTime.value,
-                closing = closingTime.value,
+                closing = closingTime.value!! + openingTime.value!!,
                 latitude = latitudeLiveData.value,
                 longitude = longitudeLiveData.value,
                 address = addressLiveData.value

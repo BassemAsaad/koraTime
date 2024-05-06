@@ -111,6 +111,32 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
 
 
 
+        dataBinding.swipeRefresh.setOnRefreshListener {
+            dataBinding.swipeRefresh.isRefreshing = false
+            getMultipleImageFromFirestore(
+                stadiumID = stadiumModel.stadiumID!!,
+                onSuccessListener = {urls->
+                    slideImageList.clear()
+                    slideImageList.addAll(urls)
+                    Log.e("Firebase"," List of $urls")
+                    val imageList = ArrayList<SlideModel>()
+                    for ( i in slideImageList ){
+                        imageList.add(SlideModel(i, ""))
+                    }
+
+                    if (imageList.isNotEmpty()){
+                        dataBinding.stadiumImages.visibility = View.VISIBLE
+                        dataBinding.imageSlider.visibility = View.VISIBLE
+                        dataBinding.imageSlider.setImageList(imageList, ScaleTypes.FIT)
+                    }
+
+                },
+                onFailureListener = {
+                    Log.e("Firebase","Failed To get Images From firestore")
+                }
+            )
+        }
+
         getMultipleImageFromFirestore(
             stadiumID = stadiumModel.stadiumID!!,
             onSuccessListener = {urls->
