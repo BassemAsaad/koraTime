@@ -31,19 +31,6 @@
                 tools:listitem="@layout/item_public_rooms" />
 
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/createRoom_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="20dp"
-                android:layout_marginBottom="20dp"
-                android:backgroundTint="@color/primary"
-                android:contentDescription="Create Room"
-                android:onClick="@{()->vm.createRoom()}"
-                android:src="@drawable/ic_add"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:shapeAppearance="@style/Theme.AppCompat.Light" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

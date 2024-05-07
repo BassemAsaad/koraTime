@@ -52,14 +52,6 @@
                 app:layout_constraintStart_toEndOf="@id/roomImage_item"
                 app:layout_constraintTop_toTopOf="@id/roomImage_item"
                 tools:text="Room Name" />
-            <ImageView
-                android:id="@+id/remove_room"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:src="@drawable/ic_remove"
-                />
 
             <TextView
                 android:id="@+id/roomDescription_item"

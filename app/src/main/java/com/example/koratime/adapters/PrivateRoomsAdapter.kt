@@ -6,7 +6,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.koratime.R
 import com.example.koratime.databinding.ItemPrivateRoomsBinding
-import com.example.koratime.databinding.ItemPublicRoomsBinding
 import com.example.koratime.model.RoomModel
 
 class PrivateRoomsAdapter (var rooms : List<RoomModel?>?): RecyclerView.Adapter<PrivateRoomsAdapter.ViewHolder>() {
@@ -23,7 +22,7 @@ class PrivateRoomsAdapter (var rooms : List<RoomModel?>?): RecyclerView.Adapter<
 
         val dataBinding : ItemPrivateRoomsBinding =
             DataBindingUtil.inflate(LayoutInflater.from(parent.context)
-                ,R.layout.item_public_rooms, parent,false)
+                ,R.layout.item_private_rooms, parent,false)
 
         return ViewHolder(dataBinding)
 
@@ -38,7 +37,7 @@ class PrivateRoomsAdapter (var rooms : List<RoomModel?>?): RecyclerView.Adapter<
         val room = rooms!![position]
         holder.bind(room)
 
-        holder.dataBinding.joinButton.setOnClickListener {
+        holder.itemView.setOnClickListener {
             onItemClickListener?.onItemClick(room,position,holder)
         }
 

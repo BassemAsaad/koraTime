@@ -84,10 +84,6 @@ class PublicRoomsFragment : Fragment(), PublicRoomsNavigator {
     }//end init
 
 
-    override fun openAddRoomActivity() {
-            val intent = Intent(requireContext(), AddRoomActivity::class.java)
-            startActivity(intent)
-    }
 
     override fun onStart() {
         super.onStart()

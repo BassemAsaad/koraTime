@@ -22,8 +22,6 @@ class PublicRoomsViewModel : BasicViewModel<PublicRoomsNavigator>() {
     }
 
 
-    fun createRoom(){
-        navigator?.openAddRoomActivity()
-    }
+
 
 }

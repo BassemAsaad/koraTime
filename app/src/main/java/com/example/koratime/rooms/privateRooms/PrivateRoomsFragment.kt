@@ -57,8 +57,6 @@ class PrivateRoomsFragment : Fragment(), PrivateRoomsNavigator {
         dataBinding.vm = viewModel
         viewModel.navigator=this
 
-
-
         dataBinding.recyclerView.adapter = adapter
 
         adapter.onItemClickListener = object : PrivateRoomsAdapter.OnItemClickListener{
@@ -68,11 +66,24 @@ class PrivateRoomsFragment : Fragment(), PrivateRoomsNavigator {
                 position: Int,
                 holder: PrivateRoomsAdapter.ViewHolder
             ) {
+                holder.dataBinding.removeRoom.setOnClickListener {
+                    removeRoomFromFirestore(
+                        roomId = room!!.id!!,
+                        onSuccessListener = {
+                            Log.e("Firebase"," Room Removed Successfully")
+                        },
+                        onFailureListener = {
+                            Log.e("Firebase","Error Removing Room")
+
+                        }
+                    )
+
+                }
+
                 viewModel.roomPassword.value = room?.password
                 viewModel.password.value = holder.dataBinding.roomPasswordLayout.editText?.text.toString()
                 val intent = Intent(requireContext(),RoomChatActivity::class.java)
                 intent.putExtra(Constants.ROOM,room)
-
                 if (room!!.password!=null){
                     if (viewModel.checkRoomPassword() ) {
 
@@ -96,7 +107,8 @@ class PrivateRoomsFragment : Fragment(), PrivateRoomsNavigator {
 
     override fun onStart() {
         super.onStart()
-        getAllRoomsFromFirestore(
+        getUserRoomsFromFirestore(
+            userId = DataUtils.user!!.id!!,
             onSuccessListener = {querySnapShot->
                 val rooms = querySnapShot.toObjects(RoomModel::class.java)
                 adapter.changeData(rooms)

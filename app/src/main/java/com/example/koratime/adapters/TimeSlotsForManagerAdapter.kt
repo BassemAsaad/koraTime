@@ -29,13 +29,13 @@ class TimeSlotsForManagerAdapter (private  var timeSlots: List<String>, private 
 
             if (isBooked) {
                 // Slot is already booked
-                dataBinding.tvTimeSlot.isEnabled=false
+                dataBinding.tvTimeSlot.isEnabled=true
                 dataBinding.tvTimeSlot.setTextColor((Color.GRAY))
                 dataBinding.btnBook.isEnabled=false
                 dataBinding.btnBook.text= "Booked"
                 dataBinding.btnBook.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
             } else{
-                dataBinding.tvTimeSlot.isEnabled=true
+                dataBinding.tvTimeSlot.isEnabled=false
                 dataBinding.tvTimeSlot.setTextColor((Color.BLACK))
                 dataBinding.btnBook.isEnabled=true
                 dataBinding.btnBook.text= "Book"
@@ -63,7 +63,7 @@ class TimeSlotsForManagerAdapter (private  var timeSlots: List<String>, private 
         val timeSlot = timeSlots[position]
         val bookedSlot = bookedTimesList
         holder.bind(timeSlot, bookedSlot)
-        holder.dataBinding.btnBook.setOnClickListener {
+        holder.itemView.setOnClickListener {
             onBookClickListener?.onclick(timeSlot, holder, position)
         }
 

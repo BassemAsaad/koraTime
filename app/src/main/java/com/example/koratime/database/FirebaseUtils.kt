@@ -212,7 +212,7 @@ fun getMultipleImagesFromFirestore(stadiumID: String,
                                    onFailureListener: OnFailureListener) {
     val db = Firebase.firestore
     val stadiumImagesRef = db.collection(StadiumModel.COLLECTION_NAME).document(stadiumID)
-        .collection(StadiumModel.COLLECTION_IMAGES).document("imageLinks")
+        .collection(StadiumModel.COLLECTION_IMAGES).document("ImageLinks")
     stadiumImagesRef.get()
         .addOnSuccessListener { documentSnapshot ->
             if (documentSnapshot.exists()) {

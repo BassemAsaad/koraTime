@@ -23,6 +23,7 @@ import com.example.koratime.database.addBookingToFirestore
 import com.example.koratime.database.deleteStadiumFromFirestore
 import com.example.koratime.database.getBookedTimesFromFirestore
 import com.example.koratime.database.getMultipleImagesFromFirestore
+import com.example.koratime.database.removeBookingFromFirestore
 import com.example.koratime.database.uploadMultipleImagesToStorage
 import com.example.koratime.databinding.ActivityManageStadiumBinding
 import com.example.koratime.model.StadiumModel
@@ -93,27 +94,54 @@ class ManageStadiumActivity : BasicActivity<ActivityManageStadiumBinding,ManageS
         adapter.onBookClickListener = object : TimeSlotsForManagerAdapter.OnBookClickListener {
             @SuppressLint("SetTextI18n")
             override fun onclick(slot: String, holder: TimeSlotsForManagerAdapter.ViewHolder, position: Int) {
-                addBookingToFirestore(timeSlot = holder.dataBinding.tvTimeSlot.text.toString(),
-                    stadiumID = stadiumModel.stadiumID!!,
-                    date = selectedDate, userId = DataUtils.user!!.id!!,
-                    onSuccessListener = {
+                holder.dataBinding.tvTimeSlot.setOnLongClickListener {
+                    removeBookingFromFirestore(
+                        timeSlot= holder.dataBinding.tvTimeSlot.text.toString(),
+                        stadiumID = stadiumModel.stadiumID!!,
+                        date = selectedDate,
+                        onSuccessListener = {
+                            Log.e("Firebase"," Book has been Removed successfully")
+                            holder.dataBinding.tvTimeSlot.isEnabled=true
+                            holder.dataBinding.tvTimeSlot.setTextColor((Color.BLACK))
+                            holder.dataBinding.btnBook.isEnabled=true
+                            holder.dataBinding.btnBook.text= "Book"
+                            holder.dataBinding.btnBook.backgroundTintList = null
+                            Toast.makeText(this@ManageStadiumActivity,"${holder.dataBinding.tvTimeSlot.text} Book Removed Successfully", Toast.LENGTH_SHORT).show()
+                            getBookedTimes(selectedDate)
+                        },
+                        onFailureListener = {
+                            Log.e("Firebase"," Book is not found")
+                            getBookedTimes(selectedDate)
 
-                        holder.dataBinding.tvTimeSlot.isEnabled=false
-                        holder.dataBinding.tvTimeSlot.setTextColor((Color.GRAY))
-                        holder.dataBinding.btnBook.isEnabled=false
-                        holder.dataBinding.btnBook.text= "Booked"
-                        holder.dataBinding.btnBook.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
+                        }
 
+                    )
+                    true
+                }
 
-                        Log.e("Firebase"," ${holder.dataBinding.tvTimeSlot.text} booked on  $selectedDate from userId: ${DataUtils.user!!.id!!} to the stadiumID: ${stadiumModel.stadiumID}")
-                        Toast.makeText(this@ManageStadiumActivity,"${holder.dataBinding.tvTimeSlot.text} Booked Successfully", Toast.LENGTH_SHORT).show()
+                holder.dataBinding.btnBook.setOnClickListener {
+                    addBookingToFirestore(
+                        timeSlot = holder.dataBinding.tvTimeSlot.text.toString(),
+                        stadiumID = stadiumModel.stadiumID!!,
+                        date = selectedDate, userId = DataUtils.user!!.id!!,
+                        onSuccessListener = {
 
-                        getBookedTimes(selectedDate)
+                            holder.dataBinding.tvTimeSlot.isEnabled=false
+                            holder.dataBinding.tvTimeSlot.setTextColor((Color.GRAY))
+                            holder.dataBinding.btnBook.isEnabled=false
+                            holder.dataBinding.btnBook.text= "Booked"
+                            holder.dataBinding.btnBook.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
 
-                    },
-                    onFailureListener = {e->
-                        Log.e("Firebase"," Error:  ${holder.dataBinding.tvTimeSlot.text} booked on  $selectedDate from userId: ${DataUtils.user!!.id!!} ",e) }
-                )
+                            Log.e("Firebase"," ${holder.dataBinding.tvTimeSlot.text} booked on  $selectedDate from userId: ${DataUtils.user!!.id!!} to the stadiumID: ${stadiumModel.stadiumID}")
+                            Toast.makeText(this@ManageStadiumActivity,"${holder.dataBinding.tvTimeSlot.text} Booked Successfully", Toast.LENGTH_SHORT).show()
+                            getBookedTimes(selectedDate)
+
+                        },
+                        onFailureListener = {e->
+                            Log.e("Firebase"," Error:  ${holder.dataBinding.tvTimeSlot.text} booked on  $selectedDate from userId: ${DataUtils.user!!.id!!} ",e) }
+                    )
+                }
+
 
             }
         }
@@ -185,6 +213,7 @@ class ManageStadiumActivity : BasicActivity<ActivityManageStadiumBinding,ManageS
 
                 }
             )
+
         }
     }
 
