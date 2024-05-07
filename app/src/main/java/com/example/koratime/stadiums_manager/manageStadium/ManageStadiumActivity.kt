@@ -73,9 +73,6 @@ class ManageStadiumActivity : BasicActivity<ActivityManageStadiumBinding,ManageS
         // Enable back button on Toolbar and title
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
-        // Enable title on Toolbar
-        supportActionBar?.title = stadiumModel.stadiumName + " Stadium"
-        supportActionBar?.setDisplayShowTitleEnabled(true)
 
         //select date
         selectedDate = SimpleDateFormat("MM_dd_yyyy", Locale.getDefault()).format(Date())

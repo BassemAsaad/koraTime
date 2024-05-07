@@ -28,7 +28,7 @@
                 android:id="@+id/app_bar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/primary"
+                android:background="@drawable/shape_tab_indicator"
                 android:elevation="0dp"
                 android:fitsSystemWindows="true">
 
@@ -37,24 +37,23 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
                     <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:paddingHorizontal="15dp"
-                        android:layout_marginTop="15dp"
+                        android:layout_gravity="end"
+                        android:paddingEnd="5dp"
+                        android:paddingStart="2dp"
                         >
 
                         <TextView
                             android:id="@+id/delete_stadiun"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:textSize="16sp"
-                            android:layout_marginEnd="8dp"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            android:text="Delete Stadium "
+                            android:text="Delete Stadium"
                             android:drawableEnd="@drawable/ic_remove"
-                            android:drawablePadding="5dp"
                             android:gravity="center"
                             android:textColor="@color/black"
                             />

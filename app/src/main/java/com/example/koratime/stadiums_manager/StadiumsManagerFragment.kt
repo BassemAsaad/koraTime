@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.example.koratime.Constants
 import com.example.koratime.DataUtils
 import com.example.koratime.R
@@ -17,6 +18,7 @@ import com.example.koratime.adapters.StadiumsAdapter
 import com.example.koratime.database.getUserStadiumFromFirestore
 import com.example.koratime.databinding.FragmentStadiumsManagerBinding
 import com.example.koratime.model.StadiumModel
+import com.example.koratime.registration.log_in.LoginActivity
 import com.example.koratime.stadiums_manager.createStadium.AddStadiumActivity
 import com.example.koratime.stadiums_manager.manageStadium.ManageStadiumActivity
 
@@ -63,13 +65,20 @@ class StadiumsManagerFragment : Fragment(),StadiumsManagerNavigator{
             }
         }
 
+        Glide.with(requireContext())
+            .load(DataUtils.user!!.profilePicture)
+            .into(dataBinding.profilePicture)
+
+        dataBinding.userName.text = DataUtils.user!!.userName
+
     }
 
-    override fun addStadiumActivity() {
-
-    }
     override fun createStadiumActivity() {
         val intent = Intent(requireContext(), AddStadiumActivity::class.java)
+        startActivity(intent)
+    }
+    override fun Logout() {
+        val intent  = Intent(requireContext(), LoginActivity::class.java)
         startActivity(intent)
     }
     override fun onStart() {
