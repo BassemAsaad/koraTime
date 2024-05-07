@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.koratime.Constants
 import com.example.koratime.R
-import com.example.koratime.adapters.RoomsAdapter
+import com.example.koratime.adapters.PublicRoomsAdapter
 import com.example.koratime.database.getAllRoomsFromFirestore
 import com.example.koratime.databinding.FragmentPublicRoomsBinding
 import com.example.koratime.rooms.createRoom.AddRoomActivity
@@ -23,7 +23,7 @@ class PublicRoomsFragment : Fragment(), PublicRoomsNavigator {
 
     private lateinit var dataBinding : FragmentPublicRoomsBinding
     private lateinit var viewModel : PublicRoomsViewModel
-    private val adapter = RoomsAdapter(null)
+    private val adapter = PublicRoomsAdapter(null)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -56,12 +56,12 @@ class PublicRoomsFragment : Fragment(), PublicRoomsNavigator {
 
          dataBinding.recyclerView.adapter = adapter
 
-         adapter.onItemClickListener = object : RoomsAdapter.OnItemClickListener{
+         adapter.onItemClickListener = object : PublicRoomsAdapter.OnItemClickListener{
              @SuppressLint("SuspiciousIndentation")
              override fun onItemClick(
                  room: RoomModel?,
                  position: Int,
-                 holder: RoomsAdapter.ViewHolder
+                 holder: PublicRoomsAdapter.ViewHolder
              ) {
                  viewModel.roomPassword.value = room?.password
                  viewModel.password.value = holder.dataBinding.roomPasswordLayout.editText?.text.toString()

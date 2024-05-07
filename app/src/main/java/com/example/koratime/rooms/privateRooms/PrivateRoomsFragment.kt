@@ -14,11 +14,12 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.koratime.Constants
 import com.example.koratime.DataUtils
 import com.example.koratime.R
-import com.example.koratime.adapters.RoomsAdapter
+import com.example.koratime.adapters.PrivateRoomsAdapter
+import com.example.koratime.adapters.PublicRoomsAdapter
 import com.example.koratime.database.getAllRoomsFromFirestore
+import com.example.koratime.database.removeRoomFromFirestore
 import com.example.koratime.database.getUserRoomsFromFirestore
 import com.example.koratime.databinding.FragmentPrivateRoomsBinding
-import com.example.koratime.databinding.FragmentPublicRoomsBinding
 import com.example.koratime.rooms.createRoom.AddRoomActivity
 import com.example.koratime.model.RoomModel
 import com.example.koratime.rooms.room_chat.RoomChatActivity
@@ -27,7 +28,7 @@ class PrivateRoomsFragment : Fragment(), PrivateRoomsNavigator {
 
     private lateinit var dataBinding : FragmentPrivateRoomsBinding
     private lateinit var viewModel : PrivateRoomsViewModel
-    private val adapter = RoomsAdapter(null)
+    private val adapter = PrivateRoomsAdapter(null)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,61 +53,59 @@ class PrivateRoomsFragment : Fragment(), PrivateRoomsNavigator {
 
 
 
-     fun initView() {
-         dataBinding.vm = viewModel
-         viewModel.navigator=this
+    fun initView() {
+        dataBinding.vm = viewModel
+        viewModel.navigator=this
 
-         dataBinding.recyclerView.adapter = adapter
 
-         adapter.onItemClickListener = object : RoomsAdapter.OnItemClickListener{
-             @SuppressLint("SuspiciousIndentation")
-             override fun onItemClick(
-                 room: RoomModel?,
-                 position: Int,
-                 holder: RoomsAdapter.ViewHolder
-             ) {
-                 viewModel.roomPassword.value = room?.password
-                 viewModel.password.value = holder.dataBinding.roomPasswordLayout.editText?.text.toString()
-                 val intent = Intent(requireContext(),RoomChatActivity::class.java)
-                 intent.putExtra(Constants.ROOM,room)
 
-                 if (room!!.password!=null){
-                     if (viewModel.checkRoomPassword() ) {
+        dataBinding.recyclerView.adapter = adapter
 
-                         startActivity(intent)
-                     } else {
-                         holder.dataBinding.roomPasswordLayout.error = viewModel.passwordError.value
-                     }
-                 }else{
-                     startActivity(intent)
-                 }
+        adapter.onItemClickListener = object : PrivateRoomsAdapter.OnItemClickListener{
+            @SuppressLint("SuspiciousIndentation")
+            override fun onItemClick(
+                room: RoomModel?,
+                position: Int,
+                holder: PrivateRoomsAdapter.ViewHolder
+            ) {
+                viewModel.roomPassword.value = room?.password
+                viewModel.password.value = holder.dataBinding.roomPasswordLayout.editText?.text.toString()
+                val intent = Intent(requireContext(),RoomChatActivity::class.java)
+                intent.putExtra(Constants.ROOM,room)
 
-             }
-         }
+                if (room!!.password!=null){
+                    if (viewModel.checkRoomPassword() ) {
+
+                        startActivity(intent)
+                    } else {
+                        holder.dataBinding.roomPasswordLayout.error = viewModel.passwordError.value
+                    }
+                }else{
+                    startActivity(intent)
+                }
+
+            }
+        }
     }//end init
 
 
     override fun openAddRoomActivity() {
-            val intent = Intent(requireContext(), AddRoomActivity::class.java)
-            startActivity(intent)
+        val intent = Intent(requireContext(), AddRoomActivity::class.java)
+        startActivity(intent)
     }
 
     override fun onStart() {
         super.onStart()
-        getUserRoomsFromFirestore(
-            userId = DataUtils.user!!.id!!,
+        getAllRoomsFromFirestore(
             onSuccessListener = {querySnapShot->
                 val rooms = querySnapShot.toObjects(RoomModel::class.java)
                 adapter.changeData(rooms)
-                Log.e("Firebase"," Private rooms loaded successfully ")
-
             }
-            , onFailureListener = {e->
-                Log.e("Firebase"," Private rooms error: ",e)
+            , onFailureListener = {
+                Toast.makeText(requireContext(), it.localizedMessage, Toast.LENGTH_SHORT).show()
             }
         )
     }
-
 
 
 }

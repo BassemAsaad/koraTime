@@ -20,6 +20,7 @@ import com.example.koratime.R
 import com.example.koratime.adapters.TimeSlotsForManagerAdapter
 import com.example.koratime.basic.BasicActivity
 import com.example.koratime.database.addBookingToFirestore
+import com.example.koratime.database.deleteStadiumFromFirestore
 import com.example.koratime.database.getBookedTimesFromFirestore
 import com.example.koratime.database.getMultipleImagesFromFirestore
 import com.example.koratime.database.uploadMultipleImagesToStorage
@@ -173,6 +174,18 @@ class ManageStadiumActivity : BasicActivity<ActivityManageStadiumBinding,ManageS
         }
 
 
+        dataBinding.deleteStadiun.setOnClickListener {
+            deleteStadiumFromFirestore(
+                stadiumID = stadiumModel.stadiumID!!,
+                onSuccessListener = {
+                    Log.e("Firebase "," Stadium Removed Successfully from firestore")
+                },
+                onFailureListener = {
+                    Log.e("Firebase ","Error Removing Stadium from firestore")
+
+                }
+            )
+        }
     }
 
     private fun getBookedTimes(date: String) {

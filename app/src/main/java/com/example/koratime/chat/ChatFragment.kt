@@ -15,6 +15,9 @@ import com.example.koratime.R
 import com.example.koratime.adapters.FriendsAdapter
 import com.example.koratime.chat.chat_friends.ChatFriendsActivity
 import com.example.koratime.database.getFriendsFromFirestore
+import com.example.koratime.database.removeFriendRequestWithRequestID
+import com.example.koratime.database.removeFriendRequestWithoutRequestID
+import com.example.koratime.database.updateFriendshipStatusToFalse
 import com.example.koratime.databinding.FragmentChatBinding
 import com.example.koratime.model.FriendModel
 
@@ -59,6 +62,29 @@ class ChatFragment : Fragment(),ChatNavigator {
                 val intent = Intent(requireContext(),ChatFriendsActivity::class.java)
                 intent.putExtra(Constants.FRIEND,user)
                 startActivity(intent)
+
+                holder.dataBinding.removeFriend.setOnClickListener {
+                    updateFriendshipStatusToFalse(
+                        senderID = DataUtils.user!!.id!!,
+                        receiverID = user!!.friendID!!,
+                        friendshipID=user.friendshipID!!,
+                        onSuccessListener = {
+                            removeFriendRequestWithoutRequestID(
+                                sender = DataUtils.user!!.id!!,
+                                receiver = user.friendID!!, onSuccessListener = {
+                                    Log.e("Firebase","Friend Removed Successfully")
+
+                                }, onFailureListener = {
+                                    Log.e("Firebase","Error Removing Friend")
+
+                                })
+                        },
+                        onFailureListener = {
+
+                        }
+                    )
+                }
+
             }
         }
     }

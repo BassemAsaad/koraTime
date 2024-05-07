@@ -35,11 +35,12 @@ class AddFriendsAdapter  (private var usersList : List<UserModel?>?, private val
                         "accepted" -> {
                             dataBinding.addFriendButtonItem.text = "Friends"
                             dataBinding.addFriendButtonItem.isEnabled = false
-                            dataBinding.removeFriendButtonItem.isEnabled = true
+                            dataBinding.removeFriendButtonItem.isEnabled = false
                         }
                         else -> {
                             dataBinding.addFriendButtonItem.text = "Add Friend"
                             dataBinding.addFriendButtonItem.isEnabled = true
+                            dataBinding.removeFriendButtonItem.isEnabled = false
                         }
                     }
 

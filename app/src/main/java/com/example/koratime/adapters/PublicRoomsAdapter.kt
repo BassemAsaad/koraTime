@@ -5,12 +5,12 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.koratime.R
-import com.example.koratime.databinding.ItemRoomsBinding
+import com.example.koratime.databinding.ItemPublicRoomsBinding
 import com.example.koratime.model.RoomModel
 
-class RoomsAdapter (var rooms : List<RoomModel?>?): RecyclerView.Adapter<RoomsAdapter.ViewHolder>() {
+class PublicRoomsAdapter (var rooms : List<RoomModel?>?): RecyclerView.Adapter<PublicRoomsAdapter.ViewHolder>() {
 
-    inner class ViewHolder(val dataBinding :ItemRoomsBinding): RecyclerView.ViewHolder(dataBinding.root){
+    inner class ViewHolder(val dataBinding :ItemPublicRoomsBinding): RecyclerView.ViewHolder(dataBinding.root){
         fun bind(room : RoomModel?){
             dataBinding.roomModel = room
             dataBinding.invalidateAll()
@@ -20,9 +20,9 @@ class RoomsAdapter (var rooms : List<RoomModel?>?): RecyclerView.Adapter<RoomsAd
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
-        val dataBinding : ItemRoomsBinding =
+        val dataBinding : ItemPublicRoomsBinding =
             DataBindingUtil.inflate(LayoutInflater.from(parent.context)
-                ,R.layout.item_rooms, parent,false)
+                ,R.layout.item_public_rooms, parent,false)
 
         return ViewHolder(dataBinding)
 
