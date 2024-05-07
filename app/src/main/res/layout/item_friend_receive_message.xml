@@ -44,21 +44,26 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="Hi Ahmed, this is me i love biasda sdasnj kndlf,g " />
+                tools:text="Hi Ahmed " />
 
             <!-- Text view for the time of the message -->
             <TextView
                 android:id="@+id/message_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="5dp"
                 android:text="@{messageModel.formatTime()}"
                 android:textColor="#CCFFFFFF"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.933"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/message_content"
-                tools:text="3:18 PM" />
+                app:layout_constraintVertical_bias="0.0"
+                tools:text="3:18 PM"
+                android:paddingHorizontal="10dp"
+                android:layout_marginVertical="5dp"
+                />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

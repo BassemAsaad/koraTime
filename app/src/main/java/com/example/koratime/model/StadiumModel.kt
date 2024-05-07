@@ -20,5 +20,7 @@ data class StadiumModel(
     companion object {
         const val COLLECTION_NAME = "Stadiums"
         const val COLLECTION_IMAGES = "StadiumImages"
+        const val COLLECTION_FIND_PLAYERS= "AddPlayers"
+
     }
 }

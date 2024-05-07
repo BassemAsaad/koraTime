@@ -11,6 +11,7 @@ data class RoomModel(
     val password :String?=null,
     val imageUrl :String?=null,
     val userManager: String? =null,
+    val playerIds:List<String>?=null,
     val createdTimestamp: Long? = System.currentTimeMillis()
 ) : Parcelable { companion object {
         const val COLLECTION_NAME = "Rooms"

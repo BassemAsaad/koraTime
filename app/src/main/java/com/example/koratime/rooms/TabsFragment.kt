@@ -45,6 +45,7 @@ class TabsFragment : Fragment() {
             tab.text = when (position) {
                 0 -> "Public Rooms"
                 1 -> "Private Rooms"
+                2 -> "Stadium Rooms"
                 else -> null
             }
         }.attach()

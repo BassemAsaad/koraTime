@@ -57,6 +57,8 @@ class AddRoomActivity : BasicActivity< ActivityAddRoomBinding, AddRoomViewModel>
     private fun openImagePicker(){
         // Registers a photo picker activity launcher in single-select mode.
          pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+             viewModel.showLoading.value = true
+
             // photo picker
             if (uri != null) {
                 Log.d("PhotoPicker", "Selected URI: $uri")
@@ -65,10 +67,12 @@ class AddRoomActivity : BasicActivity< ActivityAddRoomBinding, AddRoomViewModel>
                         Log.e("Firebase Storage:", "Image uploaded successfully")
                         // pass imageUrl to view model
                         viewModel.imageUrl.value = downloadUri.toString()
+                        viewModel.showLoading.value = false
 
                     },
                     onFailureListener = {
                         Log.e("Firebase Storage:", it.localizedMessage!!.toString())
+                        viewModel.showLoading.value = false
 
                     }
                 )
@@ -79,6 +83,8 @@ class AddRoomActivity : BasicActivity< ActivityAddRoomBinding, AddRoomViewModel>
                 dataBinding.roomImageTextLayout.text = "Default Picture"
                 Toast.makeText(this, "No image selected", Toast.LENGTH_SHORT).show()
                 Log.d("PhotoPicker", "No image selected")
+                viewModel.showLoading.value = false
+
             }
         }
     }

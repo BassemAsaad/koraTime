@@ -78,6 +78,7 @@
                 android:layout_marginVertical="5dp"
                 tools:text="Bassem Asaad"
                 android:layout_marginHorizontal="5dp"
+                android:paddingHorizontal="15dp"
                 />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
@@ -19,6 +20,8 @@ import com.example.koratime.basic.BasicActivity
 import com.example.koratime.database.addBookingToFirestore
 import com.example.koratime.database.getBookedTimesFromFirestore
 import com.example.koratime.database.getMultipleImagesFromFirestore
+import com.example.koratime.database.playerDocumentExists
+import com.example.koratime.database.removePlayer
 import com.example.koratime.databinding.ActivityBookingStadiumBinding
 import com.example.koratime.model.StadiumModel
 import java.text.SimpleDateFormat
@@ -48,6 +51,7 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
         super.onCreate(savedInstanceState)
         initView()
     }
+    @SuppressLint("SetTextI18n")
     override fun initView() {
         viewModel.navigator=this
         dataBinding.vm = viewModel
@@ -161,6 +165,44 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
                 Log.e("Firebase","Failed To get Images From firestore")
             }
         )
+
+
+        playerDocumentExists(
+            stadiumID = stadiumModel!!.stadiumID!!,
+            userID = DataUtils.user!!.id!!,
+            onSuccessListener = {playerExist->
+                if (playerExist){
+                    dataBinding.lookForPlayers.text = "Looking For Players..."
+                    dataBinding.lookForPlayers.isEnabled = false
+                    dataBinding.stopSearching.visibility = View.VISIBLE
+                } else{
+                    dataBinding.lookForPlayers.text = "Click To Search For Players"
+                    dataBinding.lookForPlayers.isEnabled = true
+                    dataBinding.stopSearching.visibility = View.GONE
+                }
+                Log.e("Firebase ","Player Exist ? $playerExist")
+            },
+            onFailureListener = {e->
+                Log.e("Firebase ","Error Finding The player: ",e)
+
+            }
+        )
+        dataBinding.stopSearching.setOnClickListener {
+            removePlayer(
+                stadiumID = stadiumModel.stadiumID!!,
+                userID = DataUtils.user!!.id!!,
+                onSuccessListener = {
+                    Log.e("Firebase","Player Removed From Search Successfully")
+                    dataBinding.stopSearching.visibility = View.GONE
+                    dataBinding.lookForPlayers.text = "Click To Search For Players"
+                    dataBinding.lookForPlayers.isEnabled=true
+                },
+                onFailureListener = {e->
+                    Log.e("Firebase","Error Removing Player From Search: ",e)
+                }
+            )
+        }
+
 
     }
 

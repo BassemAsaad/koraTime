@@ -15,9 +15,8 @@ import com.example.koratime.R
 import com.example.koratime.adapters.FriendsAdapter
 import com.example.koratime.chat.chat_friends.ChatFriendsActivity
 import com.example.koratime.database.getFriendsFromFirestore
-import com.example.koratime.database.removeFriendRequestWithRequestID
 import com.example.koratime.database.removeFriendRequestWithoutRequestID
-import com.example.koratime.database.updateFriendshipStatusToFalse
+import com.example.koratime.database.removeFriendFromFirestore
 import com.example.koratime.databinding.FragmentChatBinding
 import com.example.koratime.model.FriendModel
 
@@ -64,7 +63,7 @@ class ChatFragment : Fragment(),ChatNavigator {
                 startActivity(intent)
 
                 holder.dataBinding.removeFriend.setOnClickListener {
-                    updateFriendshipStatusToFalse(
+                    removeFriendFromFirestore(
                         senderID = DataUtils.user!!.id!!,
                         receiverID = user!!.friendID!!,
                         friendshipID=user.friendshipID!!,

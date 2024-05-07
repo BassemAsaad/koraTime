@@ -18,6 +18,7 @@ import com.example.koratime.adapters.StadiumsAdapter
 import com.example.koratime.database.getAllStadiumsFromFirestore
 import com.example.koratime.databinding.FragmentStadiumsBinding
 import com.example.koratime.model.StadiumModel
+import com.example.koratime.registration.log_in.LoginActivity
 import com.example.koratime.stadiums_user.bookStadium.BookingStadiumActivity
 
 class StadiumsFragment : Fragment(),StadiumNavigator {
@@ -68,7 +69,10 @@ class StadiumsFragment : Fragment(),StadiumNavigator {
 
     }
 
-
+    override fun Logout() {
+        val intent  = Intent(requireContext(),LoginActivity::class.java)
+        startActivity(intent)
+    }
     override fun onStart() {
         super.onStart()
 

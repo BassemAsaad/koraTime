@@ -46,8 +46,7 @@ fun getUserFromFirestore(uid: String?,
 
 fun getUsersFromFirestore(currentUserId: String?,
                           onSuccessListener: OnSuccessListener<QuerySnapshot>,
-                          onFailureListener: OnFailureListener)
-{
+                          onFailureListener: OnFailureListener) {
     val db = Firebase.firestore
     val collection =db.collection(UserModel.COLLECTION_NAME)
     collection
@@ -56,7 +55,6 @@ fun getUsersFromFirestore(currentUserId: String?,
         .addOnSuccessListener(onSuccessListener)
         .addOnFailureListener(onFailureListener)
 }
-
 
 fun updateUserLocationInFirestore(userId: String,
                                   latitude: Double,
@@ -86,6 +84,7 @@ fun addRoomToFirestore(room:RoomModel,
         .addOnSuccessListener(onSuccessListener)
         .addOnFailureListener(onFailureListener)
 }
+
 fun removeRoomFromFirestore(roomId: String,
                             onSuccessListener: OnSuccessListener<Void>,
                             onFailureListener: OnFailureListener) {
@@ -96,6 +95,7 @@ fun removeRoomFromFirestore(roomId: String,
         .addOnSuccessListener(onSuccessListener)
         .addOnFailureListener(onFailureListener)
 }
+
 fun getAllRoomsFromFirestore(onSuccessListener: OnSuccessListener<QuerySnapshot>,
                              onFailureListener: OnFailureListener) {
     val db = Firebase.firestore
@@ -106,6 +106,7 @@ fun getAllRoomsFromFirestore(onSuccessListener: OnSuccessListener<QuerySnapshot>
         .addOnSuccessListener(onSuccessListener)
         .addOnFailureListener(onFailureListener)
 }
+
 fun getUserRoomsFromFirestore(userId: String,
                               onSuccessListener: OnSuccessListener<QuerySnapshot>,
                               onFailureListener: OnFailureListener) {
@@ -119,10 +120,41 @@ fun getUserRoomsFromFirestore(userId: String,
         .addOnFailureListener(onFailureListener)
 }
 
-fun addRoomMessageToFirestore(
-    message: RoomMessageModel,
-    onSuccessListener: OnSuccessListener<Void>,
-    onFailureListener: OnFailureListener){
+fun addStadiumRoomToFirestore(stadium: StadiumModel,
+                              playerIds:List<String>,
+                              onSuccessListener: OnSuccessListener<Void>,
+                              onFailureListener: OnFailureListener) {
+
+    val room = RoomModel(
+        name = StadiumModel.COLLECTION_NAME,
+        description = "10 players are added to this room only the 10 players can see the room",
+        imageUrl = stadium.stadiumImageUrl,
+        playerIds = playerIds
+    )
+    val db = Firebase.firestore
+    val collection = db.collection(RoomModel.COLLECTION_NAME)
+    val document = collection.document()
+    room.id = document.id
+    document.set(room)
+        .addOnSuccessListener(onSuccessListener)
+        .addOnFailureListener(onFailureListener)
+}
+
+fun getStadiumRoomFromFirestore(playerID:String,
+                                onSuccessListener: OnSuccessListener<QuerySnapshot>,
+                                onFailureListener: OnFailureListener) {
+
+    val db = Firebase.firestore
+    val collection = db.collection(RoomModel.COLLECTION_NAME)
+    val query = collection.whereArrayContains("playerIds", playerID)
+    query.get()
+        .addOnSuccessListener(onSuccessListener)
+        .addOnFailureListener(onFailureListener)
+}
+
+fun addRoomMessageToFirestore(message: RoomMessageModel,
+                              onSuccessListener: OnSuccessListener<Void>,
+                              onFailureListener: OnFailureListener){
 
     val db = Firebase.firestore
     val collection = db.collection(RoomModel.COLLECTION_NAME)
@@ -134,6 +166,7 @@ fun addRoomMessageToFirestore(
         .addOnSuccessListener(onSuccessListener)
         .addOnFailureListener(onFailureListener)
 }
+
 fun getRoomMessagesFromFirestore(roomId : String): CollectionReference {
     val db = Firebase.firestore
     val roomRef = db.collection(RoomModel.COLLECTION_NAME)
@@ -141,6 +174,7 @@ fun getRoomMessagesFromFirestore(roomId : String): CollectionReference {
 
     return roomRef.collection(RoomMessageModel.COLLECTION_NAME)
 }
+
 fun uploadImageToStorage(imageUri: Uri?,
                          onSuccessListener: OnSuccessListener<Uri>,
                          onFailureListener: OnFailureListener) {
@@ -164,8 +198,10 @@ fun uploadImageToStorage(imageUri: Uri?,
     }
 }
 
-
-fun uploadMultipleImagesToStorage(uris: List<Uri>, stadiumID: String, onSuccessListener: OnSuccessListener<List<String>>, onFailureListener: OnFailureListener) {
+fun uploadMultipleImagesToStorage(uris: List<Uri>,
+                                  stadiumID: String,
+                                  onSuccessListener: OnSuccessListener<List<String>>,
+                                  onFailureListener: OnFailureListener) {
     val imageUrls = mutableListOf<String>()
     val storageRef = Firebase.storage.reference
     val imagesRef = storageRef.child("stadiums/$stadiumID")
@@ -191,6 +227,7 @@ fun uploadMultipleImagesToStorage(uris: List<Uri>, stadiumID: String, onSuccessL
     }
 
 }
+
 fun addMultipleImagesToFirestore(imageUris: List<String>,
                                  stadiumID:String,
                                  onSuccessListener: OnSuccessListener<Void>,
@@ -237,7 +274,7 @@ fun addFriendRequestToFirestore(sender: String,
                                 senderUserName : String?, onSuccessListener: OnSuccessListener<Void>,
                                 onFailureListener: OnFailureListener) {
 
-    val request = FriendRequestModel(
+    val requestSender = FriendRequestModel(
         senderID = sender,
         receiverID = receiver,
         status = "pending",
@@ -260,21 +297,21 @@ fun addFriendRequestToFirestore(sender: String,
         .collection(FriendRequestModel.COLLECTION_NAME_SENDER)
         .document(requestId)
     // set id
-    request.requestID = requestId
+    requestSender.requestID = requestId
 
     // batch write can improve performance and reduce the risk of data inconsistency.
     val batch = db.batch()
-    batch.set(senderRef, request)
-    batch.set(receiverRef, request)
+    batch.set(senderRef, requestSender)
+    batch.set(receiverRef, requestSender)
 
     batch.commit()
         .addOnSuccessListener(onSuccessListener)
         .addOnFailureListener(onFailureListener)
 }
 
-fun checkFriendRequestStatusFromFirestore(sender: String,
-                                          receiver: String,
-                                          callback: (String) -> Unit ) {
+fun checkFriendRequestStatusFromFirestoreSender(sender: String,
+                                                receiver: String,
+                                                callback: (String) -> Unit ) {
     val db = Firebase.firestore
     val receiverRef = db.collection(UserModel.COLLECTION_NAME)
     receiverRef
@@ -308,7 +345,42 @@ fun checkFriendRequestStatusFromFirestore(sender: String,
             callback("error")
         }
 }
-
+fun checkFriendRequestStatusFromFirestoreReceiver(currentUser: String,
+                                                senderID: String,
+                                                callback: (String) -> Unit ) {
+    val db = Firebase.firestore
+    val receiverRef = db.collection(UserModel.COLLECTION_NAME)
+    receiverRef
+        .document(currentUser)
+        .collection(FriendRequestModel.COLLECTION_NAME_RECEIVER)
+        .whereEqualTo("senderID", senderID)
+        .whereEqualTo("receiverID", currentUser)
+        .get()
+        .addOnSuccessListener { querySnapshot ->
+            if (!querySnapshot.isEmpty) {
+                // Iterate over the documents in the query snapshot
+                for (document in querySnapshot.documents) {
+                    // Get the status of the friend request
+                    val status = document.getString("status")
+                    if (status == "pending") {
+                        // callback function to handle the result of the asynchronous operation.
+                        callback("pending")
+                    } else if (status == "accepted") {
+                        callback("accepted")
+                    }
+                }
+            }
+            else {
+                // No friend request found
+                callback("not_pending")
+            }
+        }
+        .addOnFailureListener { e ->
+            // Error handling
+            Log.e("Firestore", "Error checking friend request status", e)
+            callback("error")
+        }
+}
 fun getFriendRequestsFromFirestore(receiver: String,
                                    onSuccessListener: OnSuccessListener<QuerySnapshot>,
                                    onFailureListener: OnFailureListener){
@@ -321,34 +393,6 @@ fun getFriendRequestsFromFirestore(receiver: String,
         .addOnSuccessListener(onSuccessListener)
         .addOnFailureListener(onFailureListener)
 
-}
-
-fun updateFriendRequestStatusToAccepted(sender: String,
-                                        receiver: String,
-                                        requestId: String,
-                                        onSuccessListener: OnSuccessListener<Void>,
-                                        onFailureListener: OnFailureListener) {
-
-    val db = Firebase.firestore
-    // create a unique ID for the friend request
-    val receiverRef = db.collection(UserModel.COLLECTION_NAME)
-        .document(receiver)
-        .collection(FriendRequestModel.COLLECTION_NAME_RECEIVER)
-        .document(requestId)
-    // Add the friend request to senderUser
-    val senderRef = db.collection(UserModel.COLLECTION_NAME)
-        .document(sender)
-        .collection(FriendRequestModel.COLLECTION_NAME_SENDER)
-        .document(requestId)
-
-    // batch write can improve performance and reduce the risk of data inconsistency.
-    val batch = db.batch()
-    batch.update(senderRef, "status", "accepted")
-    batch.update(receiverRef, "status", "accepted")
-
-    batch.commit()
-        .addOnSuccessListener(onSuccessListener)
-        .addOnFailureListener(onFailureListener)
 }
 
 fun acceptFriendRequest(sender: FriendRequestModel,
@@ -408,6 +452,34 @@ fun acceptFriendRequest(sender: FriendRequestModel,
         .addOnFailureListener(onFailureListener)
 }
 
+fun updateFriendRequestStatusToAccepted(sender: String,
+                                        receiver: String,
+                                        requestId: String,
+                                        onSuccessListener: OnSuccessListener<Void>,
+                                        onFailureListener: OnFailureListener) {
+
+    val db = Firebase.firestore
+    // create a unique ID for the friend request
+    val receiverRef = db.collection(UserModel.COLLECTION_NAME)
+        .document(receiver)
+        .collection(FriendRequestModel.COLLECTION_NAME_RECEIVER)
+        .document(requestId)
+    // Add the friend request to senderUser
+    val senderRef = db.collection(UserModel.COLLECTION_NAME)
+        .document(sender)
+        .collection(FriendRequestModel.COLLECTION_NAME_SENDER)
+        .document(requestId)
+
+    // batch write can improve performance and reduce the risk of data inconsistency.
+    val batch = db.batch()
+    batch.update(senderRef, "status", "accepted")
+    batch.update(receiverRef, "status", "accepted")
+
+    batch.commit()
+        .addOnSuccessListener(onSuccessListener)
+        .addOnFailureListener(onFailureListener)
+}
+
 fun getFriendsFromFirestore(userID:String,
                             onSuccessListener: OnSuccessListener<QuerySnapshot>,
                             onFailureListener: OnFailureListener){
@@ -422,6 +494,7 @@ fun getFriendsFromFirestore(userID:String,
         .addOnFailureListener(onFailureListener)
 
 }
+
 fun removeFriendRequestWithoutRequestID(sender: String,
                                         receiver: String,
                                         onSuccessListener: OnSuccessListener<Void>,
@@ -458,42 +531,6 @@ fun removeFriendRequestWithoutRequestID(sender: String,
 
 }
 
-fun updateFriendshipStatusToFalse(senderID: String,
-                                  receiverID: String,
-                                  friendshipID: String,
-                                  onSuccessListener: OnSuccessListener<Void>,
-                                  onFailureListener: OnFailureListener) {
-    val db = Firebase.firestore
-
-    // Get a reference to the friendship document for the sender
-    val senderFriendRef = db.collection(UserModel.COLLECTION_NAME)
-        .document(senderID)
-        .collection(FriendModel.COLLECTION_NAME)
-        .document(friendshipID)
-
-    // Get a reference to the friendship document for the receiver
-    val receiverFriendRef = db.collection(UserModel.COLLECTION_NAME)
-        .document(receiverID)
-        .collection(FriendModel.COLLECTION_NAME)
-        .document(friendshipID)
-
-    // Create a map of the updated fields
-    val updates = hashMapOf<String, Any>(
-        "friendshipStatus" to false
-    )
-
-    // Batch write can improve performance and reduce the risk of data inconsistency.
-    val batch = db.batch()
-    batch.update(senderFriendRef, updates)
-    batch.update(receiverFriendRef, updates)
-
-
-    batch.commit()
-        .addOnSuccessListener(onSuccessListener
-
-        )
-        .addOnFailureListener(onFailureListener)
-}
 fun removeFriendRequestWithRequestID(sender: String,
                                      receiver: String,
                                      request: String,
@@ -518,6 +555,35 @@ fun removeFriendRequestWithRequestID(sender: String,
     batch.delete(senderRef)
     batch.delete(receiverRef)
 
+    batch.commit()
+        .addOnSuccessListener(onSuccessListener)
+        .addOnFailureListener(onFailureListener)
+}
+
+fun removeFriendFromFirestore(senderID: String,
+                              receiverID: String,
+                              friendshipID: String,
+                              onSuccessListener: OnSuccessListener<Void>,
+                              onFailureListener: OnFailureListener) {
+    val db = Firebase.firestore
+
+    // Get a reference to the friendship document for the sender
+    val senderFriendRef = db.collection(UserModel.COLLECTION_NAME)
+        .document(senderID)
+        .collection(FriendModel.COLLECTION_NAME)
+        .document(friendshipID)
+
+    // Get a reference to the friendship document for the receiver
+    val receiverFriendRef = db.collection(UserModel.COLLECTION_NAME)
+        .document(receiverID)
+        .collection(FriendModel.COLLECTION_NAME)
+        .document(friendshipID)
+
+
+    // Batch write can improve performance and reduce the risk of data inconsistency.
+    val batch = db.batch()
+    batch.delete(senderFriendRef)
+    batch.delete(receiverFriendRef)
     batch.commit()
         .addOnSuccessListener(onSuccessListener)
         .addOnFailureListener(onFailureListener)
@@ -559,7 +625,9 @@ fun addFriendMessageToFirestore(
         .addOnFailureListener(onFailureListener)
 
 }
-fun getFriendMessagesFromFirestore(senderID: String, friendshipID: String): Query {
+
+fun getFriendMessagesFromFirestore(senderID: String,
+                                   friendshipID: String): Query {
     val db = Firebase.firestore
 
     val senderRef = db.collection(UserModel.COLLECTION_NAME)
@@ -571,6 +639,7 @@ fun getFriendMessagesFromFirestore(senderID: String, friendshipID: String): Quer
     return senderRef.collection(FriendMessageModel.COLLECTION_NAME)
         .orderBy("dateTime",Query.Direction.ASCENDING)
 }
+
 fun getLastMessageFromFirestore(userID:String,
                                 friendshipID: String,
                                 onSuccessListener: OnSuccessListener<String>,
@@ -597,7 +666,6 @@ fun getLastMessageFromFirestore(userID:String,
 
 }
 
-
 fun addStadiumToFirestore(stadium:StadiumModel,
                           onSuccessListener: OnSuccessListener<Void>,
                           onFailureListener: OnFailureListener) {
@@ -609,16 +677,7 @@ fun addStadiumToFirestore(stadium:StadiumModel,
         .addOnSuccessListener(onSuccessListener)
         .addOnFailureListener(onFailureListener)
 }
-fun deleteStadiumFromFirestore(stadiumID: String,
-                               onSuccessListener: OnSuccessListener<Void>,
-                               onFailureListener: OnFailureListener) {
-    val db = Firebase.firestore
-    val collection = db.collection(StadiumModel.COLLECTION_NAME)
-    val document = collection.document(stadiumID)
-    document.delete()
-        .addOnSuccessListener(onSuccessListener)
-        .addOnFailureListener(onFailureListener)
-}
+
 fun getAllStadiumsFromFirestore(onSuccessListener: OnSuccessListener<QuerySnapshot>,
                                 onFailureListener: OnFailureListener) {
     val db = Firebase.firestore
@@ -642,6 +701,16 @@ fun getUserStadiumFromFirestore(userId: String?,
         .addOnFailureListener(onFailureListener)
 }
 
+fun deleteStadiumFromFirestore(stadiumID: String,
+                               onSuccessListener: OnSuccessListener<Void>,
+                               onFailureListener: OnFailureListener) {
+    val db = Firebase.firestore
+    val collection = db.collection(StadiumModel.COLLECTION_NAME)
+    val document = collection.document(stadiumID)
+    document.delete()
+        .addOnSuccessListener(onSuccessListener)
+        .addOnFailureListener(onFailureListener)
+}
 
 fun addBookingToFirestore(timeSlot: String,
                           stadiumID:String,
@@ -667,6 +736,7 @@ fun addBookingToFirestore(timeSlot: String,
         .addOnSuccessListener(onSuccessListener)
         .addOnFailureListener(onFailureListener)
 }
+
 fun removeBookingFromFirestore(timeSlot: String,
                                stadiumID: String,
                                date: String,
@@ -686,7 +756,11 @@ fun removeBookingFromFirestore(timeSlot: String,
         .addOnSuccessListener(onSuccessListener)
         .addOnFailureListener(onFailureListener)
 }
-fun getBookedTimesFromFirestore(stadiumID: String, date: String, onSuccessListener: OnSuccessListener<List<String>>, onFailureListener: OnFailureListener) {
+
+fun getBookedTimesFromFirestore(stadiumID: String,
+                                date: String,
+                                onSuccessListener: OnSuccessListener<List<String>>,
+                                onFailureListener: OnFailureListener) {
     val db = Firebase.firestore
     val slotsRef = db.collection(StadiumModel.COLLECTION_NAME).document(stadiumID)
         .collection("bookings")
@@ -700,6 +774,168 @@ fun getBookedTimesFromFirestore(stadiumID: String, date: String, onSuccessListen
                 slotNames.add(document.id)
             }
             onSuccessListener.onSuccess(slotNames)
+        }
+        .addOnFailureListener(onFailureListener)
+}
+
+fun playerDocumentExists(stadiumID: String,
+                         userID: String,
+                         onSuccessListener: OnSuccessListener<Boolean>,
+                         onFailureListener: OnFailureListener) {
+    // Get a reference to the Firestore database
+    val db = Firebase.firestore
+
+    // Get a reference to the PlayersCounter document
+    val findPlayersRef = db.collection(StadiumModel.COLLECTION_NAME).document(stadiumID)
+        .collection(StadiumModel.COLLECTION_FIND_PLAYERS).document("PlayersCounter")
+
+    // Get the PlayersCounter document
+    findPlayersRef.get()
+        .addOnSuccessListener { document ->
+            // Check if the PlayersCounter document exists
+            if (document.exists()) {
+                // Get a reference to the player document
+                val playerRef = findPlayersRef.collection("Players").document(userID)
+
+                // Get the player document
+                playerRef.get()
+                    .addOnSuccessListener { playerDocument ->
+                        // Check if the player document exists
+                        if (playerDocument.exists()) {
+                            // Call the onSuccessListener with true to indicate that the player document exists
+                            onSuccessListener.onSuccess(true)
+                        } else {
+                            // Call the onSuccessListener with false to indicate that the player document does not exist
+                            onSuccessListener.onSuccess(false)
+                        }
+                    }
+                    .addOnFailureListener(onFailureListener)
+            } else {
+                // Call the onSuccessListener with false to indicate that the player document does not exist
+                onSuccessListener.onSuccess(false)
+            }
+        }
+        .addOnFailureListener(onFailureListener)
+}
+
+fun setPlayerDataAndUpdateCounter(stadiumID: String,
+                                  userID: String,
+                                  onSuccessListener: OnSuccessListener<Void>,
+                                  onFailureListener: OnFailureListener) {
+    val db = Firebase.firestore
+    val findPlayersRef = db.collection(StadiumModel.COLLECTION_NAME).document(stadiumID)
+        .collection(StadiumModel.COLLECTION_FIND_PLAYERS).document("PlayersCounter")
+
+    findPlayersRef.get()
+        .addOnSuccessListener { document ->
+            if (document.exists()) {
+                val count = document.getLong("count") ?:0
+                val playerRef = findPlayersRef.collection("Players").document(userID)
+                playerRef.set(hashMapOf("userID" to userID))
+                    .addOnSuccessListener {
+                        findPlayersRef.update("count", count + 1)
+                            .addOnSuccessListener(onSuccessListener)
+                            .addOnFailureListener(onFailureListener)
+                    }.addOnFailureListener(onFailureListener)
+
+            } else {
+                val playerRef = findPlayersRef.collection("Players").document(userID)
+                playerRef.set(hashMapOf("userID" to userID))
+                    .addOnSuccessListener {
+                        findPlayersRef.set(hashMapOf("count" to 1))
+                            .addOnSuccessListener(onSuccessListener)
+                            .addOnFailureListener(onFailureListener)
+                    }
+                    .addOnFailureListener(onFailureListener)
+
+            }
+        }
+        .addOnFailureListener(onFailureListener)
+}
+
+fun checkCounterInFirestore(stadiumID: String,
+                            onSuccessListener: OnSuccessListener<Boolean>,
+                            onFailureListener: OnFailureListener) {
+    val db = Firebase.firestore
+    val findPlayersRef = db.collection(StadiumModel.COLLECTION_NAME).document(stadiumID)
+        .collection(StadiumModel.COLLECTION_FIND_PLAYERS).document("PlayersCounter")
+
+    findPlayersRef.get()
+        .addOnSuccessListener { document ->
+            if (document.exists()) {
+                val count = document.getLong("count") ?: 0
+                onSuccessListener.onSuccess(count.toInt() == 3)
+            } else {
+                onSuccessListener.onSuccess(false)
+            }
+        }
+        .addOnFailureListener { exception ->
+            onFailureListener.onFailure(exception)
+        }
+}
+
+fun getPlayersIdListFromFirestore(stadiumID: String,
+                                  onSuccessListener: OnSuccessListener<List<String>>,
+                                  onFailureListener: OnFailureListener) {
+    val db = Firebase.firestore
+    val playersCounterRef = db.collection(StadiumModel.COLLECTION_NAME).document(stadiumID)
+        .collection(StadiumModel.COLLECTION_FIND_PLAYERS).document("PlayersCounter")
+        .collection("Players")
+
+    playersCounterRef.get()
+        .addOnSuccessListener { documents ->
+            val playerIDs = documents.map { it.id }
+            onSuccessListener.onSuccess(playerIDs)
+        }
+        .addOnFailureListener { exception ->
+            onFailureListener.onFailure(exception)
+        }
+}
+
+fun resetCounterAndRemovePlayers(stadiumID: String,
+                                 onSuccessListener: OnSuccessListener<String>,
+                                 onFailureListener: OnFailureListener) {
+    val db = Firebase.firestore
+    val findPlayersRef = db.collection(StadiumModel.COLLECTION_NAME).document(stadiumID)
+        .collection(StadiumModel.COLLECTION_FIND_PLAYERS)
+        .document("PlayersCounter")
+    val playersRef = findPlayersRef.collection("Players")
+
+
+    findPlayersRef.update("count", 0)
+        .addOnSuccessListener {
+            playersRef.get()
+                .addOnSuccessListener {querySnapshot ->
+                    querySnapshot.documents.forEach{
+                        onSuccessListener.onSuccess(it.id)
+                        it.reference.delete()
+                    }
+                }.addOnFailureListener(onFailureListener)
+        }
+        .addOnFailureListener(onFailureListener)
+}
+fun removePlayer(stadiumID: String,
+                 userID: String,
+                 onSuccessListener: OnSuccessListener<Void>, onFailureListener: OnFailureListener) {
+    val db = Firebase.firestore
+    val findPlayersRef = db.collection(StadiumModel.COLLECTION_NAME).document(stadiumID)
+        .collection(StadiumModel.COLLECTION_FIND_PLAYERS).document("PlayersCounter")
+
+    findPlayersRef.get()
+        .addOnSuccessListener { document ->
+            if (document.exists()) {
+                val count = document.getLong("count") ?:0
+                val playerRef = findPlayersRef.collection("Players").document(userID)
+                playerRef.delete()
+                    .addOnSuccessListener {
+                        findPlayersRef.update("count", count - 1)
+                            .addOnSuccessListener(onSuccessListener)
+                            .addOnFailureListener(onFailureListener)
+                    }
+                    .addOnFailureListener(onFailureListener)
+            } else {
+                onFailureListener.onFailure(Exception("PlayersCounter document does not exist"))
+            }
         }
         .addOnFailureListener(onFailureListener)
 }
