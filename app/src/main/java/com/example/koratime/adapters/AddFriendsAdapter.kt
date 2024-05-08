@@ -62,7 +62,6 @@ class AddFriendsAdapter  (private var usersList : List<UserModel?>?, private val
                     }
                 }
             }
-
         }
     }
 

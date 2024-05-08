@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
@@ -21,7 +22,7 @@ import com.example.koratime.model.StadiumModel
 import com.example.koratime.registration.log_in.LoginActivity
 import com.example.koratime.stadiums_user.bookStadium.BookingStadiumActivity
 
-class StadiumsFragment : Fragment(),StadiumNavigator {
+class StadiumsFragment : Fragment(),StadiumsNavigator {
 
     lateinit var dataBinding : FragmentStadiumsBinding
     lateinit var viewModel : StadiumsViewModel
@@ -51,6 +52,13 @@ class StadiumsFragment : Fragment(),StadiumNavigator {
         viewModel.navigator=this
         dataBinding.recyclerView.adapter = adapter
 
+        Glide.with(requireContext())
+            .load(DataUtils.user!!.profilePicture)
+            .into(dataBinding.profilePicture)
+
+        dataBinding.userName.text = DataUtils.user!!.userName
+
+
         adapter.onItemClickListener = object :StadiumsAdapter.OnItemClickListener{
             override fun onItemClick(stadium: StadiumModel?, position: Int) {
                 val intent = Intent(requireContext(), BookingStadiumActivity::class.java)
@@ -58,12 +66,19 @@ class StadiumsFragment : Fragment(),StadiumNavigator {
                 startActivity(intent)
             }
         }
+        // filter stadiums for search
+        dataBinding.searchStadiums.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                // Handle query submission if needed
+                return true
+            }
 
-        Glide.with(requireContext())
-            .load(DataUtils.user!!.profilePicture)
-            .into(dataBinding.profilePicture)
+            override fun onQueryTextChange(newText: String): Boolean {
+                adapter.filterUsers(newText)
+                return true
+            }
+        })
 
-        dataBinding.userName.text = DataUtils.user!!.userName
 
 
 

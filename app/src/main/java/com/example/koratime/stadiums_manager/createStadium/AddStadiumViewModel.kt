@@ -15,6 +15,10 @@ class AddStadiumViewModel : BasicViewModel<AddStadiumNavigator>() {
     val stadiumNameError = ObservableField<String>()
     val description = ObservableField<String>()
     val descriptionError = ObservableField<String>()
+
+    val number = ObservableField<String>()
+    val numberError = ObservableField<String>()
+
     val imageError = ObservableField<String>()
     val imageUrl = MutableLiveData<String>()
 
@@ -31,6 +35,7 @@ class AddStadiumViewModel : BasicViewModel<AddStadiumNavigator>() {
             val stadium= StadiumModel(
                 stadiumName = stadiumName.get(),
                 stadiumDescription = description.get(),
+                stadiumNumber = number.get(),
                 userManager = DataUtils.user!!.id,
                 stadiumImageUrl = imageUrl.value,
                 opening = openingTime.value,
@@ -81,6 +86,14 @@ class AddStadiumViewModel : BasicViewModel<AddStadiumNavigator>() {
             valid=false
         } else{
             descriptionError.set(null)
+        }
+        if (number.get().isNullOrBlank()){
+            numberError.set("Please enter the stadium number")
+            valid=false
+        } else if (number.get()!!.length < 11){
+            numberError.set("stadium number is wrong")
+        } else{
+            numberError.set(null)
         }
         if ( imageUrl.value==null){
             imageError.set("Add The Stadium Image")

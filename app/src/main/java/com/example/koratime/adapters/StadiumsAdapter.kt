@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.koratime.R
 import com.example.koratime.databinding.ItemStadiumsBinding
 import com.example.koratime.model.StadiumModel
+import com.example.koratime.model.UserModel
 
 class StadiumsAdapter (var stadiumsList : List<StadiumModel?>?): RecyclerView.Adapter<StadiumsAdapter.ViewHolder>() {
 
@@ -50,5 +51,24 @@ class StadiumsAdapter (var stadiumsList : List<StadiumModel?>?): RecyclerView.Ad
     }
 
 
+    private var originalUsersList: List<StadiumModel?>? = null
+    fun filterUsers(query: String) {
+        if (originalUsersList == null) {
+            originalUsersList = stadiumsList
+        }
 
+        val filteredList = mutableListOf<StadiumModel?>()
+
+        if (query.isEmpty()) {
+            filteredList.addAll(originalUsersList ?: emptyList())
+        } else {
+            originalUsersList?.forEach { stadium ->
+                if (stadium?.stadiumName?.contains(query, ignoreCase = true) == true) {
+                    filteredList.add(stadium)
+                }
+            }
+        }
+
+        changeData(filteredList)
+    }
 }

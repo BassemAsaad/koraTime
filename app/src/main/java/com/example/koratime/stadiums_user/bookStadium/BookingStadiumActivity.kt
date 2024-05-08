@@ -1,14 +1,17 @@
 package com.example.koratime.stadiums_user.bookStadium
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
 import com.denzcoskun.imageslider.constants.ScaleTypes
 import com.denzcoskun.imageslider.models.SlideModel
@@ -63,6 +66,7 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
 
         stadiumModel = intent.getParcelableExtra(Constants.STADIUM_USER)!!
         viewModel.stadium = stadiumModel
+        dataBinding.stadiumNumber.text = stadiumModel.stadiumNumber
 
         setSupportActionBar(dataBinding.toolbar)
         // Enable back button on Toolbar and title
@@ -203,8 +207,27 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
             )
         }
 
+        dataBinding.stadiumLocation.setOnClickListener {
+            showLocation(stadiumModel.latitude!!,stadiumModel.longitude!!)
+        }
+
 
     }
+
+
+    private fun showLocation(lat: Double, lng: Double) {
+        val location = "My Location"
+        val url = "geo:$lat,$lng?q=$lat,$lng($location)"
+        val pushIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        pushIntent.setPackage("com.google.android.apps.maps")
+        if (pushIntent.resolveActivity(this.packageManager) != null) {
+            startActivity(pushIntent)
+        } else {
+            val map = "https://www.google.com/maps/search/?api=1&query=$lat,$lng"
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(map)))
+        }
+    }
+
 
     private fun getAvailableTimes(date: String) {
         getBookedTimesFromFirestore(

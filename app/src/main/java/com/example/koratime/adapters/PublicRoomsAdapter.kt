@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.koratime.R
 import com.example.koratime.databinding.ItemPublicRoomsBinding
 import com.example.koratime.model.RoomModel
+import com.example.koratime.model.StadiumModel
 
 class PublicRoomsAdapter (var rooms : List<RoomModel?>?): RecyclerView.Adapter<PublicRoomsAdapter.ViewHolder>() {
 
@@ -55,5 +56,27 @@ class PublicRoomsAdapter (var rooms : List<RoomModel?>?): RecyclerView.Adapter<P
     var onItemClickListener : OnItemClickListener?=null
     interface OnItemClickListener{
         fun onItemClick(room : RoomModel?, position: Int,holder:ViewHolder)
+    }
+
+
+    private var originalUsersList: List<RoomModel?>? = null
+    fun filterUsers(query: String) {
+        if (originalUsersList == null) {
+            originalUsersList = rooms
+        }
+
+        val filteredList = mutableListOf<RoomModel?>()
+
+        if (query.isEmpty()) {
+            filteredList.addAll(originalUsersList ?: emptyList())
+        } else {
+            originalUsersList?.forEach { room ->
+                if (room?.name?.contains(query, ignoreCase = true) == true) {
+                    filteredList.add(room)
+                }
+            }
+        }
+
+        changeData(filteredList)
     }
 }

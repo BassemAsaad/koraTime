@@ -8,6 +8,7 @@ data class StadiumModel(
     var stadiumID: String?=null,
     val stadiumName: String?=null,
     val stadiumDescription: String?=null,
+    val stadiumNumber:String?=null,
     val stadiumImageUrl :String?=null,
     val userManager: String? =null,
     val opening : Int ?=null,

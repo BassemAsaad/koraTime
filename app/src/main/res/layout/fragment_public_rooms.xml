@@ -14,26 +14,35 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/searchRooms"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginHorizontal="10dp"
+            android:background="@drawable/shape_rounded_search"
+            app:iconifiedByDefault="false"
+            app:queryHint="Search For Public Rooms"
+            android:layout_gravity="center"
+            android:layout_marginVertical="20dp"
+            />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="match_parent"
                 android:backgroundTint="@color/primary"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:spanCount="2"
                 tools:listitem="@layout/item_public_rooms" />
 
+        </LinearLayout>
 
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

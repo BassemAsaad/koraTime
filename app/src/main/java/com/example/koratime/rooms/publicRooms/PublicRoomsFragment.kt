@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -81,6 +82,22 @@ class PublicRoomsFragment : Fragment(), PublicRoomsNavigator {
 
              }
          }
+
+
+
+
+         // filter rooms for search
+         dataBinding.searchRooms.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+             override fun onQueryTextSubmit(query: String): Boolean {
+                 // Handle query submission if needed
+                 return true
+             }
+
+             override fun onQueryTextChange(newText: String): Boolean {
+                 adapter.filterUsers(newText)
+                 return true
+             }
+         })
     }//end init
 
 
