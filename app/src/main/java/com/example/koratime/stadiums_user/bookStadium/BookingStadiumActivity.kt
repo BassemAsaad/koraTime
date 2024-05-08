@@ -6,12 +6,10 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Toast
-import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
 import com.denzcoskun.imageslider.constants.ScaleTypes
 import com.denzcoskun.imageslider.models.SlideModel
@@ -62,11 +60,11 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
         dataBinding.stadiumImages.visibility =View.GONE
 
         dataBinding.calendarView.minDate = System.currentTimeMillis()
-        dataBinding.calendarView.startAnimation(AnimationUtils.loadAnimation(this, androidx.appcompat.R.anim.abc_popup_enter))
+        dataBinding.calendarView.startAnimation(AnimationUtils.loadAnimation(this, com.google.android.material.R.anim.abc_popup_enter))
 
         stadiumModel = intent.getParcelableExtra(Constants.STADIUM_USER)!!
         viewModel.stadium = stadiumModel
-        dataBinding.stadiumNumber.text = stadiumModel.stadiumNumber
+        dataBinding.stadiumNumber.text = stadiumModel.stadiumTelephoneNumber
 
         setSupportActionBar(dataBinding.toolbar)
         // Enable back button on Toolbar and title
@@ -211,7 +209,7 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
             showLocation(stadiumModel.latitude!!,stadiumModel.longitude!!)
         }
 
-
+        dataBinding.bookingPrice.text = "Note: Booking Price is ${stadiumModel.stadiumPrice}EGP (per hour)"
     }
 
 

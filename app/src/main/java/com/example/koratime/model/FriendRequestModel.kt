@@ -10,7 +10,7 @@ data class FriendRequestModel(
     val sentAt : Long?= System.currentTimeMillis()
 ){
     companion object{
-        const val COLLECTION_NAME_SENDER = "AddedFriends"
-        const val COLLECTION_NAME_RECEIVER = "PendingFriends"
+        const val SUB_COLLECTION_NAME_SENDER = "AddedFriends"
+        const val SUB_COLLECTION_NAME_RECEIVER = "PendingFriends"
     }
 }

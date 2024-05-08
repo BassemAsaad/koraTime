@@ -56,7 +56,9 @@ class BookingStadiumViewModel : BasicViewModel<BookingStadiumNavigator>() {
                                     getPlayersIdListFromFirestore(
                                         stadiumID = stadium!!.stadiumID!!,
                                         onSuccessListener = {playersIDs->
-                                            Log.e("Firebase"," PlayersIDs $playersIDs")
+                                            var playerIdsAndManger = playersIDs.toMutableList()
+                                            playerIdsAndManger.add(stadium!!.userManager!!)
+                                            Log.e("Firebase"," PlayersIDs $playerIdsAndManger")
                                             addStadiumRoomToFirestore(
                                                 stadium!!,
                                                 playersIDs,

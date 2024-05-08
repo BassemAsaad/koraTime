@@ -5,13 +5,13 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class RoomModel(
-    var id: String?=null,
+    var roomID: String?=null,
     val name: String?=null,
     val description: String?=null,
     val password :String?=null,
     val imageUrl :String?=null,
     val userManager: String? =null,
-    val playerIds:List<String>?=null,
+    val playersId:List<String>?=null,
     val createdTimestamp: Long? = System.currentTimeMillis()
 ) : Parcelable { companion object {
         const val COLLECTION_NAME = "Rooms"

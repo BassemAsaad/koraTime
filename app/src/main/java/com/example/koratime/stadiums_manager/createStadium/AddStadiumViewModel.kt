@@ -13,11 +13,15 @@ class AddStadiumViewModel : BasicViewModel<AddStadiumNavigator>() {
 
     val stadiumName = ObservableField<String>()
     val stadiumNameError = ObservableField<String>()
+
     val description = ObservableField<String>()
     val descriptionError = ObservableField<String>()
 
     val number = ObservableField<String>()
     val numberError = ObservableField<String>()
+
+    val price = ObservableField<String>()
+    val priceError = ObservableField<String>()
 
     val imageError = ObservableField<String>()
     val imageUrl = MutableLiveData<String>()
@@ -35,7 +39,8 @@ class AddStadiumViewModel : BasicViewModel<AddStadiumNavigator>() {
             val stadium= StadiumModel(
                 stadiumName = stadiumName.get(),
                 stadiumDescription = description.get(),
-                stadiumNumber = number.get(),
+                stadiumTelephoneNumber = number.get(),
+                stadiumPrice = price.get(),
                 userManager = DataUtils.user!!.id,
                 stadiumImageUrl = imageUrl.value,
                 opening = openingTime.value,
@@ -90,10 +95,20 @@ class AddStadiumViewModel : BasicViewModel<AddStadiumNavigator>() {
         if (number.get().isNullOrBlank()){
             numberError.set("Please enter the stadium number")
             valid=false
-        } else if (number.get()!!.length < 11){
-            numberError.set("stadium number is wrong")
-        } else{
+        } else if (number.get()!!.length < 12){
+            valid=false
+            numberError.set("stadium telephone number is wrong")
+        } else {
             numberError.set(null)
+        }
+        if (price.get().isNullOrBlank()){
+            priceError.set("Please enter the stadium price per hour")
+            valid=false
+        } else if (price.get()!!.length < 4){
+            valid=false
+            priceError.set("stadium price should be realistic")
+        } else {
+            priceError.set(null)
         }
         if ( imageUrl.value==null){
             imageError.set("Add The Stadium Image")

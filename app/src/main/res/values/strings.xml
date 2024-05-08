@@ -42,6 +42,8 @@
     <string name="stadium_available_times">Stadium Available Times</string>
     <string name="search_for_people">search for people</string>
     <string name="chat">Chat</string>
+    <string name="enter_stadium_price_per_hour">Enter Stadium Price (Per Hour)</string>
+    <string name="add_your_stadium">Add Your Stadium</string>
 
     <string-array name="time_slots">
         <item> 12PM</item>

@@ -15,8 +15,6 @@ import com.example.koratime.Constants
 import com.example.koratime.DataUtils
 import com.example.koratime.R
 import com.example.koratime.adapters.PrivateRoomsAdapter
-import com.example.koratime.adapters.PublicRoomsAdapter
-import com.example.koratime.database.getAllRoomsFromFirestore
 import com.example.koratime.database.removeRoomFromFirestore
 import com.example.koratime.database.getUserRoomsFromFirestore
 import com.example.koratime.databinding.FragmentPrivateRoomsBinding
@@ -68,7 +66,7 @@ class PrivateRoomsFragment : Fragment(), PrivateRoomsNavigator {
             ) {
                 holder.dataBinding.removeRoom.setOnClickListener {
                     removeRoomFromFirestore(
-                        roomId = room!!.id!!,
+                        roomId = room!!.roomID!!,
                         onSuccessListener = {
                             Log.e("Firebase"," Room Removed Successfully")
                         },

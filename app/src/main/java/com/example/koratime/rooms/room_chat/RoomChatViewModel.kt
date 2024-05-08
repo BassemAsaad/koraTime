@@ -18,7 +18,7 @@ class RoomChatViewModel : BasicViewModel<RoomChatNavigator>() {
     fun sendMessage(){
         val roomMessageModel = RoomMessageModel(
             content = messageField.get(),
-            roomID = room?.id,
+            roomID = room?.roomID,
             senderID = DataUtils.user?.id,
             senderName =DataUtils.user?.userName,
             dateTime = Date().time

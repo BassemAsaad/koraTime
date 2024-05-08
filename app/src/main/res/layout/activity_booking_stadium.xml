@@ -96,17 +96,19 @@
                                 android:id="@+id/stadium_number_textView"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Contact with stadium manager: "
+                                android:text="Contact with the stadium manager: "
                                 android:textSize="16sp"
                                 android:paddingVertical="15dp"
                                 android:layout_marginTop="10dp"
                                 android:layout_marginBottom="5dp"
                                 android:drawablePadding="5dp"
                                 android:textColor="@color/black"
+                                style="@style/TextAppearance.MaterialComponents.Subtitle1"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 android:gravity="center"
+                                android:layout_marginStart="5dp"
                                 />
 
                             <TextView
@@ -200,6 +202,17 @@
                             android:layout_marginVertical="20dp"
                             android:text="@string/stadium_available_times"
                             android:textSize="20sp" />
+                        <TextView
+                            android:id="@+id/bookingPrice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:layout_marginVertical="20dp"
+                            android:text="Note: Booking Price is 880EGP (per hour)"
+                            android:textSize="20sp"
+                            android:layout_marginStart="5dp"
+                            />
+
 
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/recyclerView"

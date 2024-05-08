@@ -11,6 +11,7 @@ import com.example.koratime.R
 import com.example.koratime.database.getLastMessageFromFirestore
 import com.example.koratime.databinding.ItemFriendsBinding
 import com.example.koratime.model.FriendModel
+import com.example.koratime.model.UserModel
 
 class FriendsAdapter  (var friendsList : List<FriendModel?>?): RecyclerView.Adapter<FriendsAdapter.ViewHolder>()  {
     class ViewHolder(val dataBinding : ItemFriendsBinding): RecyclerView.ViewHolder(dataBinding.root){
@@ -62,6 +63,27 @@ class FriendsAdapter  (var friendsList : List<FriendModel?>?): RecyclerView.Adap
     fun changeData(newFriend : List<FriendModel?>?){
         friendsList = newFriend
         notifyDataSetChanged()
+    }
+
+    private var originalUsersList: List<FriendModel?>? = null
+    fun filterUsers(query: String) {
+        if (originalUsersList == null) {
+            originalUsersList = friendsList
+        }
+
+        val filteredList = mutableListOf<FriendModel?>()
+
+        if (query.isEmpty()) {
+            filteredList.addAll(originalUsersList ?: emptyList())
+        } else {
+            originalUsersList?.forEach { friend ->
+                if (friend?.friendName?.contains(query, ignoreCase = true) == true) {
+                    filteredList.add(friend)
+                }
+            }
+        }
+
+        changeData(filteredList)
     }
 
 }

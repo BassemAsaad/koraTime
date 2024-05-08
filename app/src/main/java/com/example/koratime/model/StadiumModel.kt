@@ -8,7 +8,8 @@ data class StadiumModel(
     var stadiumID: String?=null,
     val stadiumName: String?=null,
     val stadiumDescription: String?=null,
-    val stadiumNumber:String?=null,
+    val stadiumTelephoneNumber:String?=null,
+    val stadiumPrice:String?=null,
     val stadiumImageUrl :String?=null,
     val userManager: String? =null,
     val opening : Int ?=null,
@@ -20,8 +21,8 @@ data class StadiumModel(
 ) : Parcelable {
     companion object {
         const val COLLECTION_NAME = "Stadiums"
-        const val COLLECTION_IMAGES = "StadiumImages"
-        const val COLLECTION_FIND_PLAYERS= "AddPlayers"
+        const val SUB_COLLECTION_IMAGES = "StadiumImages"
+        const val SUB_COLLECTION_FIND_PLAYERS= "AddPlayers"
 
     }
 }

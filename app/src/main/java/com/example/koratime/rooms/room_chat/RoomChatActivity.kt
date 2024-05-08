@@ -53,7 +53,7 @@ class RoomChatActivity : BasicActivity<ActivityRoomChatBinding,RoomChatViewModel
 
     }
     private fun listenForMessageUpdate (){
-        getRoomMessagesFromFirestore(room.id!!)
+        getRoomMessagesFromFirestore(room.roomID!!)
             .addSnapshotListener { snapshots , error ->
                 if (error!=null){
                     Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()

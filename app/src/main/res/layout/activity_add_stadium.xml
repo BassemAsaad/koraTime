@@ -43,7 +43,7 @@
                         android:background="@color/transparent"
                         android:gravity="center"
                         android:padding="10dp"
-                        android:text="@string/create_new_stadium"
+                        android:text="@string/add_your_stadium"
                         android:textColor="@color/white"
                         android:textSize="30sp"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -141,6 +141,24 @@
                         android:inputType="number"
                         android:lines="1"
                         android:text="@={vm.number}" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/stadiumPrice_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:inputType="number"
+                    app:error="@{vm.priceError}">
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:autofillHints="enter stadium number"
+                        android:hint="@string/enter_stadium_price_per_hour"
+                        android:inputType="number"
+                        android:lines="1"
+                        android:text="@={vm.price}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout

@@ -8,10 +8,9 @@ data class FriendModel(
     var friendshipID: String?=null,
     val friendID : String?=null,
     val friendPicture : String?=null,
-    val friendName : String?=null,
-    var friendshipStatus: Boolean?=null
+    val friendName : String?=null
 ): Parcelable {
     companion object{
-        const val COLLECTION_NAME = "Friend"
+        const val SUB_COLLECTION_NAME = "Friend"
     }
 }
