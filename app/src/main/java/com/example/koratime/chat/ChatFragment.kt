@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -26,6 +27,7 @@ class ChatFragment : Fragment(),ChatNavigator {
     lateinit var dataBinding : FragmentChatBinding
     private lateinit var viewModel : ChatViewModel
     val adapter = FriendsAdapter(null)
+    lateinit var friendsList : MutableList<FriendModel>
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -73,6 +75,13 @@ class ChatFragment : Fragment(),ChatNavigator {
                                 sender = DataUtils.user!!.id!!,
                                 receiver = user.friendID!!, onSuccessListener = {
                                     Log.e("Firebase","Friend Removed Successfully")
+                                    Toast.makeText(
+                                        requireContext(),
+                                        "Friend Removed Successfully",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    getFriends()
+                                    dataBinding.recyclerView.adapter = adapter
 
                                 }, onFailureListener = {
                                     Log.e("Firebase","Error Removing Friend")
@@ -103,19 +112,22 @@ class ChatFragment : Fragment(),ChatNavigator {
 
     }
 
-    override fun onStart() {
-        super.onStart()
-
+    fun getFriends(){
         getFriendsFromFirestore(
             DataUtils.user!!.id!!,
             onSuccessListener = {querySnapshot->
-                val friendsList = querySnapshot.toObjects(FriendModel::class.java)
+                friendsList = querySnapshot.toObjects(FriendModel::class.java)
                 adapter.changeData(friendsList)
             },
             onFailureListener = {e->
                 Log.e("Firebase"," Error loading friends",e)
             }
         )
+    }
+    override fun onStart() {
+        super.onStart()
+
+        getFriends()
 
 
     }

@@ -66,11 +66,10 @@ class FriendsRequestsFragment : Fragment(),FriendsRequestsNavigator {
                     receiver = DataUtils.user!!,
                     requestID = user.requestID!!,
                     onSuccessListener = {
-                        Log.e("Firebase"," ${user.senderName} Accepted Successfully ")
+                        Log.e("Firebase"," ${user.senderName.toString()} Accepted Successfully ")
                         holder.dataBinding.confirmFriendButtonItem.text="Friends"
                         holder.dataBinding.confirmFriendButtonItem.isEnabled = false
-                        Toast.makeText(requireContext(), "${user.senderID} Added as a friends", Toast.LENGTH_SHORT).show()
-                        dataBinding.recyclerView.adapter = adapter
+                        Toast.makeText(requireContext(), "${user.senderName} Added as a friends", Toast.LENGTH_SHORT).show()
 
                     },
                     onFailureListener = {
