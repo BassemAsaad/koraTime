@@ -3,6 +3,7 @@ package com.example.koratime.registration.log_in
 
 import android.util.Log
 import androidx.databinding.ObservableField
+import androidx.lifecycle.MutableLiveData
 import com.example.koratime.DataUtils
 import com.example.koratime.basic.BasicViewModel
 import com.example.koratime.database.getUserFromFirestore
@@ -21,6 +22,7 @@ class LoginViewModel : BasicViewModel<LoginNavigator>() {
 
     private lateinit var auth: FirebaseAuth
 
+    val toastMessage = MutableLiveData<String>()
 
     fun loginIntoAccount(){
         //validation
@@ -40,11 +42,10 @@ class LoginViewModel : BasicViewModel<LoginNavigator>() {
                 if (!task.isSuccessful){
                     Log.e("Firebase: ",task.exception?.localizedMessage.toString())
                     showLoading.value = false
-                    messageLiveData.value = "Invalid Email or Password"
+                    toastMessage.value = "Invalid Email or Password"
                 }else{
 
                     Log.e("Firebase: ", "Successful Login")
-                    messageLiveData.value = "Successful Login"
                     getUserFromFirestore(task.result.user?.uid)
                 }
             }
@@ -58,7 +59,7 @@ class LoginViewModel : BasicViewModel<LoginNavigator>() {
             onSuccessListener = OnSuccessListener{ docSnapshot->
                 val user = docSnapshot.toObject(UserModel::class.java)
                 if (user == null){
-                    messageLiveData.value = "Invalid Email or Password"
+                    toastMessage.value = "Invalid Email or Password"
                     Log.e("Firebase: ", "Not a successful Login")
                     showLoading.value = false
                     return@OnSuccessListener
@@ -76,7 +77,7 @@ class LoginViewModel : BasicViewModel<LoginNavigator>() {
             }//end OnSuccessListener
             ,
             onFailureListener = {
-                messageLiveData.value = it.localizedMessage
+                toastMessage.value = it.localizedMessage
             }//end OnFailureListener
         )
     }

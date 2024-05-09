@@ -16,9 +16,10 @@ class AddRoomViewModel : BasicViewModel<AddRoomNavigator>() {
     val description = ObservableField<String>()
     val descriptionError = ObservableField<String>()
     val password = ObservableField<String>()
-    val passwordError = ObservableField<String>()
     val imageUrl = MutableLiveData<String>()
     private val user = Firebase.auth.currentUser
+
+    val toastMessage = MutableLiveData<String>()
 
     fun createRoom(){
         if (validate()){
@@ -46,7 +47,7 @@ class AddRoomViewModel : BasicViewModel<AddRoomNavigator>() {
             },
             onFailureListener = {
                 showLoading.value=false
-                messageLiveData.value = it.localizedMessage
+                toastMessage.value = it.localizedMessage
             }
         )
     }

@@ -69,6 +69,9 @@ class RegisterActivity : BasicActivity<ActivityRegisterBinding, RegisterViewMode
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
 
+        viewModel.toastMessage.observe(this, Observer { message ->
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        })
     }
 
 
@@ -82,6 +85,7 @@ class RegisterActivity : BasicActivity<ActivityRegisterBinding, RegisterViewMode
             // photo picker
             if (uri != null) {
                 Log.d("PhotoPicker", "Selected URI: $uri")
+
                 uploadImageToStorage(uri,
                     onSuccessListener = { downloadUri ->
                         Log.e("Firebase Storage:", "Image uploaded successfully")

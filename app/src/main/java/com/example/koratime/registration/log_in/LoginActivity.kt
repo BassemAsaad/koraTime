@@ -1,6 +1,8 @@
 package com.example.koratime.registration.log_in
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
+import androidx.lifecycle.Observer
 
 import androidx.lifecycle.ViewModelProvider
 import com.example.koratime.basic.BasicActivity
@@ -24,6 +26,9 @@ class LoginActivity
         dataBinding.loginVM = viewModel
         viewModel.navigator = this
         openRegisterActivity()
+        viewModel.toastMessage.observe(this, Observer { message ->
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        })
     }
 
     override fun getLayoutID(): Int {
@@ -50,6 +55,7 @@ class LoginActivity
         dataBinding.signUp.setOnClickListener{
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
+            finish()
         }
     }
 

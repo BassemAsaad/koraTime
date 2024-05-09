@@ -36,6 +36,8 @@ class RegisterViewModel : BasicViewModel<RegisterNavigator>() {
 
     val showNationalID = MutableLiveData<Boolean>().apply { value = false }
 
+    val toastMessage = MutableLiveData<String>()
+
 
 
 

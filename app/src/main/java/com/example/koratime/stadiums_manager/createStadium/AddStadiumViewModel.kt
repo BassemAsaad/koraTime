@@ -34,6 +34,7 @@ class AddStadiumViewModel : BasicViewModel<AddStadiumNavigator>() {
     val addressLiveData = MutableLiveData<String>()
     val locationError= ObservableField<String>()
 
+    val toastMessage = MutableLiveData<String>()
     fun createStadium(){
         if (validate()){
             val stadium= StadiumModel(
@@ -68,7 +69,7 @@ class AddStadiumViewModel : BasicViewModel<AddStadiumNavigator>() {
             },
             onFailureListener = {
                 showLoading.value=false
-                messageLiveData.value = it.localizedMessage
+                toastMessage.value = it.localizedMessage
 
             }
 
