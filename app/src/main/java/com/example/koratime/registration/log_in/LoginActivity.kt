@@ -55,7 +55,6 @@ class LoginActivity
         dataBinding.signUp.setOnClickListener{
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
-            finish()
         }
     }
 
