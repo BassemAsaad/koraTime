@@ -168,12 +168,13 @@ fun addRoomMessageToFirestore(message: RoomMessageModel,
         .addOnFailureListener(onFailureListener)
 }
 
-fun getRoomMessagesFromFirestore(roomId : String): CollectionReference {
+fun getRoomMessagesFromFirestore(roomId : String): Query {
     val db = Firebase.firestore
     val roomRef = db.collection(RoomModel.COLLECTION_NAME)
         .document(roomId)
 
     return roomRef.collection(RoomMessageModel.COLLECTION_NAME)
+        .orderBy("dateTime",Query.Direction.ASCENDING)
 }
 
 fun uploadImageToStorage(imageUri: Uri?,

@@ -93,7 +93,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:boxBackgroundColor="@color/transparent"
-                        app:error="@{registerVM.firstNameError}">
+                        app:error="@{registerVM.firstNameError}"
+                        >
 
                         <EditText
                             android:layout_width="match_parent"

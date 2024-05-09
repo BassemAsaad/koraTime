@@ -3,7 +3,9 @@ package com.example.koratime.rooms.room_chat
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.koratime.Constants
 import com.example.koratime.R
 import com.example.koratime.adapters.RoomMessagesAdapter
@@ -47,10 +49,25 @@ class RoomChatActivity : BasicActivity<ActivityRoomChatBinding,RoomChatViewModel
         supportActionBar?.title = room.name
         supportActionBar?.setDisplayShowTitleEnabled(true)
         listenForMessageUpdate()
-        dataBinding.recyclerView.adapter=messageAdapter
+        setupRecyclerView()
 
+        viewModel.toastMessage.observe(this, Observer { message ->
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        })
 
-
+    }
+    private fun setupRecyclerView() {
+        val layoutManager = LinearLayoutManager(this)
+        layoutManager.stackFromEnd = true // This will start the layout from the end
+        dataBinding.recyclerView.layoutManager = layoutManager
+        dataBinding.recyclerView.adapter = messageAdapter
+    }
+    private fun scrollToBottom() {
+        dataBinding.recyclerView.postDelayed({
+            if (messageAdapter.itemCount > 0) {
+                dataBinding.recyclerView.smoothScrollToPosition(messageAdapter.itemCount - 1)
+            }
+        }, 100) // Delaying the scroll by 100 milliseconds
     }
     private fun listenForMessageUpdate (){
         getRoomMessagesFromFirestore(room.roomID!!)
@@ -70,6 +87,7 @@ class RoomChatActivity : BasicActivity<ActivityRoomChatBinding,RoomChatViewModel
                         }
                     }
                     messageAdapter.changeData(newMessageList)
+                    scrollToBottom()
                 }
             }
     }

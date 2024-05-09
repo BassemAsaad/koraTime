@@ -12,8 +12,10 @@ import java.util.Date
 
 class RoomChatViewModel : BasicViewModel<RoomChatNavigator>() {
     val messageField = ObservableField<String>()
+    val messageFieldError = ObservableField<String>()
+
     var room : RoomModel?=null
-    val toastLiveData = MutableLiveData<String>()
+    val toastMessage = MutableLiveData<String>()
 
     fun sendMessage(){
         val roomMessageModel = RoomMessageModel(
@@ -24,17 +26,32 @@ class RoomChatViewModel : BasicViewModel<RoomChatNavigator>() {
             dateTime = Date().time
         )
 
-        addRoomMessageToFirestore(
-            message = roomMessageModel,
-            onSuccessListener = {
-                Log.e("Firebase","message sent successfully")
-                messageField.set("")
+        if (validation()){
+            addRoomMessageToFirestore(
+                message = roomMessageModel,
+                onSuccessListener = {
+                    Log.e("Firebase","message sent successfully")
+                    messageField.set("")
 
-            },
-            onFailureListener = {
-                toastLiveData.value = "message was not sent"
-            }
-        )
+                },
+                onFailureListener = {
+                    toastMessage.value = "message was not sent"
+                }
+            )
+        }
 
+
+    }
+    private fun validation():Boolean{
+        var check = true
+
+        if (messageField.get().isNullOrBlank()){
+            check = false
+            messageFieldError.set("Cant send empty message")
+        }else{
+            messageFieldError.set(null)
+        }
+
+        return check
     }
 }

@@ -5,6 +5,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.koratime.Constants
 import com.example.koratime.DataUtils
 import com.example.koratime.R
@@ -50,7 +51,8 @@ class ChatFriendsActivity : BasicActivity<ActivityChatFriendsBinding,ChatFriends
         supportActionBar?.title = friendModel.friendName
         supportActionBar?.setDisplayShowTitleEnabled(true)
         listenForMessageUpdate()
-        dataBinding.recyclerView.adapter=messageAdapter
+
+        setupRecyclerView()
 
         viewModel.toastMessage.observe(this, Observer { message ->
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
@@ -62,27 +64,37 @@ class ChatFriendsActivity : BasicActivity<ActivityChatFriendsBinding,ChatFriends
         onBackPressed()
         return true
     }
-
-    private fun listenForMessageUpdate (){
+    private fun setupRecyclerView() {
+        val layoutManager = LinearLayoutManager(this)
+        layoutManager.stackFromEnd = true // This will start the layout from the end
+        dataBinding.recyclerView.layoutManager = layoutManager
+        dataBinding.recyclerView.adapter = messageAdapter
+    }
+    private fun scrollToBottom() {
+        dataBinding.recyclerView.postDelayed({
+            if (messageAdapter.itemCount > 0) {
+                dataBinding.recyclerView.smoothScrollToPosition(messageAdapter.itemCount - 1)
+            }
+        }, 100) // Delaying the scroll by 100 milliseconds
+    }
+    private fun listenForMessageUpdate() {
         getFriendMessagesFromFirestore(
-            senderID =DataUtils.user!!.id!!,
+            senderID = DataUtils.user!!.id!!,
             friendshipID = friendModel.friendshipID!!,
-        ).addSnapshotListener { snapshots , error ->
-            if (error!=null){
+        ).addSnapshotListener { snapshots, error ->
+            if (error != null) {
                 Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
-            }else{
+            } else {
                 val newMessageList = mutableListOf<FriendMessageModel?>()
                 for (dc in snapshots!!.documentChanges) {
-                    when (dc.type) {
-                        DocumentChange.Type.ADDED -> {
-                            val message = dc.document.toObject(FriendMessageModel::class.java)
-                            newMessageList.add(message)
-                        }
-                        DocumentChange.Type.MODIFIED -> Log.e("Firebase", "Error")
-                        DocumentChange.Type.REMOVED -> Log.e("Firebase", "Error")
+                    if (dc.type == DocumentChange.Type.ADDED) {
+                        val message = dc.document.toObject(FriendMessageModel::class.java)
+                        newMessageList.add(message)
                     }
                 }
                 messageAdapter.changeData(newMessageList)
+                scrollToBottom() // Scroll to the last position
+
             }
         }
     }

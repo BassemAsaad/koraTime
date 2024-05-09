@@ -75,9 +75,14 @@ class FriendMessagesAdapter : RecyclerView.Adapter<ViewHolder>() {
         }
     }
 
-    fun changeData( newItem: MutableList<FriendMessageModel?> ){
+    fun changeData(newItem: List<FriendMessageModel?>) {
+        // Update this to clear the existing items and add all the new items
+        val positionStart = item.size
+        if (positionStart == 0) {
+            item.clear()  // Clear existing items only if necessary
+        }
         item.addAll(newItem)
-        notifyItemRangeInserted(item.size+1,newItem.size)
+        notifyItemRangeInserted(positionStart, newItem.size)
     }
 
 }

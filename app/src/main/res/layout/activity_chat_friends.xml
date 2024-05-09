@@ -58,19 +58,29 @@
                 android:onClick="@{()->vm.sendMessage()}"
                 />
 
-            <EditText
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/type_message"
                 android:layout_width="0dp"
-                android:layout_height="50dp"
+                android:layout_height="60dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/sendButton"
                 app:layout_constraintBottom_toBottomOf="@id/sendButton"
-                android:background="@drawable/shape_type_message"
-                android:padding="15dp"
-                android:hint="@string/type_a_message"
-                android:text="@={vm.messageField}"
-                android:inputType="text"
-                android:autofillHints="type a message" />
+                app:boxStrokeWidth="2dp"
+                app:boxCornerRadiusTopEnd="20dp"
+                app:boxCornerRadiusBottomStart="20dp"
+                app:boxCornerRadiusBottomEnd="20dp"
+                app:boxCornerRadiusTopStart="20dp"
+                app:boxBackgroundColor="@color/transparent"
+                app:error="@{vm.messageFieldError}"
+                >
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/type_a_message"
+                    android:text="@={vm.messageField}"
+                    android:inputType="text"
+                    android:autofillHints="type a message" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"

@@ -9,6 +9,7 @@ import com.example.koratime.DataUtils
 import com.example.koratime.R
 import com.example.koratime.databinding.ItemReceiveMessageBinding
 import com.example.koratime.databinding.ItemSendMessageBinding
+import com.example.koratime.model.FriendMessageModel
 import com.example.koratime.model.RoomMessageModel
 
 class RoomMessagesAdapter : RecyclerView.Adapter<ViewHolder>() {
@@ -75,9 +76,14 @@ class RoomMessagesAdapter : RecyclerView.Adapter<ViewHolder>() {
         }
     }
 
-    fun changeData( newItem: MutableList<RoomMessageModel?> ){
+    fun changeData(newItem: List<RoomMessageModel?>) {
+        // Update this to clear the existing items and add all the new items
+        val positionStart = item.size
+        if (positionStart == 0) {
+            item.clear()  // Clear existing items only if necessary
+        }
         item.addAll(newItem)
-        notifyItemRangeInserted(item.size+1,newItem.size)
+        notifyItemRangeInserted(positionStart, newItem.size)
     }
 
 }
