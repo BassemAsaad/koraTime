@@ -164,9 +164,9 @@ class AddStadiumActivity : BasicActivity<ActivityAddStadiumBinding,AddStadiumVie
     private fun openImagePicker(){
         // Registers a photo picker activity launcher in single-select mode.
         pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-            viewModel.showLoading.value =true
             // photo picker
             if (uri != null) {
+                viewModel.showLoading.value =true
                 Log.d("PhotoPicker", "Selected URI: $uri")
                 uploadImageToStorage(uri,
                     onSuccessListener = { downloadUri ->
@@ -174,7 +174,8 @@ class AddStadiumActivity : BasicActivity<ActivityAddStadiumBinding,AddStadiumVie
                         // pass imageUrl to view model
                         viewModel.imageUrl.value = downloadUri.toString()
                         viewModel.showLoading.value = false
-
+                        dataBinding.stadiumImagesLayout.setImageURI(uri)
+                        dataBinding.stadiumImagesTextLayout.text = "Change Picture Chosen"
                     },
                     onFailureListener = {
                         Log.e("Firebase Storage:", it.localizedMessage!!.toString())
@@ -183,8 +184,7 @@ class AddStadiumActivity : BasicActivity<ActivityAddStadiumBinding,AddStadiumVie
                     }
                 )
 
-                dataBinding.stadiumImagesLayout.setImageURI(uri)
-                dataBinding.stadiumImagesTextLayout.text = "Change Picture Chosen"
+
             } else {
                 dataBinding.stadiumImagesTextLayout.text = "Default Picture"
                 Toast.makeText(this, "No image selected", Toast.LENGTH_SHORT).show()

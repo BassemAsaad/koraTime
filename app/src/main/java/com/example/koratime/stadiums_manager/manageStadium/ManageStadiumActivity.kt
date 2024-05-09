@@ -243,12 +243,11 @@ class ManageStadiumActivity : BasicActivity<ActivityManageStadiumBinding,ManageS
         Log.e("StadiumID","${stadiumModel.stadiumID}")
         // Registers a photo picker activity launcher in single-select mode.
         pickMedia = registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(3)) { uris ->
-
             // photo picker
-            if (uris != null) {
-                viewModel.showLoading.value=true
+            if (uris.isNotEmpty()) {
                 dataBinding.imagePickerTextView.text = "Uploading Images.."
                 Log.e("PhotoPicker", "Selected URI: $uris")
+                viewModel.showLoading.value=true
                 //upload images to storage
                 uploadMultipleImagesToStorage(uris = uris, stadiumID = stadiumModel.stadiumID!!,
                     onSuccessListener = {imagesList->
@@ -256,16 +255,15 @@ class ManageStadiumActivity : BasicActivity<ActivityManageStadiumBinding,ManageS
                         viewModel.listOfUrls.value = imagesList
                         viewModel.addImageUrlsToFirestore()
                         dataBinding.imagePickerTextView.text = "Images Selected"
+
                 },
                     onFailureListener = {
-                        viewModel.showLoading.value=false
                         Log.e("Firebase","Error uploading images to storage")
                     }
                 )
 
 
             } else {
-                viewModel.showLoading.value=false
                 dataBinding.imagePickerTextView.text = " No Image Selected"
                 Toast.makeText(this, "No image selected", Toast.LENGTH_SHORT).show()
                 Log.e("PhotoPicker", "No image selected")

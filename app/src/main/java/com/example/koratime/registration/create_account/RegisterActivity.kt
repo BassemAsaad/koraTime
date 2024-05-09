@@ -80,12 +80,11 @@ class RegisterActivity : BasicActivity<ActivityRegisterBinding, RegisterViewMode
     fun openImagePicker(){
         // Registers a photo picker activity launcher in single-select mode.
         pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-            viewModel.showLoading.value = true
 
             // photo picker
             if (uri != null) {
                 Log.d("PhotoPicker", "Selected URI: $uri")
-
+                viewModel.showLoading.value = true
                 uploadImageToStorage(uri,
                     onSuccessListener = { downloadUri ->
                         Log.e("Firebase Storage:", "Image uploaded successfully")

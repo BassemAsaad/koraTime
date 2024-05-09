@@ -1,5 +1,6 @@
 package com.example.koratime.friends
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -53,6 +54,7 @@ class FriendsRequestsFragment : Fragment(),FriendsRequestsNavigator {
 
 
         adapter.onAddButtonClickListener = object :PendingFriendsAdapter.OnAddButtonClickListener{
+            @SuppressLint("SetTextI18n")
             override fun onClick(
                 user: FriendRequestModel,
                 holder: PendingFriendsAdapter.ViewHolder,
@@ -65,6 +67,11 @@ class FriendsRequestsFragment : Fragment(),FriendsRequestsNavigator {
                     requestID = user.requestID!!,
                     onSuccessListener = {
                         Log.e("Firebase"," ${user.senderName} Accepted Successfully ")
+                        holder.dataBinding.confirmFriendButtonItem.text="Friends"
+                        holder.dataBinding.confirmFriendButtonItem.isEnabled = false
+                        Toast.makeText(requireContext(), "${user.senderID} Added as a friends", Toast.LENGTH_SHORT).show()
+                        dataBinding.recyclerView.adapter = adapter
+
                     },
                     onFailureListener = {
                         Log.e("Firebase"," Error Accepting  ${user.senderName} ")
@@ -87,6 +94,7 @@ class FriendsRequestsFragment : Fragment(),FriendsRequestsNavigator {
                     request = requestId!!,
                     onSuccessListener = {
                         Log.e("Firebase: "," Request has been removed successfully $requestId")
+                        Toast.makeText(requireContext(), "${user.senderName} Removed", Toast.LENGTH_SHORT).show()
                         adapter.removeData(user)
                     },
                     onFailureListener = {

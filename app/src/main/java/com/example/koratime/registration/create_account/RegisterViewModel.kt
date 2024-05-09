@@ -56,6 +56,7 @@ class RegisterViewModel : BasicViewModel<RegisterNavigator>() {
             .addOnCompleteListener{task ->
                 if (!task.isSuccessful){
                     showLoading.value = false
+                    toastMessage.value = task.exception?.localizedMessage
                     Log.e("Firebase: ",task.exception?.localizedMessage.toString())
                 } else{
                     Log.e("Firebase: ", "Account added successfully to firestore")

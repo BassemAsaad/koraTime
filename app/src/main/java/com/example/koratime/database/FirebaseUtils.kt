@@ -126,7 +126,7 @@ fun addStadiumRoomToFirestore(stadium: StadiumModel,
                               onFailureListener: OnFailureListener) {
 
     val room = RoomModel(
-        name = StadiumModel.COLLECTION_NAME,
+        name = stadium.stadiumName,
         description = "10 players are added to this room only the 10 players can see the room",
         imageUrl = stadium.stadiumImageUrl,
         playersId = playerIds,
@@ -147,7 +147,7 @@ fun getStadiumRoomFromFirestore(playerID:String,
 
     val db = Firebase.firestore
     val collection = db.collection(RoomModel.COLLECTION_NAME)
-    val query = collection.whereArrayContains("playerIds", playerID)
+    val query = collection.whereArrayContains("playersId", playerID)
     query.get()
         .addOnSuccessListener(onSuccessListener)
         .addOnFailureListener(onFailureListener)
