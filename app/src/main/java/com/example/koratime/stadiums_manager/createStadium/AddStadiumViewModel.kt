@@ -95,7 +95,7 @@ class AddStadiumViewModel : BasicViewModel<AddStadiumNavigator>() {
         if (number.get().isNullOrBlank()){
             numberError.set("Please enter the stadium number")
             valid=false
-        } else if (number.get()!!.length < 12){
+        } else if (number.get()!!.length != 11){
             valid=false
             numberError.set("stadium telephone number is wrong")
         } else {
@@ -104,7 +104,7 @@ class AddStadiumViewModel : BasicViewModel<AddStadiumNavigator>() {
         if (price.get().isNullOrBlank()){
             priceError.set("Please enter the stadium price per hour")
             valid=false
-        } else if (price.get()!!.length < 4){
+        } else if (price.get()!!.length > 3){
             valid=false
             priceError.set("stadium price should be realistic")
         } else {

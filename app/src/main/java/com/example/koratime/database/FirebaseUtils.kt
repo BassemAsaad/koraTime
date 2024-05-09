@@ -487,7 +487,6 @@ fun getFriendsFromFirestore(userID:String,
     friendRef
         .document(userID)
         .collection(FriendModel.SUB_COLLECTION_NAME)
-        .whereEqualTo("friendshipStatus",true)
         .get()
         .addOnSuccessListener(onSuccessListener)
         .addOnFailureListener(onFailureListener)

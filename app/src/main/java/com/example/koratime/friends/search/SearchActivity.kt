@@ -81,6 +81,7 @@ class SearchActivity : BasicActivity<ActivitySearchBinding,SearchViewModel>(),Se
                         onSuccessListener = {
                             holder.dataBinding.addFriendButtonItem.text= "Pending"
                             holder.dataBinding.addFriendButtonItem.isEnabled = false
+                            holder.dataBinding.removeFriendButtonItem.isEnabled = true
                             Log.e("Firebase", "Friend request sent to: $receiverUserId" )
                         },
                         onFailureListener = { e ->
@@ -107,6 +108,7 @@ class SearchActivity : BasicActivity<ActivitySearchBinding,SearchViewModel>(),Se
                         onSuccessListener = {
                             holder.dataBinding.addFriendButtonItem.text= "Add Friend"
                             holder.dataBinding.addFriendButtonItem.isEnabled = true
+                            holder.dataBinding.removeFriendButtonItem.isEnabled = false
                             Log.e("firebase","Friend request removed")
                         },
                         onFailureListener = {e->
