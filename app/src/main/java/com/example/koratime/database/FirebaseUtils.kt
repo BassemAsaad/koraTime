@@ -101,8 +101,7 @@ fun getAllRoomsFromFirestore(onSuccessListener: OnSuccessListener<QuerySnapshot>
     val db = Firebase.firestore
     val collection = db.collection(RoomModel.COLLECTION_NAME)
     collection
-        .whereEqualTo("playersID", null)
-        .orderBy("createdTimestamp", Query.Direction.DESCENDING)
+        .whereEqualTo("playersId", null)
         .get()
         .addOnSuccessListener(onSuccessListener)
         .addOnFailureListener(onFailureListener)
