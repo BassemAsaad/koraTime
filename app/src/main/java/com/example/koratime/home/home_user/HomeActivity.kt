@@ -51,8 +51,6 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>() , HomeN
         }
     }
     override fun LogoutActivity() {
-        val intent = Intent(this,LoginActivity::class.java)
-        startActivity(intent)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
