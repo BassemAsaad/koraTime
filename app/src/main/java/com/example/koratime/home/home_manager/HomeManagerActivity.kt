@@ -24,9 +24,6 @@ import com.google.firebase.auth.auth
 import java.util.Locale
 
 class HomeManagerActivity : BasicActivity<ActivityHomeManagerBinding,HomeManagerViewModel>(),HomeManagerNavigator {
-    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
-
-        private val LOCATION_PERMISSION_REQUEST_CODE = 100
 
     override fun getLayoutID(): Int {
         return R.layout.activity_home_manager
@@ -71,7 +68,6 @@ class HomeManagerActivity : BasicActivity<ActivityHomeManagerBinding,HomeManager
     override fun initView() {
         viewModel.navigator = this
         dataBinding.vm = viewModel
-//        getLocationIfPermissionGranted()
     }
 
     private fun pushFragment(fragment: Fragment) {
@@ -82,78 +78,5 @@ class HomeManagerActivity : BasicActivity<ActivityHomeManagerBinding,HomeManager
     }
 
 
-    private fun getLocationIfPermissionGranted() {
-        if (hasLocationPermissions()) {
-            getLastKnownLocation()
-        } else {
-            requestLocationPermissions()
-        }
-    }
-    private fun hasLocationPermissions(): Boolean {
-        return ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
-    }
-    @SuppressLint("MissingPermission")
-    private fun getLastKnownLocation() {
-        fusedLocationProviderClient.lastLocation
-            .addOnSuccessListener { location ->
-                if (location != null) {
-                    val latitude = location.latitude
-                    val longitude = location.longitude
-//                    Constants.LATITUDE = latitude
-//                    Constants.LONGITUDE = longitude
-                    // Retrieve city name based on latitude and longitude
-                    val cityName = getCityName(latitude, longitude)
-
-                    // Update user's location in Firestore along with city name
-                    val userId = Firebase.auth.currentUser?.uid
-
-                    if (userId != null) {
-                        updateUserLocationInFirestore(userId, latitude, longitude, cityName,
-                            onSuccessListener = {
-                                Log.e("Firestore", "Location updated in Firestore")
-                            },
-                            onFailureListener = {
-                                Log.e("Firestore", "Error updating location in Firestore")
-                            }
-                        )
-                    } else {
-                        Log.e("Firestore", "Failed to update location: User ID is null")
-                    }
-                } else {
-                    Toast.makeText(this, "Last known location is not available.",
-                        Toast.LENGTH_SHORT).show()
-                } }//end of onSuccess
-            .addOnFailureListener {
-                Toast.makeText(this, "Failed to get last known location.",
-                    Toast.LENGTH_SHORT).show()
-            }
-
-
-    }
-    private fun getCityName(latitude: Double, longitude: Double): String {
-        val geocoder = Geocoder(this, Locale.getDefault())
-        val addresses = geocoder.getFromLocation(latitude, longitude, 1)
-        return if (addresses!!.isNotEmpty()) {
-            addresses[0].locality ?: addresses[0].adminArea ?: ""
-        } else {
-            "null"
-        }
-    }
-    private fun requestLocationPermissions() {
-        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION),
-            LOCATION_PERMISSION_REQUEST_CODE
-        )
-    }
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) { // Check if the request code matches the location permission request code
-            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) { // Check if permissions are granted
-                getLastKnownLocation() // If permissions are granted, attempt to get the last known location
-            } else {
-                Toast.makeText(this, "Location permission denied.", Toast.LENGTH_SHORT).show() // Show a toast message indicating permission denial
-            }
-        }
-    }
 
 }
