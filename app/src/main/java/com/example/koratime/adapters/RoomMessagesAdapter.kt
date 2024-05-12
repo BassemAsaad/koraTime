@@ -77,7 +77,7 @@ class RoomMessagesAdapter : RecyclerView.Adapter<ViewHolder>() {
     }
 
     fun changeData(newItem: List<RoomMessageModel?>) {
-        // Update this to clear the existing items and add all the new items
+        //  position the new items
         val positionStart = item.size
         if (positionStart == 0) {
             item.clear()  // Clear existing items only if necessary

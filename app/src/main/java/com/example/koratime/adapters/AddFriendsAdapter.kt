@@ -116,6 +116,7 @@ class AddFriendsAdapter  (private var usersList : List<UserModel?>?, private val
         if (query.isEmpty()) {
             filteredList.addAll(originalUsersList ?: emptyList())
         } else {
+            //check if the userName of each user contains the query string.
             originalUsersList?.forEach { user ->
                 if (user?.userName?.contains(query, ignoreCase = true) == true) {
                     filteredList.add(user)
