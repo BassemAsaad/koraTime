@@ -69,6 +69,10 @@ dependencies {
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     // Glide
     implementation("com.github.bumptech.glide:glide:4.16.0")
+
+    //notification push
+    implementation ("com.github.YarikSOffice:lingver:1.3.0")
+
     implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.8.0"))
     implementation("com.google.android.libraries.places:places:3.4.0")
     implementation("androidx.core:core-splashscreen:1.0.1")

@@ -17,6 +17,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.KoraTime"
         tools:targetApi="31">
+
+        <service
+            android:name=".notifications.NotificationServices"
+            android:enabled="true"
+            android:exported="false" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_api_key" />
+
+
         <activity
             android:name=".stadiums_user.bookStadium.BookingStadiumActivity"
             android:exported="false" />
@@ -32,10 +42,6 @@
         <activity
             android:name=".stadiums_manager.createStadium.AddStadiumActivity"
             android:exported="false" />
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_api_key" />
-
         <activity
             android:name=".location.LocationPickerActivity"
             android:exported="true"
@@ -47,16 +53,10 @@
             android:name=".friends.FriendsRequestsFragment"
             android:exported="false" />
         <activity
-            android:name=".messages.MessagesActivity"
-            android:exported="false" />
-        <activity
             android:name=".rooms.publicRooms.PublicRoomsFragment"
             android:exported="false" />
         <activity
             android:name=".rooms.createRoom.AddRoomActivity"
-            android:exported="false" />
-        <activity
-            android:name=".location.LocationActivity"
             android:exported="false" />
         <activity
             android:name=".registration.create_account.RegisterActivity"
@@ -70,6 +70,7 @@
         <activity
             android:name=".home.home_manager.HomeManagerActivity"
             android:exported="true" />
+
         <activity
             android:name=".splash.SplashActivity"
             android:exported="true">

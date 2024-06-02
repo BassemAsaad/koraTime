@@ -73,15 +73,14 @@
                     tools:text="@string/last_message_sent"
 
                     />
+
                 <ImageView
                     android:id="@+id/remove_friend"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_width="100dp"
+                    android:layout_height="35dp"
                     android:src="@drawable/ic_remove"
-                    android:layout_margin="5dp"
-                    />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

@@ -17,51 +17,9 @@ class AddFriendsAdapter  (private var usersList : List<UserModel?>?, private val
     : RecyclerView.Adapter<AddFriendsAdapter.ViewHolder>()  {
 
      class ViewHolder(val dataBinding: ItemAddFriendBinding) : RecyclerView.ViewHolder(dataBinding.root) {
-        @SuppressLint("SetTextI18n")
-        fun bind(user: UserModel, currentUserId: String?) {
+        fun bind(user: UserModel) {
             dataBinding.userModel = user
             dataBinding.invalidateAll()
-
-            // Check friend request status dynamically
-            currentUserId?.let { userId ->
-                checkFriendRequestStatusFromFirestoreSender(userId, user.id!!) { status ->
-                    Log.e("Firebase"," $status")
-                    Log.e("Firebase"," ${user.userName}")
-                    when (status) {
-                        "pending" -> {
-                            dataBinding.addFriendButtonItem.text = "Pending"
-                            dataBinding.addFriendButtonItem.isEnabled = false
-                            dataBinding.removeFriendButtonItem.isEnabled = true
-                        }
-                        "accepted" -> {
-                            dataBinding.addFriendButtonItem.text = "Friends"
-                            dataBinding.addFriendButtonItem.isEnabled = false
-                            dataBinding.removeFriendButtonItem.isEnabled = false
-                        }
-                        else -> {
-                            dataBinding.addFriendButtonItem.text = "Add Friend"
-                            dataBinding.addFriendButtonItem.isEnabled = true
-                            dataBinding.removeFriendButtonItem.isEnabled = false
-                            checkFriendRequestStatusFromFirestoreReceiver(userId, user.id!!) { status ->
-                                Log.e("Firebase"," $status")
-                                Log.e("Firebase"," ${user.userName}")
-                                when (status) {
-                                    "pending" -> {
-                                        dataBinding.addFriendButtonItem.text = "Pending"
-                                        dataBinding.addFriendButtonItem.isEnabled = false
-                                        dataBinding.removeFriendButtonItem.isEnabled = true
-                                    }
-                                    "accepted" -> {
-                                        dataBinding.addFriendButtonItem.text = "Friends"
-                                        dataBinding.addFriendButtonItem.isEnabled = false
-                                        dataBinding.removeFriendButtonItem.isEnabled = false
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
         }
     }
 
@@ -80,7 +38,46 @@ class AddFriendsAdapter  (private var usersList : List<UserModel?>?, private val
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val user = usersList!![position]!!
-        holder.bind(user, currentUserId)
+        holder.bind(user)
+
+        checkFriendRequestStatusFromFirestoreSender(currentUserId!!, user.id!!) { status ->
+            Log.e("Firebase"," $status")
+            Log.e("Firebase"," ${user.userName}")
+            when (status) {
+                "pending" -> {
+                    holder.dataBinding.addFriendButtonItem.text = "Pending"
+                    holder.dataBinding.addFriendButtonItem.isEnabled = false
+                    holder.dataBinding.removeFriendButtonItem.isEnabled = true
+                }
+                "accepted" -> {
+                    holder.dataBinding.addFriendButtonItem.text = "Friends"
+                    holder.dataBinding.addFriendButtonItem.isEnabled = false
+                    holder.dataBinding.removeFriendButtonItem.isEnabled = false
+                }
+                else -> {
+                    checkFriendRequestStatusFromFirestoreReceiver(currentUserId, user.id!!) { status ->
+                        Log.e("Firebase"," $status")
+                        Log.e("Firebase"," ${user.userName}")
+                        holder.dataBinding.addFriendButtonItem.text = "Add Friend"
+                        holder.dataBinding.addFriendButtonItem.isEnabled = true
+                        holder.dataBinding.removeFriendButtonItem.isEnabled = false
+                        when (status) {
+                            "accepted" -> {
+                                holder.dataBinding.addFriendButtonItem.text = "Friends"
+                                holder.dataBinding.addFriendButtonItem.isEnabled = false
+                                holder.dataBinding.removeFriendButtonItem.isEnabled = false
+                            }
+                            "pending" -> {
+                                holder.dataBinding.addFriendButtonItem.text = "Pending"
+                                holder.dataBinding.addFriendButtonItem.isEnabled = false
+                                holder.dataBinding.removeFriendButtonItem.isEnabled = true
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
 
         holder.dataBinding.addFriendButtonItem.setOnClickListener {
             onAddFriendButtonClickListener?.onClick(user,holder, position)

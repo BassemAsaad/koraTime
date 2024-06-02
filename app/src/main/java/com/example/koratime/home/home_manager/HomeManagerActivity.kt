@@ -1,28 +1,15 @@
 package com.example.koratime.home.home_manager
 
-import android.Manifest
-import android.annotation.SuppressLint
-import android.content.pm.PackageManager
-import android.location.Geocoder
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
-import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.koratime.R
 import com.example.koratime.basic.BasicActivity
 import com.example.koratime.chat.ChatFragment
-import com.example.koratime.database.updateUserLocationInFirestore
 import com.example.koratime.databinding.ActivityHomeManagerBinding
 import com.example.koratime.friends.FriendsRequestsFragment
 import com.example.koratime.rooms.TabsFragment
 import com.example.koratime.stadiums_manager.StadiumsManagerFragment
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.firebase.Firebase
-import com.google.firebase.auth.auth
-import java.util.Locale
-
 class HomeManagerActivity : BasicActivity<ActivityHomeManagerBinding,HomeManagerViewModel>(),HomeManagerNavigator {
 
     override fun getLayoutID(): Int {
