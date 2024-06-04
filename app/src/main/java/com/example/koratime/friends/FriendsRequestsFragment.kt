@@ -60,7 +60,6 @@ class FriendsRequestsFragment : Fragment(),FriendsRequestsNavigator {
                 holder: PendingFriendsAdapter.ViewHolder,
                 position: Int
             ) {
-
                 acceptFriendRequest(
                     sender = user,
                     receiver = DataUtils.user!!,
@@ -109,7 +108,7 @@ class FriendsRequestsFragment : Fragment(),FriendsRequestsNavigator {
         super.onStart()
 
         getFriendRequestsFromFirestore(
-            DataUtils.user!!.id!!,
+            DataUtils.user!!,
             onSuccessListener = {querySnapshot->
                 val user = querySnapshot.toObjects(FriendRequestModel::class.java)
                 adapter.changeData(user)

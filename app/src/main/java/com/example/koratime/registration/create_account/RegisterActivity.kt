@@ -20,6 +20,7 @@ import com.example.koratime.home.home_user.HomeActivity
 
 class RegisterActivity : BasicActivity<ActivityRegisterBinding, RegisterViewModel>(),RegisterNavigator {
     private lateinit var pickMedia : ActivityResultLauncher<PickVisualMediaRequest>
+    private val defaultImageUrl = "https://firebasestorage.googleapis.com/v0/b/kora-time-d21c3.appspot.com/o/images%2Fprofile_picture.png?alt=media&token=650310ed-94a0-479b-8bb3-ad2f3c4b6489"
     override fun getLayoutID(): Int {
         return R.layout.activity_register
     }
@@ -61,7 +62,6 @@ class RegisterActivity : BasicActivity<ActivityRegisterBinding, RegisterViewMode
         })
 
 
-        val defaultImageUrl = "https://firebasestorage.googleapis.com/v0/b/kora-time-d21c3.appspot.com/o/images%2Fprofile_picture.png?alt=media&;token=650310ed-94a0-479b-8bb3-ad2f3c4b6489"
         viewModel.imageUrl.value = defaultImageUrl
         openImagePicker()
         dataBinding.profilePictureLayout.setOnClickListener {
@@ -92,7 +92,6 @@ class RegisterActivity : BasicActivity<ActivityRegisterBinding, RegisterViewMode
                         viewModel.imageUrl.value = downloadUri.toString()
                         viewModel.showLoading.value = false
 
-
                     },
                     onFailureListener = {
                         Log.e("Firebase Storage:", it.localizedMessage!!.toString())
@@ -107,6 +106,8 @@ class RegisterActivity : BasicActivity<ActivityRegisterBinding, RegisterViewMode
                 dataBinding.profileTextLayout.text = "Default Picture"
                 Toast.makeText(this, "No image selected", Toast.LENGTH_SHORT).show()
                 Log.d("PhotoPicker", "No image selected")
+
+
                 viewModel.showLoading.value = false
 
             }

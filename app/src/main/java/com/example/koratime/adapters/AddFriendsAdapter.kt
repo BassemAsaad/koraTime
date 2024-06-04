@@ -7,8 +7,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.koratime.R
-import com.example.koratime.database.checkFriendRequestStatusFromFirestoreReceiver
-import com.example.koratime.database.checkFriendRequestStatusFromFirestoreSender
+import com.example.koratime.database.checkFriendRequestStatusFromFirestore
 import com.example.koratime.databinding.ItemAddFriendBinding
 import com.example.koratime.model.UserModel
 
@@ -36,11 +35,12 @@ class AddFriendsAdapter  (private var usersList : List<UserModel?>?, private val
         return usersList?.size?:0
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val user = usersList!![position]!!
         holder.bind(user)
 
-        checkFriendRequestStatusFromFirestoreSender(currentUserId!!, user.id!!) { status ->
+        checkFriendRequestStatusFromFirestore(currentUserId!!, user.id!!) { status ->
             Log.e("Firebase"," $status")
             Log.e("Firebase"," ${user.userName}")
             when (status) {
@@ -55,25 +55,10 @@ class AddFriendsAdapter  (private var usersList : List<UserModel?>?, private val
                     holder.dataBinding.removeFriendButtonItem.isEnabled = false
                 }
                 else -> {
-                    checkFriendRequestStatusFromFirestoreReceiver(currentUserId, user.id!!) { status ->
-                        Log.e("Firebase"," $status")
-                        Log.e("Firebase"," ${user.userName}")
-                        holder.dataBinding.addFriendButtonItem.text = "Add Friend"
-                        holder.dataBinding.addFriendButtonItem.isEnabled = true
-                        holder.dataBinding.removeFriendButtonItem.isEnabled = false
-                        when (status) {
-                            "accepted" -> {
-                                holder.dataBinding.addFriendButtonItem.text = "Friends"
-                                holder.dataBinding.addFriendButtonItem.isEnabled = false
-                                holder.dataBinding.removeFriendButtonItem.isEnabled = false
-                            }
-                            "pending" -> {
-                                holder.dataBinding.addFriendButtonItem.text = "Pending"
-                                holder.dataBinding.addFriendButtonItem.isEnabled = false
-                                holder.dataBinding.removeFriendButtonItem.isEnabled = true
-                            }
-                        }
-                    }
+                    holder.dataBinding.addFriendButtonItem.text = "Add Friend"
+                    holder.dataBinding.addFriendButtonItem.isEnabled = true
+                    holder.dataBinding.removeFriendButtonItem.isEnabled = false
+
                 }
             }
         }
@@ -98,7 +83,8 @@ class AddFriendsAdapter  (private var usersList : List<UserModel?>?, private val
     interface OnRemoveFriendButtonClickListener{
         fun onClick(user : UserModel,holder: ViewHolder, position: Int)
     }
-    fun changeData( newUser : List<UserModel?>?){
+    @SuppressLint("NotifyDataSetChanged")
+    fun changeData(newUser : List<UserModel?>?){
         usersList = newUser
         notifyDataSetChanged()
     }

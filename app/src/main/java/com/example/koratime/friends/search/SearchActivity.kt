@@ -10,6 +10,7 @@ import com.example.koratime.R
 import com.example.koratime.adapters.AddFriendsAdapter
 import com.example.koratime.basic.BasicActivity
 import com.example.koratime.database.addFriendRequestToFirestore
+import com.example.koratime.database.checkIfFriendExist
 import com.example.koratime.database.getUsersFromFirestore
 import com.example.koratime.database.removeFriendRequestWithoutRequestID
 import com.example.koratime.databinding.ActivitySearchBinding
@@ -74,10 +75,8 @@ class SearchActivity : BasicActivity<ActivitySearchBinding,SearchViewModel>(),Se
             ) {
                 val receiverUserId = user.id
                     addFriendRequestToFirestore(
-                        sender = DataUtils.user!!.id!!,
-                        receiver = receiverUserId!!,
-                        senderPicture = currentUserPicture,
-                        senderUserName = currentUserName,
+                        sender = DataUtils.user!!,
+                        receiver = user,
                         onSuccessListener = {
                             holder.dataBinding.addFriendButtonItem.text= "Pending"
                             holder.dataBinding.addFriendButtonItem.isEnabled = false

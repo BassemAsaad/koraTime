@@ -67,26 +67,11 @@ class ChatFragment : Fragment(),ChatNavigator {
 
                 holder.dataBinding.removeFriend.setOnClickListener {
                     removeFriendFromFirestore(
-                        senderID = DataUtils.user!!.id!!,
-                        receiverID = user!!.friendID!!,
+                        user1 = DataUtils.user!!,
+                        user2 = user!!,
                         friendshipID=user.friendshipID!!,
                         onSuccessListener = {
-                            removeFriendRequestWithoutRequestID(
-                                sender = DataUtils.user!!.id!!,
-                                receiver = user.friendID!!, onSuccessListener = {
-                                    Log.e("Firebase","Friend Removed Successfully")
-                                    Toast.makeText(
-                                        requireContext(),
-                                        "Friend Removed Successfully",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                    getFriends()
-                                    dataBinding.recyclerView.adapter = adapter
-
-                                }, onFailureListener = {
-                                    Log.e("Firebase","Error Removing Friend")
-
-                                })
+                            Log.e("Firebase","Friend Removed Successfully")
                         },
                         onFailureListener = {
 

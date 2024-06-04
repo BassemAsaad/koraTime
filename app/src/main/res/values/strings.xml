@@ -1,7 +1,7 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Kora Time</string>
     <string name="google_api_key">AIzaSyCGVONQzIxP8r_Vb9c1KhIlSQADRMYYaSk</string>
-
+    <string name="default_profile_picture" tools:ignore="TypographyDashes">https://firebasestorage.googleapis.com/v0/b/kora-time-d21c3.appspot.com/o/images%2Fprofile_picture.png?alt=media&amp;token=650310ed-94a0-479b-8bb3-ad2f3c4b6489</string>
     <string name="create_account">Create Account</string>
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
