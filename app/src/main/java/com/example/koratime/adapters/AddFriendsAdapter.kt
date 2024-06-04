@@ -40,7 +40,7 @@ class AddFriendsAdapter  (private var usersList : List<UserModel?>?, private val
         val user = usersList!![position]!!
         holder.bind(user)
 
-        checkFriendRequestStatusFromFirestore(currentUserId!!, user.id!!) { status ->
+        checkFriendRequestStatusFromFirestore(currentUser= currentUserId!!, receiver =  user.id!!) { status ->
             Log.e("Firebase"," $status")
             Log.e("Firebase"," ${user.userName}")
             when (status) {

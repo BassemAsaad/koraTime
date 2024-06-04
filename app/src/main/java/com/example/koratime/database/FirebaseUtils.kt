@@ -154,13 +154,13 @@ fun getStadiumRoomFromFirestore(playerID:String,
 }
 
 
-fun checkFriendRequestStatusFromFirestore(sender: String,
+fun checkFriendRequestStatusFromFirestore(currentUser: String,
                                           receiver: String,
                                           callback: (String) -> Unit ) {
     val db = Firebase.firestore
     val receiverRef = db.collection(UserModel.COLLECTION_NAME)
     receiverRef
-        .document(sender)
+        .document(currentUser)
         .collection(FriendRequestModel.SUB_COLLECTION_REQUEST)
         .whereArrayContains("friendList", receiver)
         .get()
