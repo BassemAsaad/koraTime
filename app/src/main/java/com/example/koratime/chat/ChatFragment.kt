@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -17,7 +16,6 @@ import com.example.koratime.R
 import com.example.koratime.adapters.FriendsAdapter
 import com.example.koratime.chat.chat_friends.ChatFriendsActivity
 import com.example.koratime.database.getFriendsFromFirestore
-import com.example.koratime.database.removeFriendRequestWithoutRequestID
 import com.example.koratime.database.removeFriendFromFirestore
 import com.example.koratime.databinding.FragmentChatBinding
 import com.example.koratime.model.FriendModel
@@ -27,7 +25,7 @@ class ChatFragment : Fragment(),ChatNavigator {
     lateinit var dataBinding : FragmentChatBinding
     private lateinit var viewModel : ChatViewModel
     val adapter = FriendsAdapter(null)
-    lateinit var friendsList : MutableList<FriendModel>
+    private lateinit var friendsList : MutableList<FriendModel>
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -69,11 +67,11 @@ class ChatFragment : Fragment(),ChatNavigator {
                     removeFriendFromFirestore(
                         user1 = DataUtils.user!!,
                         user2 = user!!,
-                        friendshipID=user.friendshipID!!,
                         onSuccessListener = {
                             Log.e("Firebase","Friend Removed Successfully")
                         },
                         onFailureListener = {
+                            Log.e("Firebase","Friend not removed ")
 
                         }
                     )
@@ -97,7 +95,7 @@ class ChatFragment : Fragment(),ChatNavigator {
 
     }
 
-    fun getFriends(){
+    private fun getFriends(){
         getFriendsFromFirestore(
             DataUtils.user!!.id!!,
             onSuccessListener = {querySnapshot->

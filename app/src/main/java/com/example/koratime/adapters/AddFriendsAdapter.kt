@@ -40,7 +40,10 @@ class AddFriendsAdapter  (private var usersList : List<UserModel?>?, private val
         val user = usersList!![position]!!
         holder.bind(user)
 
-        checkFriendRequestStatusFromFirestore(currentUser= currentUserId!!, receiver =  user.id!!) { status ->
+        checkFriendRequestStatusFromFirestore(currentUser= currentUserId!!, receiver =  user.id!!,
+            onFailureListener = {
+                Log.e("Firestore", "Error checking friend request status", it)
+            }) { status ->
             Log.e("Firebase"," $status")
             Log.e("Firebase"," ${user.userName}")
             when (status) {
@@ -60,6 +63,7 @@ class AddFriendsAdapter  (private var usersList : List<UserModel?>?, private val
                     holder.dataBinding.removeFriendButtonItem.isEnabled = false
 
                 }
+
             }
         }
 

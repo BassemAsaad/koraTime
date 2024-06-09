@@ -15,8 +15,10 @@ import com.example.koratime.DataUtils
 import com.example.koratime.R
 import com.example.koratime.adapters.PendingFriendsAdapter
 import com.example.koratime.database.acceptFriendRequest
+import com.example.koratime.database.checkIfFriendExist
 import com.example.koratime.database.getFriendRequestsFromFirestore
 import com.example.koratime.database.removeFriendRequestWithRequestID
+import com.example.koratime.database.updateFriendshipStatus
 import com.example.koratime.databinding.FragmentFriendsRequestsBinding
 import com.example.koratime.friends.search.SearchActivity
 import com.example.koratime.model.FriendRequestModel
@@ -60,21 +62,52 @@ class FriendsRequestsFragment : Fragment(),FriendsRequestsNavigator {
                 holder: PendingFriendsAdapter.ViewHolder,
                 position: Int
             ) {
-                acceptFriendRequest(
-                    sender = user,
-                    receiver = DataUtils.user!!,
-                    requestID = user.requestID!!,
+                checkIfFriendExist(
+                    currentUser = DataUtils.user!!,
+                    userSender = user,
                     onSuccessListener = {
-                        Log.e("Firebase"," ${user.senderName.toString()} Accepted Successfully ")
-                        holder.dataBinding.confirmFriendButtonItem.text="Friends"
-                        holder.dataBinding.confirmFriendButtonItem.isEnabled = false
-                        Toast.makeText(requireContext(), "${user.senderName} Added as a friends", Toast.LENGTH_SHORT).show()
+                        Log.e("Firebase"," ${user.senderName} ex friend status $it")
+                        if (it){
+                            updateFriendshipStatus(
+                                currentUser = DataUtils.user!!,
+                                sender = user,
+                                onSuccessListener = {
+                                    Log.e("Firebase"," ${user.senderName.toString()} Updated successfully as a friend")
+                                    holder.dataBinding.confirmFriendButtonItem.text="Friends"
+                                    holder.dataBinding.confirmFriendButtonItem.isEnabled = false
+                                    Toast.makeText(requireContext(), "${user.senderName} Added as a friends", Toast.LENGTH_SHORT).show()
+                                },
+                                onFailureListener = {e->
+                                    Log.e("Firebase"," Error updating ${user.senderName} to be friend... Error: ",e)
+                                }
 
+
+                            )
+                        }else{
+                            acceptFriendRequest(
+                                sender = user,
+                                receiver = DataUtils.user!!,
+                                requestID = user.requestID!!,
+                                onSuccessListener = {
+                                    Log.e("Firebase"," ${user.senderName.toString()} Accepted Successfully ")
+                                    holder.dataBinding.confirmFriendButtonItem.text="Friends"
+                                    holder.dataBinding.confirmFriendButtonItem.isEnabled = false
+                                    Toast.makeText(requireContext(), "${user.senderName} Added as a friends", Toast.LENGTH_SHORT).show()
+
+                                },
+                                onFailureListener = {
+                                    Log.e("Firebase"," Error Accepting  ${user.senderName} ")
+                                }
+                            )
+                        }
                     },
                     onFailureListener = {
-                        Log.e("Firebase"," Error Accepting  ${user.senderName} ")
+                        Log.e("Firebase"," Error checking if ${user.senderName} is an ex friend ")
                     }
+
                 )
+
+
             }
         }
         adapter.onRemoveButtonClickListener = object :PendingFriendsAdapter.OnRemoveButtonClickListener{
