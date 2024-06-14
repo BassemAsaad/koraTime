@@ -44,7 +44,6 @@ class LoginViewModel : BasicViewModel<LoginNavigator>() {
                     showLoading.value = false
                     toastMessage.value = "Invalid Email or Password"
                 }else{
-
                     Log.e("Firebase: ", "Successful Login")
                     getUserFromFirestore(task.result.user?.uid)
                 }
@@ -63,8 +62,7 @@ class LoginViewModel : BasicViewModel<LoginNavigator>() {
                     Log.e("Firebase: ", "Not a successful Login")
                     showLoading.value = false
                     return@OnSuccessListener
-
-                }else{
+                } else{
                     showLoading.value = false
                     Log.e("Firebase: ", "Successful Login")
                     DataUtils.user = user
@@ -77,7 +75,7 @@ class LoginViewModel : BasicViewModel<LoginNavigator>() {
             }//end OnSuccessListener
             ,
             onFailureListener = {
-                toastMessage.value = it.localizedMessage
+                Log.e("Firebase: ", it.localizedMessage!!)
             }//end OnFailureListener
         )
     }

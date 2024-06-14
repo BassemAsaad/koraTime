@@ -1,22 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/chat_bar"
-        android:title="Chat"
-        android:icon="@drawable/ic_chat"/>
-    <item
-        android:id="@+id/rooms_bar"
-        android:title="Rooms"
-        android:icon="@drawable/ic_rooms"/>
+        android:id="@+id/home_bar"
+        android:title="Home"
+        android:icon="@drawable/ic_home"
+        />
+
     <item
         android:id="@+id/friends_bar"
         android:title="Friends"
         android:icon="@drawable/ic_friends"
         />
+
     <item
-        android:id="@+id/home_bar"
-        android:title="Home"
-        android:icon="@drawable/ic_home"
-        />
+        android:id="@+id/rooms_bar"
+        android:title="Rooms"
+        android:icon="@drawable/ic_rooms"/>
+
+    <item
+        android:id="@+id/chat_bar"
+        android:title="Chat"
+        android:icon="@drawable/ic_chat"/>
 
 </menu>

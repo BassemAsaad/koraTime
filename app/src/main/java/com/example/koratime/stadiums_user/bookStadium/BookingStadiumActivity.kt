@@ -56,22 +56,22 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
     override fun initView() {
         viewModel.navigator=this
         dataBinding.vm = viewModel
-        dataBinding.imageSlider.visibility =View.GONE
-        dataBinding.stadiumImages.visibility =View.GONE
+//        dataBinding.imageSlider.visibility =View.GONE
+//        dataBinding.stadiumImages.visibility =View.GONE
 
         dataBinding.calendarView.minDate = System.currentTimeMillis()
         dataBinding.calendarView.startAnimation(AnimationUtils.loadAnimation(this, com.google.android.material.R.anim.abc_popup_enter))
 
         stadiumModel = intent.getParcelableExtra(Constants.STADIUM_USER)!!
         viewModel.stadium = stadiumModel
-        dataBinding.stadiumNumber.text = stadiumModel.stadiumTelephoneNumber
+
 
         setSupportActionBar(dataBinding.toolbar)
         // Enable back button on Toolbar and title
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
         // Enable title on Toolbar
-        supportActionBar?.title = stadiumModel.stadiumName + " Stadium"
+        supportActionBar?.title = stadiumModel.stadiumName
         supportActionBar?.setDisplayShowTitleEnabled(true)
 
         //select date
@@ -170,7 +170,7 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
 
 
         playerDocumentExists(
-            stadiumID = stadiumModel!!.stadiumID!!,
+            stadiumID = stadiumModel.stadiumID!!,
             userID = DataUtils.user!!.id!!,
             onSuccessListener = {playerExist->
                 if (playerExist){
@@ -209,21 +209,23 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
             showLocation(stadiumModel.latitude!!,stadiumModel.longitude!!)
         }
 
+        dataBinding.stadiumNumber.setOnClickListener {
+            intent = Intent(Intent.ACTION_DIAL)
+            intent.data = Uri.parse("tel:${stadiumModel.stadiumTelephoneNumber}")
+            startActivity(intent)
+        }
+
         dataBinding.bookingPrice.text = "Note: Booking Price is ${stadiumModel.stadiumPrice}EGP (per hour)"
     }
 
 
     private fun showLocation(lat: Double, lng: Double) {
-        val location = "My Location"
-        val url = "geo:$lat,$lng?q=$lat,$lng($location)"
+        val url = "geo:$lat,$lng?q=$lat,$lng(My Location)"
         val pushIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-        pushIntent.setPackage("com.google.android.apps.maps")
         if (pushIntent.resolveActivity(this.packageManager) != null) {
             startActivity(pushIntent)
-        } else {
-            val map = "https://www.google.com/maps/search/?api=1&query=$lat,$lng"
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(map)))
         }
+
     }
 
 

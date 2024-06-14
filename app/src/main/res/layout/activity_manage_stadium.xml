@@ -44,19 +44,17 @@
                         android:paddingStart="2dp"
                         >
 
-                        <TextView
-                            android:id="@+id/delete_stadiun"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:textSize="16sp"
-                            app:layout_constraintTop_toTopOf="parent"
+                        <ImageView
+                            android:id="@+id/notifications"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:padding="5dp"
+                            android:src="@drawable/ic_notification"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            android:text="Delete Stadium"
-                            android:drawableEnd="@drawable/ic_remove"
-                            android:gravity="center"
-                            android:textColor="@color/black"
-                            />
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:background="@drawable/shape_search"
+                            android:contentDescription="@string/notifications" />
 
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -102,17 +100,31 @@
                 android:paddingHorizontal="15dp"
                 android:layout_marginTop="15dp"
                 >
-
+                <TextView
+                    android:id="@+id/delete_stadiun"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textSize="16sp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:text="Remove Stadium"
+                    android:drawableStart="@drawable/ic_remove"
+                    android:gravity="center"
+                    android:textColor="@color/black"
+                    android:paddingVertical="10dp"
+                    />
             <ImageView
                 android:id="@+id/image_picker"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:src="@drawable/ic_add_images"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/delete_stadiun"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/image_picker_textView"
-                android:contentDescription="@string/add_multiple_stadium_pictures" />
+                android:contentDescription="@string/add_multiple_stadium_pictures"
+                android:layout_marginTop="35dp"
+                />
 
                 <TextView
                     android:id="@+id/image_picker_textView"
@@ -121,9 +133,9 @@
                     android:layout_marginStart="8dp"
                     android:text="@string/add_multiple_stadium_pictures"
                     android:textSize="14sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@+id/image_picker"
                     app:layout_constraintStart_toEndOf="@id/image_picker"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="@+id/image_picker" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView

@@ -6,15 +6,18 @@
         android:title="Stadium"
         android:icon="@drawable/ic_stadium"/>
 
-    <item
-        android:id="@+id/rooms_bar"
-        android:title="Rooms"
-        android:icon="@drawable/ic_rooms"/>
+
     <item
         android:id="@+id/friends_bar"
         android:title="Friends"
         android:icon="@drawable/ic_friends"
         />
+
+    <item
+        android:id="@+id/rooms_bar"
+        android:title="Rooms"
+        android:icon="@drawable/ic_rooms"/>
+
     <item
         android:id="@+id/chat_bar"
         android:title="Chat"

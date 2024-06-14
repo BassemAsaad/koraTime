@@ -76,8 +76,9 @@
                             android:id="@+id/stadium_location"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Click Here To View Stadium Location"
-                            android:layout_gravity="center"
+                            android:text="View Stadium Location"
+                            android:layout_gravity="start"
+                            android:layout_marginStart="15dp"
                             android:textSize="15sp"
                             android:layout_marginTop="10dp"
                             android:layout_marginBottom="5dp"
@@ -88,47 +89,23 @@
                             android:textColor="@color/blue"
                             android:backgroundTint="#C7E1F6"
                             />
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:layout_width="match_parent"
+                        <TextView
+                            android:id="@+id/stadium_number"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            >
-                            <TextView
-                                android:id="@+id/stadium_number_textView"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Contact with the stadium manager: "
-                                android:textSize="16sp"
-                                android:paddingVertical="15dp"
-                                android:layout_marginTop="10dp"
-                                android:layout_marginBottom="5dp"
-                                android:drawablePadding="5dp"
-                                android:textColor="@color/black"
-                                style="@style/TextAppearance.MaterialComponents.Subtitle1"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                android:gravity="center"
-                                android:layout_marginStart="5dp"
-                                />
-
-                            <TextView
-                                android:id="@+id/stadium_number"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:gravity="center"
-                                android:paddingVertical="15dp"
-                                android:text="01114148059"
-                                android:textSize="18sp"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintHorizontal_bias="0.108"
-                                app:layout_constraintStart_toEndOf="@id/stadium_number_textView"
-                                app:layout_constraintTop_toTopOf="parent"
-                                app:layout_constraintVertical_bias="0.666" />
-
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
+                            android:text="Call Stadium Manager"
+                            android:layout_gravity="end"
+                            android:layout_marginEnd="15dp"
+                            android:textSize="15sp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="5dp"
+                            android:drawableStart="@drawable/ic_call"
+                            android:drawablePadding="5dp"
+                            android:background="@drawable/shape_type_message"
+                            android:padding="8dp"
+                            android:textColor="#084D0B"
+                            android:backgroundTint="#96E79A"
+                            />
 
                         <TextView
                             android:id="@+id/stadium_images"
@@ -139,6 +116,7 @@
                             android:textSize="20sp"
                             android:layout_marginTop="10dp"
                             android:layout_marginBottom="5dp"
+                            android:visibility="gone"
                             />
                         <com.denzcoskun.imageslider.ImageSlider
                             android:id="@+id/image_slider"
@@ -149,6 +127,7 @@
                             app:iss_delay="1000"
                             android:layout_marginBottom="15dp"
                             app:iss_title_background="@color/transparent"
+                            android:visibility="gone"
                             />
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
