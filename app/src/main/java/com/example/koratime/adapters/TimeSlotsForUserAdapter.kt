@@ -1,5 +1,7 @@
 package com.example.koratime.adapters
 
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -31,6 +33,13 @@ class TimeSlotsForUserAdapter(private  var availableTimeSlots: List<String>) : R
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val timeSlot = availableTimeSlots[position]
         holder.bind(timeSlot)
+        holder.dataBinding.apply {
+            tvTimeSlot.isEnabled = false
+            tvTimeSlot.setTextColor((Color.BLACK))
+            btnBook.isEnabled = true
+            btnBook.text = "Book"
+            btnBook.backgroundTintList = null
+        }
         holder.dataBinding.btnBook.setOnClickListener {
             onBookClickListener?.onclick(timeSlot, holder, position)
         }

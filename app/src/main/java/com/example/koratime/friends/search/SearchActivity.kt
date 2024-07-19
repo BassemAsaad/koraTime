@@ -21,8 +21,6 @@ import com.example.koratime.model.UserModel
 @Suppress("DEPRECATION")
 class SearchActivity : BasicActivity<ActivitySearchBinding,SearchViewModel>(),SearchNavigator {
     private val usersList = mutableListOf<UserModel?>()
-    private val currentUserPicture= DataUtils.user!!.profilePicture
-    private val currentUserName= DataUtils.user!!.userName
     private val adapter = AddFriendsAdapter(usersList,DataUtils.user!!.id )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,10 +43,13 @@ class SearchActivity : BasicActivity<ActivitySearchBinding,SearchViewModel>(),Se
 
         setSupportActionBar(dataBinding.toolbar)
         // Enable back button on Toolbar
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowHomeEnabled(true)
-        supportActionBar?.title= "Search For People"
-        supportActionBar?.setDisplayShowTitleEnabled(true)
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setDisplayShowHomeEnabled(true)
+            title= "Search For People"
+            setDisplayShowTitleEnabled(true)
+        }
+
         dataBinding.searchUser.requestFocus()
 
         // filter users for search

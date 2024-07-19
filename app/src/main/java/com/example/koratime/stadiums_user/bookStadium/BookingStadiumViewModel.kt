@@ -34,9 +34,6 @@ class BookingStadiumViewModel : BasicViewModel<BookingStadiumNavigator>() {
         return allTimeSlots.filterNot { it in bookedTimeSlots }
     }
 
-//onSuccessListenerBoolean = {
-//                Log.e("Firebase "," Player Document Exist $it")
-//            },
     fun LookForPlayers(){
 
     playerDocumentExists(stadium!!.stadiumID!!, DataUtils.user!!.id!!,
@@ -100,6 +97,5 @@ class BookingStadiumViewModel : BasicViewModel<BookingStadiumNavigator>() {
 
 
     }
-
 }
 

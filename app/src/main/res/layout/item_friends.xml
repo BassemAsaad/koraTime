@@ -29,19 +29,20 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="20dp"
                 android:paddingVertical="5dp"
                 >
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/userImage_item"
-                    android:layout_width="100dp"
-                    android:layout_height="80dp"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
                     app:imageUrl="@{friendModel.friendPicture}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:src="@drawable/ic_account_circle_" />
+                    tools:src="@drawable/ic_account_circle_"
+                    android:layout_marginStart="15dp"
+                    />
 
                 <TextView
                     android:id="@+id/textView"
@@ -76,11 +77,13 @@
 
                 <ImageView
                     android:id="@+id/remove_friend"
-                    android:layout_width="100dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="35dp"
                     android:src="@drawable/ic_remove"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+
+                    />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

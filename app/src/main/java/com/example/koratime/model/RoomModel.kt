@@ -13,7 +13,8 @@ data class RoomModel(
     val userManager: String? =null,
     val playersId:List<String>?=null,
     val createdTimestamp: Long? = System.currentTimeMillis()
-) : Parcelable { companion object {
+) : Parcelable {
+    companion object {
         const val COLLECTION_NAME = "Rooms"
     }
 }

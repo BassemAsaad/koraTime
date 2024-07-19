@@ -42,9 +42,11 @@ abstract class BasicActivity <DB : ViewDataBinding, VM : BasicViewModel<*>>: App
      private var progressDialog: ProgressDialog?=null
      private fun showLoading(){
          progressDialog = ProgressDialog(this)
-         progressDialog?.setMessage("Loading...")
-         progressDialog?.setCancelable(false)
-         progressDialog?.show()
+         progressDialog?.apply {
+             setMessage("Loading...")
+             setCancelable(false)
+             show()
+         }
      }
      private fun hideLoading(){
          progressDialog?.dismiss()

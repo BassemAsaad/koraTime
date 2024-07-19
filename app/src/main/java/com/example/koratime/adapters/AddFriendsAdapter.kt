@@ -48,19 +48,26 @@ class AddFriendsAdapter  (private var usersList : List<UserModel?>?, private val
             Log.e("Firebase"," ${user.userName}")
             when (status) {
                 "pending" -> {
-                    holder.dataBinding.addFriendButtonItem.text = "Pending"
-                    holder.dataBinding.addFriendButtonItem.isEnabled = false
-                    holder.dataBinding.removeFriendButtonItem.isEnabled = true
+                    holder.dataBinding.apply {
+                        addFriendButtonItem.text = "Pending"
+                        addFriendButtonItem.isEnabled = false
+                        removeFriendButtonItem.isEnabled = true
+                    }
+
                 }
                 "accepted" -> {
-                    holder.dataBinding.addFriendButtonItem.text = "Friends"
-                    holder.dataBinding.addFriendButtonItem.isEnabled = false
-                    holder.dataBinding.removeFriendButtonItem.isEnabled = false
+                    holder.dataBinding.apply {
+                        addFriendButtonItem.text = "Friends"
+                        addFriendButtonItem.isEnabled = false
+                        removeFriendButtonItem.isEnabled = false
+                    }
                 }
                 else -> {
-                    holder.dataBinding.addFriendButtonItem.text = "Add Friend"
-                    holder.dataBinding.addFriendButtonItem.isEnabled = true
-                    holder.dataBinding.removeFriendButtonItem.isEnabled = false
+                    holder.dataBinding.apply {
+                        addFriendButtonItem.text = "Add Friend"
+                        addFriendButtonItem.isEnabled = true
+                        removeFriendButtonItem.isEnabled = false
+                    }
 
                 }
 

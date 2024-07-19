@@ -50,14 +50,20 @@ class FriendsAdapter  (var friendsList : List<FriendModel?>?): RecyclerView.Adap
                 Log.e("Firebase ","Error returning message")
             }
         )
-        holder.itemView.setOnClickListener {
-            onUserClickListener?.onItemClick(friendsList!![position]!!,holder,position)
+        holder.apply {
+            dataBinding.removeFriend.setOnClickListener {
+                onUserClickListener?.onRemoveClick(friendsList!![position]!!,holder,position)
+            }
+            itemView.setOnClickListener {
+                onUserClickListener?.onItemClick(friendsList!![position]!!,holder,position)
+            }
         }
 
     }
     var onUserClickListener : OnUserClickListener?=null
     interface OnUserClickListener{
         fun onItemClick(user : FriendModel?,holder: ViewHolder, position: Int)
+        fun onRemoveClick(user : FriendModel?,holder: ViewHolder, position: Int)
     }
     @SuppressLint("NotifyDataSetChanged")
     fun changeData(newFriend : List<FriendModel?>?){

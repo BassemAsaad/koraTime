@@ -26,6 +26,8 @@ class ChatFragment : Fragment(),ChatNavigator {
     private lateinit var viewModel : ChatViewModel
     val adapter = FriendsAdapter(null)
     private lateinit var friendsList : MutableList<FriendModel>
+
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -52,7 +54,13 @@ class ChatFragment : Fragment(),ChatNavigator {
         dataBinding.vm = viewModel
         viewModel.navigator=this
         dataBinding.recyclerView.adapter = adapter
+        callBack()
+    }
 
+
+
+
+    private fun callBack(){
         adapter.onUserClickListener=object :FriendsAdapter.OnUserClickListener{
             override fun onItemClick(
                 user: FriendModel?,
@@ -63,20 +71,24 @@ class ChatFragment : Fragment(),ChatNavigator {
                 intent.putExtra(Constants.FRIEND,user)
                 startActivity(intent)
 
-                holder.dataBinding.removeFriend.setOnClickListener {
-                    removeFriendFromFirestore(
-                        user1 = DataUtils.user!!,
-                        user2 = user!!,
-                        onSuccessListener = {
-                            Log.e("Firebase","Friend Removed Successfully")
-                        },
-                        onFailureListener = {
-                            Log.e("Firebase","Friend not removed ")
+            }
 
-                        }
-                    )
-                }
-
+            override fun onRemoveClick(
+                user: FriendModel?,
+                holder: FriendsAdapter.ViewHolder,
+                position: Int
+            ) {
+                removeFriendFromFirestore(
+                    user1 = DataUtils.user!!,
+                    user2 = user!!,
+                    onSuccessListener = {
+                        friendsList.remove(user)
+                        adapter.changeData(friendsList)
+                        Log.e("Firebase","Friend Removed Successfully") },
+                    onFailureListener = {
+                        Log.e("Firebase","Friend not removed ")
+                    }
+                )
             }
         }
 
@@ -92,7 +104,6 @@ class ChatFragment : Fragment(),ChatNavigator {
                 return true
             }
         })
-
     }
 
     private fun getFriends(){
@@ -109,10 +120,7 @@ class ChatFragment : Fragment(),ChatNavigator {
     }
     override fun onStart() {
         super.onStart()
-
         getFriends()
-
-
     }
 
 }

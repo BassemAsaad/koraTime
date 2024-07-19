@@ -14,16 +14,12 @@ import androidx.core.app.NotificationCompat
 import com.example.koratime.R
 import com.example.koratime.splash.SplashActivity
 
-class NotificationServices  : Service() {
+class NotificationServices : Service() {
 
     override fun onCreate() {
         super.onCreate()
         createNotificationChannel()
         startForegroundService()
-        Log.d("dd", "Service created")
-
-
-
 
     }
 
@@ -53,10 +49,6 @@ class NotificationServices  : Service() {
         startForeground(1, notification)
     }
 
-    private fun isAppInForeground(): Boolean {
-        val app = applicationContext as InApplication
-        return app.isInForeground
-    }
 
     @SuppressLint("NotificationPermission")
     private fun sendNotification(title: String, message: String) {
@@ -66,14 +58,14 @@ class NotificationServices  : Service() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val importance = NotificationManager.IMPORTANCE_DEFAULT
             val channel = NotificationChannel(channelId, channelName, importance)
-            val notificationManager: NotificationManager =
-                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)
         }
 
         val intent = Intent(this, SplashActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
+
         val pendingIntent: PendingIntent = PendingIntent.getActivity(
             this, 1, intent, PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
         )

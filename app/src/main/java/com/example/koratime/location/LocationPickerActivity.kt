@@ -3,7 +3,6 @@ package com.example.koratime.location
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
-import android.location.Address
 import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
@@ -11,12 +10,10 @@ import android.util.Log
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
 import com.example.koratime.R
 import com.example.koratime.basic.BasicActivity
 import com.example.koratime.databinding.ActivityLocationPickerBinding
-import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -28,11 +25,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 
 import com.google.android.libraries.places.api.Places
-import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.net.PlacesClient
-import com.google.android.libraries.places.widget.AutocompleteSupportFragment
-import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
-import java.io.IOException
 import java.lang.Exception
 
 @Suppress("DEPRECATION")
