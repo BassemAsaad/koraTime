@@ -13,6 +13,7 @@ import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.firestore
@@ -847,14 +848,14 @@ fun playerDocumentExists(stadiumID: String,
         .collection(StadiumModel.SUB_COLLECTION_FIND_PLAYERS).document(StadiumModel.DOCUMENT_PLAYERS)
 
     // Query the document for the "players" field and check if it contains the userID
-    findPlayersRef.get().addOnSuccessListener { task ->
-            if (task != null && task.exists()) {
-                val playersList = task.get("players") as List<*>
-                val playerExists = playersList.contains(userID)
-                onSuccessListener.onSuccess(playerExists)
-            } else {
-                onSuccessListener.onSuccess(false) // Document doesn't exist
-            }
+    findPlayersRef.get().addOnSuccessListener { document ->
+        if (document.exists()) {
+            val playersList = document.get(StadiumModel.FIELD_PLAYERS_LIST) as List<String>
+            onSuccessListener.onSuccess(playersList.contains(userID))
+        }else{
+            onSuccessListener.onSuccess(false)
+        }
+
         }
         .addOnFailureListener(onFailureListener)
     }
@@ -872,9 +873,8 @@ fun setPlayerDataAndUpdateCounter(stadiumID: String,
         .addOnSuccessListener { document ->
             if (document.exists()) {
                 val counter = document.getLong(StadiumModel.FIELD_PLAYERS_COUNTER) ?:0
-                val playersList = document.get(StadiumModel.FIELD_PLAYERS_LIST) as MutableList<String>
                 findPlayersRef.update(StadiumModel.FIELD_PLAYERS_COUNTER, counter + 1,
-                    StadiumModel.FIELD_PLAYERS_LIST,playersList.add(userID))
+                    StadiumModel.FIELD_PLAYERS_LIST,FieldValue.arrayUnion(userID))
                     .addOnSuccessListener(onSuccessListener)
                     .addOnFailureListener(onFailureListener)
 
@@ -949,7 +949,7 @@ fun removePlayer(stadiumID: String,
                 val count = document.getLong(StadiumModel.FIELD_PLAYERS_COUNTER)
                 val playersList = document.get(StadiumModel.FIELD_PLAYERS_LIST) as MutableList<String>
                 findPlayersRef.update(StadiumModel.FIELD_PLAYERS_COUNTER, count!! - 1
-                    ,StadiumModel.FIELD_PLAYERS_LIST,playersList.remove(userID))
+                    ,StadiumModel.FIELD_PLAYERS_LIST,FieldValue.arrayRemove(userID))
                     .addOnSuccessListener(onSuccessListener)
                     .addOnFailureListener(onFailureListener)
 

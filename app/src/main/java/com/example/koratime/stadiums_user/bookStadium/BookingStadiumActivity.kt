@@ -59,11 +59,15 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
         setSupportActionBar(dataBinding.toolbar)
         callBack()
         getStadiumImages()
-        searchForPlayers()
 
 
     }
 
+    override fun onStart() {
+        super.onStart()
+        checkSearch()
+
+    }
     private fun callBack(){
         viewModel.apply {
             dataBinding.vm = viewModel
@@ -89,21 +93,6 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
             }
             stadiumNumber.setOnClickListener {
                 showNumber()
-            }
-            stopSearching.setOnClickListener {
-                removePlayer(
-                    stadiumID = stadiumModel.stadiumID!!,
-                    userID = DataUtils.user!!.id!!,
-                    onSuccessListener = {
-                        Log.e(TAG,"Player Removed From Search Successfully")
-                        stopSearching.visibility = View.GONE
-                        lookForPlayers.text = "Click To Search For Players"
-                        lookForPlayers.isEnabled=true
-                    },
-                    onFailureListener = {e->
-                        Log.e(TAG,"Error Removing Player From Search: ",e)
-                    }
-                )
             }
             bookingPrice.text = "Note: Booking Price is ${stadiumModel.stadiumPrice}EGP (per hour)"
 
@@ -172,11 +161,12 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
             }
         )
     }
-    private fun searchForPlayers() {
+    private fun checkSearch() {
         playerDocumentExists(
             stadiumID = stadiumModel.stadiumID!!,
             userID = DataUtils.user!!.id!!,
             onSuccessListener = {playerExist->
+                Log.e( TAG,"Player Exist ? $playerExist")
                 if (playerExist){
                     dataBinding.lookForPlayers.text = "Looking For Players..."
                     dataBinding.lookForPlayers.isEnabled = false
@@ -186,10 +176,10 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
                     dataBinding.lookForPlayers.isEnabled = true
                     dataBinding.stopSearching.visibility = View.GONE
                 }
-                Log.e("Firebase ","Player Exist ? $playerExist")
+                Log.e(TAG,"Player Exist ? $playerExist")
             },
             onFailureListener = {e->
-                Log.e("Firebase ","Error Finding The player: ",e)
+                Log.e(TAG,"Error Finding The player: ",e)
 
             }
         )
@@ -213,19 +203,19 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
             date = date,
             onSuccessListener = { bookedList ->
                 bookedTimesList = bookedList
-                Log.e("Firebase"," Booked times $bookedTimesList")
+                Log.e(TAG," Booked times $bookedTimesList")
 
                 // create opening and closing list
                 timeSlotsList = viewModel.createListForOpeningTimes(stadiumModel.opening!!,stadiumModel.closing!!,resources.getStringArray(R.array.time_slots))
 
                 // create list of available times
                 availableSlots = viewModel.removeBookedListFromOpeningTimes(timeSlotsList,bookedTimesList).toMutableList()
-                Log.e("Available Slots","$availableSlots")
+                Log.e(TAG,"Available Slots : $availableSlots")
 
                 updateAdapter(availableSlots)
             },
             onFailureListener = { e->
-                Log.e("Firebase", "Error fetching booked times", e)
+                Log.e(TAG, "Error fetching booked times", e)
             }
         )
     }

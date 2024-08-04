@@ -1,6 +1,7 @@
 package com.example.koratime.stadiums_user.bookStadium
 
 import android.util.Log
+import android.view.View
 import androidx.databinding.ObservableField
 import com.example.koratime.DataUtils
 import com.example.koratime.basic.BasicViewModel
@@ -8,9 +9,11 @@ import com.example.koratime.database.addStadiumRoomToFirestore
 import com.example.koratime.database.checkCounterInFirestore
 import com.example.koratime.database.getPlayersIdListFromFirestore
 import com.example.koratime.database.playerDocumentExists
+import com.example.koratime.database.removePlayer
 import com.example.koratime.database.resetCounterAndRemovePlayers
 import com.example.koratime.database.setPlayerDataAndUpdateCounter
 import com.example.koratime.model.StadiumModel
+import com.example.koratime.stadiums_user.bookStadium.BookingStadiumActivity.Companion
 
 
 class BookingStadiumViewModel : BasicViewModel<BookingStadiumNavigator>() {
@@ -39,7 +42,6 @@ class BookingStadiumViewModel : BasicViewModel<BookingStadiumNavigator>() {
     }
 
     fun lookForPlayers(){
-
     playerDocumentExists(stadium!!.stadiumID!!, DataUtils.user!!.id!!,
         onSuccessListener = {playerExist->
             Log.e(TAG," Player ${DataUtils.user!!.userName} is looking for players")
@@ -100,6 +102,21 @@ class BookingStadiumViewModel : BasicViewModel<BookingStadiumNavigator>() {
         )// end check if player document exist
 
 
+    }
+    fun stopSearching(){
+        removePlayer(
+            stadiumID = stadium!!.stadiumID!!,
+            userID = DataUtils.user!!.id!!,
+            onSuccessListener = {
+                Log.e(TAG,"Player Removed From Search Successfully")
+                buttonVisibility.set(false)
+                lookForPlayers.set("Click To Search For Players")
+                buttonEnabled.set(true)
+            },
+            onFailureListener = {e->
+                Log.e(TAG,"Error Removing Player From Search: ",e)
+            }
+        )
     }
 }
 

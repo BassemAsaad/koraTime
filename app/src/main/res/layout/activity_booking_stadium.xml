@@ -132,6 +132,7 @@
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:padding="15dp"
                             >
                             <TextView
                                 android:id="@+id/look_for_players"
@@ -141,8 +142,7 @@
                                 android:text="@={vm.lookForPlayers}"
                                 android:enabled="@{vm.buttonEnabled}"
                                 tools:text="Find Players"
-                                android:textSize="20sp"
-                                android:padding="15dp"
+                                android:textSize="16sp"
                                 android:layout_marginVertical="15dp"
                                 android:onClick="@{()->vm.lookForPlayers()}"
                                 android:textColor="@color/blue_light"
@@ -154,14 +154,15 @@
                                 />
                             <Button
                                 android:id="@+id/stopSearching"
-                                android:layout_width="155dp"
-                                android:layout_height="60dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toEndOf="@id/look_for_players"
                                 app:layout_constraintTop_toTopOf="parent"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 android:visibility="@{vm.buttonVisibility==true? View.VISIBLE:View.GONE }"
-                                android:text="Stop Searching? press here"
+                                android:text="Stop Searching?"
+                                android:onClick="@{()->vm.stopSearching()}"
                                 />
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
