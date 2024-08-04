@@ -40,6 +40,10 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
     private val slideImageList = mutableListOf<String>()
     private var selectedDate= SimpleDateFormat("MM_dd_yyyy", Locale.getDefault()).format(Date())
 
+    companion object{
+        const val TAG = "BookingStadiumActivity"
+    }
+
     override fun getLayoutID(): Int {
         return R.layout.activity_booking_stadium
     }
@@ -91,13 +95,13 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
                     stadiumID = stadiumModel.stadiumID!!,
                     userID = DataUtils.user!!.id!!,
                     onSuccessListener = {
-                        Log.e("Firebase","Player Removed From Search Successfully")
+                        Log.e(TAG,"Player Removed From Search Successfully")
                         stopSearching.visibility = View.GONE
                         lookForPlayers.text = "Click To Search For Players"
                         lookForPlayers.isEnabled=true
                     },
                     onFailureListener = {e->
-                        Log.e("Firebase","Error Removing Player From Search: ",e)
+                        Log.e(TAG,"Error Removing Player From Search: ",e)
                     }
                 )
             }
@@ -107,7 +111,7 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
             // Add an OnDateChangeListener to the CalendarView
             calendarView.setOnDateChangeListener { view, year, month, dayOfMonth ->
                 selectedDate = String.format("%02d_%02d_%04d", month + 1, dayOfMonth, year)
-                Log.e("Firebase"," Date selected: $selectedDate  ")
+                Log.e(TAG," Date selected: $selectedDate  ")
 
                 getAvailableTimes(selectedDate)
             }

@@ -836,44 +836,29 @@ fun getBookedTimesFromFirestore(stadiumID: String,
 }
 
 fun playerDocumentExists(stadiumID: String,
-                         userID: String,
-                         onSuccessListener: OnSuccessListener<Boolean>,
-                         onFailureListener: OnFailureListener) {
+                 userID: String,
+                 onSuccessListener: OnSuccessListener<Boolean>,
+                 onFailureListener: OnFailureListener) {
     // Get a reference to the Firestore database
     val db = Firebase.firestore
 
     // Get a reference to the PlayersCounter document
     val findPlayersRef = db.collection(StadiumModel.COLLECTION_NAME).document(stadiumID)
-        .collection(StadiumModel.SUB_COLLECTION_FIND_PLAYERS).document("PlayersCounter")
+        .collection(StadiumModel.SUB_COLLECTION_FIND_PLAYERS).document(StadiumModel.DOCUMENT_PLAYERS)
 
-    // Get the PlayersCounter document
-    findPlayersRef.get()
-        .addOnSuccessListener { document ->
-            // Check if the PlayersCounter document exists
-            if (document.exists()) {
-                // Get a reference to the player document
-                val playerRef = findPlayersRef.collection("Players").document(userID)
-
-                // Get the player document
-                playerRef.get()
-                    .addOnSuccessListener { playerDocument ->
-                        // Check if the player document exists
-                        if (playerDocument.exists()) {
-                            // Call the onSuccessListener with true to indicate that the player document exists
-                            onSuccessListener.onSuccess(true)
-                        } else {
-                            // Call the onSuccessListener with false to indicate that the player document does not exist
-                            onSuccessListener.onSuccess(false)
-                        }
-                    }
-                    .addOnFailureListener(onFailureListener)
+    // Query the document for the "players" field and check if it contains the userID
+    findPlayersRef.get().addOnSuccessListener { task ->
+            if (task != null && task.exists()) {
+                val playersList = task.get("players") as List<*>
+                val playerExists = playersList.contains(userID)
+                onSuccessListener.onSuccess(playerExists)
             } else {
-                // Call the onSuccessListener with false to indicate that the player document does not exist
-                onSuccessListener.onSuccess(false)
+                onSuccessListener.onSuccess(false) // Document doesn't exist
             }
         }
         .addOnFailureListener(onFailureListener)
-}
+    }
+
 
 fun setPlayerDataAndUpdateCounter(stadiumID: String,
                                   userID: String,
@@ -881,30 +866,24 @@ fun setPlayerDataAndUpdateCounter(stadiumID: String,
                                   onFailureListener: OnFailureListener) {
     val db = Firebase.firestore
     val findPlayersRef = db.collection(StadiumModel.COLLECTION_NAME).document(stadiumID)
-        .collection(StadiumModel.SUB_COLLECTION_FIND_PLAYERS).document("PlayersCounter")
+        .collection(StadiumModel.SUB_COLLECTION_FIND_PLAYERS).document(StadiumModel.DOCUMENT_PLAYERS)
 
     findPlayersRef.get()
         .addOnSuccessListener { document ->
             if (document.exists()) {
-                val count = document.getLong("count") ?:0
-                val playerRef = findPlayersRef.collection("Players").document(userID)
-                playerRef.set(hashMapOf("userID" to userID))
-                    .addOnSuccessListener {
-                        findPlayersRef.update("count", count + 1)
-                            .addOnSuccessListener(onSuccessListener)
-                            .addOnFailureListener(onFailureListener)
-                    }.addOnFailureListener(onFailureListener)
-
-            } else {
-                val playerRef = findPlayersRef.collection("Players").document(userID)
-                playerRef.set(hashMapOf("userID" to userID))
-                    .addOnSuccessListener {
-                        findPlayersRef.set(hashMapOf("count" to 1))
-                            .addOnSuccessListener(onSuccessListener)
-                            .addOnFailureListener(onFailureListener)
-                    }
+                val counter = document.getLong(StadiumModel.FIELD_PLAYERS_COUNTER) ?:0
+                val playersList = document.get(StadiumModel.FIELD_PLAYERS_LIST) as MutableList<String>
+                findPlayersRef.update(StadiumModel.FIELD_PLAYERS_COUNTER, counter + 1,
+                    StadiumModel.FIELD_PLAYERS_LIST,playersList.add(userID))
+                    .addOnSuccessListener(onSuccessListener)
                     .addOnFailureListener(onFailureListener)
 
+
+            } else {
+                findPlayersRef.set(hashMapOf(StadiumModel.FIELD_PLAYERS_COUNTER to 1,
+                    StadiumModel.FIELD_PLAYERS_LIST to mutableListOf(userID)))
+                    .addOnSuccessListener(onSuccessListener)
+                    .addOnFailureListener(onFailureListener)
             }
         }
         .addOnFailureListener(onFailureListener)
@@ -915,20 +894,19 @@ fun checkCounterInFirestore(stadiumID: String,
                             onFailureListener: OnFailureListener) {
     val db = Firebase.firestore
     val findPlayersRef = db.collection(StadiumModel.COLLECTION_NAME).document(stadiumID)
-        .collection(StadiumModel.SUB_COLLECTION_FIND_PLAYERS).document("PlayersCounter")
+        .collection(StadiumModel.SUB_COLLECTION_FIND_PLAYERS).document(StadiumModel.DOCUMENT_PLAYERS)
 
     findPlayersRef.get()
         .addOnSuccessListener { document ->
             if (document.exists()) {
-                val count = document.getLong("count") ?: 0
+                val count = document.getLong(StadiumModel.FIELD_PLAYERS_COUNTER) ?: 0
                 onSuccessListener.onSuccess(count.toInt() == 3)
             } else {
                 onSuccessListener.onSuccess(false)
             }
+
         }
-        .addOnFailureListener { exception ->
-            onFailureListener.onFailure(exception)
-        }
+        .addOnFailureListener(onFailureListener)
 }
 
 fun getPlayersIdListFromFirestore(stadiumID: String,
@@ -936,60 +914,45 @@ fun getPlayersIdListFromFirestore(stadiumID: String,
                                   onFailureListener: OnFailureListener) {
     val db = Firebase.firestore
     val playersCounterRef = db.collection(StadiumModel.COLLECTION_NAME).document(stadiumID)
-        .collection(StadiumModel.SUB_COLLECTION_FIND_PLAYERS).document("PlayersCounter")
-        .collection("Players")
+        .collection(StadiumModel.SUB_COLLECTION_FIND_PLAYERS).document(StadiumModel.DOCUMENT_PLAYERS)
 
     playersCounterRef.get()
-        .addOnSuccessListener { documents ->
-            val playerIDs = documents.map { it.id }
+        .addOnSuccessListener { document ->
+            val playerIDs = document.get(StadiumModel.FIELD_PLAYERS_LIST) as List<String>
             onSuccessListener.onSuccess(playerIDs)
         }
-        .addOnFailureListener { exception ->
-            onFailureListener.onFailure(exception)
-        }
+        .addOnFailureListener(onFailureListener)
 }
 
 fun resetCounterAndRemovePlayers(stadiumID: String,
-                                 onSuccessListener: OnSuccessListener<String>,
+                                 onSuccessListener: OnSuccessListener<Void>,
                                  onFailureListener: OnFailureListener) {
     val db = Firebase.firestore
     val findPlayersRef = db.collection(StadiumModel.COLLECTION_NAME).document(stadiumID)
         .collection(StadiumModel.SUB_COLLECTION_FIND_PLAYERS)
-        .document("PlayersCounter")
-    val playersRef = findPlayersRef.collection("Players")
-
-
-    findPlayersRef.update("count", 0)
-        .addOnSuccessListener {
-            playersRef.get()
-                .addOnSuccessListener {querySnapshot ->
-                    querySnapshot.documents.forEach{
-                        onSuccessListener.onSuccess(it.id)
-                        it.reference.delete()
-                    }
-                }.addOnFailureListener(onFailureListener)
-        }
+        .document(StadiumModel.DOCUMENT_PLAYERS)
+    findPlayersRef.delete()
+        .addOnSuccessListener(onSuccessListener)
         .addOnFailureListener(onFailureListener)
+
 }
 fun removePlayer(stadiumID: String,
                  userID: String,
                  onSuccessListener: OnSuccessListener<Void>, onFailureListener: OnFailureListener) {
     val db = Firebase.firestore
     val findPlayersRef = db.collection(StadiumModel.COLLECTION_NAME).document(stadiumID)
-        .collection(StadiumModel.SUB_COLLECTION_FIND_PLAYERS).document("PlayersCounter")
+        .collection(StadiumModel.SUB_COLLECTION_FIND_PLAYERS).document(StadiumModel.DOCUMENT_PLAYERS)
 
     findPlayersRef.get()
         .addOnSuccessListener { document ->
             if (document.exists()) {
-                val count = document.getLong("count") ?:0
-                val playerRef = findPlayersRef.collection("Players").document(userID)
-                playerRef.delete()
-                    .addOnSuccessListener {
-                        findPlayersRef.update("count", count - 1)
-                            .addOnSuccessListener(onSuccessListener)
-                            .addOnFailureListener(onFailureListener)
-                    }
+                val count = document.getLong(StadiumModel.FIELD_PLAYERS_COUNTER)
+                val playersList = document.get(StadiumModel.FIELD_PLAYERS_LIST) as MutableList<String>
+                findPlayersRef.update(StadiumModel.FIELD_PLAYERS_COUNTER, count!! - 1
+                    ,StadiumModel.FIELD_PLAYERS_LIST,playersList.remove(userID))
+                    .addOnSuccessListener(onSuccessListener)
                     .addOnFailureListener(onFailureListener)
+
             } else {
                 onFailureListener.onFailure(Exception("PlayersCounter document does not exist"))
             }

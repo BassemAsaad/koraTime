@@ -18,6 +18,10 @@ class BookingStadiumViewModel : BasicViewModel<BookingStadiumNavigator>() {
     val lookForPlayers = ObservableField<String>()
     val buttonEnabled = ObservableField<Boolean>()
     val buttonVisibility= ObservableField<Boolean>()
+    companion object{
+        private const val TAG = "BookingStadiumViewModel"
+    }
+
     fun createListForOpeningTimes(openingIndex: Int, closingIndex: Int, timeSlotsArray: Array<String>): List<String> {
         val availableTimeSlots = mutableListOf<String>()
 
@@ -34,64 +38,64 @@ class BookingStadiumViewModel : BasicViewModel<BookingStadiumNavigator>() {
         return allTimeSlots.filterNot { it in bookedTimeSlots }
     }
 
-    fun LookForPlayers(){
+    fun lookForPlayers(){
 
     playerDocumentExists(stadium!!.stadiumID!!, DataUtils.user!!.id!!,
         onSuccessListener = {playerExist->
-            Log.e("Firebase"," Player ${DataUtils.user!!.userName} is looking for players")
+            Log.e(TAG," Player ${DataUtils.user!!.userName} is looking for players")
             if (!playerExist){
                 setPlayerDataAndUpdateCounter(stadium!!.stadiumID!!, DataUtils.user!!.id!!,
                     onSuccessListener = {
-                        Log.e("Firebase ","Document added successfully for player ${DataUtils.user!!.id}")
+                        Log.e(TAG,"Player added successfully for playersList ${DataUtils.user!!.userName}")
                         lookForPlayers.set("Looking For Players...")
                         buttonEnabled.set(false)
                         buttonVisibility.set(true)
                         checkCounterInFirestore(stadiumID = stadium!!.stadiumID!!,
-                            onSuccessListener = {playersCounter->
-                                Log.e("Firebase"," Counter == 3 ? $playersCounter")
-                                if (playersCounter){
+                            onSuccessListener = {checkCounter->
+                                Log.e(TAG," Counter == 3 ? $checkCounter")
+                                if (checkCounter){
                                     getPlayersIdListFromFirestore(
                                         stadiumID = stadium!!.stadiumID!!,
                                         onSuccessListener = {playersIDs->
-                                            Log.e("Firebase"," PlayersIDs $playersIDs")
+                                            Log.e(TAG," PlayersID List $playersIDs")
                                             addStadiumRoomToFirestore(
                                                 stadium!!,
                                                 playersIDs,
                                                 onSuccessListener = {
-                                                    Log.e("Firebase"," Stadium Room Added Successfully ")
+                                                    Log.e(TAG," Stadium Room Created Successfully ")
 
                                                     resetCounterAndRemovePlayers(
                                                         stadiumID = stadium!!.stadiumID!!,
                                                         onSuccessListener = {
-                                                            Log.e("Firebase"," Document $it Removed Successfully ")
+                                                            Log.e(TAG,"Document Removed Successfully")
 
                                                         },
                                                         onFailureListener = {
-                                                            Log.e("Firebase","Error Adding Stadium Room")
+                                                            Log.e(TAG,"Error Removing Document")
                                                         }
-                                                    )//reset counter and delete documents
+                                                    ) //delete document
+
                                                 },
-                                                onFailureListener = { Log.e("Firebase"," Error Adding Stadium Room ") }
+                                                onFailureListener = { Log.e(TAG," Error Adding Stadium Room ",it) }
                                             )
 
                                         },
                                         onFailureListener = {
-                                            Log.e("Firebase","Error getting PlayersIDs: ",it)
-
+                                            Log.e(TAG,"Error getting PlayersID list: ",it)
                                         }
                                     )// end get list of players id
                                 }
 
                             },
-                            onFailureListener = { Log.e("Firebase","Error getting players count: ",it) }
+                            onFailureListener = { Log.e(TAG,"Error getting players count: ",it) }
                         )// end check counter
 
                                         },
-                    onFailureListener = { Log.e("Firebase","Error adding document and updating counter: ",it) }
+                    onFailureListener = { Log.e(TAG,"Error adding player and updating counter: ",it) }
                 ) // end set player
             } },
         onFailureListener = {
-                Log.e("Firebase"," Error adding player to search")
+                Log.e(TAG," Error adding player to search")
             }
         )// end check if player document exist
 
