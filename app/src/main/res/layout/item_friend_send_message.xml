@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="messageModel"
             type="com.example.koratime.model.FriendMessageModel" />
@@ -12,8 +13,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        >
+        android:layout_marginTop="10dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
@@ -27,8 +27,7 @@
             app:layout_constraintHorizontal_bias="1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0"
-            >
+            app:layout_constraintVertical_bias="0.0">
 
 
             <!-- Text view for the message content -->
@@ -53,6 +52,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="5dp"
+                android:paddingHorizontal="10dp"
                 android:text="@{messageModel.formatTime()}"
                 android:textColor="#CCFFFFFF"
                 android:textSize="12sp"
@@ -62,9 +62,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/message_content"
                 app:layout_constraintVertical_bias="0.0"
-                tools:text="3:18 PM"
-                android:paddingHorizontal="10dp"
-                />
+                tools:text="3:18 PM" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

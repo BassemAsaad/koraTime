@@ -30,8 +30,6 @@
                 tools:listitem="@layout/item_public_rooms" />
 
 
-
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,7 +9,7 @@
             name="roomModel"
             type="com.example.koratime.model.RoomModel" />
 
-        <import type="android.view.View"/>
+        <import type="android.view.View" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -33,12 +33,12 @@
                 android:id="@+id/roomImage_item"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
+                android:contentDescription="@string/room_image"
                 app:imageUrl="@{roomModel.imageUrl}"
+                app:layout_constraintBottom_toTopOf="@id/linearLayout"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/linearLayout"
-                tools:src="@drawable/ic_friends"
-                android:contentDescription="@string/room_image" />
+                tools:src="@drawable/ic_friends" />
 
             <TextView
                 android:id="@+id/roomName_item"
@@ -74,37 +74,35 @@
                 android:id="@+id/linearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
                 android:gravity="center"
-                app:layout_constraintTop_toBottomOf="@id/roomImage_item"
+                android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/roomImage_item"
 
                 >
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/roomPassword_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:visibility="@{roomModel.password != null &amp;&amp; roomModel.password.length() > 0 ? View.VISIBLE : View.GONE}"
-                >
-
-                <EditText
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/roomPassword_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:autofillHints="enter room password (optional)"
-                    android:hint="Enter room password to join"
-                     />
-            </com.google.android.material.textfield.TextInputLayout>
-            <Button
-                android:id="@+id/joinButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Join Room"
-                android:layout_marginTop="8dp"
-                />
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:visibility="@{roomModel.password != null &amp;&amp; roomModel.password.length() > 0 ? View.VISIBLE : View.GONE}">
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:autofillHints="enter room password (optional)"
+                        android:hint="Enter room password to join" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/joinButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Join Room" />
             </LinearLayout>
 
 

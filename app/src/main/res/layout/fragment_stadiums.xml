@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="vm"
             type="com.example.koratime.stadiums_user.StadiumsViewModel" />
@@ -57,22 +58,22 @@
                         android:textColor="@color/white"
                         android:textSize="22sp"
                         app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
                         tools:text="Mohammed Ehab" />
+
                     <ImageView
                         android:layout_width="50dp"
                         android:layout_height="50dp"
+                        android:background="@drawable/shape_search"
+                        android:contentDescription="Logout"
+                        android:onClick="@{()->vm.logOut()}"
+                        android:padding="10dp"
                         android:src="@drawable/ic_logout"
-                        app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        android:onClick="@{()->vm.logOut()}"
-                        android:background="@drawable/shape_search"
-                        android:padding="10dp"
-                        android:contentDescription="Logout"
-                        />
+                        app:layout_constraintTop_toTopOf="parent" />
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -89,20 +90,19 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                >
+                android:orientation="vertical">
+
                 <androidx.appcompat.widget.SearchView
                     android:id="@+id/searchStadiums"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_marginTop="30dp"
+                    android:layout_gravity="center"
                     android:layout_marginHorizontal="10dp"
+                    android:layout_marginVertical="20dp"
+                    android:layout_marginTop="30dp"
                     android:background="@drawable/shape_rounded_search"
                     app:iconifiedByDefault="false"
-                    app:queryHint="Search For Stadiums"
-                    android:layout_gravity="center"
-                    android:layout_marginVertical="20dp"
-                    />
+                    app:queryHint="Search For Stadiums" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerView"
@@ -111,7 +111,6 @@
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:listitem="@layout/item_stadiums" />
             </LinearLayout>
-
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

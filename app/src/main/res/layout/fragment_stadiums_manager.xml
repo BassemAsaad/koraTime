@@ -56,22 +56,22 @@
                         android:textColor="@color/white"
                         android:textSize="22sp"
                         app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
                         tools:text="Mohammed Ehab" />
+
                     <ImageView
                         android:layout_width="50dp"
                         android:layout_height="50dp"
+                        android:background="@drawable/shape_search"
+                        android:contentDescription="Logout"
+                        android:onClick="@{()->vm.logOut()}"
+                        android:padding="10dp"
                         android:src="@drawable/ic_logout"
-                        app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        android:onClick="@{()->vm.logOut()}"
-                        android:background="@drawable/shape_search"
-                        android:padding="10dp"
-                        android:contentDescription="Logout"
-                        />
+                        app:layout_constraintTop_toTopOf="parent" />
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -102,16 +102,15 @@
                 android:id="@+id/create_Stadium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="20dp"
                 android:backgroundTint="@color/primary"
                 android:contentDescription="@string/create_stadium"
                 android:elevation="12dp"
-                android:src="@drawable/ic_add"
-                app:shapeAppearance="@style/Theme.AppCompat.Light"
                 android:onClick="@{()->vm.createStadium()}"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:src="@drawable/ic_add"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_margin="20dp"
-                />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:shapeAppearance="@style/Theme.AppCompat.Light" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

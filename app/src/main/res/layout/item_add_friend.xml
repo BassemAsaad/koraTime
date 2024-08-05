@@ -45,14 +45,13 @@
             android:layout_height="50dp"
             android:layout_marginStart="10dp"
             android:backgroundTint="@color/primary"
-            tools:text="Add Friend"
+            android:enabled="false"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="@id/userImage_item"
             app:layout_constraintEnd_toStartOf="@id/removeFriendButton_item"
             app:layout_constraintStart_toEndOf="@id/userImage_item"
             app:layout_constraintTop_toBottomOf="@+id/userName"
-            android:enabled="false"
-             />
+            tools:text="Add Friend" />
 
         <Button
             android:id="@+id/removeFriendButton_item"
@@ -60,12 +59,12 @@
             android:layout_height="50dp"
             android:layout_marginStart="5dp"
             android:backgroundTint="@color/primaryVariant"
+            android:enabled="false"
             android:text="Remove"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="@id/userImage_item"
             app:layout_constraintStart_toEndOf="@id/addFriendButton_item"
-            app:layout_constraintTop_toBottomOf="@+id/userName"
-            android:enabled="false"/>
+            app:layout_constraintTop_toBottomOf="@+id/userName" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

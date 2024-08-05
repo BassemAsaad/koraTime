@@ -26,8 +26,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:menu="@menu/manager_home_bar"
-            />
+            app:menu="@menu/manager_home_bar" />
 
 
         <FrameLayout
@@ -37,8 +36,7 @@
             app:layout_constraintBottom_toTopOf="@id/managerHome_bar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
+            app:layout_constraintTop_toTopOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

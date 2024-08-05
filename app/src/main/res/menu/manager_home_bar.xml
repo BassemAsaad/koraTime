@@ -3,21 +3,20 @@
 
     <item
         android:id="@+id/stadium_bar"
-        android:title="Stadium"
-        android:icon="@drawable/ic_stadium"/>
+        android:icon="@drawable/ic_stadium"
+        android:title="Stadium" />
 
 
     <item
         android:id="@+id/rooms_bar"
-        android:title="Rooms"
-        android:icon="@drawable/ic_rooms"/>
+        android:icon="@drawable/ic_rooms"
+        android:title="Rooms" />
     <item
         android:id="@+id/friends_bar"
-        android:title="Friends"
         android:icon="@drawable/ic_friends"
-        />
+        android:title="Friends" />
     <item
         android:id="@+id/chat_bar"
-        android:title="Chat"
-        android:icon="@drawable/ic_chat"/>
+        android:icon="@drawable/ic_chat"
+        android:title="Chat" />
 </menu>

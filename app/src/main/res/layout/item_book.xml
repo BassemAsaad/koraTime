@@ -17,23 +17,21 @@
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:orientation="vertical"
-            android:paddingHorizontal="16dp"
-            >
+            android:paddingHorizontal="16dp">
 
             <TextView
                 android:id="@+id/tvTimeSlot"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
+                android:enabled="false"
+                android:gravity="center"
                 android:textColor="@color/black"
                 android:textSize="25sp"
                 card_view:layout_constraintBottom_toBottomOf="parent"
                 card_view:layout_constraintStart_toStartOf="parent"
                 card_view:layout_constraintTop_toTopOf="parent"
-                tools:text="1pm"
-                android:gravity="center"
-                android:enabled="false"
-                />
+                tools:text="1pm" />
 
             <TextView
                 android:id="@+id/btnBook"
@@ -42,6 +40,7 @@
                 android:layout_gravity="center"
                 android:layout_marginEnd="10dp"
                 android:background="@drawable/shape_type_message"
+                android:gravity="center"
                 android:paddingHorizontal="30dp"
                 android:paddingVertical="10dp"
                 android:text="Book"
@@ -49,9 +48,7 @@
                 android:textSize="20sp"
                 card_view:layout_constraintBottom_toBottomOf="@id/tvTimeSlot"
                 card_view:layout_constraintEnd_toEndOf="parent"
-                card_view:layout_constraintTop_toTopOf="@id/tvTimeSlot"
-                android:gravity="center"
-                />
+                card_view:layout_constraintTop_toTopOf="@id/tvTimeSlot" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </layout>

@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="app_name">Kora Time</string>
     <string name="google_api_key">AIzaSyA1WivRAWYXnV4ztiA3UMZJcm6LbAR9XfQ</string>
     <string name="default_room_picture">"https://firebasestorage.googleapis.com/v0/b/kora-time-d21c3.appspot.com/o/images%2Fgroup_profile.png?alt=media&amp;token=68cbdd0e-43f2-4634-9ba9-bdcdec71555d" </string>

@@ -2,24 +2,22 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/home_bar"
-        android:title="Home"
         android:icon="@drawable/ic_home"
-        />
+        android:title="Home" />
 
 
     <item
         android:id="@+id/rooms_bar"
-        android:title="Rooms"
-        android:icon="@drawable/ic_rooms"/>
+        android:icon="@drawable/ic_rooms"
+        android:title="Rooms" />
     <item
         android:id="@+id/friends_bar"
-        android:title="Friends"
         android:icon="@drawable/ic_friends"
-        />
+        android:title="Friends" />
 
     <item
         android:id="@+id/chat_bar"
-        android:title="Chat"
-        android:icon="@drawable/ic_chat"/>
+        android:icon="@drawable/ic_chat"
+        android:title="Chat" />
 
 </menu>

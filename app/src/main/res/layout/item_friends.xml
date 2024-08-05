@@ -4,15 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="friendModel"
             type="com.example.koratime.model.FriendModel" />
     </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        >
+        android:layout_marginTop="10dp">
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
@@ -22,27 +23,24 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            >
+            app:layout_constraintTop_toTopOf="parent">
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingVertical="5dp"
-                >
+                android:paddingVertical="5dp">
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/userImage_item"
                     android:layout_width="70dp"
                     android:layout_height="70dp"
+                    android:layout_marginStart="15dp"
                     app:imageUrl="@{friendModel.friendPicture}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:src="@drawable/ic_account_circle_"
-                    android:layout_marginStart="15dp"
-                    />
+                    tools:src="@drawable/ic_account_circle_" />
 
                 <TextView
                     android:id="@+id/textView"
@@ -64,9 +62,9 @@
                     android:layout_marginStart="10dp"
                     android:ellipsize="end"
                     android:lines="1"
-                    android:textSize="18sp"
-                    android:paddingVertical="4dp"
                     android:paddingHorizontal="8dp"
+                    android:paddingVertical="4dp"
+                    android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/userImage_item"

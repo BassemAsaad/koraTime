@@ -37,8 +37,7 @@
             android:textSize="20sp"
             app:layout_constraintStart_toEndOf="@id/userImage_item"
             app:layout_constraintTop_toTopOf="@id/userImage_item"
-            tools:text="Mohammed Ehab"
-            />
+            tools:text="Mohammed Ehab" />
 
         <Button
             android:id="@+id/confirmFriendButton_item"
@@ -51,8 +50,7 @@
             app:layout_constraintBottom_toBottomOf="@id/userImage_item"
             app:layout_constraintEnd_toStartOf="@id/removeFriendButton_item"
             app:layout_constraintStart_toEndOf="@id/userImage_item"
-            app:layout_constraintTop_toBottomOf="@+id/userName"
-            />
+            app:layout_constraintTop_toBottomOf="@+id/userName" />
 
         <Button
             android:id="@+id/removeFriendButton_item"
