@@ -13,12 +13,11 @@ import com.example.koratime.databinding.ItemBookBinding
 class TimeSlotsForManagerAdapter (private  var timeSlots: List<String>, private  var bookedTimesList: List<String>) : RecyclerView.Adapter<TimeSlotsForManagerAdapter.ViewHolder>(){
 
     class ViewHolder(val dataBinding: ItemBookBinding) : RecyclerView.ViewHolder(dataBinding.root) {
-        fun bind(timeSlot: String, bookedTimesList: List<String>) {
+        fun bind(timeSlot: String) {
             dataBinding.tvTimeSlot.text = timeSlot
-            dataBinding.executePendingBindings()
+            dataBinding.invalidateAll()
 
-            Log.e("Adapter ", "List $bookedTimesList time slot $timeSlot")
-
+            /*
             var isBooked = false
             for (bookedTime in bookedTimesList) {
                 if (bookedTime == timeSlot) {
@@ -41,6 +40,8 @@ class TimeSlotsForManagerAdapter (private  var timeSlots: List<String>, private 
                 dataBinding.btnBook.text= "Book"
                 dataBinding.btnBook.backgroundTintList = null
             }
+             */
+
         }
 
     }
@@ -61,17 +62,34 @@ class TimeSlotsForManagerAdapter (private  var timeSlots: List<String>, private 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val timeSlot = timeSlots[position]
-        val bookedSlot = bookedTimesList
-        holder.bind(timeSlot, bookedSlot)
+        holder.bind(timeSlot)
         holder.itemView.setOnClickListener {
             onBookClickListener?.onclick(timeSlot, holder, position)
+        }
+        if (bookedTimesList.contains(timeSlot)){
+            // Slot is already booked
+            holder.dataBinding.apply {
+                tvTimeSlot.isEnabled=true
+                tvTimeSlot.setTextColor((Color.GRAY))
+                btnBook.isEnabled=false
+                btnBook.text= "Booked"
+                btnBook.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
+            }
+
+        }else{
+            holder.dataBinding.apply {
+                tvTimeSlot.isEnabled=false
+                tvTimeSlot.setTextColor((Color.BLACK))
+                btnBook.isEnabled=true
+                btnBook.text= "Book"
+                btnBook.backgroundTintList = null
+            }
         }
 
     }
 
 
     var onBookClickListener: OnBookClickListener? = null
-
     interface OnBookClickListener {
         fun onclick(slot: String, holder: ViewHolder, position: Int)
     }

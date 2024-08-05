@@ -10,7 +10,6 @@ import com.example.koratime.R
 import com.example.koratime.adapters.AddFriendsAdapter
 import com.example.koratime.basic.BasicActivity
 import com.example.koratime.database.addFriendRequestToFirestore
-import com.example.koratime.database.checkIfFriendExist
 import com.example.koratime.database.getUsersFromFirestore
 import com.example.koratime.database.removeFriendRequestWithoutRequestID
 import com.example.koratime.databinding.ActivitySearchBinding

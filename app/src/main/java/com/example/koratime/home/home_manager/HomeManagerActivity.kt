@@ -23,7 +23,7 @@ class HomeManagerActivity : BasicActivity<ActivityHomeManagerBinding,HomeManager
         dataBinding.managerHomeBar.selectedItemId = R.id.stadium_bar
         pushFragment(StadiumsManagerFragment())
 
-        dataBinding.managerHomeBar.setOnItemSelectedListener {item->
+        dataBinding.managerHomeBar.setOnItemSelectedListener { item->
             if (item.itemId == R.id.stadium_bar){
                 pushFragment(StadiumsManagerFragment())
             }

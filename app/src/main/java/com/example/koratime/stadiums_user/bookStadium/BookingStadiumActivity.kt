@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.denzcoskun.imageslider.constants.ScaleTypes
@@ -21,7 +22,6 @@ import com.example.koratime.database.addBookingToFirestore
 import com.example.koratime.database.getBookedTimesFromFirestore
 import com.example.koratime.database.getMultipleImagesFromFirestore
 import com.example.koratime.database.playerDocumentExists
-import com.example.koratime.database.removePlayer
 import com.example.koratime.databinding.ActivityBookingStadiumBinding
 import com.example.koratime.model.StadiumModel
 import java.text.SimpleDateFormat
@@ -39,15 +39,12 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
     private lateinit var bookedTimesList : List<String>
     private val slideImageList = mutableListOf<String>()
     private var selectedDate= SimpleDateFormat("MM_dd_yyyy", Locale.getDefault()).format(Date())
-
     companion object{
         const val TAG = "BookingStadiumActivity"
     }
-
     override fun getLayoutID(): Int {
         return R.layout.activity_booking_stadium
     }
-
     override fun initViewModel(): BookingStadiumViewModel {
         return ViewModelProvider(this)[BookingStadiumViewModel::class.java]
     }
@@ -55,18 +52,15 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
         super.onCreate(savedInstanceState)
         initView()
     }
+    override fun onStart() {
+        super.onStart()
+        checkSearch()
+    }
+
     override fun initView() {
         setSupportActionBar(dataBinding.toolbar)
         callBack()
         getStadiumImages()
-
-
-    }
-
-    override fun onStart() {
-        super.onStart()
-        checkSearch()
-
     }
     private fun callBack(){
         viewModel.apply {
@@ -82,7 +76,7 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
             setDisplayShowTitleEnabled(true)
         }
         dataBinding.apply {
-            getAvailableTimes(selectedDate)
+            getTimeSlots(selectedDate)
             recyclerView.adapter=adapter
             swipeRefresh.setOnRefreshListener {
                 dataBinding.swipeRefresh.isRefreshing = false
@@ -100,9 +94,8 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
             // Add an OnDateChangeListener to the CalendarView
             calendarView.setOnDateChangeListener { view, year, month, dayOfMonth ->
                 selectedDate = String.format("%02d_%02d_%04d", month + 1, dayOfMonth, year)
-                Log.e(TAG," Date selected: $selectedDate  ")
-
-                getAvailableTimes(selectedDate)
+                Log.e(TAG,"Date selected: $selectedDate")
+                getTimeSlots(selectedDate)
             }
 
 
@@ -112,7 +105,8 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
             override fun onclick(slot: String, holder: TimeSlotsForUserAdapter.ViewHolder, position: Int) {
                 addBookingToFirestore(timeSlot = holder.dataBinding.tvTimeSlot.text.toString(),
                     stadiumID = stadiumModel.stadiumID!!,
-                    date = selectedDate, userId = DataUtils.user!!.id!!,
+                    date = selectedDate,
+                    userId = DataUtils.user!!.id!!,
                     onSuccessListener = {
                         holder.dataBinding.apply {
                             tvTimeSlot.isEnabled=false
@@ -136,7 +130,29 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
             }
         }
     }
+    private fun getTimeSlots(date: String) {
+        getBookedTimesFromFirestore(
+            stadiumID = stadiumModel.stadiumID!!,
+            date = date,
+            onSuccessListener = { bookedList ->
 
+                bookedTimesList = bookedList
+                Log.e(TAG," Booked times $bookedTimesList")
+
+                // create opening and closing list
+                timeSlotsList = viewModel.createListForOpeningTimes(stadiumModel.opening!!,stadiumModel.closing!!,resources.getStringArray(R.array.time_slots))
+
+                // create list of available times
+                availableSlots = viewModel.removeBookedListFromOpeningTimes(timeSlotsList,bookedTimesList).toMutableList()
+                Log.e(TAG,"Available Slots : $availableSlots")
+
+                adapter.updateTimeSlots(availableSlots)
+            },
+            onFailureListener = { e->
+                Log.e(TAG, "Error fetching booked times", e)
+            }
+        )
+    }
     private fun getStadiumImages() {
         getMultipleImagesFromFirestore(
             stadiumID = stadiumModel.stadiumID!!,
@@ -196,31 +212,6 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
         intent = Intent(Intent.ACTION_DIAL)
         intent.data = Uri.parse("tel:${stadiumModel.stadiumTelephoneNumber}")
         startActivity(intent)
-    }
-    private fun getAvailableTimes(date: String) {
-        getBookedTimesFromFirestore(
-            stadiumID = stadiumModel.stadiumID!!,
-            date = date,
-            onSuccessListener = { bookedList ->
-                bookedTimesList = bookedList
-                Log.e(TAG," Booked times $bookedTimesList")
-
-                // create opening and closing list
-                timeSlotsList = viewModel.createListForOpeningTimes(stadiumModel.opening!!,stadiumModel.closing!!,resources.getStringArray(R.array.time_slots))
-
-                // create list of available times
-                availableSlots = viewModel.removeBookedListFromOpeningTimes(timeSlotsList,bookedTimesList).toMutableList()
-                Log.e(TAG,"Available Slots : $availableSlots")
-
-                updateAdapter(availableSlots)
-            },
-            onFailureListener = { e->
-                Log.e(TAG, "Error fetching booked times", e)
-            }
-        )
-    }
-    private fun updateAdapter(availableList : List<String>){
-        adapter.updateTimeSlots(availableList)
     }
     override fun onSupportNavigateUp(): Boolean {
         // go to the previous fragment when back button clicked on toolbar

@@ -1,5 +1,4 @@
 @file:Suppress("DEPRECATION")
-
 package com.example.koratime.basic
 
 import android.app.ProgressDialog
@@ -10,16 +9,17 @@ import androidx.databinding.ViewDataBinding
 
 abstract class BasicActivity <DB : ViewDataBinding, VM : BasicViewModel<*>>: AppCompatActivity(){
 
-    lateinit var dataBinding : DB
-    lateinit var viewModel: VM
+    private lateinit var _dataBinding : DB
+    private lateinit var _viewModel: VM
+    protected val dataBinding get() = _dataBinding
+    protected val viewModel get() = _viewModel
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        dataBinding = DataBindingUtil.setContentView(this, getLayoutID())
-
-        viewModel = initViewModel()
+        _dataBinding = DataBindingUtil.setContentView(this, getLayoutID())
+        _viewModel = initViewModel()
         subscribeToLiveData()
 
     }
@@ -29,7 +29,7 @@ abstract class BasicActivity <DB : ViewDataBinding, VM : BasicViewModel<*>>: App
     abstract fun initView()
 
      private fun subscribeToLiveData() {
-         viewModel.showLoading.observe(this) { show ->
+         _viewModel.showLoading.observe(this) { show ->
              if (show) {
                  showLoading()
              } else {

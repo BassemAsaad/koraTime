@@ -16,7 +16,6 @@ import com.example.koratime.R
 import com.example.koratime.database.uploadImageToStorage
 import com.example.koratime.databinding.ActivityRegisterBinding
 import com.example.koratime.registration.log_in.LoginActivity
-import com.example.koratime.home.home_user.HomeActivity
 
 class RegisterActivity : BasicActivity<ActivityRegisterBinding, RegisterViewModel>(),RegisterNavigator {
     private lateinit var pickMedia : ActivityResultLauncher<PickVisualMediaRequest>

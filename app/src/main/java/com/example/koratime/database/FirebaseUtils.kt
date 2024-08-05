@@ -947,7 +947,6 @@ fun removePlayer(stadiumID: String,
         .addOnSuccessListener { document ->
             if (document.exists()) {
                 val count = document.getLong(StadiumModel.FIELD_PLAYERS_COUNTER)
-                val playersList = document.get(StadiumModel.FIELD_PLAYERS_LIST) as MutableList<String>
                 findPlayersRef.update(StadiumModel.FIELD_PLAYERS_COUNTER, count!! - 1
                     ,StadiumModel.FIELD_PLAYERS_LIST,FieldValue.arrayRemove(userID))
                     .addOnSuccessListener(onSuccessListener)

@@ -1,7 +1,6 @@
 package com.example.koratime.chat.chat_friends
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider

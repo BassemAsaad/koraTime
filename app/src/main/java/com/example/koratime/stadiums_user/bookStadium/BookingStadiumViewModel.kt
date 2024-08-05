@@ -1,7 +1,6 @@
 package com.example.koratime.stadiums_user.bookStadium
 
 import android.util.Log
-import android.view.View
 import androidx.databinding.ObservableField
 import com.example.koratime.DataUtils
 import com.example.koratime.basic.BasicViewModel
@@ -13,7 +12,6 @@ import com.example.koratime.database.removePlayer
 import com.example.koratime.database.resetCounterAndRemovePlayers
 import com.example.koratime.database.setPlayerDataAndUpdateCounter
 import com.example.koratime.model.StadiumModel
-import com.example.koratime.stadiums_user.bookStadium.BookingStadiumActivity.Companion
 
 
 class BookingStadiumViewModel : BasicViewModel<BookingStadiumNavigator>() {

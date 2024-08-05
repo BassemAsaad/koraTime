@@ -1,7 +1,6 @@
 package com.example.koratime.home.home_user
 
 import android.Manifest
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.widget.Toast
@@ -13,7 +12,6 @@ import com.example.koratime.basic.BasicActivity
 import com.example.koratime.chat.ChatFragment
 import com.example.koratime.databinding.ActivityHomeBinding
 import com.example.koratime.friends.FriendsRequestsFragment
-import com.example.koratime.registration.log_in.LoginActivity
 import com.example.koratime.rooms.TabsFragment
 import com.example.koratime.stadiums_user.StadiumsFragment
 
@@ -34,7 +32,7 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>() , HomeN
         dataBinding.homeBar.selectedItemId = R.id.home_bar
         pushFragment(StadiumsFragment())
 
-        dataBinding.homeBar.setOnItemSelectedListener {item->
+        dataBinding.homeBar.setOnItemSelectedListener { item->
             if (item.itemId == R.id.chat_bar){
                 pushFragment(ChatFragment())
             }
