@@ -22,12 +22,9 @@ class TabsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        dataBinding = DataBindingUtil.inflate(inflater,
-            R.layout.fragment_tabs,container,false)
+        dataBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_tabs,container,false)
         return dataBinding.root
     }
-
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

@@ -9,12 +9,11 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.IBinder
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.example.koratime.R
 import com.example.koratime.splash.SplashActivity
 
-class NotificationServices : Service() {
+class NotificationService : Service() {
 
     override fun onCreate() {
         super.onCreate()

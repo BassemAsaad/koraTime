@@ -7,14 +7,13 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.koratime.R
 import com.example.koratime.basic.BasicActivity
 import com.example.koratime.database.uploadImageToStorage
 import com.example.koratime.databinding.ActivityAddRoomBinding
 
-@Suppress("DEPRECATION")
+@Suppress("DEPRECATION","SetTextI18n")
 class AddRoomActivity : BasicActivity< ActivityAddRoomBinding, AddRoomViewModel>(), AddRoomNavigator {
 
     private lateinit var pickMedia : ActivityResultLauncher<PickVisualMediaRequest>
@@ -34,33 +33,34 @@ class AddRoomActivity : BasicActivity< ActivityAddRoomBinding, AddRoomViewModel>
 
 
     override fun initView() {
-        viewModel.navigator = this
-        dataBinding.vm = viewModel
-
         setSupportActionBar(dataBinding.toolbar)
 
-        // Enable back button on Toolbar
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowHomeEnabled(true)
-
-        // If no image is selected, use the default image URL
-        val defaultImageUrl = "https://firebasestorage.googleapis.com/v0/b/kora-time-d21c3.appspot.com/o/images%2Fgroup_profile.png?alt=media&token=68cbdd0e-43f2-4634-9ba9-bdcdec71555d"
-        viewModel.imageUrl.value = defaultImageUrl
-        openImagePicker()
-        dataBinding.roomImageLayout.setOnClickListener {
-        // Launch the photo picker and let the user choose only images.
-        pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        viewModel.apply {
+            navigator = this@AddRoomActivity
+            // If no image is selected, use the default image URL
+            imageUrl.value = getString(R.string.default_room_picture)
+            toastMessage.observe( this@AddRoomActivity) { message ->
+                Toast.makeText(this@AddRoomActivity, message, Toast.LENGTH_SHORT).show()
+            }
         }
 
-        viewModel.toastMessage.observe(this, Observer { message ->
-            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-        })
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setDisplayShowHomeEnabled(true)
+        }
+        dataBinding.apply {
+            vm = viewModel
+            openImagePicker()
+            roomImageLayout.setOnClickListener {
+                // Launch the photo picker and let the user choose only images.
+                pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+            }
+        }
     }
 
     private fun openImagePicker(){
         // Registers a photo picker activity launcher in single-select mode.
          pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-
             // photo picker
             if (uri != null) {
                 Log.d("PhotoPicker", "Selected URI: $uri")
@@ -69,8 +69,10 @@ class AddRoomActivity : BasicActivity< ActivityAddRoomBinding, AddRoomViewModel>
                     onSuccessListener = { downloadUri ->
                         Log.e("Firebase Storage:", "Image uploaded successfully")
                         // pass imageUrl to view model
-                        viewModel.imageUrl.value = downloadUri.toString()
-                        viewModel.showLoading.value = false
+                        viewModel.apply {
+                            imageUrl.value = downloadUri.toString()
+                            showLoading.value = false
+                        }
 
                     },
                     onFailureListener = {
@@ -80,8 +82,10 @@ class AddRoomActivity : BasicActivity< ActivityAddRoomBinding, AddRoomViewModel>
                     }
                 )
 
-                dataBinding.roomImageLayout.setImageURI(uri)
-                dataBinding.roomImageTextLayout.text = "Change Picture Chosen"
+                dataBinding.apply {
+                    roomImageLayout.setImageURI(uri)
+                    roomImageTextLayout.text = "Change Picture Chosen"
+                }
             } else {
                 dataBinding.roomImageTextLayout.text = "Default Picture"
                 Toast.makeText(this, "No image selected", Toast.LENGTH_SHORT).show()

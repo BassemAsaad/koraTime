@@ -34,11 +34,13 @@ abstract class BasicFragment <DB : ViewDataBinding, VM : BasicViewModel<*>>: Fra
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initView()
         subscribeToLiveData()
     }
 
     abstract fun initViewModel():VM
     abstract fun initView()
+    abstract fun callback()
     abstract fun getLayoutID():Int
 
 

@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.koratime.DataUtils
 import com.example.koratime.R
 import com.example.koratime.adapters.PendingFriendsAdapter
+import com.example.koratime.basic.BasicFragment
 import com.example.koratime.database.acceptFriendRequest
 import com.example.koratime.database.checkIfFriendExist
 import com.example.koratime.database.getFriendRequestsFromFirestore
@@ -23,38 +24,27 @@ import com.example.koratime.databinding.FragmentFriendsRequestsBinding
 import com.example.koratime.friends.search.SearchActivity
 import com.example.koratime.model.FriendRequestModel
 
-class FriendsRequestsFragment : Fragment(),FriendsRequestsNavigator {
-    lateinit var dataBinding : FragmentFriendsRequestsBinding
-    private lateinit var viewModel : FriendsRequestsViewModel
+class FriendsRequestsFragment : BasicFragment< FragmentFriendsRequestsBinding,FriendsRequestsViewModel>(),FriendsRequestsNavigator {
     private val adapter = PendingFriendsAdapter(null)
 
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        dataBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_friends_requests,container,false)
-        return dataBinding.root
+    override fun getLayoutID(): Int {
+        return R.layout.fragment_friends_requests
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(this)[FriendsRequestsViewModel::class.java]
-
-
+    override fun initViewModel(): FriendsRequestsViewModel {
+        return ViewModelProvider(this)[FriendsRequestsViewModel::class.java]
+    }
+    override fun initView() {
+        callback()
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initView()
-    }
-    fun initView() {
-        dataBinding.vm = viewModel
+    override fun callback() {
         viewModel.navigator = this
-        dataBinding.recyclerView.adapter = adapter
-
-
+        dataBinding.apply {
+            vm = viewModel
+            recyclerView.adapter = adapter
+        }
         adapter.onAddButtonClickListener = object :PendingFriendsAdapter.OnAddButtonClickListener{
             @SuppressLint("SetTextI18n")
             override fun onClick(
@@ -137,9 +127,15 @@ class FriendsRequestsFragment : Fragment(),FriendsRequestsNavigator {
         }
     }
 
+
+
     override fun onStart() {
         super.onStart()
+        getRequests()
 
+    }
+
+    private fun getRequests() {
         getFriendRequestsFromFirestore(
             DataUtils.user!!,
             onSuccessListener = {querySnapshot->
@@ -153,11 +149,7 @@ class FriendsRequestsFragment : Fragment(),FriendsRequestsNavigator {
                 Toast.makeText(requireContext(), "Error Loading Friend Requests", Toast.LENGTH_SHORT).show()
             }
 
-        )
-
-
-    }
-
+        )    }
 
     override fun openSearchActivity() {
         val intent = Intent(requireContext(),SearchActivity::class.java)

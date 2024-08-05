@@ -72,6 +72,9 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:paddingHorizontal="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
 
@@ -137,6 +140,7 @@
                         android:lines="1"
                         android:text="@={vm.password}" />
                 </com.google.android.material.textfield.TextInputLayout>
+
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/roomImage_layout"
                     android:layout_width="100dp"
@@ -167,7 +171,7 @@
                     android:backgroundTint="@color/primary"
                     android:onClick="@{()->vm.createRoom()}"
                     android:text="@string/create_room"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/white" />
 
             </LinearLayout>
 

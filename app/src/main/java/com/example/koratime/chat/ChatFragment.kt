@@ -14,6 +14,7 @@ import com.example.koratime.Constants
 import com.example.koratime.DataUtils
 import com.example.koratime.R
 import com.example.koratime.adapters.FriendsAdapter
+import com.example.koratime.basic.BasicFragment
 import com.example.koratime.chat.chat_friends.ChatFriendsActivity
 import com.example.koratime.database.getFriendsFromFirestore
 import com.example.koratime.database.removeFriendFromFirestore
@@ -21,46 +22,29 @@ import com.example.koratime.databinding.FragmentChatBinding
 import com.example.koratime.model.FriendModel
 
 
-class ChatFragment : Fragment(),ChatNavigator {
-    lateinit var dataBinding : FragmentChatBinding
-    private lateinit var viewModel : ChatViewModel
+class ChatFragment : BasicFragment< FragmentChatBinding,ChatViewModel>(),ChatNavigator {
     val adapter = FriendsAdapter(null)
     private lateinit var friendsList : MutableList<FriendModel>
 
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        dataBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_chat,container,false)
-        return dataBinding.root
+    override fun initViewModel(): ChatViewModel {
+        return ViewModelProvider(this)[ChatViewModel::class.java]
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(this)[ChatViewModel::class.java]
-
+    override fun getLayoutID(): Int {
+        return R.layout.fragment_chat
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initView()
+    override fun initView() {
+        callback()
     }
 
 
-
-    fun initView() {
-        dataBinding.vm = viewModel
+    override fun callback(){
         viewModel.navigator=this
-        dataBinding.recyclerView.adapter = adapter
-        callBack()
-    }
-
-
-
-
-    private fun callBack(){
+        dataBinding.apply {
+            vm = viewModel
+            recyclerView.adapter = adapter
+        }
         adapter.onUserClickListener=object :FriendsAdapter.OnUserClickListener{
             override fun onItemClick(
                 user: FriendModel?,

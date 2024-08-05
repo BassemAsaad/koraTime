@@ -1,20 +1,15 @@
 package com.example.koratime.stadiums_manager
 
 import android.content.Intent
-import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
-import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.koratime.Constants
 import com.example.koratime.DataUtils
 import com.example.koratime.R
 import com.example.koratime.adapters.StadiumsAdapter
+import com.example.koratime.basic.BasicFragment
 import com.example.koratime.database.getUserStadiumFromFirestore
 import com.example.koratime.databinding.FragmentStadiumsManagerBinding
 import com.example.koratime.model.StadiumModel
@@ -23,39 +18,33 @@ import com.example.koratime.stadiums_manager.createStadium.AddStadiumActivity
 import com.example.koratime.stadiums_manager.manageStadium.ManageStadiumActivity
 
 
-class StadiumsManagerFragment : Fragment(),StadiumsManagerNavigator{
+class StadiumsManagerFragment : BasicFragment<FragmentStadiumsManagerBinding,StadiumsManagerViewModel>(),StadiumsManagerNavigator{
 
-    lateinit var dataBinding : FragmentStadiumsManagerBinding
-    lateinit var viewModel : StadiumsManagerViewModel
     val adapter = StadiumsAdapter(null)
-    private val userId = DataUtils.user!!.id
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        dataBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_stadiums_manager,container,false)
-        return dataBinding.root
+    override fun initViewModel(): StadiumsManagerViewModel {
+        return ViewModelProvider(this)[StadiumsManagerViewModel::class.java]
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(this)[StadiumsManagerViewModel::class.java]
-
-
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initView()
+    override fun getLayoutID(): Int {
+        return R.layout.fragment_stadiums_manager
     }
 
 
-    fun initView() {
-        dataBinding.vm = viewModel
+    override fun initView() {
+        callback()
+    }
+
+    override fun callback() {
         viewModel.navigator=this
-        dataBinding.recyclerView.adapter = adapter
+        dataBinding.apply {
+            vm = viewModel
+            recyclerView.adapter = adapter
+            userName.text = DataUtils.user!!.userName
+            Glide.with(requireContext())
+                .load(DataUtils.user!!.profilePicture)
+                .into(profilePicture)
+        }
 
         adapter.onItemClickListener = object :StadiumsAdapter.OnItemClickListener{
             override fun onItemClick(stadium: StadiumModel?, position: Int) {
@@ -65,13 +54,9 @@ class StadiumsManagerFragment : Fragment(),StadiumsManagerNavigator{
             }
         }
 
-        Glide.with(requireContext())
-            .load(DataUtils.user!!.profilePicture)
-            .into(dataBinding.profilePicture)
-
-        dataBinding.userName.text = DataUtils.user!!.userName
 
     }
+
 
     override fun createStadiumActivity() {
         val intent = Intent(requireContext(), AddStadiumActivity::class.java)
@@ -83,9 +68,13 @@ class StadiumsManagerFragment : Fragment(),StadiumsManagerNavigator{
     }
     override fun onStart() {
         super.onStart()
+        getUserStadiums()
 
+    }
+
+    private fun getUserStadiums() {
         getUserStadiumFromFirestore(
-            userId,
+            DataUtils.user!!.id,
             onSuccessListener = {querySnapShot->
                 val stadiums = querySnapShot.toObjects(StadiumModel::class.java)
                 adapter.changeData(stadiums)
@@ -95,7 +84,6 @@ class StadiumsManagerFragment : Fragment(),StadiumsManagerNavigator{
                 Toast.makeText(requireContext(), "Error Loading Stadiums", Toast.LENGTH_SHORT).show()
             }
         )
-
     }
 
 }
