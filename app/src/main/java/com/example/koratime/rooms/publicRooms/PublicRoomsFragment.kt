@@ -16,14 +16,13 @@ import com.example.koratime.R
 import com.example.koratime.adapters.PublicRoomsAdapter
 import com.example.koratime.database.getAllRoomsFromFirestore
 import com.example.koratime.databinding.FragmentPublicRoomsBinding
-import com.example.koratime.rooms.createRoom.AddRoomActivity
 import com.example.koratime.model.RoomModel
 import com.example.koratime.rooms.room_chat.RoomChatActivity
 
 class PublicRoomsFragment : Fragment(), PublicRoomsNavigator {
 
-    private lateinit var dataBinding : FragmentPublicRoomsBinding
-    private lateinit var viewModel : PublicRoomsViewModel
+    private lateinit var dataBinding: FragmentPublicRoomsBinding
+    private lateinit var viewModel: PublicRoomsViewModel
     private val adapter = PublicRoomsAdapter(null)
 
     override fun onCreateView(
@@ -31,7 +30,8 @@ class PublicRoomsFragment : Fragment(), PublicRoomsNavigator {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        dataBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_public_rooms,container,false)
+        dataBinding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_public_rooms, container, false)
         return dataBinding.root
     }
 
@@ -48,73 +48,68 @@ class PublicRoomsFragment : Fragment(), PublicRoomsNavigator {
     }
 
 
-
-     fun initView() {
-         dataBinding.vm = viewModel
-         viewModel.navigator=this
-
-
-
-         dataBinding.recyclerView.adapter = adapter
-
-         adapter.onItemClickListener = object : PublicRoomsAdapter.OnItemClickListener{
-             @SuppressLint("SuspiciousIndentation")
-             override fun onItemClick(
-                 room: RoomModel?,
-                 position: Int,
-                 holder: PublicRoomsAdapter.ViewHolder
-             ) {
-                 viewModel.roomPassword.value = room?.password
-                 viewModel.password.value = holder.dataBinding.roomPasswordLayout.editText?.text.toString()
-                 val intent = Intent(requireContext(),RoomChatActivity::class.java)
-                 intent.putExtra(Constants.ROOM,room)
-
-                 if (room!!.password!=null){
-                     if (viewModel.checkRoomPassword() ) {
-
-                         startActivity(intent)
-                     } else {
-                         holder.dataBinding.roomPasswordLayout.error = viewModel.passwordError.value
-                     }
-                 }else{
-                     startActivity(intent)
-                 }
-
-             }
-         }
+    fun initView() {
+        dataBinding.vm = viewModel
+        viewModel.navigator = this
 
 
 
+        dataBinding.recyclerView.adapter = adapter
 
-         // filter rooms for search
-         dataBinding.searchRooms.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-             override fun onQueryTextSubmit(query: String): Boolean {
-                 // Handle query submission if needed
-                 return true
-             }
+        adapter.onItemClickListener = object : PublicRoomsAdapter.OnItemClickListener {
+            @SuppressLint("SuspiciousIndentation")
+            override fun onItemClick(
+                room: RoomModel?,
+                position: Int,
+                holder: PublicRoomsAdapter.ViewHolder
+            ) {
+                viewModel.roomPassword.value = room?.password
+                viewModel.password.value =
+                    holder.dataBinding.roomPasswordLayout.editText?.text.toString()
+                val intent = Intent(requireContext(), RoomChatActivity::class.java)
+                intent.putExtra(Constants.ROOM, room)
 
-             override fun onQueryTextChange(newText: String): Boolean {
-                 adapter.filterUsers(newText)
-                 return true
-             }
-         })
+                if (room!!.password != null) {
+                    if (viewModel.checkRoomPassword()) {
+
+                        startActivity(intent)
+                    } else {
+                        holder.dataBinding.roomPasswordLayout.error = viewModel.passwordError.value
+                    }
+                } else {
+                    startActivity(intent)
+                }
+
+            }
+        }
+
+
+        // filter rooms for search
+        dataBinding.searchRooms.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                // Handle query submission if needed
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                adapter.filterUsers(newText)
+                return true
+            }
+        })
     }//end init
-
 
 
     override fun onStart() {
         super.onStart()
         getAllRoomsFromFirestore(
-            onSuccessListener = {querySnapShot->
+            onSuccessListener = { querySnapShot ->
                 val rooms = querySnapShot.toObjects(RoomModel::class.java)
                 adapter.changeData(rooms)
-            }
-            , onFailureListener = {
+            }, onFailureListener = {
                 Toast.makeText(requireContext(), it.localizedMessage, Toast.LENGTH_SHORT).show()
             }
         )
     }
-
 
 
 }

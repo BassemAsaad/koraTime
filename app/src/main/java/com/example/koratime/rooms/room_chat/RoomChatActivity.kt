@@ -17,8 +17,9 @@ import com.example.koratime.model.RoomModel
 import com.google.firebase.firestore.DocumentChange
 
 @Suppress("DEPRECATION")
-class RoomChatActivity : BasicActivity<ActivityRoomChatBinding,RoomChatViewModel>(),RoomChatNavigator{
-    lateinit var room : RoomModel
+class RoomChatActivity : BasicActivity<ActivityRoomChatBinding, RoomChatViewModel>(),
+    RoomChatNavigator {
+    lateinit var room: RoomModel
     private val messageAdapter = RoomMessagesAdapter()
     override fun getLayoutID(): Int {
         return R.layout.activity_room_chat
@@ -27,6 +28,7 @@ class RoomChatActivity : BasicActivity<ActivityRoomChatBinding,RoomChatViewModel
     override fun initViewModel(): RoomChatViewModel {
         return ViewModelProvider(this)[RoomChatViewModel::class.java]
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initView()
@@ -56,12 +58,14 @@ class RoomChatActivity : BasicActivity<ActivityRoomChatBinding,RoomChatViewModel
         })
 
     }
+
     private fun setupRecyclerView() {
         val layoutManager = LinearLayoutManager(this)
         layoutManager.stackFromEnd = true // This will start the layout from the end
         dataBinding.recyclerView.layoutManager = layoutManager
         dataBinding.recyclerView.adapter = messageAdapter
     }
+
     private fun scrollToBottom() {
         dataBinding.recyclerView.postDelayed({
             if (messageAdapter.itemCount > 0) {
@@ -69,12 +73,13 @@ class RoomChatActivity : BasicActivity<ActivityRoomChatBinding,RoomChatViewModel
             }
         }, 100) // Delaying the scroll by 100 milliseconds
     }
-    private fun listenForMessageUpdate (){
+
+    private fun listenForMessageUpdate() {
         getRoomMessagesFromFirestore(room.roomID!!)
-            .addSnapshotListener { snapshots , error ->
-                if (error!=null){
+            .addSnapshotListener { snapshots, error ->
+                if (error != null) {
                     Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
-                }else{
+                } else {
                     val newMessageList = mutableListOf<RoomMessageModel?>()
                     for (dc in snapshots!!.documentChanges) {
                         when (dc.type) {
@@ -82,6 +87,7 @@ class RoomChatActivity : BasicActivity<ActivityRoomChatBinding,RoomChatViewModel
                                 val message = dc.document.toObject(RoomMessageModel::class.java)
                                 newMessageList.add(message)
                             }
+
                             DocumentChange.Type.MODIFIED -> Log.e("Firebase", "Error")
                             DocumentChange.Type.REMOVED -> Log.e("Firebase", "Error")
                         }
@@ -91,6 +97,7 @@ class RoomChatActivity : BasicActivity<ActivityRoomChatBinding,RoomChatViewModel
                 }
             }
     }
+
     override fun onSupportNavigateUp(): Boolean {
         // go to the previous fragment when back button clicked on toolbar
         onBackPressed()

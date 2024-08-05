@@ -11,11 +11,12 @@ import com.example.koratime.R
 import com.example.koratime.database.getLastMessageFromFirestore
 import com.example.koratime.databinding.ItemFriendsBinding
 import com.example.koratime.model.FriendModel
-import com.example.koratime.model.UserModel
 
-class FriendsAdapter  (var friendsList : List<FriendModel?>?): RecyclerView.Adapter<FriendsAdapter.ViewHolder>()  {
-    class ViewHolder(val dataBinding : ItemFriendsBinding): RecyclerView.ViewHolder(dataBinding.root){
-        fun bind(friend : FriendModel){
+class FriendsAdapter(var friendsList: List<FriendModel?>?) :
+    RecyclerView.Adapter<FriendsAdapter.ViewHolder>() {
+    class ViewHolder(val dataBinding: ItemFriendsBinding) :
+        RecyclerView.ViewHolder(dataBinding.root) {
+        fun bind(friend: FriendModel) {
             dataBinding.friendModel = friend
             dataBinding.invalidateAll()
         }
@@ -23,16 +24,16 @@ class FriendsAdapter  (var friendsList : List<FriendModel?>?): RecyclerView.Adap
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val dataBinding : ItemFriendsBinding =
+        val dataBinding: ItemFriendsBinding =
             DataBindingUtil.inflate(
-                LayoutInflater.from(parent.context)
-                , R.layout.item_friends, parent,false)
+                LayoutInflater.from(parent.context), R.layout.item_friends, parent, false
+            )
 
         return ViewHolder(dataBinding)
     }
 
     override fun getItemCount(): Int {
-        return friendsList?.size?:0
+        return friendsList?.size ?: 0
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -42,31 +43,34 @@ class FriendsAdapter  (var friendsList : List<FriendModel?>?): RecyclerView.Adap
         getLastMessageFromFirestore(
             userID = DataUtils.user!!.id!!,
             friendshipID = holder.dataBinding.friendModel!!.friendshipID!!,
-            onSuccessListener = {lastMessage->
+            onSuccessListener = { lastMessage ->
                 holder.dataBinding.lastMessageItem.text = lastMessage
-                Log.e("Firebase ","Message returned successfully")
+                Log.e("Firebase ", "Message returned successfully")
             },
             onFailureListener = {
-                Log.e("Firebase ","Error returning message")
+                Log.e("Firebase ", "Error returning message")
             }
         )
         holder.apply {
             dataBinding.removeFriend.setOnClickListener {
-                onUserClickListener?.onRemoveClick(friendsList!![position]!!,holder,position)
+                onUserClickListener?.onRemoveClick(friendsList!![position]!!, holder, position)
             }
             itemView.setOnClickListener {
-                onUserClickListener?.onItemClick(friendsList!![position]!!,holder,position)
+                onUserClickListener?.onItemClick(friendsList!![position]!!, holder, position)
             }
         }
 
     }
-    var onUserClickListener : OnUserClickListener?=null
-    interface OnUserClickListener{
-        fun onItemClick(user : FriendModel?,holder: ViewHolder, position: Int)
-        fun onRemoveClick(user : FriendModel?,holder: ViewHolder, position: Int)
+
+    var onUserClickListener: OnUserClickListener? = null
+
+    interface OnUserClickListener {
+        fun onItemClick(user: FriendModel?, holder: ViewHolder, position: Int)
+        fun onRemoveClick(user: FriendModel?, holder: ViewHolder, position: Int)
     }
+
     @SuppressLint("NotifyDataSetChanged")
-    fun changeData(newFriend : List<FriendModel?>?){
+    fun changeData(newFriend: List<FriendModel?>?) {
         friendsList = newFriend
         notifyDataSetChanged()
     }

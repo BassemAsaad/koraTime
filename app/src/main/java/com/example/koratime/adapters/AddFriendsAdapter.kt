@@ -12,10 +12,13 @@ import com.example.koratime.databinding.ItemAddFriendBinding
 import com.example.koratime.model.UserModel
 
 
-class AddFriendsAdapter  (private var usersList : List<UserModel?>?, private val currentUserId: String?)
-    : RecyclerView.Adapter<AddFriendsAdapter.ViewHolder>()  {
+class AddFriendsAdapter(
+    private var usersList: List<UserModel?>?,
+    private val currentUserId: String?
+) : RecyclerView.Adapter<AddFriendsAdapter.ViewHolder>() {
 
-     class ViewHolder(val dataBinding: ItemAddFriendBinding) : RecyclerView.ViewHolder(dataBinding.root) {
+    class ViewHolder(val dataBinding: ItemAddFriendBinding) :
+        RecyclerView.ViewHolder(dataBinding.root) {
         fun bind(user: UserModel) {
             dataBinding.userModel = user
             dataBinding.invalidateAll()
@@ -23,16 +26,16 @@ class AddFriendsAdapter  (private var usersList : List<UserModel?>?, private val
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val dataBinding : ItemAddFriendBinding =
+        val dataBinding: ItemAddFriendBinding =
             DataBindingUtil.inflate(
-                LayoutInflater.from(parent.context)
-                , R.layout.item_add_friend, parent,false)
+                LayoutInflater.from(parent.context), R.layout.item_add_friend, parent, false
+            )
 
         return ViewHolder(dataBinding)
     }
 
     override fun getItemCount(): Int {
-        return usersList?.size?:0
+        return usersList?.size ?: 0
     }
 
     @SuppressLint("SetTextI18n")
@@ -40,12 +43,12 @@ class AddFriendsAdapter  (private var usersList : List<UserModel?>?, private val
         val user = usersList!![position]!!
         holder.bind(user)
 
-        checkFriendRequestStatusFromFirestore(currentUser= currentUserId!!, receiver =  user.id!!,
+        checkFriendRequestStatusFromFirestore(currentUser = currentUserId!!, receiver = user.id!!,
             onFailureListener = {
                 Log.e("Firestore", "Error checking friend request status", it)
             }) { status ->
-            Log.e("Firebase"," $status")
-            Log.e("Firebase"," ${user.userName}")
+            Log.e("Firebase", " $status")
+            Log.e("Firebase", " ${user.userName}")
             when (status) {
                 "pending" -> {
                     holder.dataBinding.apply {
@@ -55,6 +58,7 @@ class AddFriendsAdapter  (private var usersList : List<UserModel?>?, private val
                     }
 
                 }
+
                 "accepted" -> {
                     holder.dataBinding.apply {
                         addFriendButtonItem.text = "Friends"
@@ -62,6 +66,7 @@ class AddFriendsAdapter  (private var usersList : List<UserModel?>?, private val
                         removeFriendButtonItem.isEnabled = false
                     }
                 }
+
                 else -> {
                     holder.dataBinding.apply {
                         addFriendButtonItem.text = "Add Friend"
@@ -76,29 +81,32 @@ class AddFriendsAdapter  (private var usersList : List<UserModel?>?, private val
 
 
         holder.dataBinding.addFriendButtonItem.setOnClickListener {
-            onAddFriendButtonClickListener?.onClick(user,holder, position)
+            onAddFriendButtonClickListener?.onClick(user, holder, position)
         }
         holder.dataBinding.removeFriendButtonItem.setOnClickListener {
-            onRemoveFriendButtonClickListener?.onClick(user,holder,position)
+            onRemoveFriendButtonClickListener?.onClick(user, holder, position)
         }
     }
 
 
+    var onAddFriendButtonClickListener: OnAddFriendButtonClickListener? = null
 
-    var onAddFriendButtonClickListener:OnAddFriendButtonClickListener?=null
-    interface OnAddFriendButtonClickListener{
-        fun onClick(user : UserModel,holder: ViewHolder, position: Int)
+    interface OnAddFriendButtonClickListener {
+        fun onClick(user: UserModel, holder: ViewHolder, position: Int)
     }
 
-    var onRemoveFriendButtonClickListener:OnRemoveFriendButtonClickListener?=null
-    interface OnRemoveFriendButtonClickListener{
-        fun onClick(user : UserModel,holder: ViewHolder, position: Int)
+    var onRemoveFriendButtonClickListener: OnRemoveFriendButtonClickListener? = null
+
+    interface OnRemoveFriendButtonClickListener {
+        fun onClick(user: UserModel, holder: ViewHolder, position: Int)
     }
+
     @SuppressLint("NotifyDataSetChanged")
-    fun changeData(newUser : List<UserModel?>?){
+    fun changeData(newUser: List<UserModel?>?) {
         usersList = newUser
         notifyDataSetChanged()
     }
+
     private var originalUsersList: List<UserModel?>? = null
     fun filterUsers(query: String) {
         if (originalUsersList == null) {

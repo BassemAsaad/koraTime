@@ -4,6 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 open class BasicViewModel<N> : ViewModel() {
-    var navigator : N?=null
+    var navigator: N? = null
     val showLoading = MutableLiveData<Boolean>()
 }

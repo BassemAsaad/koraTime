@@ -1,14 +1,8 @@
 package com.example.koratime.chat
 
 import android.content.Intent
-import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
-import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.koratime.Constants
 import com.example.koratime.DataUtils
@@ -22,9 +16,9 @@ import com.example.koratime.databinding.FragmentChatBinding
 import com.example.koratime.model.FriendModel
 
 
-class ChatFragment : BasicFragment< FragmentChatBinding,ChatViewModel>(),ChatNavigator {
+class ChatFragment : BasicFragment<FragmentChatBinding, ChatViewModel>(), ChatNavigator {
     val adapter = FriendsAdapter(null)
-    private lateinit var friendsList : MutableList<FriendModel>
+    private lateinit var friendsList: MutableList<FriendModel>
 
     override fun initViewModel(): ChatViewModel {
         return ViewModelProvider(this)[ChatViewModel::class.java]
@@ -39,20 +33,20 @@ class ChatFragment : BasicFragment< FragmentChatBinding,ChatViewModel>(),ChatNav
     }
 
 
-    override fun callback(){
-        viewModel.navigator=this
+    override fun callback() {
+        viewModel.navigator = this
         dataBinding.apply {
             vm = viewModel
             recyclerView.adapter = adapter
         }
-        adapter.onUserClickListener=object :FriendsAdapter.OnUserClickListener{
+        adapter.onUserClickListener = object : FriendsAdapter.OnUserClickListener {
             override fun onItemClick(
                 user: FriendModel?,
                 holder: FriendsAdapter.ViewHolder,
                 position: Int
             ) {
-                val intent = Intent(requireContext(),ChatFriendsActivity::class.java)
-                intent.putExtra(Constants.FRIEND,user)
+                val intent = Intent(requireContext(), ChatFriendsActivity::class.java)
+                intent.putExtra(Constants.FRIEND, user)
                 startActivity(intent)
 
             }
@@ -68,9 +62,10 @@ class ChatFragment : BasicFragment< FragmentChatBinding,ChatViewModel>(),ChatNav
                     onSuccessListener = {
                         friendsList.remove(user)
                         adapter.changeData(friendsList)
-                        Log.e("Firebase","Friend Removed Successfully") },
+                        Log.e("Firebase", "Friend Removed Successfully")
+                    },
                     onFailureListener = {
-                        Log.e("Firebase","Friend not removed ")
+                        Log.e("Firebase", "Friend not removed ")
                     }
                 )
             }
@@ -90,18 +85,19 @@ class ChatFragment : BasicFragment< FragmentChatBinding,ChatViewModel>(),ChatNav
         })
     }
 
-    private fun getFriends(){
+    private fun getFriends() {
         getFriendsFromFirestore(
             DataUtils.user!!.id!!,
-            onSuccessListener = {querySnapshot->
+            onSuccessListener = { querySnapshot ->
                 friendsList = querySnapshot.toObjects(FriendModel::class.java)
                 adapter.changeData(friendsList)
             },
-            onFailureListener = {e->
-                Log.e("Firebase"," Error loading friends",e)
+            onFailureListener = { e ->
+                Log.e("Firebase", " Error loading friends", e)
             }
         )
     }
+
     override fun onStart() {
         super.onStart()
         getFriends()

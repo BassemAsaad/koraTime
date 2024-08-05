@@ -8,7 +8,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.denzcoskun.imageslider.constants.ScaleTypes
@@ -30,28 +29,35 @@ import java.util.Locale
 
 
 @Suppress("DEPRECATION", "SetTextI18n", "DefaultLocale")
-class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,BookingStadiumViewModel>(),BookingStadiumNavigator {
+class BookingStadiumActivity :
+    BasicActivity<ActivityBookingStadiumBinding, BookingStadiumViewModel>(),
+    BookingStadiumNavigator {
 
-    private lateinit var stadiumModel : StadiumModel
+    private lateinit var stadiumModel: StadiumModel
     private var adapter = TimeSlotsForUserAdapter(emptyList())
-    private lateinit var timeSlotsList :List<String>
+    private lateinit var timeSlotsList: List<String>
     private lateinit var availableSlots: MutableList<String>
-    private lateinit var bookedTimesList : List<String>
+    private lateinit var bookedTimesList: List<String>
     private val slideImageList = mutableListOf<String>()
-    private var selectedDate= SimpleDateFormat("MM_dd_yyyy", Locale.getDefault()).format(Date())
-    companion object{
+    private var selectedDate = SimpleDateFormat("MM_dd_yyyy", Locale.getDefault()).format(Date())
+
+    companion object {
         const val TAG = "BookingStadiumActivity"
     }
+
     override fun getLayoutID(): Int {
         return R.layout.activity_booking_stadium
     }
+
     override fun initViewModel(): BookingStadiumViewModel {
         return ViewModelProvider(this)[BookingStadiumViewModel::class.java]
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initView()
     }
+
     override fun onStart() {
         super.onStart()
         checkSearch()
@@ -62,10 +68,11 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
         callBack()
         getStadiumImages()
     }
-    private fun callBack(){
+
+    private fun callBack() {
         viewModel.apply {
             dataBinding.vm = viewModel
-            navigator= this@BookingStadiumActivity
+            navigator = this@BookingStadiumActivity
             stadiumModel = intent.getParcelableExtra(Constants.STADIUM_USER)!!
             stadium = stadiumModel
         }
@@ -77,13 +84,13 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
         }
         dataBinding.apply {
             getTimeSlots(selectedDate)
-            recyclerView.adapter=adapter
+            recyclerView.adapter = adapter
             swipeRefresh.setOnRefreshListener {
                 dataBinding.swipeRefresh.isRefreshing = false
                 getStadiumImages()
             }
             stadiumLocation.setOnClickListener {
-                showLocation(stadiumModel.latitude!!,stadiumModel.longitude!!)
+                showLocation(stadiumModel.latitude!!, stadiumModel.longitude!!)
             }
             stadiumNumber.setOnClickListener {
                 showNumber()
@@ -94,7 +101,7 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
             // Add an OnDateChangeListener to the CalendarView
             calendarView.setOnDateChangeListener { view, year, month, dayOfMonth ->
                 selectedDate = String.format("%02d_%02d_%04d", month + 1, dayOfMonth, year)
-                Log.e(TAG,"Date selected: $selectedDate")
+                Log.e(TAG, "Date selected: $selectedDate")
                 getTimeSlots(selectedDate)
             }
 
@@ -102,34 +109,51 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
         }
         adapter.onBookClickListener = object : TimeSlotsForUserAdapter.OnBookClickListener {
             @SuppressLint("SetTextI18n")
-            override fun onclick(slot: String, holder: TimeSlotsForUserAdapter.ViewHolder, position: Int) {
+            override fun onclick(
+                slot: String,
+                holder: TimeSlotsForUserAdapter.ViewHolder,
+                position: Int
+            ) {
                 addBookingToFirestore(timeSlot = holder.dataBinding.tvTimeSlot.text.toString(),
                     stadiumID = stadiumModel.stadiumID!!,
                     date = selectedDate,
                     userId = DataUtils.user!!.id!!,
                     onSuccessListener = {
                         holder.dataBinding.apply {
-                            tvTimeSlot.isEnabled=false
+                            tvTimeSlot.isEnabled = false
                             tvTimeSlot.setTextColor((Color.GRAY))
-                            btnBook.isEnabled=false
-                            btnBook.text= "Booked"
+                            btnBook.isEnabled = false
+                            btnBook.text = "Booked"
                             btnBook.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
                         }
 
-                        Log.e("Firebase"," ${holder.dataBinding.tvTimeSlot.text} booked on  $selectedDate from userId: ${DataUtils.user!!.id!!} to the stadiumID: ${stadiumModel.stadiumID}")
+                        Log.e(
+                            "Firebase",
+                            " ${holder.dataBinding.tvTimeSlot.text} booked on  $selectedDate from userId: ${DataUtils.user!!.id!!} to the stadiumID: ${stadiumModel.stadiumID}"
+                        )
 
-                        Toast.makeText(this@BookingStadiumActivity,"${holder.dataBinding.tvTimeSlot.text} Booked Successfully", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            this@BookingStadiumActivity,
+                            "${holder.dataBinding.tvTimeSlot.text} Booked Successfully",
+                            Toast.LENGTH_SHORT
+                        ).show()
 
 
                     },
-                    onFailureListener = {e->
-                        Log.e("Firebase"," Error:  ${holder.dataBinding.tvTimeSlot.text}" +
-                                " booked on  $selectedDate from userId: ${DataUtils.user!!.id!!} ",e) }
+                    onFailureListener = { e ->
+                        Log.e(
+                            "Firebase",
+                            " Error:  ${holder.dataBinding.tvTimeSlot.text}" +
+                                    " booked on  $selectedDate from userId: ${DataUtils.user!!.id!!} ",
+                            e
+                        )
+                    }
                 )
 
             }
         }
     }
+
     private fun getTimeSlots(date: String) {
         getBookedTimesFromFirestore(
             stadiumID = stadiumModel.stadiumID!!,
@@ -137,35 +161,42 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
             onSuccessListener = { bookedList ->
 
                 bookedTimesList = bookedList
-                Log.e(TAG," Booked times $bookedTimesList")
+                Log.e(TAG, " Booked times $bookedTimesList")
 
                 // create opening and closing list
-                timeSlotsList = viewModel.createListForOpeningTimes(stadiumModel.opening!!,stadiumModel.closing!!,resources.getStringArray(R.array.time_slots))
+                timeSlotsList = viewModel.createListForOpeningTimes(
+                    stadiumModel.opening!!,
+                    stadiumModel.closing!!,
+                    resources.getStringArray(R.array.time_slots)
+                )
 
                 // create list of available times
-                availableSlots = viewModel.removeBookedListFromOpeningTimes(timeSlotsList,bookedTimesList).toMutableList()
-                Log.e(TAG,"Available Slots : $availableSlots")
+                availableSlots =
+                    viewModel.removeBookedListFromOpeningTimes(timeSlotsList, bookedTimesList)
+                        .toMutableList()
+                Log.e(TAG, "Available Slots : $availableSlots")
 
                 adapter.updateTimeSlots(availableSlots)
             },
-            onFailureListener = { e->
+            onFailureListener = { e ->
                 Log.e(TAG, "Error fetching booked times", e)
             }
         )
     }
+
     private fun getStadiumImages() {
         getMultipleImagesFromFirestore(
             stadiumID = stadiumModel.stadiumID!!,
-            onSuccessListener = {urls->
+            onSuccessListener = { urls ->
                 slideImageList.clear()
                 slideImageList.addAll(urls)
-                Log.e("Firebase"," List of $urls")
+                Log.e("Firebase", " List of $urls")
                 val imageList = ArrayList<SlideModel>()
-                for ( i in slideImageList ){
+                for (i in slideImageList) {
                     imageList.add(SlideModel(i, ""))
                 }
 
-                if (imageList.isNotEmpty()){
+                if (imageList.isNotEmpty()) {
                     dataBinding.stadiumImages.visibility = View.VISIBLE
                     dataBinding.imageSlider.visibility = View.VISIBLE
                     dataBinding.imageSlider.setImageList(imageList, ScaleTypes.FIT)
@@ -173,33 +204,35 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
 
             },
             onFailureListener = {
-                Log.e("Firebase","Failed To get Images From firestore")
+                Log.e("Firebase", "Failed To get Images From firestore")
             }
         )
     }
+
     private fun checkSearch() {
         playerDocumentExists(
             stadiumID = stadiumModel.stadiumID!!,
             userID = DataUtils.user!!.id!!,
-            onSuccessListener = {playerExist->
-                Log.e( TAG,"Player Exist ? $playerExist")
-                if (playerExist){
+            onSuccessListener = { playerExist ->
+                Log.e(TAG, "Player Exist ? $playerExist")
+                if (playerExist) {
                     dataBinding.lookForPlayers.text = "Looking For Players..."
                     dataBinding.lookForPlayers.isEnabled = false
                     dataBinding.stopSearching.visibility = View.VISIBLE
-                } else{
+                } else {
                     dataBinding.lookForPlayers.text = "Click To Search For Players"
                     dataBinding.lookForPlayers.isEnabled = true
                     dataBinding.stopSearching.visibility = View.GONE
                 }
-                Log.e(TAG,"Player Exist ? $playerExist")
+                Log.e(TAG, "Player Exist ? $playerExist")
             },
-            onFailureListener = {e->
-                Log.e(TAG,"Error Finding The player: ",e)
+            onFailureListener = { e ->
+                Log.e(TAG, "Error Finding The player: ", e)
 
             }
         )
     }
+
     private fun showLocation(lat: Double, lng: Double) {
         val url = "geo:$lat,$lng?q=$lat,$lng(My Location)"
         val pushIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
@@ -208,11 +241,13 @@ class BookingStadiumActivity : BasicActivity<ActivityBookingStadiumBinding,Booki
         }
 
     }
-    private fun showNumber(){
+
+    private fun showNumber() {
         intent = Intent(Intent.ACTION_DIAL)
         intent.data = Uri.parse("tel:${stadiumModel.stadiumTelephoneNumber}")
         startActivity(intent)
     }
+
     override fun onSupportNavigateUp(): Boolean {
         // go to the previous fragment when back button clicked on toolbar
         onBackPressed()

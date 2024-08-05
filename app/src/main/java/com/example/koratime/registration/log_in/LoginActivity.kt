@@ -1,20 +1,20 @@
 package com.example.koratime.registration.log_in
+
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.lifecycle.Observer
-
 import androidx.lifecycle.ViewModelProvider
-import com.example.koratime.basic.BasicActivity
 import com.example.koratime.R
+import com.example.koratime.basic.BasicActivity
 import com.example.koratime.databinding.ActivityLoginBinding
 import com.example.koratime.home.home_manager.HomeManagerActivity
-import com.example.koratime.registration.create_account.RegisterActivity
 import com.example.koratime.home.home_user.HomeActivity
+import com.example.koratime.registration.create_account.RegisterActivity
 
 
 class LoginActivity
-    : BasicActivity<ActivityLoginBinding, LoginViewModel>(),LoginNavigator {
+    : BasicActivity<ActivityLoginBinding, LoginViewModel>(), LoginNavigator {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +34,7 @@ class LoginActivity
     override fun getLayoutID(): Int {
         return R.layout.activity_login
     }
+
     override fun initViewModel(): LoginViewModel {
         return ViewModelProvider(this).get(LoginViewModel::class.java)
     }
@@ -52,7 +53,7 @@ class LoginActivity
     }
 
     override fun openRegisterActivity() {
-        dataBinding.signUp.setOnClickListener{
+        dataBinding.signUp.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
         }

@@ -1,4 +1,5 @@
 @file:Suppress("DEPRECATION")
+
 package com.example.koratime.basic
 
 import android.app.ProgressDialog
@@ -7,9 +8,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 
-abstract class BasicActivity <DB : ViewDataBinding, VM : BasicViewModel<*>>: AppCompatActivity(){
+abstract class BasicActivity<DB : ViewDataBinding, VM : BasicViewModel<*>> : AppCompatActivity() {
 
-    private lateinit var _dataBinding : DB
+    private lateinit var _dataBinding: DB
     private lateinit var _viewModel: VM
     protected val dataBinding get() = _dataBinding
     protected val viewModel get() = _viewModel
@@ -24,34 +25,35 @@ abstract class BasicActivity <DB : ViewDataBinding, VM : BasicViewModel<*>>: App
 
     }
 
-    abstract fun getLayoutID():Int
-    abstract fun initViewModel():VM
+    abstract fun getLayoutID(): Int
+    abstract fun initViewModel(): VM
     abstract fun initView()
 
-     private fun subscribeToLiveData() {
-         _viewModel.showLoading.observe(this) { show ->
-             if (show) {
-                 showLoading()
-             } else {
-                 hideLoading()
-             }
-         }
-     }
+    private fun subscribeToLiveData() {
+        _viewModel.showLoading.observe(this) { show ->
+            if (show) {
+                showLoading()
+            } else {
+                hideLoading()
+            }
+        }
+    }
 
 
-     private var progressDialog: ProgressDialog?=null
-     private fun showLoading(){
-         progressDialog = ProgressDialog(this)
-         progressDialog?.apply {
-             setMessage("Loading...")
-             setCancelable(false)
-             show()
-         }
-     }
-     private fun hideLoading(){
-         progressDialog?.dismiss()
-         progressDialog = null
-     }
+    private var progressDialog: ProgressDialog? = null
+    private fun showLoading() {
+        progressDialog = ProgressDialog(this)
+        progressDialog?.apply {
+            setMessage("Loading...")
+            setCancelable(false)
+            show()
+        }
+    }
+
+    private fun hideLoading() {
+        progressDialog?.dismiss()
+        progressDialog = null
+    }
 
 
 }

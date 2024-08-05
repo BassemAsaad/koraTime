@@ -6,7 +6,7 @@ import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputLayout
 
 @BindingAdapter("android:error")
-fun setError(textInputLayout: TextInputLayout, error: String){
+fun setError(textInputLayout: TextInputLayout, error: String) {
     textInputLayout.error = error
 }
 

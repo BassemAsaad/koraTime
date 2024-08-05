@@ -1,4 +1,3 @@
 package com.example.koratime.rooms.stadiumRooms
 
-interface StadiumRoomsNavigator {
-}
+interface StadiumRoomsNavigator

@@ -21,57 +21,55 @@ class AddRoomViewModel : BasicViewModel<AddRoomNavigator>() {
 
     val toastMessage = MutableLiveData<String>()
 
-    fun createRoom(){
-        if (validate()){
+    fun createRoom() {
+        if (validate()) {
             val room = RoomModel(
-                    name = roomName.get(),
-                    description = description.get(),
-                    password = password.get(),
-                    imageUrl = imageUrl.value,
-                    userManager = user?.uid
+                name = roomName.get(),
+                description = description.get(),
+                password = password.get(),
+                imageUrl = imageUrl.value,
+                userManager = user?.uid
             )
             //add in firebase
             addRoom(room)
             navigator?.roomsFragment()
         }
     }
+
     private fun addRoom(room: RoomModel) {
-        showLoading.value=true
+        showLoading.value = true
         addRoomToFirestore(
             room,
             onSuccessListener = {
-                showLoading.value=false
-                Log.e("Firebase","Room Added to Firestore")
+                showLoading.value = false
+                Log.e("Firebase", "Room Added to Firestore")
                 //navigate
                 navigator?.roomsFragment()
             },
             onFailureListener = {
-                showLoading.value=false
+                showLoading.value = false
                 toastMessage.value = it.localizedMessage
             }
         )
     }
-    private fun validate():Boolean{
+
+    private fun validate(): Boolean {
         var valid = true
-        if (roomName.get().isNullOrBlank()){
+        if (roomName.get().isNullOrBlank()) {
             roomNameError.set("Please enter the room name")
-            valid=false
-        } else{
+            valid = false
+        } else {
             roomNameError.set(null)
         }
-        if (description.get().isNullOrBlank()){
+        if (description.get().isNullOrBlank()) {
             descriptionError.set("Please enter the room name")
-            valid=false
-        } else{
+            valid = false
+        } else {
             descriptionError.set(null)
         }
 
         return valid
     }
-
-
-
-
 
 
 }

@@ -17,8 +17,9 @@ import com.example.koratime.model.FriendModel
 import com.google.firebase.firestore.DocumentChange
 
 @Suppress("DEPRECATION")
-class ChatFriendsActivity : BasicActivity<ActivityChatFriendsBinding,ChatFriendsViewModel>(),ChatFriendsNavigator {
-    private lateinit var friendModel : FriendModel
+class ChatFriendsActivity : BasicActivity<ActivityChatFriendsBinding, ChatFriendsViewModel>(),
+    ChatFriendsNavigator {
+    private lateinit var friendModel: FriendModel
     private val messageAdapter = FriendMessagesAdapter()
     override fun getLayoutID(): Int {
         return R.layout.activity_chat_friends
@@ -27,6 +28,7 @@ class ChatFriendsActivity : BasicActivity<ActivityChatFriendsBinding,ChatFriends
     override fun initViewModel(): ChatFriendsViewModel {
         return ViewModelProvider(this)[ChatFriendsViewModel::class.java]
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initView()
@@ -58,17 +60,20 @@ class ChatFriendsActivity : BasicActivity<ActivityChatFriendsBinding,ChatFriends
         })
 
     }
+
     override fun onSupportNavigateUp(): Boolean {
         // go to the previous fragment when back button clicked on toolbar
         onBackPressed()
         return true
     }
+
     private fun setupRecyclerView() {
         val layoutManager = LinearLayoutManager(this)
         layoutManager.stackFromEnd = true // This will start the layout from the end
         dataBinding.recyclerView.layoutManager = layoutManager
         dataBinding.recyclerView.adapter = messageAdapter
     }
+
     private fun scrollToBottom() {
         dataBinding.recyclerView.postDelayed({
             if (messageAdapter.itemCount > 0) {
@@ -76,6 +81,7 @@ class ChatFriendsActivity : BasicActivity<ActivityChatFriendsBinding,ChatFriends
             }
         }, 100) // Delaying the scroll by 100 milliseconds
     }
+
     private fun listenForMessageUpdate() {
         getFriendMessagesFromFirestore(
             senderID = DataUtils.user!!.id!!,

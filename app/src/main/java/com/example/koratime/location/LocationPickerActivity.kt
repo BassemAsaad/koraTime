@@ -23,23 +23,23 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.net.PlacesClient
-import java.lang.Exception
 
 @Suppress("DEPRECATION")
-class LocationPickerActivity : BasicActivity<ActivityLocationPickerBinding,LocationPickerViewModel>(),OnMapReadyCallback{
-    companion object{
-        private const val TAG="LOCATION_PICKER"
-        private const val DEFAULT_ZOOM=13.8
+class LocationPickerActivity :
+    BasicActivity<ActivityLocationPickerBinding, LocationPickerViewModel>(), OnMapReadyCallback {
+    companion object {
+        private const val TAG = "LOCATION_PICKER"
+        private const val DEFAULT_ZOOM = 13.8
     }
-    private var mMap : GoogleMap?=null
-    private var placeClient : PlacesClient?=null
-    private var fusedLocationProvider :FusedLocationProviderClient?=null
-    private var myLastKnownLocation : Location?=null
-    private var selectedLatitude :Double?=null
-    private var selectedLongitude:Double?= null
+
+    private var mMap: GoogleMap? = null
+    private var placeClient: PlacesClient? = null
+    private var fusedLocationProvider: FusedLocationProviderClient? = null
+    private var myLastKnownLocation: Location? = null
+    private var selectedLatitude: Double? = null
+    private var selectedLongitude: Double? = null
     private var address = ""
 
 
@@ -64,28 +64,28 @@ class LocationPickerActivity : BasicActivity<ActivityLocationPickerBinding,Locat
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
         //hide container
-        dataBinding.container.visibility= View.GONE
+        dataBinding.container.visibility = View.GONE
 
         // get map
-        val mapFragment = supportFragmentManager.findFragmentById(R.id.mapFragment) as SupportMapFragment
+        val mapFragment =
+            supportFragmentManager.findFragmentById(R.id.mapFragment) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
         // initialize places client
-        Places.initialize(this,getString(R.string.google_api_key))
+        Places.initialize(this, getString(R.string.google_api_key))
 
         // create new places client instance
-        placeClient= Places.createClient(this)
+        placeClient = Places.createClient(this)
         fusedLocationProvider = LocationServices.getFusedLocationProviderClient(this)
-
 
 
         // done Button click
         dataBinding.doneButton.setOnClickListener {
             val intent = Intent()
-            intent.putExtra("latitude",selectedLatitude)
-            intent.putExtra("longitude",selectedLongitude)
-            intent.putExtra("address",address)
-            setResult(Activity.RESULT_OK,intent)
+            intent.putExtra("latitude", selectedLatitude)
+            intent.putExtra("longitude", selectedLongitude)
+            intent.putExtra("address", address)
+            setResult(Activity.RESULT_OK, intent)
             finish()
 
         }
@@ -103,13 +103,16 @@ class LocationPickerActivity : BasicActivity<ActivityLocationPickerBinding,Locat
             markerOptions.position(latLng)
             markerOptions.title(" $title ")
             markerOptions.snippet(" $address ")
-            markerOptions.icon(BitmapDescriptorFactory
-                .defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+            markerOptions.icon(
+                BitmapDescriptorFactory
+                    .defaultMarker(BitmapDescriptorFactory.HUE_GREEN)
+            )
 
             // add marker to map and move camera to the new added marker
             mMap!!.addMarker(markerOptions)
-            mMap!!.moveCamera(CameraUpdateFactory
-                .newLatLngZoom(latLng, DEFAULT_ZOOM.toFloat())
+            mMap!!.moveCamera(
+                CameraUpdateFactory
+                    .newLatLngZoom(latLng, DEFAULT_ZOOM.toFloat())
             )
             //show doneL1 so user can go back with selected location
             dataBinding.container.visibility = View.VISIBLE
@@ -118,8 +121,8 @@ class LocationPickerActivity : BasicActivity<ActivityLocationPickerBinding,Locat
             dataBinding.selectedPlace.text = address
 
 
-        }catch (e : Exception){
-            Log.e(TAG,"addMarker: ",e)
+        } catch (e: Exception) {
+            Log.e(TAG, "addMarker: ", e)
         }
 
 
@@ -127,38 +130,41 @@ class LocationPickerActivity : BasicActivity<ActivityLocationPickerBinding,Locat
 
     // get location of device and position the map's camera
     @SuppressLint("MissingPermission")
-    private fun detectAndShowDeviceLocationMap(){
+    private fun detectAndShowDeviceLocationMap() {
         fusedLocationProvider!!.lastLocation
-            .addOnSuccessListener {location->
-                if (location!=null){
+            .addOnSuccessListener { location ->
+                if (location != null) {
                     //save location
-                    myLastKnownLocation=location
+                    myLastKnownLocation = location
                     //get latitude and longitude
-                    selectedLatitude= location.latitude
+                    selectedLatitude = location.latitude
                     selectedLongitude = location.longitude
 
                     // setUp latLng
-                    val latLng = LatLng(selectedLatitude!!,selectedLongitude!!)
-                    mMap!!.moveCamera(CameraUpdateFactory
-                        .newLatLngZoom(latLng, DEFAULT_ZOOM.toFloat())
+                    val latLng = LatLng(selectedLatitude!!, selectedLongitude!!)
+                    mMap!!.moveCamera(
+                        CameraUpdateFactory
+                            .newLatLngZoom(latLng, DEFAULT_ZOOM.toFloat())
                     )
                     mMap!!.animateCamera(CameraUpdateFactory.zoomTo(DEFAULT_ZOOM.toFloat()))
 
                     // function to get address details from latLng
-                    addressFromLatLng(latLng) }
-            }.addOnFailureListener {e->
-                Log.e(TAG," location is null: : ",e) }
+                    addressFromLatLng(latLng)
+                }
+            }.addOnFailureListener { e ->
+                Log.e(TAG, " location is null: : ", e)
+            }
     }
 
 
     @SuppressLint("MissingPermission")
-    private val requestLocationPermission : ActivityResultLauncher<String> =
-        registerForActivityResult( ActivityResultContracts.RequestPermission() ){isGranted->
+    private val requestLocationPermission: ActivityResultLauncher<String> =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             //check if permission is granted
-            if (isGranted){
-                Log.e( TAG,"requestLocationPermission IsGranted: $isGranted")
+            if (isGranted) {
+                Log.e(TAG, "requestLocationPermission IsGranted: $isGranted")
                 // enable gps button to set location on map
-                mMap!!.isMyLocationEnabled= true
+                mMap!!.isMyLocationEnabled = true
                 pickCurrentPlace()
 
             }
@@ -166,7 +172,7 @@ class LocationPickerActivity : BasicActivity<ActivityLocationPickerBinding,Locat
         }
 
     private fun pickCurrentPlace() {
-        if (mMap == null){
+        if (mMap == null) {
             return
         }
         detectAndShowDeviceLocationMap()
@@ -179,9 +185,9 @@ class LocationPickerActivity : BasicActivity<ActivityLocationPickerBinding,Locat
         requestLocationPermission.launch(android.Manifest.permission.ACCESS_FINE_LOCATION)
 
         // get latitude and longitude when ever user click on map
-        mMap!!.setOnMapClickListener {latLng->
-            selectedLatitude=latLng.latitude
-            selectedLongitude=latLng.longitude
+        mMap!!.setOnMapClickListener { latLng ->
+            selectedLatitude = latLng.latitude
+            selectedLongitude = latLng.longitude
 
             // function to get address details from latLng
             addressFromLatLng(latLng)
@@ -193,18 +199,18 @@ class LocationPickerActivity : BasicActivity<ActivityLocationPickerBinding,Locat
 
         val geoCoder = Geocoder(this)
         try {
-            val addressList = geoCoder.getFromLocation(latLng.latitude,latLng.longitude,1)
-            val firstAddress =addressList!![0]
+            val addressList = geoCoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
+            val firstAddress = addressList!![0]
 
             val addressLine = firstAddress.getAddressLine(0)
             val subLocality = firstAddress.subLocality
 
             address = " $addressLine"
-            addMarker(latLng," $subLocality "," $addressLine ")
+            addMarker(latLng, " $subLocality ", " $addressLine ")
 
 
-        } catch (e : Exception){
-            Log.e(TAG," address from latitude and longitude: ",e)
+        } catch (e: Exception) {
+            Log.e(TAG, " address from latitude and longitude: ", e)
         }
     }
 

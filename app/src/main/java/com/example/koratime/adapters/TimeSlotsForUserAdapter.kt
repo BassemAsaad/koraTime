@@ -1,6 +1,5 @@
 package com.example.koratime.adapters
 
-import android.content.res.ColorStateList
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,7 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.koratime.R
 import com.example.koratime.databinding.ItemBookBinding
 
-class TimeSlotsForUserAdapter(private  var availableTimeSlots: List<String>) : RecyclerView.Adapter<TimeSlotsForUserAdapter.ViewHolder>() {
+class TimeSlotsForUserAdapter(private var availableTimeSlots: List<String>) :
+    RecyclerView.Adapter<TimeSlotsForUserAdapter.ViewHolder>() {
     class ViewHolder(val dataBinding: ItemBookBinding) : RecyclerView.ViewHolder(dataBinding.root) {
         fun bind(timeSlot: String) {
             dataBinding.tvTimeSlot.text = timeSlot

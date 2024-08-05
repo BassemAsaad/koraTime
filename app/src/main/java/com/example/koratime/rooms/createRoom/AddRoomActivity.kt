@@ -13,10 +13,11 @@ import com.example.koratime.basic.BasicActivity
 import com.example.koratime.database.uploadImageToStorage
 import com.example.koratime.databinding.ActivityAddRoomBinding
 
-@Suppress("DEPRECATION","SetTextI18n")
-class AddRoomActivity : BasicActivity< ActivityAddRoomBinding, AddRoomViewModel>(), AddRoomNavigator {
+@Suppress("DEPRECATION", "SetTextI18n")
+class AddRoomActivity : BasicActivity<ActivityAddRoomBinding, AddRoomViewModel>(),
+    AddRoomNavigator {
 
-    private lateinit var pickMedia : ActivityResultLauncher<PickVisualMediaRequest>
+    private lateinit var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +40,7 @@ class AddRoomActivity : BasicActivity< ActivityAddRoomBinding, AddRoomViewModel>
             navigator = this@AddRoomActivity
             // If no image is selected, use the default image URL
             imageUrl.value = getString(R.string.default_room_picture)
-            toastMessage.observe( this@AddRoomActivity) { message ->
+            toastMessage.observe(this@AddRoomActivity) { message ->
                 Toast.makeText(this@AddRoomActivity, message, Toast.LENGTH_SHORT).show()
             }
         }
@@ -58,9 +59,9 @@ class AddRoomActivity : BasicActivity< ActivityAddRoomBinding, AddRoomViewModel>
         }
     }
 
-    private fun openImagePicker(){
+    private fun openImagePicker() {
         // Registers a photo picker activity launcher in single-select mode.
-         pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+        pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             // photo picker
             if (uri != null) {
                 Log.d("PhotoPicker", "Selected URI: $uri")

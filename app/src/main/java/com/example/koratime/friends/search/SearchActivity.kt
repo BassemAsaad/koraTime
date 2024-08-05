@@ -16,11 +16,10 @@ import com.example.koratime.databinding.ActivitySearchBinding
 import com.example.koratime.model.UserModel
 
 
-
 @Suppress("DEPRECATION")
-class SearchActivity : BasicActivity<ActivitySearchBinding,SearchViewModel>(),SearchNavigator {
+class SearchActivity : BasicActivity<ActivitySearchBinding, SearchViewModel>(), SearchNavigator {
     private val usersList = mutableListOf<UserModel?>()
-    private val adapter = AddFriendsAdapter(usersList,DataUtils.user!!.id )
+    private val adapter = AddFriendsAdapter(usersList, DataUtils.user!!.id)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initView()
@@ -45,7 +44,7 @@ class SearchActivity : BasicActivity<ActivitySearchBinding,SearchViewModel>(),Se
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
             setDisplayShowHomeEnabled(true)
-            title= "Search For People"
+            title = "Search For People"
             setDisplayShowTitleEnabled(true)
         }
 
@@ -66,22 +65,23 @@ class SearchActivity : BasicActivity<ActivitySearchBinding,SearchViewModel>(),Se
 
 
         // send friend request
-        adapter.onAddFriendButtonClickListener=object : AddFriendsAdapter.OnAddFriendButtonClickListener{
-            @SuppressLint("SuspiciousIndentation")
-            override fun onClick(
-                user : UserModel,
-                holder: AddFriendsAdapter.ViewHolder,
-                position: Int
-            ) {
-                val receiverUserId = user.id
+        adapter.onAddFriendButtonClickListener =
+            object : AddFriendsAdapter.OnAddFriendButtonClickListener {
+                @SuppressLint("SuspiciousIndentation")
+                override fun onClick(
+                    user: UserModel,
+                    holder: AddFriendsAdapter.ViewHolder,
+                    position: Int
+                ) {
+                    val receiverUserId = user.id
                     addFriendRequestToFirestore(
                         sender = DataUtils.user!!,
                         receiver = user,
                         onSuccessListener = {
-                            holder.dataBinding.addFriendButtonItem.text= "Pending"
+                            holder.dataBinding.addFriendButtonItem.text = "Pending"
                             holder.dataBinding.addFriendButtonItem.isEnabled = false
                             holder.dataBinding.removeFriendButtonItem.isEnabled = true
-                            Log.e("Firebase", "Friend request sent to: $receiverUserId" )
+                            Log.e("Firebase", "Friend request sent to: $receiverUserId")
                         },
                         onFailureListener = { e ->
                             Log.e("Firebase", "Error sending friend request: ", e)
@@ -89,35 +89,36 @@ class SearchActivity : BasicActivity<ActivitySearchBinding,SearchViewModel>(),Se
                     )
 
 
+                }
             }
-        }
 
         //remove friend request
-        adapter.onRemoveFriendButtonClickListener = object :AddFriendsAdapter.OnRemoveFriendButtonClickListener{
-            @SuppressLint("SuspiciousIndentation")
-            override fun onClick(
-                user: UserModel,
-                holder: AddFriendsAdapter.ViewHolder,
-                position: Int
-            ) {
-                val receiverUserId = user.id!!
+        adapter.onRemoveFriendButtonClickListener =
+            object : AddFriendsAdapter.OnRemoveFriendButtonClickListener {
+                @SuppressLint("SuspiciousIndentation")
+                override fun onClick(
+                    user: UserModel,
+                    holder: AddFriendsAdapter.ViewHolder,
+                    position: Int
+                ) {
+                    val receiverUserId = user.id!!
                     removeFriendRequestWithoutRequestID(
                         sender = DataUtils.user!!.id!!,
                         receiver = receiverUserId,
                         onSuccessListener = {
-                            holder.dataBinding.addFriendButtonItem.text= "Add Friend"
+                            holder.dataBinding.addFriendButtonItem.text = "Add Friend"
                             holder.dataBinding.addFriendButtonItem.isEnabled = true
                             holder.dataBinding.removeFriendButtonItem.isEnabled = false
-                            Log.e("firebase","Friend request removed")
+                            Log.e("firebase", "Friend request removed")
                         },
-                        onFailureListener = {e->
-                            Log.e("firebase","error removing friend request: ",e)
+                        onFailureListener = { e ->
+                            Log.e("firebase", "error removing friend request: ", e)
 
                         }
                     )
 
+                }
             }
-        }
 
     }
 
@@ -126,16 +127,16 @@ class SearchActivity : BasicActivity<ActivitySearchBinding,SearchViewModel>(),Se
         getUsersFromFirestore(
             DataUtils.user!!.id,
             onSuccessListener = { querySnapshot ->
-                for (doc in querySnapshot.documents){
+                for (doc in querySnapshot.documents) {
                     val user = doc.toObject(UserModel::class.java)
                     usersList.add(user)
                 }
                 adapter.changeData(usersList)
 
-                Log.e("Firebase"," Data has been added to adapter successfully ")
+                Log.e("Firebase", " Data has been added to adapter successfully ")
             },
-            onFailureListener = {e->
-                Log.e("Firebase"," Error adding Data to adapter: ",e)
+            onFailureListener = { e ->
+                Log.e("Firebase", " Error adding Data to adapter: ", e)
             }
         )
 

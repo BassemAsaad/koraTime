@@ -11,21 +11,26 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.example.koratime.basic.BasicActivity
 import com.example.koratime.R
+import com.example.koratime.basic.BasicActivity
 import com.example.koratime.database.uploadImageToStorage
 import com.example.koratime.databinding.ActivityRegisterBinding
 import com.example.koratime.registration.log_in.LoginActivity
 
-class RegisterActivity : BasicActivity<ActivityRegisterBinding, RegisterViewModel>(),RegisterNavigator {
-    private lateinit var pickMedia : ActivityResultLauncher<PickVisualMediaRequest>
-    private val defaultImageUrl = "https://firebasestorage.googleapis.com/v0/b/kora-time-d21c3.appspot.com/o/images%2Fprofile_picture.png?alt=media&token=650310ed-94a0-479b-8bb3-ad2f3c4b6489"
+class RegisterActivity : BasicActivity<ActivityRegisterBinding, RegisterViewModel>(),
+    RegisterNavigator {
+    private lateinit var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
+    private val defaultImageUrl =
+        "https://firebasestorage.googleapis.com/v0/b/kora-time-d21c3.appspot.com/o/images%2Fprofile_picture.png?alt=media&token=650310ed-94a0-479b-8bb3-ad2f3c4b6489"
+
     override fun getLayoutID(): Int {
         return R.layout.activity_register
     }
+
     override fun initViewModel(): RegisterViewModel {
         return ViewModelProvider(this)[RegisterViewModel::class.java]
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initView()
@@ -50,6 +55,7 @@ class RegisterActivity : BasicActivity<ActivityRegisterBinding, RegisterViewMode
                 R.id.asPlayer_layout -> {
                     viewModel.showNationalID.value = false
                 }
+
                 R.id.asStadiumManager_layout -> {
                     viewModel.showNationalID.value = true
                 }
@@ -57,7 +63,8 @@ class RegisterActivity : BasicActivity<ActivityRegisterBinding, RegisterViewMode
         }
 
         viewModel.showNationalID.observe(this, Observer { showNationalID ->
-            dataBinding.nationalIDLayout.visibility = if (showNationalID) View.VISIBLE else View.GONE
+            dataBinding.nationalIDLayout.visibility =
+                if (showNationalID) View.VISIBLE else View.GONE
         })
 
 
@@ -74,9 +81,8 @@ class RegisterActivity : BasicActivity<ActivityRegisterBinding, RegisterViewMode
     }
 
 
-
     @SuppressLint("SetTextI18n")
-    fun openImagePicker(){
+    fun openImagePicker() {
         // Registers a photo picker activity launcher in single-select mode.
         pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
 

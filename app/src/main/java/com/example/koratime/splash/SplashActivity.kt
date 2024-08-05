@@ -1,10 +1,10 @@
 package com.example.koratime.splash
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import androidx.appcompat.app.AppCompatActivity
 import com.example.koratime.R
 import com.example.koratime.registration.log_in.LoginActivity
 
@@ -16,10 +16,12 @@ class SplashActivity : AppCompatActivity() {
 
         Handler(Looper.getMainLooper())
             .postDelayed({
-                startHomeScreen()},3000)
+                startHomeScreen()
+            }, 3000)
     }
-    private fun startHomeScreen(){
-        val intent = Intent(this,LoginActivity::class.java)
+
+    private fun startHomeScreen() {
+        val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
         finish()
     }

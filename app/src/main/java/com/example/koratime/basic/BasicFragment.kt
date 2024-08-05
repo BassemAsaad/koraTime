@@ -11,19 +11,19 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 
-abstract class BasicFragment <DB : ViewDataBinding, VM : BasicViewModel<*>>: Fragment() {
-    private lateinit var _dataBinding : DB
+abstract class BasicFragment<DB : ViewDataBinding, VM : BasicViewModel<*>> : Fragment() {
+    private lateinit var _dataBinding: DB
     private lateinit var _viewModel: VM
     protected val dataBinding get() = _dataBinding
     protected val viewModel get() = _viewModel
-    private var progressDialog: ProgressDialog?=null
+    private var progressDialog: ProgressDialog? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _dataBinding = DataBindingUtil.inflate(inflater, getLayoutID(),container,false)
+        _dataBinding = DataBindingUtil.inflate(inflater, getLayoutID(), container, false)
         return _dataBinding.root
     }
 
@@ -38,10 +38,10 @@ abstract class BasicFragment <DB : ViewDataBinding, VM : BasicViewModel<*>>: Fra
         subscribeToLiveData()
     }
 
-    abstract fun initViewModel():VM
+    abstract fun initViewModel(): VM
     abstract fun initView()
     abstract fun callback()
-    abstract fun getLayoutID():Int
+    abstract fun getLayoutID(): Int
 
 
     private fun subscribeToLiveData() {
@@ -53,7 +53,8 @@ abstract class BasicFragment <DB : ViewDataBinding, VM : BasicViewModel<*>>: Fra
             }
         }
     }
-    private fun showLoading(){
+
+    private fun showLoading() {
         progressDialog = ProgressDialog(requireContext())
         progressDialog?.apply {
             setMessage("Loading...")
@@ -61,7 +62,8 @@ abstract class BasicFragment <DB : ViewDataBinding, VM : BasicViewModel<*>>: Fra
             show()
         }
     }
-    private fun hideLoading(){
+
+    private fun hideLoading() {
         progressDialog?.dismiss()
         progressDialog = null
     }

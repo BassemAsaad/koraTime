@@ -16,24 +16,23 @@ class FriendMessagesAdapter : RecyclerView.Adapter<ViewHolder>() {
     private var item = mutableListOf<FriendMessageModel?>()
 
 
-
-    inner class SendMessageViewHolder (private val itemSendMessageBinding: ItemFriendSendMessageBinding)
-        :ViewHolder (itemSendMessageBinding.root){
-            fun bind (friendMessageModel: FriendMessageModel){
-                itemSendMessageBinding.messageModel = friendMessageModel
-                itemSendMessageBinding.executePendingBindings()
-            }
+    inner class SendMessageViewHolder(private val itemSendMessageBinding: ItemFriendSendMessageBinding) :
+        ViewHolder(itemSendMessageBinding.root) {
+        fun bind(friendMessageModel: FriendMessageModel) {
+            itemSendMessageBinding.messageModel = friendMessageModel
+            itemSendMessageBinding.executePendingBindings()
         }
+    }
 
-    inner class ReceiveMessageViewHolder (private val receiveMessageBinding: ItemFriendReceiveMessageBinding)
-        :ViewHolder (receiveMessageBinding.root){
-        fun bind (friendMessageModel: FriendMessageModel){
+    inner class ReceiveMessageViewHolder(private val receiveMessageBinding: ItemFriendReceiveMessageBinding) :
+        ViewHolder(receiveMessageBinding.root) {
+        fun bind(friendMessageModel: FriendMessageModel) {
             receiveMessageBinding.messageModel = friendMessageModel
             receiveMessageBinding.executePendingBindings()
         }
     }
 
-    companion object{
+    companion object {
         private const val RECEIVED = 1
         private const val SEND = 2
     }
@@ -41,23 +40,26 @@ class FriendMessagesAdapter : RecyclerView.Adapter<ViewHolder>() {
     override fun getItemViewType(position: Int): Int {
         val message = item[position]
 
-        if (message?.senderID==DataUtils.user?.id){
+        if (message?.senderID == DataUtils.user?.id) {
             return SEND
-        } else{
+        } else {
             return RECEIVED
         }
 
     }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        if (viewType==RECEIVED){
-            val itemBinding : ItemFriendReceiveMessageBinding = DataBindingUtil.inflate(
+        if (viewType == RECEIVED) {
+            val itemBinding: ItemFriendReceiveMessageBinding = DataBindingUtil.inflate(
                 LayoutInflater.from(parent.context),
-                R.layout.item_friend_receive_message, parent, false,)
+                R.layout.item_friend_receive_message, parent, false,
+            )
             return ReceiveMessageViewHolder(itemBinding)
         } else {
-            val itemBinding : ItemFriendSendMessageBinding = DataBindingUtil.inflate(
+            val itemBinding: ItemFriendSendMessageBinding = DataBindingUtil.inflate(
                 LayoutInflater.from(parent.context),
-                R.layout.item_friend_send_message, parent, false,)
+                R.layout.item_friend_send_message, parent, false,
+            )
             return SendMessageViewHolder(itemBinding)
         }
     }
@@ -67,9 +69,9 @@ class FriendMessagesAdapter : RecyclerView.Adapter<ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        if ( holder is SendMessageViewHolder){
+        if (holder is SendMessageViewHolder) {
             holder.bind(item[position]!!)
-        } else if ( holder is ReceiveMessageViewHolder){
+        } else if (holder is ReceiveMessageViewHolder) {
             holder.bind(item[position]!!)
 
         }

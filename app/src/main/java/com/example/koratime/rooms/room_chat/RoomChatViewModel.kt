@@ -14,23 +14,23 @@ class RoomChatViewModel : BasicViewModel<RoomChatNavigator>() {
     val messageField = ObservableField<String>()
     val messageFieldError = ObservableField<String>()
 
-    var room : RoomModel?=null
+    var room: RoomModel? = null
     val toastMessage = MutableLiveData<String>()
 
-    fun sendMessage(){
+    fun sendMessage() {
         val roomMessageModel = RoomMessageModel(
             content = messageField.get(),
             roomID = room?.roomID,
             senderID = DataUtils.user?.id,
-            senderName =DataUtils.user?.userName,
+            senderName = DataUtils.user?.userName,
             dateTime = Date().time
         )
 
-        if (validation()){
+        if (validation()) {
             addRoomMessageToFirestore(
                 message = roomMessageModel,
                 onSuccessListener = {
-                    Log.e("Firebase","message sent successfully")
+                    Log.e("Firebase", "message sent successfully")
                     messageField.set("")
 
                 },
@@ -42,13 +42,14 @@ class RoomChatViewModel : BasicViewModel<RoomChatNavigator>() {
 
 
     }
-    private fun validation():Boolean{
+
+    private fun validation(): Boolean {
         var check = true
 
-        if (messageField.get().isNullOrBlank()){
+        if (messageField.get().isNullOrBlank()) {
             check = false
             messageFieldError.set("Cant send empty message")
-        }else{
+        } else {
             messageFieldError.set(null)
         }
 

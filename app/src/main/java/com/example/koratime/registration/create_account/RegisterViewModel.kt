@@ -39,11 +39,9 @@ class RegisterViewModel : BasicViewModel<RegisterNavigator>() {
     val toastMessage = MutableLiveData<String>()
 
 
-
-
-    fun createAccount(){
+    fun createAccount() {
         //validation
-        if (validation()){
+        if (validation()) {
             //create account in firebase
             addAccount_toFirebase()
         }
@@ -53,12 +51,12 @@ class RegisterViewModel : BasicViewModel<RegisterNavigator>() {
     private fun addAccount_toFirebase() {
         showLoading.value = true
         auth.createUserWithEmailAndPassword(email.get()!!, password.get()!!)
-            .addOnCompleteListener{task ->
-                if (!task.isSuccessful){
+            .addOnCompleteListener { task ->
+                if (!task.isSuccessful) {
                     showLoading.value = false
                     toastMessage.value = task.exception?.localizedMessage
-                    Log.e("Firebase: ",task.exception?.localizedMessage.toString())
-                } else{
+                    Log.e("Firebase: ", task.exception?.localizedMessage.toString())
+                } else {
                     Log.e("Firebase: ", "Account added successfully to firestore")
                     createFirestore_User(task.result.user?.uid)
                 }
@@ -72,7 +70,7 @@ class RegisterViewModel : BasicViewModel<RegisterNavigator>() {
             firstName = firstName.get(),
             secondName = secondName.get(),
             userName = userName.get(),
-            nationalID= nationalID.get(),
+            nationalID = nationalID.get(),
             email = email.get(),
             profilePicture = imageUrl.value
         )
@@ -86,68 +84,65 @@ class RegisterViewModel : BasicViewModel<RegisterNavigator>() {
             },
             //OnFailureListener
             {
-                showLoading.value=false
+                showLoading.value = false
                 Log.e("Firebase: ", "error adding account to firestore")
             })
     }
 
 
-    fun validation():Boolean {
+    fun validation(): Boolean {
         var valid = true
 
 
-
         // Validate National ID if the user selected "Sign Up As Stadium Manager"
-    if (asManagerRadioButton.get()==true && nationalID.get().isNullOrBlank()){
-        valid = false
-        nationalIDError.set("Enter National ID")
-    } else if (asManagerRadioButton.get()==true && nationalID.get()?.length !=14)  {
-        nationalIDError.set("Not Correct National ID")
-        valid = false
-    } else{
-        nationalIDError.set(null)
-    }
+        if (asManagerRadioButton.get() == true && nationalID.get().isNullOrBlank()) {
+            valid = false
+            nationalIDError.set("Enter National ID")
+        } else if (asManagerRadioButton.get() == true && nationalID.get()?.length != 14) {
+            nationalIDError.set("Not Correct National ID")
+            valid = false
+        } else {
+            nationalIDError.set(null)
+        }
 
         //firstName
-        if (firstName.get().isNullOrBlank()){
-            valid=false
+        if (firstName.get().isNullOrBlank()) {
+            valid = false
             firstNameError.set("Enter First Name")
-        } else{
+        } else {
             firstNameError.set(null)
         }
         //secondName
-        if (secondName.get().isNullOrBlank()){
-            valid=false
+        if (secondName.get().isNullOrBlank()) {
+            valid = false
             secondNameError.set("Enter Second Name")
         } else {
             secondNameError.set(null)
         }
         //userName
-        if (userName.get().isNullOrBlank() ){
-            valid=false
+        if (userName.get().isNullOrBlank()) {
+            valid = false
             userNameError.set("Enter User Name")
         } else {
             userNameError.set(null)
         }
 
         //email
-        if (email.get().isNullOrBlank()){
-            valid=false
+        if (email.get().isNullOrBlank()) {
+            valid = false
             emailError.set("Enter Email")
         } else {
             emailError.set(null)
         }
 
         //password
-        if (password.get().isNullOrBlank() ){
-            valid=false
+        if (password.get().isNullOrBlank()) {
+            valid = false
             passwordError.set("Enter Password")
-        }
-        else if (password.get()?.length!! < 8){
-            valid=false
+        } else if (password.get()?.length!! < 8) {
+            valid = false
             passwordError.set("Password is less than 8")
-        }
-        else {
+        } else {
             passwordError.set(null)
         }
 

@@ -5,10 +5,11 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 
 class StadiumsManagerViewModel : BasicViewModel<StadiumsManagerNavigator>() {
-    fun createStadium(){
+    fun createStadium() {
         navigator?.createStadiumActivity()
     }
-    fun logOut(){
+
+    fun logOut() {
         Firebase.auth.signOut()
         navigator?.Logout()
     }

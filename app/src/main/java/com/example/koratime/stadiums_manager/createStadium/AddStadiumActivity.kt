@@ -21,14 +21,15 @@ import com.example.koratime.databinding.ActivityAddStadiumBinding
 import com.example.koratime.location.LocationPickerActivity
 
 @Suppress("DEPRECATION")
-class AddStadiumActivity : BasicActivity<ActivityAddStadiumBinding,AddStadiumViewModel>(), AddStadiumNavigator {
+class AddStadiumActivity : BasicActivity<ActivityAddStadiumBinding, AddStadiumViewModel>(),
+    AddStadiumNavigator {
 
-    private lateinit var pickMedia : ActivityResultLauncher<PickVisualMediaRequest>
+    private lateinit var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
     private var latitude = 0.0
     private var longitude = 0.0
     private var address = ""
-    private var openingTimeIndex:Int?=null
-    private var closingTimeIndex:Int?=null
+    private var openingTimeIndex: Int? = null
+    private var closingTimeIndex: Int? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initView()
@@ -44,7 +45,7 @@ class AddStadiumActivity : BasicActivity<ActivityAddStadiumBinding,AddStadiumVie
 
     override fun initView() {
         dataBinding.vm = viewModel
-        viewModel.navigator=this
+        viewModel.navigator = this
         setSupportActionBar(dataBinding.toolbar)
         // Enable back button on Toolbar
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -59,7 +60,7 @@ class AddStadiumActivity : BasicActivity<ActivityAddStadiumBinding,AddStadiumVie
         }
 
         dataBinding.locationPickerEditText.setOnClickListener {
-            val intent = Intent(this,LocationPickerActivity::class.java)
+            val intent = Intent(this, LocationPickerActivity::class.java)
             locationPickerActivityResultLauncher.launch(intent)
         }
 
@@ -70,23 +71,23 @@ class AddStadiumActivity : BasicActivity<ActivityAddStadiumBinding,AddStadiumVie
 
 
     private val locationPickerActivityResultLauncher =
-        registerForActivityResult( ActivityResultContracts.StartActivityForResult()){result->
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             //get result from location picked from location picker activity
-            if (result.resultCode== Activity.RESULT_OK){
+            if (result.resultCode == Activity.RESULT_OK) {
                 //get data Intent from result param
                 val data = result.data
                 // if data not null assign data
-                if ( data !=null ){
-                    latitude = data.getDoubleExtra("latitude",0.0)
-                    longitude = data.getDoubleExtra("longitude",0.0)
-                    address = data.getStringExtra("address")?:""
+                if (data != null) {
+                    latitude = data.getDoubleExtra("latitude", 0.0)
+                    longitude = data.getDoubleExtra("longitude", 0.0)
+                    address = data.getStringExtra("address") ?: ""
                     viewModel.latitudeLiveData.value = latitude
-                    viewModel.longitudeLiveData.value=longitude
+                    viewModel.longitudeLiveData.value = longitude
                     viewModel.addressLiveData.value = address
                     dataBinding.locationPickerEditText.setText(address)
                 }
-            }else{
-                Log.e("Add Stadium","locationPickerActivityResultLauncher: cancelled ")
+            } else {
+                Log.e("Add Stadium", "locationPickerActivityResultLauncher: cancelled ")
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_SHORT).show()
             }
         }
@@ -103,7 +104,12 @@ class AddStadiumActivity : BasicActivity<ActivityAddStadiumBinding,AddStadiumVie
 
         // Add listeners to update closing time spinner based on opening time spinner selection
         dataBinding.opening.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
                 // Update opening time index
                 openingTimeIndex = position
                 viewModel.openingTime.value = openingTimeIndex
@@ -117,10 +123,16 @@ class AddStadiumActivity : BasicActivity<ActivityAddStadiumBinding,AddStadiumVie
 
         // Add listener for closing time spinner
         dataBinding.closing.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
                 // Update closing time index
                 closingTimeIndex = position
-                viewModel.closingTime.value = closingTimeIndex!! + 1 // Add +1 to represent the actual closing time
+                viewModel.closingTime.value =
+                    closingTimeIndex!! + 1 // Add +1 to represent the actual closing time
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -132,12 +144,14 @@ class AddStadiumActivity : BasicActivity<ActivityAddStadiumBinding,AddStadiumVie
     // Update closing time spinner based on opening time spinner
     private fun updateClosingTimeSpinner(openingSpinner: Spinner, closingSpinner: Spinner) {
         val openingTime = openingSpinner.selectedItem.toString()
-        val timeSlots= resources.getStringArray(R.array.time_slots)
+        val timeSlots = resources.getStringArray(R.array.time_slots)
 
         // Generate closing time slots starting from one hour after the opening time
-        val closingTimeSlots = timeSlots.sliceArray((openingTimeIndex!! + 1) until timeSlots.size).toMutableList()
+        val closingTimeSlots =
+            timeSlots.sliceArray((openingTimeIndex!! + 1) until timeSlots.size).toMutableList()
 
-        val closingAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, closingTimeSlots)
+        val closingAdapter =
+            ArrayAdapter(this, android.R.layout.simple_spinner_item, closingTimeSlots)
         closingAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         closingSpinner.adapter = closingAdapter
 
@@ -160,12 +174,12 @@ class AddStadiumActivity : BasicActivity<ActivityAddStadiumBinding,AddStadiumVie
         return true
     }
 
-    private fun openImagePicker(){
+    private fun openImagePicker() {
         // Registers a photo picker activity launcher in single-select mode.
         pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             // photo picker
             if (uri != null) {
-                viewModel.showLoading.value =true
+                viewModel.showLoading.value = true
                 Log.d("PhotoPicker", "Selected URI: $uri")
                 uploadImageToStorage(uri,
                     onSuccessListener = { downloadUri ->

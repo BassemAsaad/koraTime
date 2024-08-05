@@ -17,13 +17,15 @@ import com.example.koratime.model.StadiumModel
 import com.example.koratime.registration.log_in.LoginActivity
 import com.example.koratime.stadiums_user.bookStadium.BookingStadiumActivity
 
-class StadiumsFragment : BasicFragment<FragmentStadiumsBinding,StadiumsViewModel>(),StadiumsNavigator {
+class StadiumsFragment : BasicFragment<FragmentStadiumsBinding, StadiumsViewModel>(),
+    StadiumsNavigator {
 
     val adapter = StadiumsAdapter(null)
 
     override fun initViewModel(): StadiumsViewModel {
         return ViewModelProvider(this)[StadiumsViewModel::class.java]
     }
+
     override fun getLayoutID(): Int {
         return R.layout.fragment_stadiums
     }
@@ -55,10 +57,10 @@ class StadiumsFragment : BasicFragment<FragmentStadiumsBinding,StadiumsViewModel
                 }
             })
         }
-        adapter.onItemClickListener = object :StadiumsAdapter.OnItemClickListener{
+        adapter.onItemClickListener = object : StadiumsAdapter.OnItemClickListener {
             override fun onItemClick(stadium: StadiumModel?, position: Int) {
                 val intent = Intent(requireContext(), BookingStadiumActivity::class.java)
-                intent.putExtra(Constants.STADIUM_USER,stadium)
+                intent.putExtra(Constants.STADIUM_USER, stadium)
                 startActivity(intent)
             }
         }
@@ -66,9 +68,10 @@ class StadiumsFragment : BasicFragment<FragmentStadiumsBinding,StadiumsViewModel
     }
 
     override fun Logout() {
-        val intent  = Intent(requireContext(),LoginActivity::class.java)
+        val intent = Intent(requireContext(), LoginActivity::class.java)
         startActivity(intent)
     }
+
     override fun onStart() {
         super.onStart()
         getAllStadiums()
@@ -76,13 +79,14 @@ class StadiumsFragment : BasicFragment<FragmentStadiumsBinding,StadiumsViewModel
 
     private fun getAllStadiums() {
         getAllStadiumsFromFirestore(
-            onSuccessListener = {querySnapShot->
+            onSuccessListener = { querySnapShot ->
                 val stadiums = querySnapShot.toObjects(StadiumModel::class.java)
                 adapter.changeData(stadiums)
             },
             onFailureListener = {
                 Log.e("Stadiums Adapter: ", it.localizedMessage!!.toString())
-                Toast.makeText(requireContext(), "Error Loading Stadiums", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Error Loading Stadiums", Toast.LENGTH_SHORT)
+                    .show()
             }
         )
     }

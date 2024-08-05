@@ -15,17 +15,17 @@ import com.example.koratime.Constants
 import com.example.koratime.DataUtils
 import com.example.koratime.R
 import com.example.koratime.adapters.PrivateRoomsAdapter
-import com.example.koratime.database.removeRoomFromFirestore
 import com.example.koratime.database.getUserRoomsFromFirestore
+import com.example.koratime.database.removeRoomFromFirestore
 import com.example.koratime.databinding.FragmentPrivateRoomsBinding
-import com.example.koratime.rooms.createRoom.AddRoomActivity
 import com.example.koratime.model.RoomModel
+import com.example.koratime.rooms.createRoom.AddRoomActivity
 import com.example.koratime.rooms.room_chat.RoomChatActivity
 
 class PrivateRoomsFragment : Fragment(), PrivateRoomsNavigator {
 
-    private lateinit var dataBinding : FragmentPrivateRoomsBinding
-    private lateinit var viewModel : PrivateRoomsViewModel
+    private lateinit var dataBinding: FragmentPrivateRoomsBinding
+    private lateinit var viewModel: PrivateRoomsViewModel
     private val adapter = PrivateRoomsAdapter(null)
 
     override fun onCreateView(
@@ -33,7 +33,8 @@ class PrivateRoomsFragment : Fragment(), PrivateRoomsNavigator {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        dataBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_private_rooms,container,false)
+        dataBinding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_private_rooms, container, false)
         return dataBinding.root
     }
 
@@ -50,14 +51,13 @@ class PrivateRoomsFragment : Fragment(), PrivateRoomsNavigator {
     }
 
 
-
     fun initView() {
         dataBinding.vm = viewModel
-        viewModel.navigator=this
+        viewModel.navigator = this
 
         dataBinding.recyclerView.adapter = adapter
 
-        adapter.onItemClickListener = object : PrivateRoomsAdapter.OnItemClickListener{
+        adapter.onItemClickListener = object : PrivateRoomsAdapter.OnItemClickListener {
             @SuppressLint("SuspiciousIndentation")
             override fun onItemClick(
                 room: RoomModel?,
@@ -68,10 +68,10 @@ class PrivateRoomsFragment : Fragment(), PrivateRoomsNavigator {
                     removeRoomFromFirestore(
                         roomId = room!!.roomID!!,
                         onSuccessListener = {
-                            Log.e("Firebase"," Room Removed Successfully")
+                            Log.e("Firebase", " Room Removed Successfully")
                         },
                         onFailureListener = {
-                            Log.e("Firebase","Error Removing Room")
+                            Log.e("Firebase", "Error Removing Room")
 
                         }
                     )
@@ -79,17 +79,18 @@ class PrivateRoomsFragment : Fragment(), PrivateRoomsNavigator {
                 }
 
                 viewModel.roomPassword.value = room?.password
-                viewModel.password.value = holder.dataBinding.roomPasswordLayout.editText?.text.toString()
-                val intent = Intent(requireContext(),RoomChatActivity::class.java)
-                intent.putExtra(Constants.ROOM,room)
-                if (room!!.password!=null){
-                    if (viewModel.checkRoomPassword() ) {
+                viewModel.password.value =
+                    holder.dataBinding.roomPasswordLayout.editText?.text.toString()
+                val intent = Intent(requireContext(), RoomChatActivity::class.java)
+                intent.putExtra(Constants.ROOM, room)
+                if (room!!.password != null) {
+                    if (viewModel.checkRoomPassword()) {
 
                         startActivity(intent)
                     } else {
                         holder.dataBinding.roomPasswordLayout.error = viewModel.passwordError.value
                     }
-                }else{
+                } else {
                     startActivity(intent)
                 }
 
@@ -107,11 +108,10 @@ class PrivateRoomsFragment : Fragment(), PrivateRoomsNavigator {
         super.onStart()
         getUserRoomsFromFirestore(
             userId = DataUtils.user!!.id!!,
-            onSuccessListener = {querySnapShot->
+            onSuccessListener = { querySnapShot ->
                 val rooms = querySnapShot.toObjects(RoomModel::class.java)
                 adapter.changeData(rooms)
-            }
-            , onFailureListener = {
+            }, onFailureListener = {
                 Toast.makeText(requireContext(), it.localizedMessage, Toast.LENGTH_SHORT).show()
             }
         )

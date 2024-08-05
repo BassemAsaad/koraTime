@@ -7,12 +7,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.koratime.R
 import com.example.koratime.databinding.ItemStadiumsBinding
 import com.example.koratime.model.StadiumModel
-import com.example.koratime.model.UserModel
 
-class StadiumsAdapter (var stadiumsList : List<StadiumModel?>?): RecyclerView.Adapter<StadiumsAdapter.ViewHolder>() {
+class StadiumsAdapter(var stadiumsList: List<StadiumModel?>?) :
+    RecyclerView.Adapter<StadiumsAdapter.ViewHolder>() {
 
-    inner class ViewHolder(val dataBinding : ItemStadiumsBinding): RecyclerView.ViewHolder(dataBinding.root){
-        fun bind(stadium : StadiumModel?){
+    inner class ViewHolder(val dataBinding: ItemStadiumsBinding) :
+        RecyclerView.ViewHolder(dataBinding.root) {
+        fun bind(stadium: StadiumModel?) {
             dataBinding.stadiumModel = stadium
             dataBinding.invalidateAll()
         }
@@ -20,15 +21,16 @@ class StadiumsAdapter (var stadiumsList : List<StadiumModel?>?): RecyclerView.Ad
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val dataBinding : ItemStadiumsBinding =
-            DataBindingUtil.inflate(LayoutInflater.from(parent.context)
-                ,R.layout.item_stadiums, parent,false)
+        val dataBinding: ItemStadiumsBinding =
+            DataBindingUtil.inflate(
+                LayoutInflater.from(parent.context), R.layout.item_stadiums, parent, false
+            )
 
         return ViewHolder(dataBinding)
     }
 
     override fun getItemCount(): Int {
-        return stadiumsList?.size?: 0
+        return stadiumsList?.size ?: 0
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -36,18 +38,20 @@ class StadiumsAdapter (var stadiumsList : List<StadiumModel?>?): RecyclerView.Ad
         val stadium = stadiumsList!![position]
         holder.bind(stadium)
         holder.itemView.setOnClickListener {
-            onItemClickListener?.onItemClick(stadium,position)
+            onItemClickListener?.onItemClick(stadium, position)
         }
     }
-    fun changeData( newStadium : List<StadiumModel?>?){
+
+    fun changeData(newStadium: List<StadiumModel?>?) {
         stadiumsList = newStadium
         notifyDataSetChanged()
     }
 
 
-    var onItemClickListener : OnItemClickListener?=null
+    var onItemClickListener: OnItemClickListener? = null
+
     interface OnItemClickListener {
-        fun onItemClick(stadium : StadiumModel?,position: Int)
+        fun onItemClick(stadium: StadiumModel?, position: Int)
     }
 
 

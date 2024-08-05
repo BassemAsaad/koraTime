@@ -32,12 +32,12 @@ class AddStadiumViewModel : BasicViewModel<AddStadiumNavigator>() {
     val latitudeLiveData = MutableLiveData<Double>()
     val longitudeLiveData = MutableLiveData<Double>()
     val addressLiveData = MutableLiveData<String>()
-    val locationError= ObservableField<String>()
+    val locationError = ObservableField<String>()
 
     val toastMessage = MutableLiveData<String>()
-    fun createStadium(){
-        if (validate()){
-            val stadium= StadiumModel(
+    fun createStadium() {
+        if (validate()) {
+            val stadium = StadiumModel(
                 stadiumName = stadiumName.get(),
                 stadiumDescription = description.get(),
                 stadiumTelephoneNumber = number.get(),
@@ -50,7 +50,7 @@ class AddStadiumViewModel : BasicViewModel<AddStadiumNavigator>() {
                 longitude = longitudeLiveData.value,
                 address = addressLiveData.value
             )
-            Log.e("Firebase: ","address:  ${addressLiveData.value}")
+            Log.e("Firebase: ", "address:  ${addressLiveData.value}")
 
             //add in firebase
             addStadium(stadium)
@@ -58,17 +58,17 @@ class AddStadiumViewModel : BasicViewModel<AddStadiumNavigator>() {
         }
     }
 
-    private fun addStadium(stadium: StadiumModel){
-        showLoading.value=true
+    private fun addStadium(stadium: StadiumModel) {
+        showLoading.value = true
         addStadiumToFirestore(
             stadium,
             onSuccessListener = {
-                showLoading.value=false
-                Log.e("Firebase","Stadium Added to Firestore")
+                showLoading.value = false
+                Log.e("Firebase", "Stadium Added to Firestore")
                 //navigate
             },
             onFailureListener = {
-                showLoading.value=false
+                showLoading.value = false
                 toastMessage.value = it.localizedMessage
 
             }
@@ -78,49 +78,48 @@ class AddStadiumViewModel : BasicViewModel<AddStadiumNavigator>() {
     }
 
 
-
-    private fun validate():Boolean{
+    private fun validate(): Boolean {
         var valid = true
-        if (stadiumName.get().isNullOrBlank()){
+        if (stadiumName.get().isNullOrBlank()) {
             stadiumNameError.set("Please enter the stadium name")
-            valid=false
-        } else{
+            valid = false
+        } else {
             stadiumNameError.set(null)
         }
-        if (description.get().isNullOrBlank()){
+        if (description.get().isNullOrBlank()) {
             descriptionError.set("Please enter the stadium name")
-            valid=false
-        } else{
+            valid = false
+        } else {
             descriptionError.set(null)
         }
-        if (number.get().isNullOrBlank()){
+        if (number.get().isNullOrBlank()) {
             numberError.set("Please enter the stadium number")
-            valid=false
-        } else if (number.get()!!.length != 11){
-            valid=false
+            valid = false
+        } else if (number.get()!!.length != 11) {
+            valid = false
             numberError.set("stadium telephone number is wrong")
         } else {
             numberError.set(null)
         }
-        if (price.get().isNullOrBlank()){
+        if (price.get().isNullOrBlank()) {
             priceError.set("Please enter the stadium price per hour")
-            valid=false
-        } else if (price.get()!!.length > 3){
-            valid=false
+            valid = false
+        } else if (price.get()!!.length > 3) {
+            valid = false
             priceError.set("stadium price should be realistic")
         } else {
             priceError.set(null)
         }
-        if ( imageUrl.value==null){
+        if (imageUrl.value == null) {
             imageError.set("Add The Stadium Image")
             valid = false
-        }else{
+        } else {
             imageError.set(null)
         }
-        if (addressLiveData.value == null){
+        if (addressLiveData.value == null) {
             locationError.set("Add The Stadium Location")
             valid = false
-        } else{
+        } else {
             locationError.set(null)
         }
 

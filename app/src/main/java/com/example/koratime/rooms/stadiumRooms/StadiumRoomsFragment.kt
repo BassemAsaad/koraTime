@@ -21,8 +21,8 @@ import com.example.koratime.rooms.room_chat.RoomChatActivity
 
 class StadiumRoomsFragment : Fragment(), StadiumRoomsNavigator {
 
-    private lateinit var dataBinding : FragmentStadiumRoomsBinding
-    private lateinit var viewModel : StadiumRoomsViewModel
+    private lateinit var dataBinding: FragmentStadiumRoomsBinding
+    private lateinit var viewModel: StadiumRoomsViewModel
     private val adapter = PublicRoomsAdapter(null)
 
     override fun onCreateView(
@@ -30,7 +30,8 @@ class StadiumRoomsFragment : Fragment(), StadiumRoomsNavigator {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        dataBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_stadium_rooms,container,false)
+        dataBinding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_stadium_rooms, container, false)
         return dataBinding.root
     }
 
@@ -47,45 +48,42 @@ class StadiumRoomsFragment : Fragment(), StadiumRoomsNavigator {
     }
 
 
-     fun initView() {
-         dataBinding.vm = viewModel
-         viewModel.navigator=this
+    fun initView() {
+        dataBinding.vm = viewModel
+        viewModel.navigator = this
 
 
-         dataBinding.recyclerView.adapter = adapter
+        dataBinding.recyclerView.adapter = adapter
 
-         adapter.onItemClickListener = object : PublicRoomsAdapter.OnItemClickListener{
-             @SuppressLint("SuspiciousIndentation")
-             override fun onItemClick(
-                 room: RoomModel?,
-                 position: Int,
-                 holder: PublicRoomsAdapter.ViewHolder
-             ) {
-                 val intent = Intent(requireContext(),RoomChatActivity::class.java)
-                 intent.putExtra(Constants.ROOM,room)
-                 startActivity(intent)
-             }
-         }
+        adapter.onItemClickListener = object : PublicRoomsAdapter.OnItemClickListener {
+            @SuppressLint("SuspiciousIndentation")
+            override fun onItemClick(
+                room: RoomModel?,
+                position: Int,
+                holder: PublicRoomsAdapter.ViewHolder
+            ) {
+                val intent = Intent(requireContext(), RoomChatActivity::class.java)
+                intent.putExtra(Constants.ROOM, room)
+                startActivity(intent)
+            }
+        }
     }//end init
-
 
 
     override fun onStart() {
         super.onStart()
         getStadiumRoomFromFirestore(
             playerID = DataUtils.user!!.id!!,
-            onSuccessListener = {querySnapShot->
+            onSuccessListener = { querySnapShot ->
                 val rooms = querySnapShot.toObjects(RoomModel::class.java)
                 adapter.changeData(rooms)
-                Log.e("Firebase "," Adapter Working")
+                Log.e("Firebase ", " Adapter Working")
 
-            }
-            , onFailureListener = {
-                Log.e("Firebase"," Error getting Rooms:" ,it)
+            }, onFailureListener = {
+                Log.e("Firebase", " Error getting Rooms:", it)
             }
         )
     }
-
 
 
 }

@@ -13,9 +13,9 @@ import java.util.Date
 class ChatFriendsViewModel : BasicViewModel<ChatFriendsNavigator>() {
     val messageField = ObservableField<String>()
     val messageFieldError = ObservableField<String>()
-    var friend : FriendModel?=null
+    var friend: FriendModel? = null
     val toastMessage = MutableLiveData<String>()
-    fun sendMessage(){
+    fun sendMessage() {
         val friendMessageModel = FriendMessageModel(
             content = messageField.get(),
             senderID = DataUtils.user!!.id,
@@ -23,29 +23,29 @@ class ChatFriendsViewModel : BasicViewModel<ChatFriendsNavigator>() {
             senderName = friend!!.friendName,
             dateTime = Date().time
         )
-        if (validation()){
+        if (validation()) {
             addFriendMessageToFirestore(
                 message = friendMessageModel,
-                friendshipID= friend!!.friendshipID!!,
+                friendshipID = friend!!.friendshipID!!,
                 onSuccessListener = {
-                    Log.e("Firebase"," Message sent successfully")
+                    Log.e("Firebase", " Message sent successfully")
                     messageField.set("")
                 },
                 onFailureListener = {
-                    toastMessage.value= "Message was not sent "
+                    toastMessage.value = "Message was not sent "
                 }
             )
         }
 
     }
 
-    private fun validation():Boolean{
+    private fun validation(): Boolean {
         var check = true
 
-        if (messageField.get().isNullOrBlank()){
+        if (messageField.get().isNullOrBlank()) {
             check = false
             messageFieldError.set("Cant send empty message")
-        }else{
+        } else {
             messageFieldError.set(null)
         }
 

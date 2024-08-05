@@ -30,36 +30,43 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-@Suppress("DEPRECATION","DefaultLocale","SetTextI18n")
-class ManageStadiumActivity : BasicActivity<ActivityManageStadiumBinding,ManageStadiumViewModel>(),ManageStadiumNavigator{
-    private lateinit var stadiumModel : StadiumModel
+@Suppress("DEPRECATION", "DefaultLocale", "SetTextI18n")
+class ManageStadiumActivity : BasicActivity<ActivityManageStadiumBinding, ManageStadiumViewModel>(),
+    ManageStadiumNavigator {
+    private lateinit var stadiumModel: StadiumModel
     private var adapter = TimeSlotsForManagerAdapter(emptyList(), emptyList())
 
-    private lateinit var timeSlotsList :List<String>
+    private lateinit var timeSlotsList: List<String>
     private lateinit var availableSlots: List<String>
-    private lateinit var bookedTimesList : List<String>
+    private lateinit var bookedTimesList: List<String>
 
-    private var selectedDate= SimpleDateFormat("MM_dd_yyyy", Locale.getDefault()).format(Date())
+    private var selectedDate = SimpleDateFormat("MM_dd_yyyy", Locale.getDefault()).format(Date())
     val slideImageList = mutableListOf<String>()
-    private lateinit var pickMedia : ActivityResultLauncher<PickVisualMediaRequest>
-    companion object{
+    private lateinit var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
+
+    companion object {
         const val TAG = "ManageStadiumActivity"
     }
+
     override fun getLayoutID(): Int {
         return R.layout.activity_manage_stadium
     }
+
     override fun initViewModel(): ManageStadiumViewModel {
         return ViewModelProvider(this)[ManageStadiumViewModel::class.java]
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initView()
     }
+
     override fun initView() {
         setSupportActionBar(dataBinding.toolbar)
         callBack()
         getStadiumImages()
     }
+
     private fun callBack() {
         viewModel.apply {
             dataBinding.vm = viewModel
@@ -88,11 +95,11 @@ class ManageStadiumActivity : BasicActivity<ActivityManageStadiumBinding,ManageS
                 deleteStadiumFromFirestore(
                     stadiumID = stadiumModel.stadiumID!!,
                     onSuccessListener = {
-                        Log.e("Firebase "," Stadium Removed Successfully from firestore")
+                        Log.e("Firebase ", " Stadium Removed Successfully from firestore")
                         finish()
                     },
                     onFailureListener = {
-                        Log.e("Firebase ","Error Removing Stadium from firestore")
+                        Log.e("Firebase ", "Error Removing Stadium from firestore")
                     }
                 )
 
@@ -101,7 +108,7 @@ class ManageStadiumActivity : BasicActivity<ActivityManageStadiumBinding,ManageS
             // Add an OnDateChangeListener to the CalendarView
             calendarView.setOnDateChangeListener { view, year, month, dayOfMonth ->
                 selectedDate = String.format("%02d_%02d_%04d", month + 1, dayOfMonth, year)
-                Log.e("Firebase","Date selected: $selectedDate")
+                Log.e("Firebase", "Date selected: $selectedDate")
                 getTimeSlots(selectedDate)
             }
 
@@ -109,31 +116,39 @@ class ManageStadiumActivity : BasicActivity<ActivityManageStadiumBinding,ManageS
         // Set up click listener for booking button in the adapter
         adapter.onBookClickListener = object : TimeSlotsForManagerAdapter.OnBookClickListener {
             @SuppressLint("SetTextI18n")
-            override fun onclick(slot: String, holder: TimeSlotsForManagerAdapter.ViewHolder, position: Int) {
+            override fun onclick(
+                slot: String,
+                holder: TimeSlotsForManagerAdapter.ViewHolder,
+                position: Int
+            ) {
                 holder.dataBinding.apply {
                     tvTimeSlot.setOnLongClickListener {
                         removeBookingFromFirestore(
-                            timeSlot= tvTimeSlot.text.toString(),
+                            timeSlot = tvTimeSlot.text.toString(),
                             stadiumID = stadiumModel.stadiumID!!,
                             date = selectedDate,
                             onSuccessListener = {
-                                Log.e("Firebase"," Book has been Removed successfully")
+                                Log.e("Firebase", " Book has been Removed successfully")
                                 holder.dataBinding.apply {
                                     tvTimeSlot.apply {
-                                        isEnabled=true
+                                        isEnabled = true
                                         setTextColor((Color.BLACK))
                                     }
                                     btnBook.apply {
-                                        isEnabled=true
-                                        text= "Book"
+                                        isEnabled = true
+                                        text = "Book"
                                         backgroundTintList = null
                                     }
                                 }
-                                Toast.makeText(this@ManageStadiumActivity,"${holder.dataBinding.tvTimeSlot.text} Book Removed Successfully", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    this@ManageStadiumActivity,
+                                    "${holder.dataBinding.tvTimeSlot.text} Book Removed Successfully",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                                 getTimeSlots(selectedDate)
                             },
                             onFailureListener = {
-                                Log.e("Firebase","Error: ",it)
+                                Log.e("Firebase", "Error: ", it)
                             }
 
                         )
@@ -145,27 +160,39 @@ class ManageStadiumActivity : BasicActivity<ActivityManageStadiumBinding,ManageS
                             stadiumID = stadiumModel.stadiumID!!,
                             date = selectedDate, userId = DataUtils.user!!.id!!,
                             onSuccessListener = {
-                                Log.e("Firebase"," ${holder.dataBinding.tvTimeSlot.text} booked on  $selectedDate from userId: ${DataUtils.user!!.id!!} to the stadiumID: ${stadiumModel.stadiumID}")
+                                Log.e(
+                                    "Firebase",
+                                    " ${holder.dataBinding.tvTimeSlot.text} booked on  $selectedDate from userId: ${DataUtils.user!!.id!!} to the stadiumID: ${stadiumModel.stadiumID}"
+                                )
 
                                 holder.dataBinding.apply {
                                     tvTimeSlot.apply {
-                                        isEnabled=false
+                                        isEnabled = false
                                         setTextColor((Color.GRAY))
 
                                     }
                                     btnBook.apply {
-                                        isEnabled=false
-                                        text= "Booked"
+                                        isEnabled = false
+                                        text = "Booked"
                                         backgroundTintList = ColorStateList.valueOf(Color.GRAY)
                                     }
                                 }
 
-                                Toast.makeText(this@ManageStadiumActivity,"${holder.dataBinding.tvTimeSlot.text} Booked Successfully", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    this@ManageStadiumActivity,
+                                    "${holder.dataBinding.tvTimeSlot.text} Booked Successfully",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                                 getTimeSlots(selectedDate)
 
                             },
-                            onFailureListener = {e->
-                                Log.e("Firebase"," Error:  ${holder.dataBinding.tvTimeSlot.text} booked on  $selectedDate from userId: ${DataUtils.user!!.id!!} ",e) }
+                            onFailureListener = { e ->
+                                Log.e(
+                                    "Firebase",
+                                    " Error:  ${holder.dataBinding.tvTimeSlot.text} booked on  $selectedDate from userId: ${DataUtils.user!!.id!!} ",
+                                    e
+                                )
+                            }
                         )
                     }
                 }
@@ -173,6 +200,7 @@ class ManageStadiumActivity : BasicActivity<ActivityManageStadiumBinding,ManageS
             }
         }
     }
+
     private fun getTimeSlots(date: String) {
         getBookedTimesFromFirestore(
             stadiumID = stadiumModel.stadiumID!!,
@@ -180,35 +208,41 @@ class ManageStadiumActivity : BasicActivity<ActivityManageStadiumBinding,ManageS
             onSuccessListener = { bookedList ->
 
                 bookedTimesList = bookedList
-                Log.e(TAG,"BookedSlots List: $bookedTimesList")
+                Log.e(TAG, "BookedSlots List: $bookedTimesList")
 
                 // create opening and closing list
-                timeSlotsList = viewModel.createListForOpeningTimes(stadiumModel.opening!!,stadiumModel.closing!!,resources.getStringArray(R.array.time_slots))
-                Log.e(TAG,"TimeSlots List: $timeSlotsList")
+                timeSlotsList = viewModel.createListForOpeningTimes(
+                    stadiumModel.opening!!,
+                    stadiumModel.closing!!,
+                    resources.getStringArray(R.array.time_slots)
+                )
+                Log.e(TAG, "TimeSlots List: $timeSlotsList")
 
-                availableSlots = viewModel.removeBookedListFromOpeningTimes(timeSlotsList,bookedTimesList)
-                Log.e(TAG,"AvailableSlots List: $availableSlots")
+                availableSlots =
+                    viewModel.removeBookedListFromOpeningTimes(timeSlotsList, bookedTimesList)
+                Log.e(TAG, "AvailableSlots List: $availableSlots")
 
-                adapter.updateTimeSlots(timeSlotsList,bookedTimesList)
+                adapter.updateTimeSlots(timeSlotsList, bookedTimesList)
             },
-            onFailureListener = { e->
+            onFailureListener = { e ->
                 Log.e("Firebase", "Error fetching booked times", e)
             }
         )
     }
+
     private fun getStadiumImages() {
         getMultipleImagesFromFirestore(
             stadiumID = stadiumModel.stadiumID!!,
-            onSuccessListener = {urls->
+            onSuccessListener = { urls ->
                 slideImageList.clear()
                 slideImageList.addAll(urls)
-                Log.e("Firebase"," List of $urls")
+                Log.e("Firebase", " List of $urls")
                 val imageList = ArrayList<SlideModel>()
-                for ( i in slideImageList ){
+                for (i in slideImageList) {
                     imageList.add(SlideModel(i, ""))
                 }
 
-                if (imageList.isNotEmpty()){
+                if (imageList.isNotEmpty()) {
                     dataBinding.stadiumImages.visibility = View.VISIBLE
                     dataBinding.imageSlider.visibility = View.VISIBLE
                     dataBinding.imageSlider.setImageList(imageList, ScaleTypes.FIT)
@@ -216,45 +250,48 @@ class ManageStadiumActivity : BasicActivity<ActivityManageStadiumBinding,ManageS
 
             },
             onFailureListener = {
-                Log.e("Firebase","Failed To get Images From firestore")
+                Log.e("Firebase", "Failed To get Images From firestore")
             }
         )
     }
-    private fun openImagePicker(){
-        Log.e("StadiumID","${stadiumModel.stadiumID}")
+
+    private fun openImagePicker() {
+        Log.e("StadiumID", "${stadiumModel.stadiumID}")
         // Registers a photo picker activity launcher in single-select mode.
-        pickMedia = registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(3)) { uris ->
-            // photo picker
-            if (uris.isNotEmpty()) {
-                dataBinding.imagePickerTextView.text = "Uploading Images.."
-                Log.e("PhotoPicker", "Selected URI: $uris")
-                viewModel.showLoading.value=true
-                //upload images to storage
-                uploadMultipleImagesToStorage(uris = uris, stadiumID = stadiumModel.stadiumID!!,
-                    onSuccessListener = {imagesList->
-                        Log.e("Firebase","Images uploaded successfully to storage")
-                        viewModel.apply {
-                            listOfUrls.value = imagesList
-                            addImageUrlsToFirestore()
+        pickMedia =
+            registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(3)) { uris ->
+                // photo picker
+                if (uris.isNotEmpty()) {
+                    dataBinding.imagePickerTextView.text = "Uploading Images.."
+                    Log.e("PhotoPicker", "Selected URI: $uris")
+                    viewModel.showLoading.value = true
+                    //upload images to storage
+                    uploadMultipleImagesToStorage(uris = uris, stadiumID = stadiumModel.stadiumID!!,
+                        onSuccessListener = { imagesList ->
+                            Log.e("Firebase", "Images uploaded successfully to storage")
+                            viewModel.apply {
+                                listOfUrls.value = imagesList
+                                addImageUrlsToFirestore()
+                            }
+                            dataBinding.imagePickerTextView.text = "Images Selected"
+
+                        },
+                        onFailureListener = {
+                            Log.e("Firebase", "Error uploading images to storage")
                         }
-                        dataBinding.imagePickerTextView.text = "Images Selected"
-
-                },
-                    onFailureListener = {
-                        Log.e("Firebase","Error uploading images to storage")
-                    }
-                )
+                    )
 
 
-            } else {
-                dataBinding.imagePickerTextView.text = " No Image Selected"
-                Toast.makeText(this, "No image selected", Toast.LENGTH_SHORT).show()
-                Log.e("PhotoPicker", "No image selected")
+                } else {
+                    dataBinding.imagePickerTextView.text = " No Image Selected"
+                    Toast.makeText(this, "No image selected", Toast.LENGTH_SHORT).show()
+                    Log.e("PhotoPicker", "No image selected")
+                }
+
+
             }
-
-
-        }
     }
+
     override fun onSupportNavigateUp(): Boolean {
         // go to the previous fragment when back button clicked on toolbar
         onBackPressed()

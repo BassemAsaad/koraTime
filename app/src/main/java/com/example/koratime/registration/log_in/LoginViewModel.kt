@@ -9,8 +9,9 @@ import com.example.koratime.basic.BasicViewModel
 import com.example.koratime.database.getUserFromFirestore
 import com.example.koratime.model.UserModel
 import com.google.android.gms.tasks.OnSuccessListener
-import com.google.firebase.*
-import com.google.firebase.auth.*
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 
 class LoginViewModel : BasicViewModel<LoginNavigator>() {
 
@@ -24,9 +25,9 @@ class LoginViewModel : BasicViewModel<LoginNavigator>() {
 
     val toastMessage = MutableLiveData<String>()
 
-    fun loginIntoAccount(){
+    fun loginIntoAccount() {
         //validation
-        if (validation()){
+        if (validation()) {
             loginWithFirebase()
         }
 
@@ -35,15 +36,15 @@ class LoginViewModel : BasicViewModel<LoginNavigator>() {
 
 
     private fun loginWithFirebase() {
-        showLoading.value=true
+        showLoading.value = true
         auth = Firebase.auth
         auth.signInWithEmailAndPassword(emailLogin.get()!!, passwordLogin.get()!!)
-            .addOnCompleteListener {task->
-                if (!task.isSuccessful){
-                    Log.e("Firebase: ",task.exception?.localizedMessage.toString())
+            .addOnCompleteListener { task ->
+                if (!task.isSuccessful) {
+                    Log.e("Firebase: ", task.exception?.localizedMessage.toString())
                     showLoading.value = false
                     toastMessage.value = "Invalid Email or Password"
-                }else{
+                } else {
                     Log.e("Firebase: ", "Successful Login")
                     getUserFromFirestore(task.result.user?.uid)
                 }
@@ -55,18 +56,18 @@ class LoginViewModel : BasicViewModel<LoginNavigator>() {
         getUserFromFirestore(
             uid,
             //OnSuccessListener
-            onSuccessListener = OnSuccessListener{ docSnapshot->
+            onSuccessListener = OnSuccessListener { docSnapshot ->
                 val user = docSnapshot.toObject(UserModel::class.java)
-                if (user == null){
+                if (user == null) {
                     toastMessage.value = "Invalid Email or Password"
                     Log.e("Firebase: ", "Not a successful Login")
                     showLoading.value = false
                     return@OnSuccessListener
-                } else{
+                } else {
                     showLoading.value = false
                     Log.e("Firebase: ", "Successful Login")
                     DataUtils.user = user
-                    if (user.nationalID==null){
+                    if (user.nationalID == null) {
                         navigator?.openHomeActivity()
                     } else {
                         navigator?.openHomeManagerActivity()
@@ -80,10 +81,10 @@ class LoginViewModel : BasicViewModel<LoginNavigator>() {
         )
     }
 
-    private fun validation():Boolean {
+    private fun validation(): Boolean {
         var valid = true
         //email
-        if (emailLogin.get().isNullOrBlank()){
+        if (emailLogin.get().isNullOrBlank()) {
             valid = false
             emailErrorLogin.set("Enter Email")
         } else {
@@ -91,15 +92,13 @@ class LoginViewModel : BasicViewModel<LoginNavigator>() {
         }
 
         //password
-        if (passwordLogin.get().isNullOrBlank() ){
+        if (passwordLogin.get().isNullOrBlank()) {
             valid = false
             passwordErrorLogin.set("Enter Password")
-        }
-        else if (passwordLogin.get()?.length!! < 8){
+        } else if (passwordLogin.get()?.length!! < 8) {
             valid = false
             passwordErrorLogin.set("Password is less than 8")
-        }
-        else {
+        } else {
             passwordErrorLogin.set(null)
         }
 
