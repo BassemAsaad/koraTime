@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.denzcoskun.imageslider.constants.ScaleTypes
 import com.denzcoskun.imageslider.models.SlideModel
@@ -17,21 +18,21 @@ import com.example.koratime.Constants
 import com.example.koratime.DataUtils
 import com.example.koratime.R
 import com.example.koratime.adapters.TimeSlotsForManagerAdapter
-import com.example.koratime.basic.BasicActivity
+import com.example.koratime.basic.BasicFragment
 import com.example.koratime.database.addBookingToFirestore
 import com.example.koratime.database.deleteStadiumFromFirestore
 import com.example.koratime.database.getBookedTimesFromFirestore
 import com.example.koratime.database.getMultipleImagesFromFirestore
 import com.example.koratime.database.removeBookingFromFirestore
 import com.example.koratime.database.uploadMultipleImagesToStorage
-import com.example.koratime.databinding.ActivityManageStadiumBinding
+import com.example.koratime.databinding.FragmentManageStadiumBinding
 import com.example.koratime.model.StadiumModel
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-@Suppress("DEPRECATION", "DefaultLocale", "SetTextI18n")
-class ManageStadiumActivity : BasicActivity<ActivityManageStadiumBinding, ManageStadiumViewModel>(),
+@Suppress("DefaultLocale", "SetTextI18n")
+class ManageStadiumFragment : BasicFragment<FragmentManageStadiumBinding, ManageStadiumViewModel>(),
     ManageStadiumNavigator {
     private lateinit var stadiumModel: StadiumModel
     private var adapter = TimeSlotsForManagerAdapter(emptyList(), emptyList())
@@ -41,7 +42,7 @@ class ManageStadiumActivity : BasicActivity<ActivityManageStadiumBinding, Manage
     private lateinit var bookedTimesList: List<String>
 
     private var selectedDate = SimpleDateFormat("MM_dd_yyyy", Locale.getDefault()).format(Date())
-    val slideImageList = mutableListOf<String>()
+    private val slideImageList = mutableListOf<String>()
     private lateinit var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
 
     companion object {
@@ -49,37 +50,38 @@ class ManageStadiumActivity : BasicActivity<ActivityManageStadiumBinding, Manage
     }
 
     override fun getLayoutID(): Int {
-        return R.layout.activity_manage_stadium
+        return R.layout.fragment_manage_stadium
     }
 
     override fun initViewModel(): ManageStadiumViewModel {
         return ViewModelProvider(this)[ManageStadiumViewModel::class.java]
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        initView()
-    }
-
     override fun initView() {
-        setSupportActionBar(dataBinding.toolbar)
-        callBack()
+        (activity as AppCompatActivity).setSupportActionBar(dataBinding.toolbar)
+        callback()
         getStadiumImages()
     }
 
-    private fun callBack() {
+    override fun callback() {
         viewModel.apply {
             dataBinding.vm = viewModel
-            navigator = this@ManageStadiumActivity
-            stadiumModel = intent.getParcelableExtra(Constants.STADIUM_MANAGER)!!
+            navigator = this@ManageStadiumFragment
+            stadiumModel = arguments?.getParcelable(Constants.STADIUM_MANAGER)!!
             stadium = stadiumModel
         }
-        supportActionBar?.apply {
+
+        (activity as AppCompatActivity).supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
             setDisplayShowHomeEnabled(true)
             setDisplayShowTitleEnabled(true)
             title = stadiumModel.stadiumName
         }
+        dataBinding.toolbar.setNavigationOnClickListener {
+            requireActivity().onBackPressed()
+        }
+
+
         dataBinding.apply {
             getTimeSlots(selectedDate)
             recyclerView.adapter = adapter
@@ -96,7 +98,8 @@ class ManageStadiumActivity : BasicActivity<ActivityManageStadiumBinding, Manage
                     stadiumID = stadiumModel.stadiumID!!,
                     onSuccessListener = {
                         Log.e("Firebase ", " Stadium Removed Successfully from firestore")
-                        finish()
+//                        requireActivity().finish()
+
                     },
                     onFailureListener = {
                         Log.e("Firebase ", "Error Removing Stadium from firestore")
@@ -110,6 +113,9 @@ class ManageStadiumActivity : BasicActivity<ActivityManageStadiumBinding, Manage
                 selectedDate = String.format("%02d_%02d_%04d", month + 1, dayOfMonth, year)
                 Log.e("Firebase", "Date selected: $selectedDate")
                 getTimeSlots(selectedDate)
+            }
+            notificationIc.setOnClickListener {
+
             }
 
         }
@@ -141,7 +147,7 @@ class ManageStadiumActivity : BasicActivity<ActivityManageStadiumBinding, Manage
                                     }
                                 }
                                 Toast.makeText(
-                                    this@ManageStadiumActivity,
+                                    requireContext(),
                                     "${holder.dataBinding.tvTimeSlot.text} Book Removed Successfully",
                                     Toast.LENGTH_SHORT
                                 ).show()
@@ -158,7 +164,9 @@ class ManageStadiumActivity : BasicActivity<ActivityManageStadiumBinding, Manage
                         addBookingToFirestore(
                             timeSlot = holder.dataBinding.tvTimeSlot.text.toString(),
                             stadiumID = stadiumModel.stadiumID!!,
-                            date = selectedDate, userId = DataUtils.user!!.id!!,
+                            date = selectedDate,
+                            userId = DataUtils.user!!.id!!,
+                            userName= DataUtils.user!!.userName!!,
                             onSuccessListener = {
                                 Log.e(
                                     "Firebase",
@@ -178,8 +186,7 @@ class ManageStadiumActivity : BasicActivity<ActivityManageStadiumBinding, Manage
                                     }
                                 }
 
-                                Toast.makeText(
-                                    this@ManageStadiumActivity,
+                                Toast.makeText(requireContext(),
                                     "${holder.dataBinding.tvTimeSlot.text} Booked Successfully",
                                     Toast.LENGTH_SHORT
                                 ).show()
@@ -187,11 +194,7 @@ class ManageStadiumActivity : BasicActivity<ActivityManageStadiumBinding, Manage
 
                             },
                             onFailureListener = { e ->
-                                Log.e(
-                                    "Firebase",
-                                    " Error:  ${holder.dataBinding.tvTimeSlot.text} booked on  $selectedDate from userId: ${DataUtils.user!!.id!!} ",
-                                    e
-                                )
+                                Log.e("Firebase", " Error:  ${holder.dataBinding.tvTimeSlot.text} booked on  $selectedDate from userId: ${DataUtils.user!!.id!!} ", e)
                             }
                         )
                     }
@@ -284,7 +287,7 @@ class ManageStadiumActivity : BasicActivity<ActivityManageStadiumBinding, Manage
 
                 } else {
                     dataBinding.imagePickerTextView.text = " No Image Selected"
-                    Toast.makeText(this, "No image selected", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "No image selected", Toast.LENGTH_SHORT).show()
                     Log.e("PhotoPicker", "No image selected")
                 }
 
@@ -292,10 +295,7 @@ class ManageStadiumActivity : BasicActivity<ActivityManageStadiumBinding, Manage
             }
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        // go to the previous fragment when back button clicked on toolbar
-        onBackPressed()
-        return true
-    }
+
+
 }
 

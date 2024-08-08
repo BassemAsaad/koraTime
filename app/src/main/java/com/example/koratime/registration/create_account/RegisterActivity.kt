@@ -20,8 +20,7 @@ import com.example.koratime.registration.log_in.LoginActivity
 class RegisterActivity : BasicActivity<ActivityRegisterBinding, RegisterViewModel>(),
     RegisterNavigator {
     private lateinit var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
-    private val defaultImageUrl =
-        "https://firebasestorage.googleapis.com/v0/b/kora-time-d21c3.appspot.com/o/images%2Fprofile_picture.png?alt=media&token=650310ed-94a0-479b-8bb3-ad2f3c4b6489"
+    private val defaultImageUrl = getString(R.string.default_profile_picture)
 
     override fun getLayoutID(): Int {
         return R.layout.activity_register
@@ -29,12 +28,6 @@ class RegisterActivity : BasicActivity<ActivityRegisterBinding, RegisterViewMode
 
     override fun initViewModel(): RegisterViewModel {
         return ViewModelProvider(this)[RegisterViewModel::class.java]
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        initView()
-
     }
 
     override fun initView() {

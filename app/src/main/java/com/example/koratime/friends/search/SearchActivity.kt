@@ -20,10 +20,6 @@ import com.example.koratime.model.UserModel
 class SearchActivity : BasicActivity<ActivitySearchBinding, SearchViewModel>(), SearchNavigator {
     private val usersList = mutableListOf<UserModel?>()
     private val adapter = AddFriendsAdapter(usersList, DataUtils.user!!.id)
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        initView()
-    }
 
     override fun getLayoutID(): Int {
         return R.layout.activity_search

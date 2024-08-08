@@ -29,11 +29,6 @@ class RoomChatActivity : BasicActivity<ActivityRoomChatBinding, RoomChatViewMode
         return ViewModelProvider(this)[RoomChatViewModel::class.java]
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        initView()
-
-    }
 
     override fun initView() {
         dataBinding.vm = viewModel

@@ -8,19 +8,13 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.koratime.R
 import com.example.koratime.basic.BasicActivity
 import com.example.koratime.databinding.ActivityLoginBinding
-import com.example.koratime.home.home_manager.HomeManagerActivity
-import com.example.koratime.home.home_user.HomeActivity
+import com.example.koratime.home.HomeActivity
 import com.example.koratime.registration.create_account.RegisterActivity
 
 
 class LoginActivity
     : BasicActivity<ActivityLoginBinding, LoginViewModel>(), LoginNavigator {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        initView()
-
-    }
 
     override fun initView() {
         dataBinding.loginVM = viewModel
@@ -46,11 +40,6 @@ class LoginActivity
 
     }
 
-    override fun openHomeManagerActivity() {
-        val intent = Intent(this, HomeManagerActivity::class.java)
-        startActivity(intent)
-        finish()
-    }
 
     override fun openRegisterActivity() {
         dataBinding.signUp.setOnClickListener {

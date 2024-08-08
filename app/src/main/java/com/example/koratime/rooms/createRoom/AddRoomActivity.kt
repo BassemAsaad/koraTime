@@ -19,10 +19,7 @@ class AddRoomActivity : BasicActivity<ActivityAddRoomBinding, AddRoomViewModel>(
 
     private lateinit var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        initView()
-    }
+
 
     override fun getLayoutID(): Int {
         return R.layout.activity_add_room

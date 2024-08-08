@@ -22,7 +22,7 @@ abstract class BasicActivity<DB : ViewDataBinding, VM : BasicViewModel<*>> : App
         _dataBinding = DataBindingUtil.setContentView(this, getLayoutID())
         _viewModel = initViewModel()
         subscribeToLiveData()
-
+        initView()
     }
 
     abstract fun getLayoutID(): Int

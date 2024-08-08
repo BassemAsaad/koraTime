@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="bookRequest"
+            type="com.example.koratime.model.BookingModel" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:contentPadding="8dp"
+        app:cardCornerRadius="8dp"
+        app:cardBackgroundColor="#FFFFFF"
+        >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+
+        >
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/userImage_item"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            app:imageUrl="@{bookRequest.profilePicture}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/stadium_img"
+/>
+
+        <TextView
+            android:id="@+id/userName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{bookRequest.userName}"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/userImage_item"
+            tools:text="Mohammed Ehab"
+             android:textStyle="bold"
+            />
+
+        <TextView
+            android:id="@+id/book_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{bookRequest.date.toString() + ` - ` + bookRequest.timeSlot.toString()}"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/book_status"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/userName"
+            tools:text="8/7/2024 - 7pm"
+            android:layout_marginTop="12dp"
+            />
+
+
+        <TextView
+            android:id="@+id/book_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{bookRequest.status}"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/book_date"
+            app:layout_constraintEnd_toStartOf="@id/book_time"
+            tools:text="UnConfirmed"
+            android:layout_marginTop="12dp"
+            />
+
+        <TextView
+            android:id="@+id/book_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@{bookRequest.formatTime()}"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/book_status"
+            app:layout_constraintStart_toEndOf="@+id/book_status"
+            app:layout_constraintTop_toTopOf="@+id/book_status"
+            app:layout_constraintVertical_bias="1.0"
+            tools:text="19h ago" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+</layout>

@@ -53,10 +53,7 @@ class BookingStadiumActivity :
         return ViewModelProvider(this)[BookingStadiumViewModel::class.java]
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        initView()
-    }
+
 
     override fun onStart() {
         super.onStart()
@@ -118,6 +115,7 @@ class BookingStadiumActivity :
                     stadiumID = stadiumModel.stadiumID!!,
                     date = selectedDate,
                     userId = DataUtils.user!!.id!!,
+                    userName = DataUtils.user!!.userName!!,
                     onSuccessListener = {
                         holder.dataBinding.apply {
                             tvTimeSlot.isEnabled = false

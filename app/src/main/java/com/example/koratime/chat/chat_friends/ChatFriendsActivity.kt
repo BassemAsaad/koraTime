@@ -29,13 +29,6 @@ class ChatFriendsActivity : BasicActivity<ActivityChatFriendsBinding, ChatFriend
         return ViewModelProvider(this)[ChatFriendsViewModel::class.java]
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        initView()
-
-
-    }
-
     override fun initView() {
         dataBinding.vm = viewModel
         viewModel.navigator = this
@@ -45,12 +38,13 @@ class ChatFriendsActivity : BasicActivity<ActivityChatFriendsBinding, ChatFriend
 
         setSupportActionBar(dataBinding.toolbar)
         // Enable back button on Toolbar
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowHomeEnabled(true)
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setDisplayShowHomeEnabled(true)
+            setDisplayShowTitleEnabled(true)
+            title = friendModel.friendName
+        }
 
-        // Enable title on Toolbar
-        supportActionBar?.title = friendModel.friendName
-        supportActionBar?.setDisplayShowTitleEnabled(true)
         listenForMessageUpdate()
 
         setupRecyclerView()

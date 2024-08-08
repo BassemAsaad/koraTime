@@ -1,4 +1,4 @@
-package com.example.koratime.home.home_user
+package com.example.koratime.home
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -28,8 +28,6 @@ class HomeViewModel : BasicViewModel<HomeNavigator>() {
                     val latitude = location.latitude
                     val longitude = location.longitude
 
-                    Constants.LATITUDE = latitude
-                    Constants.LONGITUDE = longitude
                     // Retrieve city name based on latitude and longitude
                     val cityName = getCityName(context, latitude, longitude)
 

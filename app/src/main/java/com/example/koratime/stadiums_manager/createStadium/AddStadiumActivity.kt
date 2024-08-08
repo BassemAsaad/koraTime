@@ -30,10 +30,7 @@ class AddStadiumActivity : BasicActivity<ActivityAddStadiumBinding, AddStadiumVi
     private var address = ""
     private var openingTimeIndex: Int? = null
     private var closingTimeIndex: Int? = null
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        initView()
-    }
+
 
     override fun getLayoutID(): Int {
         return R.layout.activity_add_stadium

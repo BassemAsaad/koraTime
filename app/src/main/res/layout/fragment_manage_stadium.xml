@@ -14,7 +14,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".stadiums_manager.manageStadium.ManageStadiumActivity">
+        tools:context=".stadiums_manager.manageStadium.ManageStadiumFragment">
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipeRefresh"
@@ -46,7 +46,7 @@
                         android:paddingEnd="5dp">
 
                         <ImageView
-                            android:id="@+id/notifications"
+                            android:id="@+id/notification_ic"
                             android:layout_width="50dp"
                             android:layout_height="50dp"
                             android:background="@drawable/shape_search"
@@ -55,6 +55,7 @@
                             android:src="@drawable/ic_notification"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
 

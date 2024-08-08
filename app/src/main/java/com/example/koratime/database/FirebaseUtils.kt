@@ -2,6 +2,7 @@ package com.example.koratime.database
 
 import android.net.Uri
 import android.util.Log
+import com.example.koratime.model.BookingModel
 import com.example.koratime.model.FriendMessageModel
 import com.example.koratime.model.FriendModel
 import com.example.koratime.model.FriendRequestModel
@@ -18,6 +19,7 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.firestore
 import com.google.firebase.storage.storage
+import java.util.Date
 import java.util.UUID
 
 fun addUserToFirestore(
@@ -429,22 +431,24 @@ fun acceptFriendRequest(
     )
     val db = Firebase.firestore
 
-
+    val requestId = db.collection(UserModel.COLLECTION_NAME)
+        .document().id
     // create friend collection for receiver
     val friendReceiverRef = db.collection(UserModel.COLLECTION_NAME)
         .document(receiver.id!!)
         .collection(FriendModel.SUB_COLLECTION_NAME)
-        .document()
+        .document(requestId)
 
     // create friend collection for sender
     val friendSenderRef = db.collection(UserModel.COLLECTION_NAME)
         .document(sender.senderID!!)
         .collection(FriendModel.SUB_COLLECTION_NAME)
-        .document()
+        .document(requestId)
 
     // set id
     friendSender.friendshipID = friendSenderRef.id
     friendReceiver.friendshipID = friendReceiverRef.id
+
 
     // batch write can improve performance and reduce the risk of data inconsistency.
     val batch = db.batch()
@@ -842,24 +846,52 @@ fun addBookingToFirestore(
     stadiumID: String,
     date: String,
     userId: String,
+    userName: String,
     onSuccessListener: OnSuccessListener<Void>,
     onFailureListener: OnFailureListener
 ) {
+    val bookingData = BookingModel(
+        userId = userId,
+        date = date,
+        timeSlot = timeSlot,
+        status = "pending",
+        dateTime = Date().time,
+        userName = userName
 
-    val db = Firebase.firestore
-    // Add the booking details to Firestore under the respective date document
-    val bookingRef = db.collection(StadiumModel.COLLECTION_NAME).document(stadiumID)
-        .collection("Bookings")
-        .document(date)
-        .collection("TimeSlots")
-        .document(timeSlot)
-
-    val bookingData = hashMapOf(
-        "userId" to userId,
     )
+    val db = Firebase.firestore
+
+    val bookingRef = db.collection(StadiumModel.COLLECTION_NAME).document(stadiumID)
+        .collection(BookingModel.COLLECTION_NAME).document(date)
+        .collection(BookingModel.SUB_COLLECTION_NAME).document(timeSlot)
     bookingRef.set(bookingData)
         .addOnSuccessListener(onSuccessListener)
         .addOnFailureListener(onFailureListener)
+}
+
+fun bookingRequests(
+    stadiumID: String,
+    onSuccessListener: OnSuccessListener<QuerySnapshot>,
+    onFailureListener: OnFailureListener
+){
+    val db = Firebase.firestore
+    val datesRef = db.collection(StadiumModel.COLLECTION_NAME).document(stadiumID)
+        .collection(BookingModel.COLLECTION_NAME)
+    datesRef.get()
+        .addOnSuccessListener { datesDocuments ->
+            if (!datesDocuments.isEmpty) {
+                datesDocuments.forEach { dateDocument ->
+                    datesRef.document(dateDocument.id)
+                        .collection(BookingModel.SUB_COLLECTION_NAME)
+                        .whereEqualTo(BookingModel.FIELD_STATUS,"pending")
+                        .get()
+                        .addOnSuccessListener(onSuccessListener)
+                        .addOnFailureListener(onFailureListener)
+                }
+            }
+        }
+        .addOnFailureListener(onFailureListener)
+
 }
 
 fun removeBookingFromFirestore(

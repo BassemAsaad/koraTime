@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Kora Time</string>
-    <string name="google_api_key">AIzaSyA1WivRAWYXnV4ztiA3UMZJcm6LbAR9XfQ</string>
+    <string name="google_api_key">AIzaSyD2-LK1ZmpP268ANPVyH8KWaNEk70aFJrM</string>
     <string name="default_room_picture">"https://firebasestorage.googleapis.com/v0/b/kora-time-d21c3.appspot.com/o/images%2Fgroup_profile.png?alt=media&amp;token=68cbdd0e-43f2-4634-9ba9-bdcdec71555d" </string>
     <string name="default_profile_picture">https://firebasestorage.googleapis.com/v0/b/kora-time-d21c3.appspot.com/o/images%2Fprofile_picture.png?alt=media&amp;token=650310ed-94a0-479b-8bb3-ad2f3c4b6489</string>
     <string name="create_account">Create Account</string>
@@ -73,5 +73,7 @@
         <item> 10AM</item>
         <item> 11AM</item>
     </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

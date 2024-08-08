@@ -67,11 +67,7 @@ class LoginViewModel : BasicViewModel<LoginNavigator>() {
                     showLoading.value = false
                     Log.e("Firebase: ", "Successful Login")
                     DataUtils.user = user
-                    if (user.nationalID == null) {
-                        navigator?.openHomeActivity()
-                    } else {
-                        navigator?.openHomeManagerActivity()
-                    }
+                    navigator?.openHomeActivity()
                 }
             }//end OnSuccessListener
             ,

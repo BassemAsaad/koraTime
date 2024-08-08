@@ -1,6 +1,7 @@
 package com.example.koratime.stadiums_manager
 
 import android.content.Intent
+import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
@@ -12,10 +13,11 @@ import com.example.koratime.adapters.StadiumsAdapter
 import com.example.koratime.basic.BasicFragment
 import com.example.koratime.database.getUserStadiumFromFirestore
 import com.example.koratime.databinding.FragmentStadiumsManagerBinding
+import com.example.koratime.home.HomeActivity
 import com.example.koratime.model.StadiumModel
 import com.example.koratime.registration.log_in.LoginActivity
 import com.example.koratime.stadiums_manager.createStadium.AddStadiumActivity
-import com.example.koratime.stadiums_manager.manageStadium.ManageStadiumActivity
+import com.example.koratime.stadiums_manager.manageStadium.ManageStadiumFragment
 
 
 class StadiumsManagerFragment :
@@ -50,13 +52,13 @@ class StadiumsManagerFragment :
 
         adapter.onItemClickListener = object : StadiumsAdapter.OnItemClickListener {
             override fun onItemClick(stadium: StadiumModel?, position: Int) {
-                val intent = Intent(requireContext(), ManageStadiumActivity::class.java)
-                intent.putExtra(Constants.STADIUM_MANAGER, stadium)
-                startActivity(intent)
+                val manageStadiumFragment = ManageStadiumFragment()
+                val bundle = Bundle()
+                bundle.putParcelable(Constants.STADIUM_MANAGER, stadium)
+                manageStadiumFragment.arguments = bundle
+                (activity as HomeActivity).addFragment(manageStadiumFragment, true)
             }
         }
-
-
     }
 
 
