@@ -18,32 +18,6 @@ class TimeSlotsForManagerAdapter(
         fun bind(timeSlot: String) {
             dataBinding.tvTimeSlot.text = timeSlot
             dataBinding.invalidateAll()
-
-            /*
-            var isBooked = false
-            for (bookedTime in bookedTimesList) {
-                if (bookedTime == timeSlot) {
-                    isBooked = true
-                    break
-                }
-            }
-
-            if (isBooked) {
-                // Slot is already booked
-                dataBinding.tvTimeSlot.isEnabled=true
-                dataBinding.tvTimeSlot.setTextColor((Color.GRAY))
-                dataBinding.btnBook.isEnabled=false
-                dataBinding.btnBook.text= "Booked"
-                dataBinding.btnBook.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
-            } else{
-                dataBinding.tvTimeSlot.isEnabled=false
-                dataBinding.tvTimeSlot.setTextColor((Color.BLACK))
-                dataBinding.btnBook.isEnabled=true
-                dataBinding.btnBook.text= "Book"
-                dataBinding.btnBook.backgroundTintList = null
-            }
-             */
-
         }
 
     }

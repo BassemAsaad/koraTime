@@ -146,11 +146,7 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>(), HomeNa
         try {
             val addressList = geoCoder.getFromLocation(latitude, longitude, 1)
             val firstAddress = addressList!![0]
-
-            val addressLine = firstAddress.getAddressLine(0)
-            val subLocality = firstAddress.subLocality
-
-            val address = " $addressLine"
+            val address = firstAddress.getAddressLine(0)
 
             return address
 

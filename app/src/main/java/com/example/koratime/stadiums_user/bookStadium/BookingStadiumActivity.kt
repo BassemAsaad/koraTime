@@ -114,8 +114,7 @@ class BookingStadiumActivity :
                 addBookingToFirestore(timeSlot = holder.dataBinding.tvTimeSlot.text.toString(),
                     stadiumID = stadiumModel.stadiumID!!,
                     date = selectedDate,
-                    userId = DataUtils.user!!.id!!,
-                    userName = DataUtils.user!!.userName!!,
+                    user = DataUtils.user!!,
                     onSuccessListener = {
                         holder.dataBinding.apply {
                             tvTimeSlot.isEnabled = false

@@ -73,7 +73,6 @@ dependencies {
     //notification push
     implementation ("com.github.YarikSOffice:lingver:1.3.0")
 
-    implementation ("com.github.ArjunGupta08:Horizontal-CalendarDate-With-Click-listener:1.1.0")
 
     //navigation
     implementation ("androidx.navigation:navigation-fragment-ktx:2.7.7")

@@ -22,11 +22,15 @@ import com.example.koratime.basic.BasicFragment
 import com.example.koratime.database.addBookingToFirestore
 import com.example.koratime.database.deleteStadiumFromFirestore
 import com.example.koratime.database.getBookedTimesFromFirestore
+import com.example.koratime.database.getBookingRequestsFromFirestore
 import com.example.koratime.database.getMultipleImagesFromFirestore
 import com.example.koratime.database.removeBookingFromFirestore
 import com.example.koratime.database.uploadMultipleImagesToStorage
 import com.example.koratime.databinding.FragmentManageStadiumBinding
+import com.example.koratime.home.HomeActivity
+import com.example.koratime.model.BookingModel
 import com.example.koratime.model.StadiumModel
+import com.example.koratime.stadiums_manager.manageStadium.booking_requests.BookingRequestsFragment
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -76,10 +80,11 @@ class ManageStadiumFragment : BasicFragment<FragmentManageStadiumBinding, Manage
             setDisplayShowHomeEnabled(true)
             setDisplayShowTitleEnabled(true)
             title = stadiumModel.stadiumName
+            dataBinding.toolbar.setNavigationOnClickListener {
+                requireActivity().onBackPressed()
+            }
         }
-        dataBinding.toolbar.setNavigationOnClickListener {
-            requireActivity().onBackPressed()
-        }
+
 
 
         dataBinding.apply {
@@ -98,7 +103,7 @@ class ManageStadiumFragment : BasicFragment<FragmentManageStadiumBinding, Manage
                     stadiumID = stadiumModel.stadiumID!!,
                     onSuccessListener = {
                         Log.e("Firebase ", " Stadium Removed Successfully from firestore")
-//                        requireActivity().finish()
+                        requireActivity().finish()
 
                     },
                     onFailureListener = {
@@ -115,7 +120,11 @@ class ManageStadiumFragment : BasicFragment<FragmentManageStadiumBinding, Manage
                 getTimeSlots(selectedDate)
             }
             notificationIc.setOnClickListener {
-
+                val bookingRequestsFragment = BookingRequestsFragment()
+                val bundle = Bundle()
+                bundle.putParcelable(Constants.STADIUM, stadiumModel)
+                bookingRequestsFragment.arguments = bundle
+                (activity as HomeActivity).addFragment(bookingRequestsFragment,true)
             }
 
         }
@@ -165,8 +174,7 @@ class ManageStadiumFragment : BasicFragment<FragmentManageStadiumBinding, Manage
                             timeSlot = holder.dataBinding.tvTimeSlot.text.toString(),
                             stadiumID = stadiumModel.stadiumID!!,
                             date = selectedDate,
-                            userId = DataUtils.user!!.id!!,
-                            userName= DataUtils.user!!.userName!!,
+                            user = DataUtils.user!!,
                             onSuccessListener = {
                                 Log.e(
                                     "Firebase",

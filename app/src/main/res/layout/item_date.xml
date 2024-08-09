@@ -1,26 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/linear_calendar"
-    android:layout_width="70dp"
-    android:layout_height="95dp"
-    android:layout_margin="5dp"
-    android:background="@drawable/rectangle_outline"
-    android:gravity="center"
-    android:orientation="vertical"
-    android:padding="15dp">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:id="@+id/tv_calendar_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="11"
-        android:textSize="14sp" />
+    <data>
 
-    <TextView
-        android:id="@+id/tv_calendar_day"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Mon"
-        android:textSize="14sp" />
+    </data>
 
-</LinearLayout>
+    <LinearLayout
+        android:id="@+id/linear_calendar"
+        android:layout_width="70dp"
+        android:layout_height="95dp"
+        android:layout_margin="5dp"
+        android:background="@drawable/shape_calendar"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="15dp"
+        android:elevation="1dp"
+        >
+
+        <TextView
+            android:id="@+id/calendar_day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Mon"
+            android:textSize="14sp"
+            android:textColor="@color/dark_grey"
+            />
+
+        <TextView
+            android:id="@+id/calendar_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="11"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/black"
+            />
+
+    </LinearLayout>
+</layout>

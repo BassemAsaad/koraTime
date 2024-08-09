@@ -67,113 +67,120 @@
             app:layout_constraintTop_toBottomOf="@+id/app_bar"
             app:layout_constraintWidth_percent=".9">
 
-            <LinearLayout
+            <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:paddingHorizontal="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-
-                <TextView
-                    android:id="@+id/newRoom_textView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center|top"
-                    android:padding="20dp"
-                    android:text="@string/create_new_room"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/roomName_layout"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    app:error="@{vm.roomNameError}">
+                    android:orientation="vertical"
+                    android:paddingHorizontal="10dp"
+                    >
 
-                    <EditText
+
+                    <TextView
+                        android:id="@+id/newRoom_textView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center|top"
+                        android:padding="20dp"
+                        android:text="@string/create_new_room"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/roomName_layout"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:autofillHints="enter room name"
-                        android:hint="@string/enter_room_name"
-                        android:inputType="text"
-                        android:lines="1"
-                        android:text="@={vm.roomName}" />
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        app:error="@{vm.roomNameError}">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/roomDescription_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:inputType="text|number"
-                    app:error="@{vm.descriptionError}">
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:autofillHints="enter room name"
+                            android:hint="@string/enter_room_name"
+                            android:inputType="text"
+                            android:lines="1"
+                            android:text="@={vm.roomName}" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <EditText
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/roomDescription_layout"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:autofillHints="enter room description"
-                        android:hint="@string/enter_room_description"
-                        android:inputType="text"
-                        android:lines="2"
-                        android:text="@={vm.description}" />
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:inputType="text|number"
+                        app:error="@{vm.descriptionError}">
+
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:autofillHints="enter room description"
+                            android:hint="@string/enter_room_description"
+                            android:inputType="text"
+                            android:lines="2"
+                            android:text="@={vm.description}" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/roomPassword_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:inputType="text|number">
-
-                    <EditText
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/roomPassword_layout"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:autofillHints="enter room password (optional)"
-                        android:hint="@string/password_optional"
-                        android:inputType="text"
-                        android:lines="1"
-                        android:text="@={vm.password}" />
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:inputType="text|number">
 
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/roomImage_layout"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="20dp"
-                    android:src="@drawable/ic_group_profile"
-                    app:civ_border_color="@color/primaryVariant"
-                    app:civ_border_width="3dp" />
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:autofillHints="enter room password (optional)"
+                            android:hint="@string/password_optional"
+                            android:inputType="text"
+                            android:lines="1"
+                            android:text="@={vm.password}" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                <TextView
-                    android:id="@+id/roomImageText_layout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="5dp"
-                    android:text="@string/add_room_picture"
-                    android:textColor="@color/black"
-                    android:textSize="12sp" />
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/roomImage_layout"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="20dp"
+                        android:src="@drawable/ic_group_profile"
+                        app:civ_border_color="@color/primaryVariant"
+                        app:civ_border_width="3dp" />
 
-                <Button
-                    android:id="@+id/roomButton_layout"
-                    android:layout_width="180dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="20dp"
-                    android:layout_marginTop="20dp"
-                    android:backgroundTint="@color/primary"
-                    android:onClick="@{()->vm.createRoom()}"
-                    android:text="@string/create_room"
-                    android:textColor="@color/white" />
+                    <TextView
+                        android:id="@+id/roomImageText_layout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="5dp"
+                        android:text="@string/add_room_picture"
+                        android:textColor="@color/black"
+                        android:textSize="12sp" />
 
-            </LinearLayout>
+                    <Button
+                        android:id="@+id/roomButton_layout"
+                        android:layout_width="180dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="20dp"
+                        android:layout_marginTop="20dp"
+                        android:backgroundTint="@color/primary"
+                        android:onClick="@{()->vm.createRoom()}"
+                        android:text="@string/create_room"
+                        android:textColor="@color/white" />
+
+                </LinearLayout>
+
+            </ScrollView>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

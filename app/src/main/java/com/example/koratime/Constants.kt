@@ -5,4 +5,5 @@ object Constants {
     const val FRIEND = ""
     const val STADIUM_MANAGER = ""
     const val STADIUM_USER = ""
+    const val STADIUM = ""
 }

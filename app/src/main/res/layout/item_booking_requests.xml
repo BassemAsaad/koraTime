@@ -6,7 +6,7 @@
     <data>
 
         <variable
-            name="bookRequest"
+            name="bookModel"
             type="com.example.koratime.model.BookingModel" />
     </data>
 
@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        app:contentPadding="8dp"
+        app:contentPadding="12dp"
         app:cardCornerRadius="8dp"
         app:cardBackgroundColor="#FFFFFF"
         >
@@ -30,7 +30,7 @@
             android:id="@+id/userImage_item"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            app:imageUrl="@{bookRequest.profilePicture}"
+            app:imageUrl="@{bookModel.profilePicture}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -41,7 +41,7 @@
             android:id="@+id/userName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{bookRequest.userName}"
+            android:text="@{bookModel.userName}"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/userImage_item"
@@ -53,12 +53,11 @@
             android:id="@+id/book_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{bookRequest.date.toString() + ` - ` + bookRequest.timeSlot.toString()}"
+            android:text="@{bookModel.date.toString() + ` - ` + bookModel.timeSlot.toString()}"
             android:textSize="18sp"
-            app:layout_constraintBottom_toTopOf="@+id/book_status"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/userName"
-            tools:text="8/7/2024 - 7pm"
+            tools:text="8/7/2024 - 7PM"
             android:layout_marginTop="12dp"
             />
 
@@ -67,28 +66,15 @@
             android:id="@+id/book_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{bookRequest.status}"
+            android:text="@{bookModel.status}"
             android:textSize="16sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/book_date"
-            app:layout_constraintEnd_toStartOf="@id/book_time"
-            tools:text="UnConfirmed"
-            android:layout_marginTop="12dp"
-            />
+            tools:text="Pending" />
 
-        <TextView
-            android:id="@+id/book_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="@{bookRequest.formatTime()}"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="@+id/book_status"
-            app:layout_constraintStart_toEndOf="@+id/book_status"
-            app:layout_constraintTop_toTopOf="@+id/book_status"
-            app:layout_constraintVertical_bias="1.0"
-            tools:text="19h ago" />
+
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
