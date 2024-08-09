@@ -1,6 +1,5 @@
 package com.example.koratime.adapters
 
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -52,13 +51,18 @@ class CalendarAdapter (private val days: List<Date>?) : RecyclerView.Adapter<Cal
     }
 
     override fun onBindViewHolder(holder: CalendarViewHolder, position: Int) {
-        val date = days!![position]!!
+        val date = days!![position]
         holder.bind(date)
         holder.itemView.setOnClickListener {
-            selectedDate = date
-            notifyDataSetChanged()
             onItemClickListener?.onItemClick(date,holder,position)
         }
+
+
+    }
+    fun changeDate(date: Date){
+        selectedDate = date
+        notifyDataSetChanged()
+
     }
 
     var onItemClickListener : OnItemClickListener? = null

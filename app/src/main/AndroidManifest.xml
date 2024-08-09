@@ -33,7 +33,7 @@
             android:name=".stadiums_user.bookStadium.BookingStadiumActivity"
             android:exported="false" />
         <activity
-            android:name=".stadiums_manager.manageStadium.ManageStadiumFragment"
+            android:name=".stadiums_manager.manageStadium.ManageStadiumActivity"
             android:exported="false" />
         <activity
             android:name=".chat.chat_friends.ChatFriendsActivity"
@@ -70,7 +70,7 @@
             android:name=".home.HomeActivity"
             android:exported="true" />
         <activity
-            android:name=".home.home_manager.HomeManagerActivity"
+            android:name=".stadiums_manager.manageStadium.booking_requests.BookingRequestsActivity"
             android:exported="true" />
 
         <activity

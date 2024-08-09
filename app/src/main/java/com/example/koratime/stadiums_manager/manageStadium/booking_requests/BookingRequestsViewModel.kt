@@ -8,7 +8,7 @@ import com.example.koratime.model.StadiumModel
 
 class BookingRequestsViewModel : BasicViewModel<BookingRequestsNavigator>() {
     var stadium = StadiumModel()
-    var adapter = BookingRequestsAdapter(null)
+    var adapter = BookingRequestsAdapter(emptyList())
 
     fun getDates(){
         getBookingRequestsFromFirestore(

@@ -17,7 +17,7 @@ import com.example.koratime.home.HomeActivity
 import com.example.koratime.model.StadiumModel
 import com.example.koratime.registration.log_in.LoginActivity
 import com.example.koratime.stadiums_manager.createStadium.AddStadiumActivity
-import com.example.koratime.stadiums_manager.manageStadium.ManageStadiumFragment
+import com.example.koratime.stadiums_manager.manageStadium.ManageStadiumActivity
 
 
 class StadiumsManagerFragment :
@@ -52,11 +52,9 @@ class StadiumsManagerFragment :
 
         adapter.onItemClickListener = object : StadiumsAdapter.OnItemClickListener {
             override fun onItemClick(stadium: StadiumModel?, position: Int) {
-                val manageStadiumFragment = ManageStadiumFragment()
-                val bundle = Bundle()
-                bundle.putParcelable(Constants.STADIUM_MANAGER, stadium)
-                manageStadiumFragment.arguments = bundle
-                (activity as HomeActivity).addFragment(manageStadiumFragment, true)
+                val intent = Intent(requireContext(), ManageStadiumActivity::class.java)
+                intent.putExtra(Constants.STADIUM_MANAGER, stadium)
+                startActivity(intent)
             }
         }
     }

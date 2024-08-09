@@ -14,7 +14,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".stadiums_manager.manageStadium.ManageStadiumFragment">
+        tools:context=".stadiums_manager.manageStadium.ManageStadiumActivity">
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipeRefresh"
@@ -158,31 +158,37 @@
                         app:iss_period="1500"
                         app:iss_title_background="@color/transparent" />
 
-                    <CalendarView
-                        android:id="@+id/calendarView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="10dp"
-                        android:dateTextAppearance="@style/calendar_style"
-                        android:paddingHorizontal="10dp" />
 
                     <TextView
-                        android:id="@+id/bookingTimes_title"
+                        android:id="@+id/date_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginVertical="20dp"
-                        android:text="@string/stadium_book_times"
+                        android:layout_marginTop="20dp"
+                        tools:text="Jul 10, 2024"
                         android:textSize="20sp" />
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recyclerView"
+                        android:id="@+id/calendar_recycler_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        android:orientation="horizontal"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/request_title"
+                        tools:listitem="@layout/item_date" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/slots_recycler_view"
                         android:layout_width="match_parent"
                         android:layout_height="600dp"
                         android:layout_gravity="center"
                         android:paddingHorizontal="15dp"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        android:layout_marginTop="16dp"
+                        />
                 </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
