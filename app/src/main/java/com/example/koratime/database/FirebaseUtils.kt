@@ -763,7 +763,7 @@ fun getFriendMessagesFromFirestore(
 fun getLastMessageFromFirestore(
     userID: String,
     friendshipID: String,
-    onSuccessListener: OnSuccessListener<String>,
+    onSuccessListener: OnSuccessListener<QuerySnapshot>,
     onFailureListener: OnFailureListener
 ) {
 
@@ -775,16 +775,15 @@ fun getLastMessageFromFirestore(
         .collection(FriendMessageModel.COLLECTION_NAME)
         .orderBy("dateTime", Query.Direction.DESCENDING)
         .limit(1)
-
-    query
-        .get()
-        .addOnSuccessListener { documents ->
-            for (document in documents) {
+    /*
+    for (document in documents) {
                 val message = document.toObject(FriendMessageModel::class.java)
                 // Access the last content sent
                 onSuccessListener.onSuccess(message.content)
             }
-        }
+     */
+    query.get()
+        .addOnSuccessListener(onSuccessListener)
         .addOnFailureListener(onFailureListener)
 
 }

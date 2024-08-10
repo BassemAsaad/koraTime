@@ -4,6 +4,8 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
@@ -76,6 +78,7 @@ class ManageStadiumActivity : BasicActivity<ActivityManageStadiumBinding, Manage
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
             setDisplayShowHomeEnabled(true)
+            setDisplayHomeAsUpEnabled(true)
             setDisplayShowTitleEnabled(true)
             title = stadiumModel.stadiumName
         }
@@ -95,25 +98,7 @@ class ManageStadiumActivity : BasicActivity<ActivityManageStadiumBinding, Manage
             imagePicker.setOnClickListener {
                 pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
             }
-            deleteStadiun.setOnClickListener {
-                deleteStadiumFromFirestore(
-                    stadiumID = stadiumModel.stadiumID!!,
-                    onSuccessListener = {
-                        log("Stadium Removed Successfully from firestore")
-                        finish()
 
-                    },
-                    onFailureListener = {
-                        log("Error Removing Stadium from firestore")
-                    }
-                )
-
-            }
-            notificationIc.setOnClickListener {
-                val intent = Intent(this@ManageStadiumActivity, BookingRequestsActivity::class.java)
-                intent.putExtra(Constants.STADIUM, viewModel.stadium)
-                startActivity(intent)
-            }
 
         }
 
@@ -132,7 +117,7 @@ class ManageStadiumActivity : BasicActivity<ActivityManageStadiumBinding, Manage
                 getTimeSlots(selectedDate)
             }
         }
-        // Set up click listener for booking button in the adapter
+
         timeSlotsAdapter.onBookClickListener = object : TimeSlotsForManagerAdapter.OnBookClickListener {
             override fun onclick(slot: String, holder: TimeSlotsForManagerAdapter.ViewHolder, position: Int) {
                 holder.dataBinding.apply {
@@ -298,8 +283,39 @@ class ManageStadiumActivity : BasicActivity<ActivityManageStadiumBinding, Manage
             }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.stadium_manager_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.booking_requests -> {
+                val intent = Intent(this, BookingRequestsActivity::class.java)
+                intent.putExtra(Constants.STADIUM, viewModel.stadium)
+                startActivity(intent)
+                return true
+            }
+            R.id.delete_stadium -> {
+                deleteStadiumFromFirestore(
+                    stadiumID = stadiumModel.stadiumID!!,
+                    onSuccessListener = {
+                        log("Stadium Removed Successfully from firestore")
+                        finish()
+                        },
+                    onFailureListener = {
+                        log("Error Removing Stadium from firestore")
+                    }
+                )
+                return true
+
+            }
+            }
+
+        return  super.onOptionsItemSelected(item)
+    }
+
     override fun onSupportNavigateUp(): Boolean {
-        // go to the previous fragment when back button clicked
         onBackPressed()
         return true
     }

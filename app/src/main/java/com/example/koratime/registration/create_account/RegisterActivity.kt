@@ -20,7 +20,6 @@ class RegisterActivity : BasicActivity<ActivityRegisterBinding, RegisterViewMode
     override val TAG: String
         get() = "RegisterActivity"
     private lateinit var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
-    private val defaultImageUrl = getString(R.string.default_profile_picture)
 
     override fun getLayoutID(): Int {
         return R.layout.activity_register
@@ -43,14 +42,17 @@ class RegisterActivity : BasicActivity<ActivityRegisterBinding, RegisterViewMode
         }
         viewModel.apply {
             navigator = this@RegisterActivity
+            dataBinding.registerVM = viewModel
+            imageUrl.value = getString(R.string.default_profile_picture)
             showNationalID.observe(this@RegisterActivity) { showNationalID ->
                 dataBinding.nationalIDLayout.visibility =
                     if (showNationalID) View.VISIBLE else View.GONE
             }
-            imageUrl.value = defaultImageUrl
+            toastMessage.observe(this@RegisterActivity) { message ->
+                Toast.makeText(this@RegisterActivity, message, Toast.LENGTH_SHORT).show()
+            }
         }
         dataBinding.apply {
-            registerVM = viewModel
             logIn.setOnClickListener {
                 openLoginActivity()
             }
@@ -71,9 +73,6 @@ class RegisterActivity : BasicActivity<ActivityRegisterBinding, RegisterViewMode
                 pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
             }
 
-            viewModel.toastMessage.observe(this@RegisterActivity) { message ->
-                Toast.makeText(this@RegisterActivity, message, Toast.LENGTH_SHORT).show()
-            }
         }
 
     }
@@ -103,7 +102,7 @@ class RegisterActivity : BasicActivity<ActivityRegisterBinding, RegisterViewMode
                 )
 
                 dataBinding.apply {
-                    profilePictureLayout.setImageURI(null)
+                    profilePictureLayout.setImageURI(uri)
                     profileTextLayout.text = "Change Picture"
                 }
             } else {

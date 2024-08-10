@@ -45,19 +45,6 @@
                         android:paddingStart="2dp"
                         android:paddingEnd="5dp">
 
-                        <ImageView
-                            android:id="@+id/notification_ic"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:background="@drawable/shape_search"
-                            android:contentDescription="@string/notifications"
-                            android:padding="5dp"
-                            android:src="@drawable/ic_notification"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -99,30 +86,16 @@
                         android:layout_marginTop="15dp"
                         android:paddingHorizontal="15dp">
 
-                        <TextView
-                            android:id="@+id/delete_stadiun"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:drawableStart="@drawable/ic_remove"
-                            android:gravity="center"
-                            android:paddingVertical="10dp"
-                            android:text="Remove Stadium"
-                            android:textColor="@color/black"
-                            android:textSize="16sp"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
                         <ImageView
                             android:id="@+id/image_picker"
                             android:layout_width="50dp"
                             android:layout_height="50dp"
-                            android:layout_marginTop="35dp"
                             android:contentDescription="@string/add_multiple_stadium_pictures"
                             android:src="@drawable/ic_add_images"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toStartOf="@id/image_picker_textView"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/delete_stadiun" />
+                            app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
                             android:id="@+id/image_picker_textView"

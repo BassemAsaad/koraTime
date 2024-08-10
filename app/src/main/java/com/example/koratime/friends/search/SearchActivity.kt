@@ -46,7 +46,7 @@ class SearchActivity : BasicActivity<ActivitySearchBinding, SearchViewModel>(), 
             viewModel.navigator = this@SearchActivity
             vm = viewModel
             recyclerView.adapter = adapter
-            searchUser.requestFocus()
+//            searchUser.requestFocus()
             // filter users for search
             searchUser.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String): Boolean {
@@ -73,9 +73,11 @@ class SearchActivity : BasicActivity<ActivitySearchBinding, SearchViewModel>(), 
                         sender = DataUtils.user!!,
                         receiver = user,
                         onSuccessListener = {
-                            holder.dataBinding.addFriendButtonItem.text = "Pending"
-                            holder.dataBinding.addFriendButtonItem.isEnabled = false
-                            holder.dataBinding.removeFriendButtonItem.isEnabled = true
+                            holder.dataBinding.apply {
+                                addFriendButtonItem.text = "Pending"
+                                addFriendButtonItem.isEnabled = false
+                                removeFriendButtonItem.isEnabled = true
+                            }
                             log("Friend request sent to: ${user.id}")
                         },
                         onFailureListener = { e ->
@@ -99,9 +101,12 @@ class SearchActivity : BasicActivity<ActivitySearchBinding, SearchViewModel>(), 
                         sender = DataUtils.user!!.id!!,
                         receiver = user.id!!,
                         onSuccessListener = {
-                            holder.dataBinding.addFriendButtonItem.text = "Add Friend"
-                            holder.dataBinding.addFriendButtonItem.isEnabled = true
-                            holder.dataBinding.removeFriendButtonItem.isEnabled = false
+                            holder.dataBinding.apply {
+                                addFriendButtonItem.text = "Add Friend"
+                                addFriendButtonItem.isEnabled = true
+                                removeFriendButtonItem.isEnabled = false
+
+                            }
                             log("Friend request removed")
                         },
                         onFailureListener = { e ->

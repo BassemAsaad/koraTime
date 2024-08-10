@@ -4,8 +4,6 @@
         android:id="@+id/home_bar"
         android:icon="@drawable/ic_home"
         android:title="Home" />
-
-
     <item
         android:id="@+id/rooms_bar"
         android:icon="@drawable/ic_rooms"

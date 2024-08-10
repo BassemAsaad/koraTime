@@ -1,5 +1,6 @@
 package com.example.koratime.stadiums.createStadium
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.util.Log
@@ -13,22 +14,22 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.example.koratime.Constants
 import com.example.koratime.R
 import com.example.koratime.basic.BasicActivity
 import com.example.koratime.database.uploadImageToStorage
 import com.example.koratime.databinding.ActivityAddStadiumBinding
 import com.example.koratime.location.LocationPickerActivity
+import com.example.koratime.model.LocationModel
 
-@Suppress("DEPRECATION")
+@Suppress("DEPRECATION","SetTextI18n")
 class AddStadiumActivity : BasicActivity<ActivityAddStadiumBinding, AddStadiumViewModel>(),
     AddStadiumNavigator {
     override val TAG: String
         get() = "AddStadiumActivity"
 
     private lateinit var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
-    private var latitude = 0.0
-    private var longitude = 0.0
-    private var address = ""
+    private lateinit var locationModel :LocationModel
     private var openingTimeIndex: Int? = null
     private var closingTimeIndex: Int? = null
 
@@ -42,33 +43,36 @@ class AddStadiumActivity : BasicActivity<ActivityAddStadiumBinding, AddStadiumVi
     }
 
     override fun initView() {
-        dataBinding.vm = viewModel
-        viewModel.navigator = this
         setSupportActionBar(dataBinding.toolbar)
-        // Enable back button on Toolbar
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowHomeEnabled(true)
-
+        callback()
         setupSpinners()
 
-        openImagePicker()
-        dataBinding.stadiumImagesLayout.setOnClickListener {
-            // Launch the photo picker and let the user choose only images.
-            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-        }
-
-        dataBinding.locationPickerEditText.setOnClickListener {
-            val intent = Intent(this, LocationPickerActivity::class.java)
-            locationPickerActivityResultLauncher.launch(intent)
-        }
-
-        viewModel.toastMessage.observe(this, Observer { message ->
-            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-        })
     }
 
     override fun callback() {
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setDisplayShowHomeEnabled(true)
+        }
+        viewModel.apply {
+            navigator = this@AddStadiumActivity
+            toastMessage.observe(this@AddStadiumActivity, Observer { message ->
+                Toast.makeText(this@AddStadiumActivity, message, Toast.LENGTH_SHORT).show()
+            })
+        }
 
+        dataBinding.apply {
+            vm = viewModel
+            openImagePicker()
+            stadiumImagesLayout.setOnClickListener {
+                // Launch the photo picker and let the user choose only images.
+                pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+            }
+            locationPickerEditText.setOnClickListener {
+                val intent = Intent(this@AddStadiumActivity, LocationPickerActivity::class.java)
+                locationPickerActivityResultLauncher.launch(intent)
+            }
+        }
     }
     private val locationPickerActivityResultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -78,13 +82,14 @@ class AddStadiumActivity : BasicActivity<ActivityAddStadiumBinding, AddStadiumVi
                 val data = result.data
                 // if data not null assign data
                 if (data != null) {
-                    latitude = data.getDoubleExtra("latitude", 0.0)
-                    longitude = data.getDoubleExtra("longitude", 0.0)
-                    address = data.getStringExtra("address") ?: ""
-                    viewModel.latitudeLiveData.value = latitude
-                    viewModel.longitudeLiveData.value = longitude
-                    viewModel.addressLiveData.value = address
-                    dataBinding.locationPickerEditText.setText(address)
+                    locationModel = data.getParcelableExtra(Constants.LOCATION)!!
+                    viewModel.apply {
+                        latitudeLiveData.value = locationModel.latitude
+                        longitudeLiveData.value = locationModel.longitude
+                        addressLiveData.value = locationModel.address
+                    }
+
+                    dataBinding.locationPickerEditText.setText(locationModel.address)
                 }
             } else {
                 Log.e("Add Stadium", "locationPickerActivityResultLauncher: cancelled ")
@@ -95,54 +100,55 @@ class AddStadiumActivity : BasicActivity<ActivityAddStadiumBinding, AddStadiumVi
 
     private fun setupSpinners() {
         val timeSlots = resources.getStringArray(R.array.time_slots)
-
         val adapterSlots = ArrayAdapter(this, android.R.layout.simple_spinner_item, timeSlots)
         adapterSlots.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
-        dataBinding.opening.adapter = adapterSlots
-        dataBinding.closing.adapter = adapterSlots
+        dataBinding.apply {
+            opening.adapter = adapterSlots
+            closing.adapter = adapterSlots
+            // Add listeners to update closing time spinner based on opening time spinner selection
+            opening.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    // Update opening time index
+                    openingTimeIndex = position
+                    viewModel.openingTime.value = openingTimeIndex
+                    updateClosingTimeSpinner(opening, closing)
+                }
 
-        // Add listeners to update closing time spinner based on opening time spinner selection
-        dataBinding.opening.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                // Update opening time index
-                openingTimeIndex = position
-                viewModel.openingTime.value = openingTimeIndex
-                updateClosingTimeSpinner(dataBinding.opening, dataBinding.closing)
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                    // Do nothing
+                }
             }
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                // Do nothing
-            }
-        }
+            // Add listener for closing time spinner
+            closing.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    // Update closing time index
+                    closingTimeIndex = position
+                    // Add +1 to represent the actual closing time
+                    viewModel.closingTime.value = closingTimeIndex!! + 1
+                }
 
-        // Add listener for closing time spinner
-        dataBinding.closing.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                // Update closing time index
-                closingTimeIndex = position
-                viewModel.closingTime.value =
-                    closingTimeIndex!! + 1 // Add +1 to represent the actual closing time
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                // Do nothing
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                    // Do nothing
+                }
             }
         }
     }
 
-    // Update closing time spinner based on opening time spinner
     private fun updateClosingTimeSpinner(openingSpinner: Spinner, closingSpinner: Spinner) {
+        // Update closing time spinner based on opening time spinner
+
         val openingTime = openingSpinner.selectedItem.toString()
         val timeSlots = resources.getStringArray(R.array.time_slots)
 
@@ -167,13 +173,6 @@ class AddStadiumActivity : BasicActivity<ActivityAddStadiumBinding, AddStadiumVi
         closingTimeIndex = selectedClosingTimeIndex
     }
 
-
-    override fun onSupportNavigateUp(): Boolean {
-        // go to the previous fragment when back button clicked on toolbar
-        onBackPressed()
-        return true
-    }
-
     private fun openImagePicker() {
         // Registers a photo picker activity launcher in single-select mode.
         pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
@@ -183,15 +182,19 @@ class AddStadiumActivity : BasicActivity<ActivityAddStadiumBinding, AddStadiumVi
                 Log.d("PhotoPicker", "Selected URI: $uri")
                 uploadImageToStorage(uri,
                     onSuccessListener = { downloadUri ->
-                        Log.e("Firebase Storage:", "Image uploaded successfully")
+                        log("Image Uploaded Successfully to Storage")
                         // pass imageUrl to view model
-                        viewModel.imageUrl.value = downloadUri.toString()
-                        viewModel.showLoading.value = false
-                        dataBinding.stadiumImagesLayout.setImageURI(uri)
-                        dataBinding.stadiumImagesTextLayout.text = "Change Picture Chosen"
+                        viewModel.apply {
+                            imageUrl.value = downloadUri.toString()
+                            showLoading.value = false
+                        }
+                        dataBinding.apply {
+                            stadiumImagesLayout.setImageURI(uri)
+                            stadiumImagesTextLayout.text = "Change Picture Chosen"
+                        }
                     },
                     onFailureListener = {
-                        Log.e("Firebase Storage:", it.localizedMessage!!.toString())
+                        log("Error Uploading Image To Storage $it")
                         viewModel.showLoading.value = false
 
                     }
@@ -199,10 +202,10 @@ class AddStadiumActivity : BasicActivity<ActivityAddStadiumBinding, AddStadiumVi
 
 
             } else {
+                viewModel.showLoading.value = false
                 dataBinding.stadiumImagesTextLayout.text = "Default Picture"
                 Toast.makeText(this, "No image selected", Toast.LENGTH_SHORT).show()
-                Log.d("PhotoPicker", "No image selected")
-                viewModel.showLoading.value = false
+                log("PhotoPicker: No media selected")
             }
         }
     }
@@ -211,6 +214,10 @@ class AddStadiumActivity : BasicActivity<ActivityAddStadiumBinding, AddStadiumVi
         Toast.makeText(this, "Stadium Created Successfully", Toast.LENGTH_SHORT).show()
         finish()
     }
-
+    override fun onSupportNavigateUp(): Boolean {
+        // go to the previous fragment when back button clicked on toolbar
+        onBackPressed()
+        return true
+    }
 
 }

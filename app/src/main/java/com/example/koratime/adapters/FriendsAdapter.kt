@@ -10,7 +10,11 @@ import com.example.koratime.DataUtils
 import com.example.koratime.R
 import com.example.koratime.database.getLastMessageFromFirestore
 import com.example.koratime.databinding.ItemFriendsBinding
+import com.example.koratime.model.FriendMessageModel
 import com.example.koratime.model.FriendModel
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 class FriendsAdapter(var friendsList: List<FriendModel?>?) :
     RecyclerView.Adapter<FriendsAdapter.ViewHolder>() {
@@ -43,21 +47,25 @@ class FriendsAdapter(var friendsList: List<FriendModel?>?) :
         getLastMessageFromFirestore(
             userID = DataUtils.user!!.id!!,
             friendshipID = holder.dataBinding.friendModel!!.friendshipID!!,
-            onSuccessListener = { lastMessage ->
-                holder.dataBinding.lastMessageItem.text = lastMessage
+            onSuccessListener = { documents ->
+                var message = FriendMessageModel()
+                for (document in documents) {
+                    message = document.toObject(FriendMessageModel::class.java)
+                    // Access the last content sent
+                }
+                holder.dataBinding.apply {
+                    lastMessageItem.text = message.content
+                    lastMessageTime.text = formatMessageTime(message.dateTime!!)
+                }
+
                 Log.e("Firebase ", "Message returned successfully")
             },
             onFailureListener = {
                 Log.e("Firebase ", "Error returning message")
             }
         )
-        holder.apply {
-            dataBinding.removeFriend.setOnClickListener {
-                onUserClickListener?.onRemoveClick(friendsList!![position]!!, holder, position)
-            }
-            itemView.setOnClickListener {
+        holder.itemView.setOnClickListener {
                 onUserClickListener?.onItemClick(friendsList!![position]!!, holder, position)
-            }
         }
 
     }
@@ -66,7 +74,6 @@ class FriendsAdapter(var friendsList: List<FriendModel?>?) :
 
     interface OnUserClickListener {
         fun onItemClick(user: FriendModel?, holder: ViewHolder, position: Int)
-        fun onRemoveClick(user: FriendModel?, holder: ViewHolder, position: Int)
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -95,5 +102,31 @@ class FriendsAdapter(var friendsList: List<FriendModel?>?) :
 
         changeData(filteredList)
     }
+    private fun formatMessageTime(timestamp: Long): String {
+        val currentTime = Calendar.getInstance()
+        val messageTime = Calendar.getInstance().apply {
+            timeInMillis = timestamp
+        }
 
+        val isToday = currentTime.get(Calendar.YEAR) == messageTime.get(Calendar.YEAR) &&
+                currentTime.get(Calendar.DAY_OF_YEAR) == messageTime.get(Calendar.DAY_OF_YEAR)
+
+        val isYesterday = currentTime.get(Calendar.YEAR) == messageTime.get(Calendar.YEAR) &&
+                currentTime.get(Calendar.DAY_OF_YEAR) - messageTime.get(Calendar.DAY_OF_YEAR) == 1
+
+        return when {
+            isToday -> {
+                // If the message is from today, show time
+                SimpleDateFormat("hh:mm a", Locale.getDefault()).format(messageTime.time)
+            }
+            isYesterday -> {
+                // If the message is from yesterday, show 'Yesterday'
+                "Yesterday"
+            }
+            else -> {
+                // Otherwise, show the date
+                SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(messageTime.time)
+            }
+        }
+    }
 }

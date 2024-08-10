@@ -11,9 +11,11 @@ import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
+import com.example.koratime.Constants
 import com.example.koratime.R
 import com.example.koratime.basic.BasicActivity
 import com.example.koratime.databinding.ActivityLocationPickerBinding
+import com.example.koratime.model.LocationModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -29,8 +31,9 @@ import com.google.android.libraries.places.api.net.PlacesClient
 @Suppress("DEPRECATION")
 class LocationPickerActivity :
     BasicActivity<ActivityLocationPickerBinding, LocationPickerViewModel>(), OnMapReadyCallback {
+    override val TAG: String
+        get() = "LocationPickerActivity"
     companion object {
-        private const val TAG = "LOCATION_PICKER"
         private const val DEFAULT_ZOOM = 13.8
     }
 
@@ -58,39 +61,41 @@ class LocationPickerActivity :
 
 
     override fun initView() {
-        // Enable back button on Toolbar
         setSupportActionBar(dataBinding.toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowHomeEnabled(true)
+        callback()
 
-        //hide container
-        dataBinding.container.visibility = View.GONE
-
-        // get map
-        val mapFragment =
-            supportFragmentManager.findFragmentById(R.id.mapFragment) as SupportMapFragment
-        mapFragment.getMapAsync(this)
-
-        // initialize places client
-        Places.initialize(this, getString(R.string.google_api_key))
-
-        // create new places client instance
-        placeClient = Places.createClient(this)
-        fusedLocationProvider = LocationServices.getFusedLocationProviderClient(this)
-
-
-        // done Button click
-        dataBinding.doneButton.setOnClickListener {
-            val intent = Intent()
-            intent.putExtra("latitude", selectedLatitude)
-            intent.putExtra("longitude", selectedLongitude)
-            intent.putExtra("address", address)
-            setResult(Activity.RESULT_OK, intent)
-            finish()
-
+    }
+    override fun callback() {
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setDisplayShowHomeEnabled(true)
         }
+        dataBinding.apply {
+            container.visibility = View.GONE
+            doneButton.setOnClickListener {
+                val locationModel = LocationModel(
+                    latitude = selectedLatitude,
+                    longitude = selectedLongitude,
+                    address = address
+                )
+                val intent = Intent()
+                intent.putExtra(Constants.LOCATION, locationModel)
+                setResult(Activity.RESULT_OK, intent)
+                finish()
 
+            }
+            // get map
+            val mapFragment =
+                supportFragmentManager.findFragmentById(R.id.mapFragment) as SupportMapFragment
+            mapFragment.getMapAsync(this@LocationPickerActivity)
 
+            // initialize places client
+            Places.initialize(this@LocationPickerActivity, getString(R.string.google_api_key))
+
+            // create new places client instance
+            placeClient = Places.createClient(this@LocationPickerActivity)
+            fusedLocationProvider = LocationServices.getFusedLocationProviderClient(this@LocationPickerActivity)
+        }
     }
 
     private fun addMarker(latLng: LatLng, title: String, address: String) {
@@ -122,7 +127,7 @@ class LocationPickerActivity :
 
 
         } catch (e: Exception) {
-            Log.e(TAG, "addMarker: ", e)
+            log("addMarker: $e")
         }
 
 
@@ -152,7 +157,7 @@ class LocationPickerActivity :
                     addressFromLatLng(latLng)
                 }
             }.addOnFailureListener { e ->
-                Log.e(TAG, " location is null: : ", e)
+                log("detectAndShowDeviceLocationMap: $e")
             }
     }
 
@@ -162,7 +167,7 @@ class LocationPickerActivity :
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             //check if permission is granted
             if (isGranted) {
-                Log.e(TAG, "requestLocationPermission IsGranted: $isGranted")
+                log("requestLocationPermission IsGranted: $isGranted")
                 // enable gps button to set location on map
                 mMap!!.isMyLocationEnabled = true
                 pickCurrentPlace()
@@ -210,7 +215,7 @@ class LocationPickerActivity :
 
 
         } catch (e: Exception) {
-            Log.e(TAG, " address from latitude and longitude: ", e)
+            log("addressFromLatLng: $e")
         }
     }
 

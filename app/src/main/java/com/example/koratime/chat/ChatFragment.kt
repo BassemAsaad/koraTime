@@ -51,7 +51,10 @@ class ChatFragment : BasicFragment<FragmentChatBinding, ChatViewModel>(), ChatNa
 
             }
 
-            override fun onRemoveClick(
+
+        }
+        /*
+        override fun onRemoveClick(
                 user: FriendModel?,
                 holder: FriendsAdapter.ViewHolder,
                 position: Int
@@ -69,7 +72,7 @@ class ChatFragment : BasicFragment<FragmentChatBinding, ChatViewModel>(), ChatNa
                     }
                 )
             }
-        }
+         */
 
         // filter users for search
         dataBinding.searchFriends.setOnQueryTextListener(object : SearchView.OnQueryTextListener {

@@ -32,7 +32,8 @@ class LoginActivity
         dataBinding.apply {
             loginVM = viewModel
             signUp.setOnClickListener {
-                openRegisterActivity()
+                val intent = Intent(this@LoginActivity, RegisterActivity::class.java)
+                startActivity(intent)
             }
         }
     }
@@ -52,10 +53,5 @@ class LoginActivity
 
     }
 
-
-    override fun openRegisterActivity() {
-        val intent = Intent(this, RegisterActivity::class.java)
-        startActivity(intent)
-    }
 
 }
