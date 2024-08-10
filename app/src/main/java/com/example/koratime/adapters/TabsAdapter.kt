@@ -1,4 +1,4 @@
-package com.example.koratime.rooms
+package com.example.koratime.adapters
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter

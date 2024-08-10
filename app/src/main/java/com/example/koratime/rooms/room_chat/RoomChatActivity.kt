@@ -1,9 +1,6 @@
 package com.example.koratime.rooms.room_chat
 
-import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.koratime.Constants
@@ -19,7 +16,9 @@ import com.google.firebase.firestore.DocumentChange
 @Suppress("DEPRECATION")
 class RoomChatActivity : BasicActivity<ActivityRoomChatBinding, RoomChatViewModel>(),
     RoomChatNavigator {
-    lateinit var room: RoomModel
+    override val TAG: String
+        get() = "RoomChatActivity"
+    private lateinit var roomModel: RoomModel
     private val messageAdapter = RoomMessagesAdapter()
     override fun getLayoutID(): Int {
         return R.layout.activity_room_chat
@@ -31,36 +30,40 @@ class RoomChatActivity : BasicActivity<ActivityRoomChatBinding, RoomChatViewMode
 
 
     override fun initView() {
-        dataBinding.vm = viewModel
-        viewModel.navigator = this
-
-        room = intent.getParcelableExtra(Constants.ROOM)!!
-        viewModel.room = room
-
         setSupportActionBar(dataBinding.toolbar)
-        // Enable back button on Toolbar
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowHomeEnabled(true)
+        roomModel = intent.getParcelableExtra(Constants.ROOM)!!
+        callback()
+    }
 
-        // Enable title on Toolbar
-        supportActionBar?.title = room.name
-        supportActionBar?.setDisplayShowTitleEnabled(true)
+    override fun callback() {
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setDisplayShowHomeEnabled(true)
+            setDisplayShowTitleEnabled(true)
+            title = roomModel.name
+        }
+        viewModel.apply {
+            navigator = this@RoomChatActivity
+            room = roomModel
+            toastMessage.observe(this@RoomChatActivity) { message ->
+                Toast.makeText(this@RoomChatActivity, message, Toast.LENGTH_SHORT).show()
+            }
+        }
+        dataBinding.apply {
+            vm = viewModel
+            val linearLayoutManager = LinearLayoutManager(this@RoomChatActivity)
+            linearLayoutManager.stackFromEnd = true // This will start the layout from the end
+            dataBinding.recyclerView.apply {
+                layoutManager = linearLayoutManager
+                adapter = messageAdapter
+            }
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
         listenForMessageUpdate()
-        setupRecyclerView()
-
-        viewModel.toastMessage.observe(this, Observer { message ->
-            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-        })
-
     }
-
-    private fun setupRecyclerView() {
-        val layoutManager = LinearLayoutManager(this)
-        layoutManager.stackFromEnd = true // This will start the layout from the end
-        dataBinding.recyclerView.layoutManager = layoutManager
-        dataBinding.recyclerView.adapter = messageAdapter
-    }
-
     private fun scrollToBottom() {
         dataBinding.recyclerView.postDelayed({
             if (messageAdapter.itemCount > 0) {
@@ -70,7 +73,7 @@ class RoomChatActivity : BasicActivity<ActivityRoomChatBinding, RoomChatViewMode
     }
 
     private fun listenForMessageUpdate() {
-        getRoomMessagesFromFirestore(room.roomID!!)
+        getRoomMessagesFromFirestore(roomModel.roomID!!)
             .addSnapshotListener { snapshots, error ->
                 if (error != null) {
                     Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
@@ -83,8 +86,8 @@ class RoomChatActivity : BasicActivity<ActivityRoomChatBinding, RoomChatViewMode
                                 newMessageList.add(message)
                             }
 
-                            DocumentChange.Type.MODIFIED -> Log.e("Firebase", "Error")
-                            DocumentChange.Type.REMOVED -> Log.e("Firebase", "Error")
+                            DocumentChange.Type.MODIFIED -> log("Message Modified")
+                            DocumentChange.Type.REMOVED -> log("Message Removed")
                         }
                     }
                     messageAdapter.changeData(newMessageList)

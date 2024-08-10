@@ -1,4 +1,4 @@
-package com.example.koratime.stadiums_user.bookStadium
+package com.example.koratime.stadiums.bookStadium
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -41,9 +41,9 @@ class BookingStadiumActivity :
     private val slideImageList = mutableListOf<String>()
     private var selectedDate = SimpleDateFormat("MM_dd_yyyy", Locale.getDefault()).format(Date())
 
-    companion object {
-        const val TAG = "BookingStadiumActivity"
-    }
+    override val TAG: String
+        get() = "BookingStadiumActivity"
+
 
     override fun getLayoutID(): Int {
         return R.layout.activity_booking_stadium
@@ -53,24 +53,17 @@ class BookingStadiumActivity :
         return ViewModelProvider(this)[BookingStadiumViewModel::class.java]
     }
 
-
-
-    override fun onStart() {
-        super.onStart()
-        checkSearch()
-    }
-
     override fun initView() {
         setSupportActionBar(dataBinding.toolbar)
-        callBack()
+        stadiumModel = intent.getParcelableExtra(Constants.STADIUM_USER)!!
+        callback()
         getStadiumImages()
     }
 
-    private fun callBack() {
+    override fun callback() {
         viewModel.apply {
             dataBinding.vm = viewModel
             navigator = this@BookingStadiumActivity
-            stadiumModel = intent.getParcelableExtra(Constants.STADIUM_USER)!!
             stadium = stadiumModel
         }
         supportActionBar?.apply {
@@ -151,6 +144,10 @@ class BookingStadiumActivity :
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        checkSearch()
+    }
     private fun getTimeSlots(date: String) {
         getBookedTimesFromFirestore(
             stadiumID = stadiumModel.stadiumID!!,

@@ -1,4 +1,4 @@
-package com.example.koratime.stadiums_manager.manageStadium
+package com.example.koratime.stadiums.manageStadium
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData

@@ -7,13 +7,13 @@
 
         <variable
             name="vm"
-            type="com.example.koratime.stadiums_user.StadiumsViewModel" />
+            type="com.example.koratime.stadiums.stadiums_user.StadiumsViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".stadiums_user.StadiumsFragment">
+        tools:context=".stadiums.stadiums_user.StadiumsFragment">
 
 
         <com.google.android.material.appbar.AppBarLayout

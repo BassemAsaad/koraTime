@@ -14,15 +14,27 @@ import com.example.koratime.registration.create_account.RegisterActivity
 
 class LoginActivity
     : BasicActivity<ActivityLoginBinding, LoginViewModel>(), LoginNavigator {
-
+    override val TAG: String
+        get() = "LoginActivity"
 
     override fun initView() {
-        dataBinding.loginVM = viewModel
-        viewModel.navigator = this
-        openRegisterActivity()
-        viewModel.toastMessage.observe(this, Observer { message ->
-            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-        })
+        callback()
+    }
+
+    override fun callback() {
+        viewModel.apply {
+            navigator = this@LoginActivity
+            toastMessage.observe(this@LoginActivity, Observer { message ->
+                Toast.makeText(this@LoginActivity, message, Toast.LENGTH_SHORT).show()
+            })
+        }
+
+        dataBinding.apply {
+            loginVM = viewModel
+            signUp.setOnClickListener {
+                openRegisterActivity()
+            }
+        }
     }
 
     override fun getLayoutID(): Int {
@@ -42,10 +54,8 @@ class LoginActivity
 
 
     override fun openRegisterActivity() {
-        dataBinding.signUp.setOnClickListener {
-            val intent = Intent(this, RegisterActivity::class.java)
-            startActivity(intent)
-        }
+        val intent = Intent(this, RegisterActivity::class.java)
+        startActivity(intent)
     }
 
 }

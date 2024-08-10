@@ -30,10 +30,10 @@
 
 
         <activity
-            android:name=".stadiums_user.bookStadium.BookingStadiumActivity"
+            android:name=".stadiums.bookStadium.BookingStadiumActivity"
             android:exported="false" />
         <activity
-            android:name=".stadiums_manager.manageStadium.ManageStadiumActivity"
+            android:name=".stadiums.manageStadium.ManageStadiumActivity"
             android:exported="false" />
         <activity
             android:name=".chat.chat_friends.ChatFriendsActivity"
@@ -42,7 +42,7 @@
             android:name=".rooms.room_chat.RoomChatActivity"
             android:exported="false" />
         <activity
-            android:name=".stadiums_manager.createStadium.AddStadiumActivity"
+            android:name=".stadiums.createStadium.AddStadiumActivity"
             android:exported="false" />
         <activity
             android:name=".location.LocationPickerActivity"
@@ -70,7 +70,7 @@
             android:name=".home.HomeActivity"
             android:exported="true" />
         <activity
-            android:name=".stadiums_manager.manageStadium.booking_requests.BookingRequestsActivity"
+            android:name=".stadiums.booking_requests.BookingRequestsActivity"
             android:exported="true" />
 
         <activity

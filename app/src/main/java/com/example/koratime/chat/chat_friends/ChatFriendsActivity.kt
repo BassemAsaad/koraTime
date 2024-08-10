@@ -19,6 +19,8 @@ import com.google.firebase.firestore.DocumentChange
 @Suppress("DEPRECATION")
 class ChatFriendsActivity : BasicActivity<ActivityChatFriendsBinding, ChatFriendsViewModel>(),
     ChatFriendsNavigator {
+    override val TAG: String
+        get() = "ChatFriendsActivity"
     private lateinit var friendModel: FriendModel
     private val messageAdapter = FriendMessagesAdapter()
     override fun getLayoutID(): Int {
@@ -30,43 +32,42 @@ class ChatFriendsActivity : BasicActivity<ActivityChatFriendsBinding, ChatFriend
     }
 
     override fun initView() {
-        dataBinding.vm = viewModel
-        viewModel.navigator = this
-
         friendModel = intent.getParcelableExtra(Constants.FRIEND)!!
-        viewModel.friend = friendModel
+        callback()
+    }
 
+    override fun callback() {
         setSupportActionBar(dataBinding.toolbar)
-        // Enable back button on Toolbar
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
             setDisplayShowHomeEnabled(true)
             setDisplayShowTitleEnabled(true)
             title = friendModel.friendName
         }
-
-        listenForMessageUpdate()
-
-        setupRecyclerView()
-
-        viewModel.toastMessage.observe(this, Observer { message ->
-            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-        })
+        viewModel.apply {
+            navigator = this@ChatFriendsActivity
+            friend = friendModel
+            toastMessage.observe(this@ChatFriendsActivity, Observer { message ->
+                Toast.makeText(this@ChatFriendsActivity, message, Toast.LENGTH_SHORT).show()
+            })
+        }
+        dataBinding.apply {
+            vm = viewModel
+            val linearLayoutManager = LinearLayoutManager(this@ChatFriendsActivity)
+            linearLayoutManager.stackFromEnd = true // This will start the layout from the end
+            recyclerView.apply {
+                layoutManager = linearLayoutManager
+                adapter = messageAdapter
+            }
+        }
 
     }
-
     override fun onSupportNavigateUp(): Boolean {
         // go to the previous fragment when back button clicked on toolbar
         onBackPressed()
         return true
     }
 
-    private fun setupRecyclerView() {
-        val layoutManager = LinearLayoutManager(this)
-        layoutManager.stackFromEnd = true // This will start the layout from the end
-        dataBinding.recyclerView.layoutManager = layoutManager
-        dataBinding.recyclerView.adapter = messageAdapter
-    }
 
     private fun scrollToBottom() {
         dataBinding.recyclerView.postDelayed({
@@ -74,6 +75,11 @@ class ChatFriendsActivity : BasicActivity<ActivityChatFriendsBinding, ChatFriend
                 dataBinding.recyclerView.smoothScrollToPosition(messageAdapter.itemCount - 1)
             }
         }, 100) // Delaying the scroll by 100 milliseconds
+    }
+
+    override fun onStart() {
+        super.onStart()
+        listenForMessageUpdate()
     }
 
     private fun listenForMessageUpdate() {

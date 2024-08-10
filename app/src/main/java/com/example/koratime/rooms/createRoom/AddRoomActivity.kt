@@ -16,12 +16,11 @@ import com.example.koratime.databinding.ActivityAddRoomBinding
 @Suppress("DEPRECATION", "SetTextI18n")
 class AddRoomActivity : BasicActivity<ActivityAddRoomBinding, AddRoomViewModel>(),
     AddRoomNavigator {
+    override val TAG: String
+        get() = "AddRoomActivity"
+        private lateinit var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
 
-    private lateinit var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
-
-
-
-    override fun getLayoutID(): Int {
+        override fun getLayoutID(): Int {
         return R.layout.activity_add_room
     }
 
@@ -32,7 +31,14 @@ class AddRoomActivity : BasicActivity<ActivityAddRoomBinding, AddRoomViewModel>(
 
     override fun initView() {
         setSupportActionBar(dataBinding.toolbar)
+        callback()
+    }
 
+    override fun callback() {
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setDisplayShowHomeEnabled(true)
+        }
         viewModel.apply {
             navigator = this@AddRoomActivity
             // If no image is selected, use the default image URL
@@ -40,11 +46,6 @@ class AddRoomActivity : BasicActivity<ActivityAddRoomBinding, AddRoomViewModel>(
             toastMessage.observe(this@AddRoomActivity) { message ->
                 Toast.makeText(this@AddRoomActivity, message, Toast.LENGTH_SHORT).show()
             }
-        }
-
-        supportActionBar?.apply {
-            setDisplayHomeAsUpEnabled(true)
-            setDisplayShowHomeEnabled(true)
         }
         dataBinding.apply {
             vm = viewModel
@@ -61,11 +62,11 @@ class AddRoomActivity : BasicActivity<ActivityAddRoomBinding, AddRoomViewModel>(
         pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             // photo picker
             if (uri != null) {
-                Log.d("PhotoPicker", "Selected URI: $uri")
+                log("PhotoPicker selected URI: $uri")
                 viewModel.showLoading.value = true
                 uploadImageToStorage(uri,
                     onSuccessListener = { downloadUri ->
-                        Log.e("Firebase Storage:", "Image uploaded successfully")
+                        log("Firebase Storage: Image uploaded successfully")
                         // pass imageUrl to view model
                         viewModel.apply {
                             imageUrl.value = downloadUri.toString()
@@ -74,7 +75,7 @@ class AddRoomActivity : BasicActivity<ActivityAddRoomBinding, AddRoomViewModel>(
 
                     },
                     onFailureListener = {
-                        Log.e("Firebase Storage:", it.localizedMessage!!.toString())
+                        log("Firebase Storage: Error uploading image $it")
                         viewModel.showLoading.value = false
 
                     }
@@ -87,7 +88,7 @@ class AddRoomActivity : BasicActivity<ActivityAddRoomBinding, AddRoomViewModel>(
             } else {
                 dataBinding.roomImageTextLayout.text = "Default Picture"
                 Toast.makeText(this, "No image selected", Toast.LENGTH_SHORT).show()
-                Log.d("PhotoPicker", "No image selected")
+                log("PhotoPicker: No media selected")
                 viewModel.showLoading.value = false
 
             }
@@ -103,7 +104,6 @@ class AddRoomActivity : BasicActivity<ActivityAddRoomBinding, AddRoomViewModel>(
     override fun roomsFragment() {
         Toast.makeText(this, "Room Added Successfully", Toast.LENGTH_SHORT).show()
         finish()
-
     }
 
 }

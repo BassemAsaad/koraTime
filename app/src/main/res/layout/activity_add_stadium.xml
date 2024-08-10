@@ -7,7 +7,7 @@
 
         <variable
             name="vm"
-            type="com.example.koratime.stadiums_manager.createStadium.AddStadiumViewModel" />
+            type="com.example.koratime.stadiums.createStadium.AddStadiumViewModel" />
 
         <import type="android.view.View" />
 

@@ -1,4 +1,4 @@
-package com.example.koratime.stadiums_user.bookStadium
+package com.example.koratime.stadiums.bookStadium
 
 import android.util.Log
 import androidx.databinding.ObservableField

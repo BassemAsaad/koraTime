@@ -1,9 +1,8 @@
-package com.example.koratime.stadiums_user
+package com.example.koratime.stadiums.stadium_manager
 
 import android.content.Intent
 import android.util.Log
 import android.widget.Toast
-import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.koratime.Constants
@@ -11,24 +10,28 @@ import com.example.koratime.DataUtils
 import com.example.koratime.R
 import com.example.koratime.adapters.StadiumsAdapter
 import com.example.koratime.basic.BasicFragment
-import com.example.koratime.database.getAllStadiumsFromFirestore
-import com.example.koratime.databinding.FragmentStadiumsBinding
+import com.example.koratime.database.getUserStadiumFromFirestore
+import com.example.koratime.databinding.FragmentStadiumsManagerBinding
 import com.example.koratime.model.StadiumModel
 import com.example.koratime.registration.log_in.LoginActivity
-import com.example.koratime.stadiums_user.bookStadium.BookingStadiumActivity
+import com.example.koratime.stadiums.createStadium.AddStadiumActivity
+import com.example.koratime.stadiums.manageStadium.ManageStadiumActivity
 
-class StadiumsFragment : BasicFragment<FragmentStadiumsBinding, StadiumsViewModel>(),
-    StadiumsNavigator {
+
+class StadiumsManagerFragment :
+    BasicFragment<FragmentStadiumsManagerBinding, StadiumsManagerViewModel>(),
+    StadiumsManagerNavigator {
 
     val adapter = StadiumsAdapter(null)
 
-    override fun initViewModel(): StadiumsViewModel {
-        return ViewModelProvider(this)[StadiumsViewModel::class.java]
+    override fun initViewModel(): StadiumsManagerViewModel {
+        return ViewModelProvider(this)[StadiumsManagerViewModel::class.java]
     }
 
     override fun getLayoutID(): Int {
-        return R.layout.fragment_stadiums
+        return R.layout.fragment_stadiums_manager
     }
+
 
     override fun initView() {
         callback()
@@ -43,28 +46,21 @@ class StadiumsFragment : BasicFragment<FragmentStadiumsBinding, StadiumsViewMode
             Glide.with(requireContext())
                 .load(DataUtils.user!!.profilePicture)
                 .into(profilePicture)
-
-            // filter stadiums for search
-            searchStadiums.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                override fun onQueryTextSubmit(query: String): Boolean {
-                    // Handle query submission if needed
-                    return true
-                }
-
-                override fun onQueryTextChange(newText: String): Boolean {
-                    adapter.filterUsers(newText)
-                    return true
-                }
-            })
         }
+
         adapter.onItemClickListener = object : StadiumsAdapter.OnItemClickListener {
             override fun onItemClick(stadium: StadiumModel?, position: Int) {
-                val intent = Intent(requireContext(), BookingStadiumActivity::class.java)
-                intent.putExtra(Constants.STADIUM_USER, stadium)
+                val intent = Intent(requireContext(), ManageStadiumActivity::class.java)
+                intent.putExtra(Constants.STADIUM_MANAGER, stadium)
                 startActivity(intent)
             }
         }
+    }
 
+
+    override fun createStadiumActivity() {
+        val intent = Intent(requireContext(), AddStadiumActivity::class.java)
+        startActivity(intent)
     }
 
     override fun Logout() {
@@ -74,11 +70,13 @@ class StadiumsFragment : BasicFragment<FragmentStadiumsBinding, StadiumsViewMode
 
     override fun onStart() {
         super.onStart()
-        getAllStadiums()
+        getUserStadiums()
+
     }
 
-    private fun getAllStadiums() {
-        getAllStadiumsFromFirestore(
+    private fun getUserStadiums() {
+        getUserStadiumFromFirestore(
+            DataUtils.user!!.id,
             onSuccessListener = { querySnapShot ->
                 val stadiums = querySnapShot.toObjects(StadiumModel::class.java)
                 adapter.changeData(stadiums)

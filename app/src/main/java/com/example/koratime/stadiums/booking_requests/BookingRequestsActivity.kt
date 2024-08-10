@@ -1,4 +1,4 @@
-package com.example.koratime.stadiums_manager.manageStadium.booking_requests
+package com.example.koratime.stadiums.booking_requests
 
 import androidx.lifecycle.ViewModelProvider
 import com.example.koratime.Constants
@@ -9,7 +9,10 @@ import com.example.koratime.model.StadiumModel
 
 
 @Suppress("DEPRECATION")
-class BookingRequestsActivity : BasicActivity<ActivityBookingRequestsBinding, BookingRequestsViewModel>(), BookingRequestsNavigator {
+class BookingRequestsActivity : BasicActivity<ActivityBookingRequestsBinding, BookingRequestsViewModel>(),
+    BookingRequestsNavigator {
+    override val TAG: String
+        get() = "BookingRequestsActivity"
     private lateinit var stadiumModel: StadiumModel
 
     override fun initViewModel(): BookingRequestsViewModel {
@@ -23,7 +26,7 @@ class BookingRequestsActivity : BasicActivity<ActivityBookingRequestsBinding, Bo
         callback()
     }
 
-    fun callback() {
+    override fun callback() {
         viewModel.apply {
             navigator = this@BookingRequestsActivity
             stadiumModel = intent.getParcelableExtra(Constants.STADIUM)!!

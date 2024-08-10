@@ -1,10 +1,8 @@
 package com.example.koratime.home
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.location.Geocoder
-import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
@@ -17,19 +15,21 @@ import com.example.koratime.database.updateUserLocationInFirestore
 import com.example.koratime.databinding.ActivityHomeBinding
 import com.example.koratime.friends.FriendsRequestsFragment
 import com.example.koratime.rooms.TabsFragment
-import com.example.koratime.stadiums_manager.StadiumsManagerFragment
-import com.example.koratime.stadiums_user.StadiumsFragment
+import com.example.koratime.stadiums.stadium_manager.StadiumsManagerFragment
+import com.example.koratime.stadiums.stadiums_user.StadiumsFragment
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 
-@Suppress("DEPRECATION")
+@Suppress("DEPRECATION","MissingPermission")
 class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>(), HomeNavigator {
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
     companion object {
         const val LOCATION_PERMISSION_REQUEST_CODE = 100
-        const val TAG = "HomeActivity"
     }
+
+    override val TAG: String
+        get() = "HomeActivity"
 
     override fun getLayoutID(): Int {
         return R.layout.activity_home
@@ -64,6 +64,10 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>(), HomeNa
     }
 
     override fun initView() {
+        callback()
+    }
+
+    override fun callback() {
         viewModel.navigator = this
         dataBinding.vm = viewModel
         getLocationIfPermissionGranted()
@@ -85,15 +89,6 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>(), HomeNa
         }
         push.commit()
     }
-    fun addFragment(fragment: Fragment, addToBackStack: Boolean = false) {
-        val push = supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, fragment)
-        if (addToBackStack) {
-            push.addToBackStack("")
-        }
-        push.commit()
-    }
-
 
     private fun getLocationIfPermissionGranted() {
         if (hasLocationPermissions()) {
@@ -110,9 +105,7 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>(), HomeNa
                     Manifest.permission.ACCESS_COARSE_LOCATION
                 ) == PackageManager.PERMISSION_GRANTED
     }
-
-    @SuppressLint("MissingPermission")
-    fun getLastKnownLocation() {
+    private fun getLastKnownLocation() {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         fusedLocationProviderClient.lastLocation
             .addOnSuccessListener { location ->
@@ -127,20 +120,19 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>(), HomeNa
                     updateUserLocationInFirestore(
                         DataUtils.user!!.id!!, latitude, longitude, cityName,
                         onSuccessListener = {
-                            Log.e("Firestore", "Location updated in Firestore")
+                            log("Location updated in Firestore")
                         },
                         onFailureListener = {
-                            Log.e("Firestore", "Error updating location in Firestore")
+                            log("Error updating location in Firestore")
                         }
                     )
                 }
             }.addOnFailureListener { e ->
                 Toast.makeText(this, "Failed to get last known location.", Toast.LENGTH_SHORT)
                     .show()
-                Log.e("Location", " location is null: : ", e)
+                log("Failed to get last known location.")
             }
     }
-
     private fun getCityName(latitude: Double, longitude: Double): String {
         val geoCoder = Geocoder(this)
         try {
@@ -151,13 +143,10 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>(), HomeNa
             return address
 
         } catch (e: Exception) {
-            Log.e(TAG, " address from latitude and longitude: ", e)
+            log("Error getting city name: $e")
             return e.toString()
         }
     }
-
-
-
     private fun requestLocationPermissions() {
         ActivityCompat.requestPermissions(this,
             arrayOf(
@@ -166,7 +155,6 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>(), HomeNa
             ), LOCATION_PERMISSION_REQUEST_CODE
         )
     }
-
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,

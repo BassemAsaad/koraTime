@@ -1,7 +1,6 @@
 package com.example.koratime.friends.search
 
 import android.annotation.SuppressLint
-import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
@@ -16,8 +15,10 @@ import com.example.koratime.databinding.ActivitySearchBinding
 import com.example.koratime.model.UserModel
 
 
-@Suppress("DEPRECATION")
+@Suppress("DEPRECATION", "SetTextI18n")
 class SearchActivity : BasicActivity<ActivitySearchBinding, SearchViewModel>(), SearchNavigator {
+    override val TAG: String
+        get() = "SearchActivity"
     private val usersList = mutableListOf<UserModel?>()
     private val adapter = AddFriendsAdapter(usersList, DataUtils.user!!.id)
 
@@ -30,46 +31,44 @@ class SearchActivity : BasicActivity<ActivitySearchBinding, SearchViewModel>(), 
     }
 
     override fun initView() {
-        dataBinding.vm = viewModel
-        viewModel.navigator = this
-
-        dataBinding.recyclerView.adapter = adapter
-
         setSupportActionBar(dataBinding.toolbar)
-        // Enable back button on Toolbar
+        callback()
+
+    }
+    override fun callback(){
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
             setDisplayShowHomeEnabled(true)
-            title = "Search For People"
             setDisplayShowTitleEnabled(true)
+            title = "Search For People"
         }
+        dataBinding.apply {
+            viewModel.navigator = this@SearchActivity
+            vm = viewModel
+            recyclerView.adapter = adapter
+            searchUser.requestFocus()
+            // filter users for search
+            searchUser.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String): Boolean {
+                    // Handle query submission if needed
+                    return true
+                }
 
-        dataBinding.searchUser.requestFocus()
-
-        // filter users for search
-        dataBinding.searchUser.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String): Boolean {
-                // Handle query submission if needed
-                return true
-            }
-
-            override fun onQueryTextChange(newText: String): Boolean {
-                adapter.filterUsers(newText)
-                return true
-            }
-        })
-
+                override fun onQueryTextChange(newText: String): Boolean {
+                    adapter.filterUsers(newText)
+                    return true
+                }
+            })
+        }
 
         // send friend request
         adapter.onAddFriendButtonClickListener =
             object : AddFriendsAdapter.OnAddFriendButtonClickListener {
-                @SuppressLint("SuspiciousIndentation")
                 override fun onClick(
                     user: UserModel,
                     holder: AddFriendsAdapter.ViewHolder,
                     position: Int
                 ) {
-                    val receiverUserId = user.id
                     addFriendRequestToFirestore(
                         sender = DataUtils.user!!,
                         receiver = user,
@@ -77,10 +76,10 @@ class SearchActivity : BasicActivity<ActivitySearchBinding, SearchViewModel>(), 
                             holder.dataBinding.addFriendButtonItem.text = "Pending"
                             holder.dataBinding.addFriendButtonItem.isEnabled = false
                             holder.dataBinding.removeFriendButtonItem.isEnabled = true
-                            Log.e("Firebase", "Friend request sent to: $receiverUserId")
+                            log("Friend request sent to: ${user.id}")
                         },
                         onFailureListener = { e ->
-                            Log.e("Firebase", "Error sending friend request: ", e)
+                            log("Error sending friend request $e")
                         }
                     )
 
@@ -91,35 +90,37 @@ class SearchActivity : BasicActivity<ActivitySearchBinding, SearchViewModel>(), 
         //remove friend request
         adapter.onRemoveFriendButtonClickListener =
             object : AddFriendsAdapter.OnRemoveFriendButtonClickListener {
-                @SuppressLint("SuspiciousIndentation")
                 override fun onClick(
                     user: UserModel,
                     holder: AddFriendsAdapter.ViewHolder,
                     position: Int
                 ) {
-                    val receiverUserId = user.id!!
                     removeFriendRequestWithoutRequestID(
                         sender = DataUtils.user!!.id!!,
-                        receiver = receiverUserId,
+                        receiver = user.id!!,
                         onSuccessListener = {
                             holder.dataBinding.addFriendButtonItem.text = "Add Friend"
                             holder.dataBinding.addFriendButtonItem.isEnabled = true
                             holder.dataBinding.removeFriendButtonItem.isEnabled = false
-                            Log.e("firebase", "Friend request removed")
+                            log("Friend request removed")
                         },
                         onFailureListener = { e ->
-                            Log.e("firebase", "error removing friend request: ", e)
+                            log("Error removing friend request: $e")
 
                         }
                     )
 
                 }
             }
-
     }
 
     override fun onStart() {
         super.onStart()
+        getUsers()
+
+    }
+
+    private fun getUsers(){
         getUsersFromFirestore(
             DataUtils.user!!.id,
             onSuccessListener = { querySnapshot ->
@@ -128,16 +129,13 @@ class SearchActivity : BasicActivity<ActivitySearchBinding, SearchViewModel>(), 
                     usersList.add(user)
                 }
                 adapter.changeData(usersList)
-
-                Log.e("Firebase", " Data has been added to adapter successfully ")
+                log("Data has been added to adapter successfully")
             },
             onFailureListener = { e ->
-                Log.e("Firebase", " Error adding Data to adapter: ", e)
+                log("Error adding Data to adapter: $e")
             }
         )
-
     }
-
     override fun onSupportNavigateUp(): Boolean {
         // go to the previous fragment when back button clicked
         onBackPressed()

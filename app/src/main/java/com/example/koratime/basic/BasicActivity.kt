@@ -4,6 +4,7 @@ package com.example.koratime.basic
 
 import android.app.ProgressDialog
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
@@ -14,7 +15,8 @@ abstract class BasicActivity<DB : ViewDataBinding, VM : BasicViewModel<*>> : App
     private lateinit var _viewModel: VM
     protected val dataBinding get() = _dataBinding
     protected val viewModel get() = _viewModel
-
+    abstract val TAG: String
+    private var progressDialog: ProgressDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,7 +30,7 @@ abstract class BasicActivity<DB : ViewDataBinding, VM : BasicViewModel<*>> : App
     abstract fun getLayoutID(): Int
     abstract fun initViewModel(): VM
     abstract fun initView()
-
+    abstract fun callback()
     private fun subscribeToLiveData() {
         _viewModel.showLoading.observe(this) { show ->
             if (show) {
@@ -39,8 +41,9 @@ abstract class BasicActivity<DB : ViewDataBinding, VM : BasicViewModel<*>> : App
         }
     }
 
-
-    private var progressDialog: ProgressDialog? = null
+    protected fun log(value: Any) {
+        Log.e(TAG, value.toString())
+    }
     private fun showLoading() {
         progressDialog = ProgressDialog(this)
         progressDialog?.apply {

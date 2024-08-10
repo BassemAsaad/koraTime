@@ -7,14 +7,14 @@
 
         <variable
             name="vm"
-            type="com.example.koratime.stadiums_manager.manageStadium.ManageStadiumViewModel" />
+            type="com.example.koratime.stadiums.manageStadium.ManageStadiumViewModel" />
 
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".stadiums_manager.manageStadium.ManageStadiumActivity">
+        tools:context=".stadiums.manageStadium.ManageStadiumActivity">
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipeRefresh"

@@ -1,15 +1,12 @@
 package com.example.koratime.registration.create_account
 
-import android.annotation.SuppressLint
 import android.content.Intent
-import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.koratime.R
 import com.example.koratime.basic.BasicActivity
@@ -17,8 +14,11 @@ import com.example.koratime.database.uploadImageToStorage
 import com.example.koratime.databinding.ActivityRegisterBinding
 import com.example.koratime.registration.log_in.LoginActivity
 
+@Suppress("DEPRECATION","SetTextI18n")
 class RegisterActivity : BasicActivity<ActivityRegisterBinding, RegisterViewModel>(),
     RegisterNavigator {
+    override val TAG: String
+        get() = "RegisterActivity"
     private lateinit var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
     private val defaultImageUrl = getString(R.string.default_profile_picture)
 
@@ -31,83 +31,86 @@ class RegisterActivity : BasicActivity<ActivityRegisterBinding, RegisterViewMode
     }
 
     override fun initView() {
-        dataBinding.registerVM = viewModel
-        viewModel.navigator = this
-
         setSupportActionBar(dataBinding.toolbar)
+        callback()
 
-        // Enable back button on Toolbar
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowHomeEnabled(true)
+    }
 
-        dataBinding.logIn.setOnClickListener {
-            openLoginActivity()
+    override fun callback() {
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setDisplayShowHomeEnabled(true)
         }
-        dataBinding.radioGroupLayout.setOnCheckedChangeListener { group, checkedId ->
-            when (checkedId) {
-                R.id.asPlayer_layout -> {
-                    viewModel.showNationalID.value = false
-                }
+        viewModel.apply {
+            navigator = this@RegisterActivity
+            showNationalID.observe(this@RegisterActivity) { showNationalID ->
+                dataBinding.nationalIDLayout.visibility =
+                    if (showNationalID) View.VISIBLE else View.GONE
+            }
+            imageUrl.value = defaultImageUrl
+        }
+        dataBinding.apply {
+            registerVM = viewModel
+            logIn.setOnClickListener {
+                openLoginActivity()
+            }
+            radioGroupLayout.setOnCheckedChangeListener { _, checkedId ->
+                when (checkedId) {
+                    R.id.asPlayer_layout -> {
+                        viewModel.showNationalID.value = false
+                    }
 
-                R.id.asStadiumManager_layout -> {
-                    viewModel.showNationalID.value = true
+                    R.id.asStadiumManager_layout -> {
+                        viewModel.showNationalID.value = true
+                    }
                 }
+            }
+            openImagePicker()
+            profilePictureLayout.setOnClickListener {
+                // Launch the photo picker and let the user choose only images.
+                pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+            }
+
+            viewModel.toastMessage.observe(this@RegisterActivity) { message ->
+                Toast.makeText(this@RegisterActivity, message, Toast.LENGTH_SHORT).show()
             }
         }
 
-        viewModel.showNationalID.observe(this, Observer { showNationalID ->
-            dataBinding.nationalIDLayout.visibility =
-                if (showNationalID) View.VISIBLE else View.GONE
-        })
-
-
-        viewModel.imageUrl.value = defaultImageUrl
-        openImagePicker()
-        dataBinding.profilePictureLayout.setOnClickListener {
-            // Launch the photo picker and let the user choose only images.
-            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-        }
-
-        viewModel.toastMessage.observe(this, Observer { message ->
-            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-        })
     }
 
-
-    @SuppressLint("SetTextI18n")
-    fun openImagePicker() {
+    private fun openImagePicker() {
         // Registers a photo picker activity launcher in single-select mode.
         pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-
             // photo picker
             if (uri != null) {
-                Log.d("PhotoPicker", "Selected URI: $uri")
+                log("PhotoPicker selected URI: $uri")
                 viewModel.showLoading.value = true
                 uploadImageToStorage(uri,
                     onSuccessListener = { downloadUri ->
-                        Log.e("Firebase Storage:", "Image uploaded successfully")
+                        log("Image uploaded successfully to Firebase Storage")
                         // pass imageUrl to view model
-                        viewModel.imageUrl.value = downloadUri.toString()
-                        viewModel.showLoading.value = false
+                        viewModel.apply {
+                            showLoading.value = false
+                            imageUrl.value = downloadUri.toString()
 
+                        }
                     },
                     onFailureListener = {
-                        Log.e("Firebase Storage:", it.localizedMessage!!.toString())
+                        log("Error uploading image to Firebase Storage $it")
                         viewModel.showLoading.value = false
 
                     }
                 )
 
-                dataBinding.profilePictureLayout.setImageURI(uri)
-                dataBinding.profileTextLayout.text = "Change Picture Chosen"
+                dataBinding.apply {
+                    profilePictureLayout.setImageURI(null)
+                    profileTextLayout.text = "Change Picture"
+                }
             } else {
+                viewModel.showLoading.value = false
                 dataBinding.profileTextLayout.text = "Default Picture"
                 Toast.makeText(this, "No image selected", Toast.LENGTH_SHORT).show()
-                Log.d("PhotoPicker", "No image selected")
-
-
-                viewModel.showLoading.value = false
-
+                log("PhotoPicker: No media selected")
             }
         }
     }

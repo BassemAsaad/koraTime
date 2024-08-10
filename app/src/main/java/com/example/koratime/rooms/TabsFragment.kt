@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.example.koratime.R
+import com.example.koratime.adapters.TabsAdapter
 import com.example.koratime.databinding.FragmentTabsBinding
 import com.google.android.material.tabs.TabLayoutMediator
 

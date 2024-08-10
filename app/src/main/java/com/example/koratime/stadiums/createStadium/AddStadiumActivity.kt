@@ -1,8 +1,7 @@
-package com.example.koratime.stadiums_manager.createStadium
+package com.example.koratime.stadiums.createStadium
 
 import android.app.Activity
 import android.content.Intent
-import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
@@ -23,6 +22,8 @@ import com.example.koratime.location.LocationPickerActivity
 @Suppress("DEPRECATION")
 class AddStadiumActivity : BasicActivity<ActivityAddStadiumBinding, AddStadiumViewModel>(),
     AddStadiumNavigator {
+    override val TAG: String
+        get() = "AddStadiumActivity"
 
     private lateinit var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
     private var latitude = 0.0
@@ -66,7 +67,9 @@ class AddStadiumActivity : BasicActivity<ActivityAddStadiumBinding, AddStadiumVi
         })
     }
 
+    override fun callback() {
 
+    }
     private val locationPickerActivityResultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             //get result from location picked from location picker activity

@@ -1,4 +1,4 @@
-package com.example.koratime.stadiums_user
+package com.example.koratime.stadiums.stadiums_user
 
 import com.example.koratime.basic.BasicViewModel
 import com.google.firebase.Firebase
