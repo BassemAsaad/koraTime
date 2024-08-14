@@ -1,4 +1,4 @@
-package com.example.koratime.stadiums.booking_requests
+package com.example.koratime.stadiums.bookingRequests
 
 import androidx.lifecycle.ViewModelProvider
 import com.example.koratime.Constants

@@ -15,8 +15,8 @@ import com.example.koratime.database.updateUserLocationInFirestore
 import com.example.koratime.databinding.ActivityHomeBinding
 import com.example.koratime.friends.FriendsRequestsFragment
 import com.example.koratime.rooms.TabsFragment
-import com.example.koratime.stadiums.stadium_manager.StadiumsManagerFragment
-import com.example.koratime.stadiums.stadiums_user.StadiumsFragment
+import com.example.koratime.stadiums.stadiumManager.StadiumsManagerFragment
+import com.example.koratime.stadiums.stadiumsUser.StadiumsFragment
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 

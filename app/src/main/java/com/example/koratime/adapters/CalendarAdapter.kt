@@ -62,7 +62,6 @@ class CalendarAdapter (private val days: List<Date>?) : RecyclerView.Adapter<Cal
     fun changeDate(date: Date){
         selectedDate = date
         notifyDataSetChanged()
-
     }
 
     var onItemClickListener : OnItemClickListener? = null

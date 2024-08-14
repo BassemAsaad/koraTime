@@ -9,9 +9,8 @@ import com.example.koratime.DataUtils
 import com.example.koratime.R
 import com.example.koratime.adapters.FriendsAdapter
 import com.example.koratime.basic.BasicFragment
-import com.example.koratime.chat.chat_friends.ChatFriendsActivity
+import com.example.koratime.chat.chatFriends.ChatFriendsActivity
 import com.example.koratime.database.getFriendsFromFirestore
-import com.example.koratime.database.removeFriendFromFirestore
 import com.example.koratime.databinding.FragmentChatBinding
 import com.example.koratime.model.FriendModel
 

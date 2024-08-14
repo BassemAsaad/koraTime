@@ -3,7 +3,6 @@ package com.example.koratime.stadiums.manageStadium
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -19,6 +18,7 @@ import com.example.koratime.DataUtils
 import com.example.koratime.R
 import com.example.koratime.adapters.CalendarAdapter
 import com.example.koratime.adapters.TimeSlotsForManagerAdapter
+import com.example.koratime.adapters.parentAdapters.ManageStadiumAdapter
 import com.example.koratime.basic.BasicActivity
 import com.example.koratime.database.addBookingToFirestore
 import com.example.koratime.database.deleteStadiumFromFirestore
@@ -28,7 +28,7 @@ import com.example.koratime.database.removeBookingFromFirestore
 import com.example.koratime.database.uploadMultipleImagesToStorage
 import com.example.koratime.databinding.ActivityManageStadiumBinding
 import com.example.koratime.model.StadiumModel
-import com.example.koratime.stadiums.booking_requests.BookingRequestsActivity
+import com.example.koratime.stadiums.bookingRequests.BookingRequestsActivity
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -42,6 +42,7 @@ class ManageStadiumActivity : BasicActivity<ActivityManageStadiumBinding, Manage
 
     private var timeSlotsAdapter = TimeSlotsForManagerAdapter(emptyList(), emptyList())
     private var calendarAdapter = CalendarAdapter(emptyList())
+    private lateinit var manageStadiumAdapter : ManageStadiumAdapter
 
     private lateinit var timeSlotsList: List<String>
     private lateinit var availableSlots: List<String>
@@ -85,11 +86,15 @@ class ManageStadiumActivity : BasicActivity<ActivityManageStadiumBinding, Manage
 
         dataBinding.apply {
             calendarAdapter = CalendarAdapter(viewModel.generateNextTwoWeeks())
-            calendarRecyclerView.adapter = calendarAdapter
             getTimeSlots(selectedDate)
-            slotsRecyclerView.adapter = timeSlotsAdapter
+//            calendarRecyclerView.adapter = calendarAdapter
+//            slotsRecyclerView.adapter = timeSlotsAdapter
 
-            dateTitle.text = selectedYear
+//            dateTitle.text = selectedYear
+
+
+            manageStadiumAdapter = ManageStadiumAdapter(calendarAdapter, timeSlotsAdapter)
+            parentRecyclerView.adapter= manageStadiumAdapter
             swipeRefresh.setOnRefreshListener {
                 dataBinding.swipeRefresh.isRefreshing = false
                 getStadiumImages()
@@ -109,87 +114,92 @@ class ManageStadiumActivity : BasicActivity<ActivityManageStadiumBinding, Manage
                 holder: CalendarAdapter.CalendarViewHolder,
                 position: Int
             ) {
-                calendarAdapter.changeDate(date!!)
-                selectedDate = SimpleDateFormat("MM_dd_yyyy", Locale.getDefault()).format(date)
+                selectedDate = SimpleDateFormat("MM_dd_yyyy", Locale.getDefault()).format(date!!)
                 log("Date selected: $selectedDate")
                 selectedYear = SimpleDateFormat("MMM d, yyyy", Locale.getDefault()).format(date)
-                dataBinding.dateTitle.text = selectedYear
+
+                calendarAdapter.changeDate(date)
+                manageStadiumAdapter.changeDateTitle(selectedYear)
                 getTimeSlots(selectedDate)
             }
         }
 
         timeSlotsAdapter.onBookClickListener = object : TimeSlotsForManagerAdapter.OnBookClickListener {
             override fun onclick(slot: String, holder: TimeSlotsForManagerAdapter.ViewHolder, position: Int) {
-                holder.dataBinding.apply {
-                    tvTimeSlot.setOnLongClickListener {
-                        removeBookingFromFirestore(
-                            timeSlot = tvTimeSlot.text.toString(),
-                            stadiumID = stadiumModel.stadiumID!!,
-                            date = selectedDate,
-                            onSuccessListener = {
-                                log("Book has been Removed successfully from firestore")
-                                holder.dataBinding.apply {
-                                    tvTimeSlot.apply {
-                                        isEnabled = true
-                                        setTextColor((Color.BLACK))
-                                    }
-                                    btnBook.apply {
-                                        isEnabled = true
-                                        text = "Book"
-                                        backgroundTintList = null
-                                    }
+                    addBookingToFirestore(
+                        timeSlot = holder.dataBinding.tvTimeSlot.text.toString(),
+                        stadiumID = stadiumModel.stadiumID!!,
+                        date = selectedDate,
+                        user = DataUtils.user!!,
+                        onSuccessListener = {
+                            log(" ${holder.dataBinding.tvTimeSlot.text} booked on  " +
+                                    "$selectedDate from userId: ${DataUtils.user!!.id!!} " +
+                                    "to the stadiumID: ${stadiumModel.stadiumID}")
+                            holder.dataBinding.apply {
+                                tvTimeSlot.apply {
+                                    isEnabled = false
+                                    setTextColor((Color.GRAY))
+
                                 }
-                                Toast.makeText(
-                                    this@ManageStadiumActivity,
-                                    "${holder.dataBinding.tvTimeSlot.text} Book Removed Successfully",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                                getTimeSlots(selectedDate)
-                            },
-                            onFailureListener = {
-                                log("Error Removing Book from firestore $it")
+                                btnBook.apply {
+                                    isEnabled = false
+                                    text = "Booked"
+                                    backgroundTintList = ColorStateList.valueOf(Color.GRAY)
+                                }
                             }
 
-                        )
-                        true
-                    }
-                    btnBook.setOnClickListener {
-                        addBookingToFirestore(
-                            timeSlot = holder.dataBinding.tvTimeSlot.text.toString(),
-                            stadiumID = stadiumModel.stadiumID!!,
-                            date = selectedDate,
-                            user = DataUtils.user!!,
-                            onSuccessListener = {
-                                log(" ${holder.dataBinding.tvTimeSlot.text} booked on  $selectedDate from userId: ${DataUtils.user!!.id!!} to the stadiumID: ${stadiumModel.stadiumID}")
-                                holder.dataBinding.apply {
-                                    tvTimeSlot.apply {
-                                        isEnabled = false
-                                        setTextColor((Color.GRAY))
+                            Toast.makeText(this@ManageStadiumActivity,
+                                "${holder.dataBinding.tvTimeSlot.text} Booked Successfully",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            getTimeSlots(selectedDate)
 
-                                    }
-                                    btnBook.apply {
-                                        isEnabled = false
-                                        text = "Booked"
-                                        backgroundTintList = ColorStateList.valueOf(Color.GRAY)
-                                    }
-                                }
-
-                                Toast.makeText(this@ManageStadiumActivity,
-                                    "${holder.dataBinding.tvTimeSlot.text} Booked Successfully",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                                getTimeSlots(selectedDate)
-
-                            },
-                            onFailureListener = { e ->
-                                log("Error Removing Book from firestore $e")
-                            }
-                        )
-                    }
-                }
-
+                        },
+                        onFailureListener = { e ->
+                            log("Error Removing Book from firestore $e")
+                        }
+                    )
             }
         }
+        timeSlotsAdapter.onTimeSlotClickListener = object : TimeSlotsForManagerAdapter.OnTimeSlotClickListener {
+            override fun onclick(
+                slot: String,
+                holder: TimeSlotsForManagerAdapter.ViewHolder,
+                position: Int
+            ) {
+                removeBookingFromFirestore(
+                    timeSlot = holder.dataBinding.tvTimeSlot.text.toString(),
+                    stadiumID = stadiumModel.stadiumID!!,
+                    date = selectedDate,
+                    onSuccessListener = {
+                        log("Book has been Removed successfully from firestore")
+                        holder.dataBinding.apply {
+                            tvTimeSlot.apply {
+                                isEnabled = true
+                                setTextColor((Color.BLACK))
+                            }
+                            btnBook.apply {
+                                isEnabled = true
+                                text = "Book"
+                                backgroundTintList = null
+                            }
+                        }
+                        Toast.makeText(
+                            this@ManageStadiumActivity,
+                            "${holder.dataBinding.tvTimeSlot.text} Book Removed Successfully",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        getTimeSlots(selectedDate)
+                    },
+                    onFailureListener = {
+                        log("Error Removing Book from firestore $it")
+                    }
+
+                )
+            }
+        }
+
+
     }
 
     private fun getTimeSlots(date: String) {
@@ -209,8 +219,7 @@ class ManageStadiumActivity : BasicActivity<ActivityManageStadiumBinding, Manage
                 )
                 log("TimeSlots List: $timeSlotsList")
 
-                availableSlots =
-                    viewModel.removeBookedListFromOpeningTimes(timeSlotsList, bookedTimesList)
+                availableSlots = viewModel.removeBookedListFromOpeningTimes(timeSlotsList, bookedTimesList)
                 log("AvailableSlots List: $availableSlots")
 
                 timeSlotsAdapter.updateTimeSlots(timeSlotsList, bookedTimesList)
@@ -235,7 +244,6 @@ class ManageStadiumActivity : BasicActivity<ActivityManageStadiumBinding, Manage
                 }
 
                 if (imageList.isNotEmpty()) {
-                    dataBinding.stadiumImages.visibility = View.VISIBLE
                     dataBinding.imageSlider.visibility = View.VISIBLE
                     dataBinding.imageSlider.setImageList(imageList, ScaleTypes.FIT)
                 }
@@ -291,30 +299,29 @@ class ManageStadiumActivity : BasicActivity<ActivityManageStadiumBinding, Manage
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.booking_requests -> {
-                val intent = Intent(this, BookingRequestsActivity::class.java)
-                intent.putExtra(Constants.STADIUM, viewModel.stadium)
-                startActivity(intent)
+                openBookingRequestsActivity()
                 return true
             }
             R.id.delete_stadium -> {
-                deleteStadiumFromFirestore(
-                    stadiumID = stadiumModel.stadiumID!!,
-                    onSuccessListener = {
-                        log("Stadium Removed Successfully from firestore")
-                        finish()
-                        },
-                    onFailureListener = {
-                        log("Error Removing Stadium from firestore")
-                    }
-                )
+                viewModel.deleteStadium()
                 return true
-
             }
-            }
+        }
 
         return  super.onOptionsItemSelected(item)
     }
 
+    override fun closeActivity() {
+        finish()
+
+    }
+
+    override fun openBookingRequestsActivity() {
+        val intent = Intent(this, BookingRequestsActivity::class.java)
+        intent.putExtra(Constants.STADIUM, viewModel.stadium)
+        startActivity(intent)
+
+    }
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true

@@ -36,10 +36,10 @@
             android:name=".stadiums.manageStadium.ManageStadiumActivity"
             android:exported="false" />
         <activity
-            android:name=".chat.chat_friends.ChatFriendsActivity"
+            android:name=".chat.chatFriends.ChatFriendsActivity"
             android:exported="false" />
         <activity
-            android:name=".rooms.room_chat.RoomChatActivity"
+            android:name=".rooms.roomChat.RoomChatActivity"
             android:exported="false" />
         <activity
             android:name=".stadiums.createStadium.AddStadiumActivity"
@@ -64,13 +64,13 @@
             android:name=".registration.create_account.RegisterActivity"
             android:exported="true" />
         <activity
-            android:name=".registration.log_in.LoginActivity"
+            android:name=".registration.login.LoginActivity"
             android:exported="true" />
         <activity
             android:name=".home.HomeActivity"
             android:exported="true" />
         <activity
-            android:name=".stadiums.booking_requests.BookingRequestsActivity"
+            android:name=".stadiums.bookingRequests.BookingRequestsActivity"
             android:exported="true" />
 
         <activity

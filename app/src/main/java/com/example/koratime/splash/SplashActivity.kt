@@ -6,7 +6,7 @@ import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import com.example.koratime.R
-import com.example.koratime.registration.log_in.LoginActivity
+import com.example.koratime.registration.login.LoginActivity
 
 
 class SplashActivity : AppCompatActivity() {

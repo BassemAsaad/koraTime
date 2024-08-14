@@ -1,4 +1,4 @@
-package com.example.koratime.rooms.room_chat
+package com.example.koratime.rooms.roomChat
 
 import android.util.Log
 import androidx.databinding.ObservableField

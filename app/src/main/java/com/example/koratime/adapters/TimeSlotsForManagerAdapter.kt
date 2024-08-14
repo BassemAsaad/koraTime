@@ -39,9 +39,6 @@ class TimeSlotsForManagerAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val timeSlot = timeSlots[position]
         holder.bind(timeSlot)
-        holder.itemView.setOnClickListener {
-            onBookClickListener?.onclick(timeSlot, holder, position)
-        }
         if (bookedTimesList.contains(timeSlot)) {
             // Slot is already booked
             holder.dataBinding.apply {
@@ -61,12 +58,23 @@ class TimeSlotsForManagerAdapter(
                 btnBook.backgroundTintList = null
             }
         }
-
+        holder.dataBinding.tvTimeSlot.setOnLongClickListener {
+            onTimeSlotClickListener?.onclick(timeSlot, holder, position)
+            true
+        }
+        holder.dataBinding.btnBook.setOnClickListener {
+            onBookClickListener?.onclick(timeSlot, holder, position)
+        }
     }
 
 
-    var onBookClickListener: OnBookClickListener? = null
+    var onTimeSlotClickListener: OnTimeSlotClickListener? = null
 
+    interface OnTimeSlotClickListener {
+        fun onclick(slot: String, holder: ViewHolder, position: Int)
+    }
+
+    var onBookClickListener: OnBookClickListener? = null
     interface OnBookClickListener {
         fun onclick(slot: String, holder: ViewHolder, position: Int)
     }

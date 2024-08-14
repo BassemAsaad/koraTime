@@ -1,4 +1,4 @@
-package com.example.koratime.stadiums.booking_requests
+package com.example.koratime.stadiums.bookingRequests
 
 import android.util.Log
 import com.example.koratime.adapters.BookingRequestsAdapter

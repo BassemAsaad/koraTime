@@ -20,7 +20,7 @@ import com.example.koratime.database.removeRoomFromFirestore
 import com.example.koratime.databinding.FragmentPrivateRoomsBinding
 import com.example.koratime.model.RoomModel
 import com.example.koratime.rooms.createRoom.AddRoomActivity
-import com.example.koratime.rooms.room_chat.RoomChatActivity
+import com.example.koratime.rooms.roomChat.RoomChatActivity
 
 class PrivateRoomsFragment : Fragment(), PrivateRoomsNavigator {
 

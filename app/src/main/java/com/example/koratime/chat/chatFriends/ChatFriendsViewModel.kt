@@ -1,4 +1,4 @@
-package com.example.koratime.chat.chat_friends
+package com.example.koratime.chat.chatFriends
 
 import android.util.Log
 import androidx.databinding.ObservableField

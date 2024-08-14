@@ -7,7 +7,7 @@
 
         <variable
             name="vm"
-            type="com.example.koratime.stadiums.stadium_manager.StadiumsManagerViewModel" />
+            type="com.example.koratime.stadiums.stadiumManager.StadiumsManagerViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

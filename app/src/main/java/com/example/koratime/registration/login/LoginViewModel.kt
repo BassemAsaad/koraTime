@@ -1,4 +1,4 @@
-package com.example.koratime.registration.log_in
+package com.example.koratime.registration.login
 
 
 import android.util.Log

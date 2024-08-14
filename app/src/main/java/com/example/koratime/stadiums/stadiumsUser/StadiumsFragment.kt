@@ -1,4 +1,4 @@
-package com.example.koratime.stadiums.stadiums_user
+package com.example.koratime.stadiums.stadiumsUser
 
 import android.content.Intent
 import android.util.Log
@@ -14,7 +14,7 @@ import com.example.koratime.basic.BasicFragment
 import com.example.koratime.database.getAllStadiumsFromFirestore
 import com.example.koratime.databinding.FragmentStadiumsBinding
 import com.example.koratime.model.StadiumModel
-import com.example.koratime.registration.log_in.LoginActivity
+import com.example.koratime.registration.login.LoginActivity
 import com.example.koratime.stadiums.bookStadium.BookingStadiumActivity
 
 class StadiumsFragment : BasicFragment<FragmentStadiumsBinding, StadiumsViewModel>(),

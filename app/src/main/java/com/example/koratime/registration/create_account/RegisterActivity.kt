@@ -1,7 +1,6 @@
 package com.example.koratime.registration.create_account
 
 import android.content.Intent
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
@@ -12,7 +11,7 @@ import com.example.koratime.R
 import com.example.koratime.basic.BasicActivity
 import com.example.koratime.database.uploadImageToStorage
 import com.example.koratime.databinding.ActivityRegisterBinding
-import com.example.koratime.registration.log_in.LoginActivity
+import com.example.koratime.registration.login.LoginActivity
 
 @Suppress("DEPRECATION","SetTextI18n")
 class RegisterActivity : BasicActivity<ActivityRegisterBinding, RegisterViewModel>(),

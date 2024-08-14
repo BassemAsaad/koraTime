@@ -17,7 +17,7 @@ import com.example.koratime.adapters.PublicRoomsAdapter
 import com.example.koratime.database.getAllRoomsFromFirestore
 import com.example.koratime.databinding.FragmentPublicRoomsBinding
 import com.example.koratime.model.RoomModel
-import com.example.koratime.rooms.room_chat.RoomChatActivity
+import com.example.koratime.rooms.roomChat.RoomChatActivity
 
 class PublicRoomsFragment : Fragment(), PublicRoomsNavigator {
 

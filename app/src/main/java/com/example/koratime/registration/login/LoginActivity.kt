@@ -1,7 +1,6 @@
-package com.example.koratime.registration.log_in
+package com.example.koratime.registration.login
 
 import android.content.Intent
-import android.os.Bundle
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider

@@ -1,4 +1,4 @@
-package com.example.koratime.stadiums.stadium_manager
+package com.example.koratime.stadiums.stadiumManager
 
 import android.content.Intent
 import android.util.Log
@@ -13,7 +13,7 @@ import com.example.koratime.basic.BasicFragment
 import com.example.koratime.database.getUserStadiumFromFirestore
 import com.example.koratime.databinding.FragmentStadiumsManagerBinding
 import com.example.koratime.model.StadiumModel
-import com.example.koratime.registration.log_in.LoginActivity
+import com.example.koratime.registration.login.LoginActivity
 import com.example.koratime.stadiums.createStadium.AddStadiumActivity
 import com.example.koratime.stadiums.manageStadium.ManageStadiumActivity
 

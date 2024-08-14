@@ -1,4 +1,4 @@
-package com.example.koratime.stadiums.stadium_manager
+package com.example.koratime.stadiums.stadiumManager
 
 interface StadiumsManagerNavigator {
     fun createStadiumActivity()
