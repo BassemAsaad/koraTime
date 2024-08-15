@@ -20,7 +20,7 @@
             android:id="@+id/swipeRefresh"
             android:layout_width="match_parent"
             android:layout_height="70dp"
-            app:layout_constraintBottom_toTopOf="@id/scrollView"
+            app:layout_constraintBottom_toTopOf="@id/parent_layout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -56,6 +56,7 @@
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/parent_layout"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -74,49 +75,6 @@
                     app:layout_constraintTop_toTopOf="parent"
 
                     >
-
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
-                        android:paddingHorizontal="15dp">
-
-                        <ImageView
-                            android:id="@+id/image_picker"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:contentDescription="@string/add_multiple_stadium_pictures"
-                            android:src="@drawable/ic_add_images"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toStartOf="@id/image_picker_textView"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/image_picker_textView"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:text="@string/add_multiple_stadium_pictures"
-                            android:textSize="14sp"
-                            app:layout_constraintBottom_toBottomOf="@+id/image_picker"
-                            app:layout_constraintStart_toEndOf="@id/image_picker"
-                            app:layout_constraintTop_toTopOf="@+id/image_picker" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <com.denzcoskun.imageslider.ImageSlider
-                        android:id="@+id/image_slider"
-                        android:layout_width="match_parent"
-                        android:layout_height="200dp"
-                        android:layout_marginBottom="15dp"
-                        android:visibility="gone"
-                        app:iss_auto_cycle="true"
-                        app:iss_delay="1000"
-                        app:iss_period="1500"
-                        app:iss_title_background="@color/transparent" />
-
-
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/parent_recycler_view"
                         android:layout_width="match_parent"
@@ -124,7 +82,6 @@
                         android:layout_gravity="center"
                         android:paddingHorizontal="15dp"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        android:layout_marginTop="16dp"
                         />
                 </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>

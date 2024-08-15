@@ -3,10 +3,14 @@ package com.example.koratime.stadiums.bookingRequests
 import android.util.Log
 import com.example.koratime.adapters.BookingRequestsAdapter
 import com.example.koratime.basic.BasicViewModel
+import com.example.koratime.chat.ChatViewModel
 import com.example.koratime.database.getBookingRequestsFromFirestore
 import com.example.koratime.model.StadiumModel
 
 class BookingRequestsViewModel : BasicViewModel<BookingRequestsNavigator>() {
+    override val TAG: String
+        get() = BookingRequestsViewModel::class.java.simpleName
+
     var stadium = StadiumModel()
     var adapter = BookingRequestsAdapter(emptyList())
 

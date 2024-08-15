@@ -4,12 +4,16 @@ import android.util.Log
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import com.example.koratime.basic.BasicViewModel
+import com.example.koratime.chat.ChatViewModel
 import com.example.koratime.database.addUserToFirestore
 import com.example.koratime.model.UserModel
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 
 class RegisterViewModel : BasicViewModel<RegisterNavigator>() {
+    override val TAG: String
+        get() = RegisterViewModel::class.java.simpleName
+
     val firstName = ObservableField<String>()
     val firstNameError = ObservableField<String>()
 

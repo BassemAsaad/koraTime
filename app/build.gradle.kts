@@ -72,8 +72,7 @@ dependencies {
 
     //notification push
     implementation ("com.github.YarikSOffice:lingver:1.3.0")
-
-
+    
     //navigation
     implementation ("androidx.navigation:navigation-fragment-ktx:2.7.7")
     implementation ("androidx.navigation:navigation-ui-ktx:2.7.7")

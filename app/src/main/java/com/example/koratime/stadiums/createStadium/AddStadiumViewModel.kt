@@ -5,11 +5,14 @@ import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import com.example.koratime.DataUtils
 import com.example.koratime.basic.BasicViewModel
+import com.example.koratime.chat.ChatViewModel
 import com.example.koratime.database.addStadiumToFirestore
 import com.example.koratime.model.StadiumModel
 
 
 class AddStadiumViewModel : BasicViewModel<AddStadiumNavigator>() {
+    override val TAG: String
+        get() = AddStadiumViewModel::class.java.simpleName
 
     val stadiumName = ObservableField<String>()
     val stadiumNameError = ObservableField<String>()

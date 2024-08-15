@@ -2,9 +2,11 @@ package com.example.koratime.rooms.privateRooms
 
 import androidx.lifecycle.MutableLiveData
 import com.example.koratime.basic.BasicViewModel
+import com.example.koratime.chat.ChatViewModel
 
 class PrivateRoomsViewModel : BasicViewModel<PrivateRoomsFragment>() {
-
+    override val TAG: String
+        get() = PrivateRoomsFragment::class.java.simpleName
     val password = MutableLiveData<String>()
     val passwordError = MutableLiveData<String>()
     val roomPassword = MutableLiveData<String>()

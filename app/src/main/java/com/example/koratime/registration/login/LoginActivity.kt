@@ -23,9 +23,9 @@ class LoginActivity
     override fun callback() {
         viewModel.apply {
             navigator = this@LoginActivity
-            toastMessage.observe(this@LoginActivity, Observer { message ->
+            toastMessage.observe(this@LoginActivity) { message ->
                 Toast.makeText(this@LoginActivity, message, Toast.LENGTH_SHORT).show()
-            })
+            }
         }
 
         dataBinding.apply {

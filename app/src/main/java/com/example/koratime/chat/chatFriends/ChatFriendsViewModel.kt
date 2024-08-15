@@ -5,12 +5,15 @@ import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import com.example.koratime.DataUtils
 import com.example.koratime.basic.BasicViewModel
+import com.example.koratime.chat.ChatViewModel
 import com.example.koratime.database.addFriendMessageToFirestore
 import com.example.koratime.model.FriendMessageModel
 import com.example.koratime.model.FriendModel
 import java.util.Date
 
 class ChatFriendsViewModel : BasicViewModel<ChatFriendsNavigator>() {
+    override val TAG: String
+        get() = ChatFriendsViewModel::class.java.simpleName
     val messageField = ObservableField<String>()
     val messageFieldError = ObservableField<String>()
     var friend: FriendModel? = null

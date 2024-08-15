@@ -11,12 +11,15 @@ import androidx.core.app.ActivityCompat
 import com.example.koratime.Constants
 import com.example.koratime.DataUtils
 import com.example.koratime.basic.BasicViewModel
+import com.example.koratime.chat.ChatViewModel
 import com.example.koratime.database.updateUserLocationInFirestore
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import java.util.Locale
 
 class HomeViewModel : BasicViewModel<HomeNavigator>() {
+    override val TAG: String
+        get() = HomeViewModel::class.java.simpleName
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
     @SuppressLint("MissingPermission")

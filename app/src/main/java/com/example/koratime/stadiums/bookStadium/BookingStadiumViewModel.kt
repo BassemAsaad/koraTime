@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.databinding.ObservableField
 import com.example.koratime.DataUtils
 import com.example.koratime.basic.BasicViewModel
+import com.example.koratime.chat.ChatViewModel
 import com.example.koratime.database.addStadiumRoomToFirestore
 import com.example.koratime.database.checkCounterInFirestore
 import com.example.koratime.database.getPlayersIdListFromFirestore
@@ -15,6 +16,9 @@ import com.example.koratime.model.StadiumModel
 
 
 class BookingStadiumViewModel : BasicViewModel<BookingStadiumNavigator>() {
+    override val TAG: String
+        get() = BookingStadiumViewModel::class.java.simpleName
+
     var stadium: StadiumModel? = null
     val lookForPlayers = ObservableField<String>()
     val buttonEnabled = ObservableField<Boolean>()

@@ -5,12 +5,16 @@ import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import com.example.koratime.DataUtils
 import com.example.koratime.basic.BasicViewModel
+import com.example.koratime.chat.ChatViewModel
 import com.example.koratime.database.addRoomMessageToFirestore
 import com.example.koratime.model.RoomMessageModel
 import com.example.koratime.model.RoomModel
 import java.util.Date
 
 class RoomChatViewModel : BasicViewModel<RoomChatNavigator>() {
+    override val TAG: String
+        get() = RoomChatViewModel::class.java.simpleName
+
     val messageField = ObservableField<String>()
     val messageFieldError = ObservableField<String>()
 

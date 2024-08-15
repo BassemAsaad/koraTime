@@ -6,6 +6,7 @@ import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import com.example.koratime.DataUtils
 import com.example.koratime.basic.BasicViewModel
+import com.example.koratime.chat.ChatViewModel
 import com.example.koratime.database.getUserFromFirestore
 import com.example.koratime.model.UserModel
 import com.google.android.gms.tasks.OnSuccessListener
@@ -14,6 +15,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 
 class LoginViewModel : BasicViewModel<LoginNavigator>() {
+    override val TAG: String
+        get() = LoginViewModel::class.java.simpleName
 
     val emailLogin = ObservableField<String>()
     val emailErrorLogin = ObservableField<String>()
