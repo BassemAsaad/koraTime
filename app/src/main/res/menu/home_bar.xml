@@ -7,7 +7,9 @@
     <item
         android:id="@+id/rooms_bar"
         android:icon="@drawable/ic_rooms"
-        android:title="Rooms" />
+        android:title="Rooms"
+        
+        />
     <item
         android:id="@+id/friends_bar"
         android:icon="@drawable/ic_friends"

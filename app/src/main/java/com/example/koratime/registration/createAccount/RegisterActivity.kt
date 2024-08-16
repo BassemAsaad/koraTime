@@ -1,4 +1,4 @@
-package com.example.koratime.registration.create_account
+package com.example.koratime.registration.createAccount
 
 import android.content.Intent
 import android.view.View

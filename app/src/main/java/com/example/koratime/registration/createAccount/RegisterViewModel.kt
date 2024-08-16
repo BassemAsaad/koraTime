@@ -1,10 +1,9 @@
-package com.example.koratime.registration.create_account
+package com.example.koratime.registration.createAccount
 
 import android.util.Log
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import com.example.koratime.basic.BasicViewModel
-import com.example.koratime.chat.ChatViewModel
 import com.example.koratime.database.addUserToFirestore
 import com.example.koratime.model.UserModel
 import com.google.firebase.Firebase

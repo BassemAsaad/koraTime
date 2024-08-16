@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/stadium_location_menu"
+        android:icon="@drawable/ic_location_picker"
+        android:title="Stadium Location"
+
+        />
+
+    <item
+        android:id="@+id/call_stadium_menu"
+        android:icon="@drawable/ic_call"
+        android:title="Call Stadium Manager" />
+</menu>

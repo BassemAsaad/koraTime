@@ -12,7 +12,6 @@
         <import type="android.view.View" />
     </data>
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -22,7 +21,7 @@
             android:id="@+id/swipeRefresh"
             android:layout_width="match_parent"
             android:layout_height="70dp"
-            app:layout_constraintBottom_toTopOf="@id/scrollView"
+            app:layout_constraintBottom_toTopOf="@id/parent_layout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -31,7 +30,7 @@
                 android:id="@+id/app_bar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/primary"
+                android:background="@drawable/shape_tab_indicator"
                 android:elevation="0dp"
                 android:fitsSystemWindows="true">
 
@@ -39,171 +38,43 @@
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
-
                 </com.google.android.material.appbar.MaterialToolbar>
             </com.google.android.material.appbar.AppBarLayout>
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-        <ScrollView
-            android:id="@+id/scrollView"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/parent_layout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/swipeRefresh">
+            app:layout_constraintTop_toBottomOf="@+id/swipeRefresh"
+            android:layout_marginTop="15dp">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
 
-                <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/guide_line"
+                >
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/parent_recycler_view"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layout_constraintGuide_begin="10dp" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/guide_line">
-
-                    <TextView
-                        android:id="@+id/stadium_location"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="start"
-                        android:layout_marginStart="15dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="5dp"
-                        android:background="@drawable/shape_type_message"
-                        android:backgroundTint="#C7E1F6"
-                        android:drawableStart="@drawable/ic_location_picker"
-                        android:drawablePadding="5dp"
-                        android:padding="8dp"
-                        android:text="View Stadium Location"
-                        android:textColor="@color/blue"
-                        android:textSize="15sp" />
-
-                    <TextView
-                        android:id="@+id/stadium_number"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginEnd="15dp"
-                        android:layout_marginBottom="5dp"
-                        android:background="@drawable/shape_type_message"
-                        android:backgroundTint="#96E79A"
-                        android:drawableStart="@drawable/ic_call"
-                        android:drawablePadding="5dp"
-                        android:padding="8dp"
-                        android:text="Call Stadium Manager"
-                        android:textColor="#084D0B"
-                        android:textSize="15sp" />
-
-                    <TextView
-                        android:id="@+id/stadium_images"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="5dp"
-                        android:text="@string/stadium_images"
-                        android:textSize="20sp"
-                        android:visibility="gone" />
-
-                    <com.denzcoskun.imageslider.ImageSlider
-                        android:id="@+id/image_slider"
-                        android:layout_width="match_parent"
-                        android:layout_height="200dp"
-                        android:layout_marginBottom="15dp"
-                        android:visibility="gone"
-                        app:iss_auto_cycle="true"
-                        app:iss_delay="1000"
-                        app:iss_period="1500"
-                        app:iss_title_background="@color/transparent" />
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="15dp">
-
-                        <TextView
-                            android:id="@+id/look_for_players"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginVertical="15dp"
-                            android:layout_marginStart="4dp"
-                            android:enabled="@{vm.buttonEnabled}"
-                            android:gravity="center"
-                            android:onClick="@{()->vm.lookForPlayers()}"
-                            android:text="@={vm.lookForPlayers}"
-                            android:textColor="@color/blue_light"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            tools:text="Find Players" />
-
-                        <Button
-                            android:id="@+id/stopSearching"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:onClick="@{()->vm.stopSearching()}"
-                            android:text="Stop Searching?"
-                            android:visibility="@{vm.buttonVisibility==true? View.VISIBLE:View.GONE }"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toEndOf="@id/look_for_players"
-                            app:layout_constraintTop_toTopOf="parent" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <CalendarView
-                        android:id="@+id/calendarView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="10dp"
-                        android:dateTextAppearance="@style/calendar_style" />
-
-                    <TextView
-                        android:id="@+id/bookingTimes_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginVertical="20dp"
-                        android:text="@string/stadium_available_times"
-                        android:textSize="20sp" />
-
-                    <TextView
-                        android:id="@+id/bookingPrice"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="start"
-                        android:layout_marginVertical="20dp"
-                        android:layout_marginStart="5dp"
-                        android:text="Note: Booking Price is 880EGP (per hour)"
-                        android:textSize="20sp" />
-
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recyclerView"
-                        android:layout_width="match_parent"
-                        android:layout_height="600dp"
-                        android:layout_gravity="center"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-                </LinearLayout>
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </ScrollView>
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:paddingHorizontal="15dp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    />
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 
 </layout>

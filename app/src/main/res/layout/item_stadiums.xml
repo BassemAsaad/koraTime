@@ -11,54 +11,97 @@
 
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="5dp"
-        android:layout_marginTop="30dp">
-
-        <TextView
-            android:id="@+id/stadium_name_item"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingHorizontal="10dp"
-            android:text="@{stadiumModel.stadiumName}"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toTopOf="@id/stadium_img_item"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Stadium Name" />
+        android:layout_marginTop="30dp"
+        app:cardCornerRadius="25dp"
+        >
 
 
-        <ImageView
-            android:id="@+id/stadium_img_item"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="160dp"
-            android:scaleType="centerCrop"
-            app:imageUrl="@{stadiumModel.stadiumImageUrl}"
-            app:layout_constraintBottom_toTopOf="@id/stadium_description_item"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/stadium_name_item"
-            tools:src="@drawable/stadium_img" />
-
-        <TextView
-            android:id="@+id/stadium_description_item"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:paddingHorizontal="5dp"
-            android:text="@{stadiumModel.stadiumDescription}"
-            android:textColor="@color/dark_grey"
-            android:textSize="20sp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/stadium_img_item"
-            tools:text="Why are football's biggest clubs starting a new tournament?" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/stadium_img_card"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                app:cardCornerRadius="25dp">
+
+                <ImageView
+                    android:id="@+id/stadium_img_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY"
+                    app:imageUrl="@{stadiumModel.stadiumImageUrl}"
+                    tools:src="@drawable/stadium_img" />
+            </androidx.cardview.widget.CardView>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:paddingHorizontal="10dp"
+                android:layout_marginHorizontal="8dp"
+                >
+
+                <TextView
+                    android:id="@+id/stadium_name_item"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{stadiumModel.stadiumName}"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Stadium Name"
+                    android:textStyle="bold"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:text="@{stadiumModel.stadiumPrice}"
+                    tools:text="£5 Per Hour"
+                    android:textSize="14sp"
+                    />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+            <TextView
+                android:id="@+id/stadium_description_item"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="12dp"
+                android:paddingHorizontal="10dp"
+                android:text="@{stadiumModel.stadiumDescription}"
+                android:textColor="@color/dark_grey"
+                android:textSize="16sp"
+                tools:text="Why are football's biggest clubs starting a new tournament?"
+                android:maxLines="2"
+                android:ellipsize="marquee"
+                />
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
 
 
 </layout>

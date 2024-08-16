@@ -61,7 +61,7 @@
             android:name=".rooms.createRoom.AddRoomActivity"
             android:exported="false" />
         <activity
-            android:name=".registration.create_account.RegisterActivity"
+            android:name=".registration.createAccount.RegisterActivity"
             android:exported="true" />
         <activity
             android:name=".registration.login.LoginActivity"

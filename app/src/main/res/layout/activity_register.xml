@@ -9,7 +9,7 @@
 
         <variable
             name="registerVM"
-            type="com.example.koratime.registration.create_account.RegisterViewModel" />
+            type="com.example.koratime.registration.createAccount.RegisterViewModel" />
     </data>
 
     <ScrollView
