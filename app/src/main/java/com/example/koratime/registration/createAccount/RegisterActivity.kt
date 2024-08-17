@@ -18,7 +18,21 @@ class RegisterActivity : BasicActivity<ActivityRegisterBinding, RegisterViewMode
     RegisterNavigator {
     override val TAG: String
         get() = "RegisterActivity"
-    private lateinit var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
+    private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+        // photo picker
+        if (uri != null) {
+            log("PhotoPicker selected URI: $uri")
+            viewModel.imagesUri.value = uri
+            dataBinding.apply {
+                profilePictureLayout.setImageURI(uri)
+                profileTextLayout.text = "Change Picture"
+            }
+        } else {
+            dataBinding.profileTextLayout.text = "Default Picture"
+            Toast.makeText(this, "No image selected", Toast.LENGTH_SHORT).show()
+            log("PhotoPicker: No media selected")
+        }
+    }
 
     override fun getLayoutID(): Int {
         return R.layout.activity_register
@@ -38,11 +52,13 @@ class RegisterActivity : BasicActivity<ActivityRegisterBinding, RegisterViewMode
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
             setDisplayShowHomeEnabled(true)
+            setDisplayShowTitleEnabled(false)
         }
         viewModel.apply {
             navigator = this@RegisterActivity
             dataBinding.registerVM = viewModel
             imageUrl.value = getString(R.string.default_profile_picture)
+
             showNationalID.observe(this@RegisterActivity) { showNationalID ->
                 dataBinding.nationalIDLayout.visibility =
                     if (showNationalID) View.VISIBLE else View.GONE
@@ -52,9 +68,6 @@ class RegisterActivity : BasicActivity<ActivityRegisterBinding, RegisterViewMode
             }
         }
         dataBinding.apply {
-            logIn.setOnClickListener {
-                openLoginActivity()
-            }
             radioGroupLayout.setOnCheckedChangeListener { _, checkedId ->
                 when (checkedId) {
                     R.id.asPlayer_layout -> {
@@ -66,9 +79,10 @@ class RegisterActivity : BasicActivity<ActivityRegisterBinding, RegisterViewMode
                     }
                 }
             }
-            openImagePicker()
+            logIn.setOnClickListener {
+                closeActivity()
+            }
             profilePictureLayout.setOnClickListener {
-                // Launch the photo picker and let the user choose only images.
                 pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
             }
 
@@ -76,42 +90,6 @@ class RegisterActivity : BasicActivity<ActivityRegisterBinding, RegisterViewMode
 
     }
 
-    private fun openImagePicker() {
-        // Registers a photo picker activity launcher in single-select mode.
-        pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-            // photo picker
-            if (uri != null) {
-                log("PhotoPicker selected URI: $uri")
-                viewModel.showLoading.value = true
-                uploadImageToStorage(uri,
-                    onSuccessListener = { downloadUri ->
-                        log("Image uploaded successfully to Firebase Storage")
-                        // pass imageUrl to view model
-                        viewModel.apply {
-                            showLoading.value = false
-                            imageUrl.value = downloadUri.toString()
-
-                        }
-                    },
-                    onFailureListener = {
-                        log("Error uploading image to Firebase Storage $it")
-                        viewModel.showLoading.value = false
-
-                    }
-                )
-
-                dataBinding.apply {
-                    profilePictureLayout.setImageURI(uri)
-                    profileTextLayout.text = "Change Picture"
-                }
-            } else {
-                viewModel.showLoading.value = false
-                dataBinding.profileTextLayout.text = "Default Picture"
-                Toast.makeText(this, "No image selected", Toast.LENGTH_SHORT).show()
-                log("PhotoPicker: No media selected")
-            }
-        }
-    }
 
 
     override fun onSupportNavigateUp(): Boolean {
@@ -120,9 +98,7 @@ class RegisterActivity : BasicActivity<ActivityRegisterBinding, RegisterViewMode
         return true
     }
 
-    override fun openLoginActivity() {
-        val intent = Intent(this, LoginActivity::class.java)
-        startActivity(intent)
+    override fun closeActivity() {
         finish()
     }
 

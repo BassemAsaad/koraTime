@@ -27,16 +27,16 @@
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:listitem="@layout/item_prv_rooms" />
+                tools:listitem="@layout/item_private_rooms" />
 
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/createRoom_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="20dp"
-                android:layout_marginBottom="20dp"
-                android:backgroundTint="@color/primary"
+                android:layout_marginBottom="10dp"
+                android:layout_marginEnd="40dp"
+                android:backgroundTint="@color/white"
                 android:contentDescription="Create Room"
                 android:onClick="@{()->vm.createRoom()}"
                 android:src="@drawable/ic_add"

@@ -69,6 +69,7 @@ class LocationPickerActivity :
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
             setDisplayShowHomeEnabled(true)
+            setDisplayShowTitleEnabled(false)
         }
         dataBinding.apply {
             container.visibility = View.GONE

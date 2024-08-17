@@ -17,24 +17,24 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".addRoom.AddRoomActivity">
-
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/app_bar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/primary"
+            android:layout_height="60dp"
+            android:background="@drawable/shape_tab_indicator"
             android:elevation="0dp"
             android:fitsSystemWindows="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginHorizontal="20dp">
-
+                android:layout_gravity="center">
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="60dp"
                     android:layout_gravity="center">
 
@@ -47,14 +47,17 @@
                         android:padding="10dp"
                         android:text="@string/add_your_stadium"
                         android:textColor="@color/white"
-                        android:textSize="30sp"
+                        android:textSize="25sp"
                         app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
             </com.google.android.material.appbar.MaterialToolbar>
 
         </com.google.android.material.appbar.AppBarLayout>
+
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -72,12 +75,13 @@
 
             <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                >
 
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:paddingHorizontal="10dp"
                     app:layout_constraintTop_toTopOf="parent">
@@ -170,7 +174,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:hint="@string/add_stadium_location"
                         android:padding="10dp"
                         app:boxCornerRadiusBottomEnd="8dp"
                         app:boxCornerRadiusBottomStart="8dp"
@@ -182,6 +185,7 @@
                             android:id="@+id/location_picker_edit_text"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:text="@string/add_stadium_location"
                             android:drawableStart="@drawable/ic_location_picker"
                             android:drawablePadding="5dp"
                             android:inputType="none" />
@@ -217,15 +221,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:padding="13dp" />
-
-                    <ImageView
+                    <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/stadiumImages_layout"
-                        android:layout_width="250dp"
-                        android:layout_height="150dp"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
                         android:layout_gravity="center"
                         android:layout_marginTop="20dp"
-                        android:contentDescription="@string/add_stadium_picture"
-                        android:src="@drawable/stadium_img" />
+                        android:src="@drawable/stadium_img"
+                        app:civ_border_color="@color/primaryVariant"
+                        app:civ_border_width="3dp" />
 
                     <TextView
                         android:id="@+id/imageText_error"

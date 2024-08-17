@@ -18,7 +18,23 @@ class AddRoomActivity : BasicActivity<ActivityAddRoomBinding, AddRoomViewModel>(
     AddRoomNavigator {
     override val TAG: String
         get() = "AddRoomActivity"
-        private lateinit var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
+        private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+            // photo picker
+            if (uri != null) {
+                log("PhotoPicker selected URI: $uri")
+                viewModel.imagesUri.value = uri
+                dataBinding.apply {
+                    roomImageLayout.setImageURI(uri)
+                    roomImageTextLayout.text = "Change Picture Chosen"
+                }
+            } else {
+                dataBinding.roomImageTextLayout.text = "Default Picture"
+                Toast.makeText(this, "No image selected", Toast.LENGTH_SHORT).show()
+                log("PhotoPicker: No media selected")
+                viewModel.showLoading.value = false
+
+            }
+        }
 
         override fun getLayoutID(): Int {
         return R.layout.activity_add_room
@@ -38,6 +54,7 @@ class AddRoomActivity : BasicActivity<ActivityAddRoomBinding, AddRoomViewModel>(
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
             setDisplayShowHomeEnabled(true)
+            setDisplayShowTitleEnabled(false)
         }
         viewModel.apply {
             navigator = this@AddRoomActivity
@@ -49,59 +66,19 @@ class AddRoomActivity : BasicActivity<ActivityAddRoomBinding, AddRoomViewModel>(
         }
         dataBinding.apply {
             vm = viewModel
-            openImagePicker()
             roomImageLayout.setOnClickListener {
                 // Launch the photo picker and let the user choose only images.
                 pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
             }
         }
     }
-
-    private fun openImagePicker() {
-        // Registers a photo picker activity launcher in single-select mode.
-        pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-            // photo picker
-            if (uri != null) {
-                log("PhotoPicker selected URI: $uri")
-                viewModel.showLoading.value = true
-                uploadImageToStorage(uri,
-                    onSuccessListener = { downloadUri ->
-                        log("Firebase Storage: Image uploaded successfully")
-                        // pass imageUrl to view model
-                        viewModel.apply {
-                            imageUrl.value = downloadUri.toString()
-                            showLoading.value = false
-                        }
-
-                    },
-                    onFailureListener = {
-                        log("Firebase Storage: Error uploading image $it")
-                        viewModel.showLoading.value = false
-
-                    }
-                )
-
-                dataBinding.apply {
-                    roomImageLayout.setImageURI(uri)
-                    roomImageTextLayout.text = "Change Picture Chosen"
-                }
-            } else {
-                dataBinding.roomImageTextLayout.text = "Default Picture"
-                Toast.makeText(this, "No image selected", Toast.LENGTH_SHORT).show()
-                log("PhotoPicker: No media selected")
-                viewModel.showLoading.value = false
-
-            }
-        }
-    }
-
     override fun onSupportNavigateUp(): Boolean {
         // go to the previous fragment when back button clicked on toolbar
         onBackPressed()
         return true
     }
 
-    override fun roomsFragment() {
+    override fun closeActivity() {
         Toast.makeText(this, "Room Added Successfully", Toast.LENGTH_SHORT).show()
         finish()
     }

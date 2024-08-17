@@ -27,8 +27,6 @@ class BookingStadiumAdapter (
     private val calendarAdapter: CalendarAdapter,
     private val timeSlotsAdapter: TimeSlotsForUserAdapter,
     private val stadiumId: String) : RecyclerView.Adapter<ViewHolder>() {
-
-
     private var dateTitle = SimpleDateFormat("MMM d, yyyy", Locale.getDefault()).format(Date())
     private  var images = emptyList<SlideModel>()
     companion object {
@@ -125,6 +123,10 @@ class BookingStadiumAdapter (
 
 
         }
+    }
+    fun changeImageSlider(imageList: List<SlideModel>) {
+        images= imageList
+        notifyItemChanged(0)
     }
     fun changeDateTitle(date: String) {
         dateTitle = date

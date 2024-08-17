@@ -11,12 +11,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        card_view:cardCornerRadius="4dp">
+        card_view:cardCornerRadius="25dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="80dp"
-            android:orientation="vertical"
             android:paddingHorizontal="16dp">
 
             <TextView
@@ -39,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginEnd="10dp"
-                android:background="@drawable/shape_type_message"
+                android:background="@drawable/shape_book"
                 android:gravity="center"
                 android:paddingHorizontal="30dp"
                 android:paddingVertical="10dp"

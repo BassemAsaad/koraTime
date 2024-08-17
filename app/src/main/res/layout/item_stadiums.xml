@@ -14,8 +14,8 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="5dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="15dp"
         app:cardCornerRadius="25dp"
         >
 
@@ -29,26 +29,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/stadium_img_card"
+            <ImageView
+                android:id="@+id/stadium_img_item"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                app:cardCornerRadius="25dp">
-
-                <ImageView
-                    android:id="@+id/stadium_img_item"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="fitXY"
-                    app:imageUrl="@{stadiumModel.stadiumImageUrl}"
-                    tools:src="@drawable/stadium_img" />
-            </androidx.cardview.widget.CardView>
-
+                android:layout_height="150dp"
+                android:scaleType="fitXY"
+                app:imageUrl="@{stadiumModel.stadiumImageUrl}"
+                tools:src="@drawable/stadium_img" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:paddingHorizontal="10dp"
                 android:layout_marginHorizontal="8dp"
                 >
@@ -73,9 +65,10 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:text="@{stadiumModel.stadiumPrice}"
+                    android:text="@{`£`+stadiumModel.stadiumPrice+ ` Per Hour` }"
                     tools:text="£5 Per Hour"
                     android:textSize="14sp"
+                    android:layout_marginEnd="8dp"
                     />
 
 

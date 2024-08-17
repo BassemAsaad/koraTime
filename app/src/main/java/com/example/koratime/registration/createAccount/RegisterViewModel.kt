@@ -1,5 +1,6 @@
 package com.example.koratime.registration.createAccount
 
+import android.net.Uri
 import android.util.Log
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
@@ -34,11 +35,11 @@ class RegisterViewModel : BasicViewModel<RegisterNavigator>() {
     val asManagerRadioButton = ObservableField<Boolean>()
 
     val imageUrl = MutableLiveData<String>()
+    val imagesUri = MutableLiveData<Uri>()
 
     private val auth = Firebase.auth
 
     val showNationalID = MutableLiveData<Boolean>().apply { value = false }
-
     val toastMessage = MutableLiveData<String>()
 
 
@@ -46,12 +47,12 @@ class RegisterViewModel : BasicViewModel<RegisterNavigator>() {
         //validation
         if (validation()) {
             //create account in firebase
-            addAccount_toFirebase()
+            addAccountToFirebase()
         }
     }
 
 
-    private fun addAccount_toFirebase() {
+    private fun addAccountToFirebase() {
         showLoading.value = true
         auth.createUserWithEmailAndPassword(email.get()!!, password.get()!!)
             .addOnCompleteListener { task ->
@@ -61,13 +62,17 @@ class RegisterViewModel : BasicViewModel<RegisterNavigator>() {
                     Log.e("Firebase: ", task.exception?.localizedMessage.toString())
                 } else {
                     Log.e("Firebase: ", "Account added successfully to firestore")
-                    createFirestore_User(task.result.user?.uid)
+                    if (imagesUri.value != null) {
+                        uploadImageToStorage(task.result.user?.uid)
+                    }else{
+                        addUser(task.result.user?.uid)
+                    }
                 }
 
             }
     }
 
-    private fun createFirestore_User(uid: String?) {
+    private fun addUser(uid: String?) {
         val user = UserModel(
             id = uid,
             firstName = firstName.get(),
@@ -83,7 +88,7 @@ class RegisterViewModel : BasicViewModel<RegisterNavigator>() {
             {
                 showLoading.value = false
                 Log.e("Firebase: ", "account added to firestore")
-                navigator?.openLoginActivity()
+                navigator?.closeActivity()
             },
             //OnFailureListener
             {
@@ -92,11 +97,24 @@ class RegisterViewModel : BasicViewModel<RegisterNavigator>() {
             })
     }
 
-
-    fun validation(): Boolean {
+    private fun uploadImageToStorage(uid: String?) {
+        showLoading.value = true
+        com.example.koratime.database.uploadImageToStorage(
+            imagesUri.value!!,
+            onSuccessListener = { downloadUri ->
+                log("Image uploaded successfully to Firebase Storage")
+                // pass imageUrl to view model
+                imageUrl.value = downloadUri.toString()
+                addUser(uid)
+            },
+            onFailureListener = {
+                showLoading.value = false
+                log("Error uploading image to Firebase Storage $it")
+            }
+        )
+    }
+    private fun validation(): Boolean {
         var valid = true
-
-
         // Validate National ID if the user selected "Sign Up As Stadium Manager"
         if (asManagerRadioButton.get() == true && nationalID.get().isNullOrBlank()) {
             valid = false

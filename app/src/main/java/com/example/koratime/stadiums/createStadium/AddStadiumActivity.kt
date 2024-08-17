@@ -28,50 +28,24 @@ class AddStadiumActivity : BasicActivity<ActivityAddStadiumBinding, AddStadiumVi
     override val TAG: String
         get() = "AddStadiumActivity"
 
-    private lateinit var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
     private lateinit var locationModel :LocationModel
     private var openingTimeIndex: Int? = null
     private var closingTimeIndex: Int? = null
-
-
-    override fun getLayoutID(): Int {
-        return R.layout.activity_add_stadium
-    }
-
-    override fun initViewModel(): AddStadiumViewModel {
-        return ViewModelProvider(this)[AddStadiumViewModel::class.java]
-    }
-
-    override fun initView() {
-        setSupportActionBar(dataBinding.toolbar)
-        callback()
-        setupSpinners()
-
-    }
-
-    override fun callback() {
-        supportActionBar?.apply {
-            setDisplayHomeAsUpEnabled(true)
-            setDisplayShowHomeEnabled(true)
-        }
-        viewModel.apply {
-            navigator = this@AddStadiumActivity
-            toastMessage.observe(this@AddStadiumActivity, Observer { message ->
-                Toast.makeText(this@AddStadiumActivity, message, Toast.LENGTH_SHORT).show()
-            })
-        }
-
-        dataBinding.apply {
-            vm = viewModel
-            openImagePicker()
-            stadiumImagesLayout.setOnClickListener {
-                // Launch the photo picker and let the user choose only images.
-                pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+    private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+        // photo picker
+        if (uri != null) {
+            log("PhotoPicker: Selected URI: $uri")
+            viewModel.imagesUri.value = uri
+            dataBinding.apply {
+                stadiumImagesLayout.setImageURI(uri)
+                stadiumImagesTextLayout.text = "Change Picture Chosen"
             }
-            locationPickerEditText.setOnClickListener {
-                val intent = Intent(this@AddStadiumActivity, LocationPickerActivity::class.java)
-                locationPickerActivityResultLauncher.launch(intent)
-            }
+
+        } else {
+            viewModel.showLoading.value = false
+            dataBinding.stadiumImagesTextLayout.text = "Default Picture"
+            Toast.makeText(this, "No image selected", Toast.LENGTH_SHORT).show()
+            log("PhotoPicker: No media selected")
         }
     }
     private val locationPickerActivityResultLauncher =
@@ -96,6 +70,48 @@ class AddStadiumActivity : BasicActivity<ActivityAddStadiumBinding, AddStadiumVi
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_SHORT).show()
             }
         }
+
+    override fun getLayoutID(): Int {
+        return R.layout.activity_add_stadium
+    }
+
+    override fun initViewModel(): AddStadiumViewModel {
+        return ViewModelProvider(this)[AddStadiumViewModel::class.java]
+    }
+
+    override fun initView() {
+        setSupportActionBar(dataBinding.toolbar)
+        callback()
+        setupSpinners()
+
+    }
+
+    override fun callback() {
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setDisplayShowHomeEnabled(true)
+            setDisplayShowTitleEnabled(false)
+        }
+        viewModel.apply {
+            navigator = this@AddStadiumActivity
+            toastMessage.observe(this@AddStadiumActivity, Observer { message ->
+                Toast.makeText(this@AddStadiumActivity, message, Toast.LENGTH_SHORT).show()
+            })
+        }
+
+        dataBinding.apply {
+            vm = viewModel
+            stadiumImagesLayout.setOnClickListener {
+                // Launch the photo picker and let the user choose only images.
+                pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+            }
+            locationPickerEditText.setOnClickListener {
+                val intent = Intent(this@AddStadiumActivity, LocationPickerActivity::class.java)
+                locationPickerActivityResultLauncher.launch(intent)
+            }
+        }
+    }
+
 
 
     private fun setupSpinners() {
@@ -171,43 +187,6 @@ class AddStadiumActivity : BasicActivity<ActivityAddStadiumBinding, AddStadiumVi
 
         // Update closing time index
         closingTimeIndex = selectedClosingTimeIndex
-    }
-
-    private fun openImagePicker() {
-        // Registers a photo picker activity launcher in single-select mode.
-        pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-            // photo picker
-            if (uri != null) {
-                viewModel.showLoading.value = true
-                Log.d("PhotoPicker", "Selected URI: $uri")
-                uploadImageToStorage(uri,
-                    onSuccessListener = { downloadUri ->
-                        log("Image Uploaded Successfully to Storage")
-                        // pass imageUrl to view model
-                        viewModel.apply {
-                            imageUrl.value = downloadUri.toString()
-                            showLoading.value = false
-                        }
-                        dataBinding.apply {
-                            stadiumImagesLayout.setImageURI(uri)
-                            stadiumImagesTextLayout.text = "Change Picture Chosen"
-                        }
-                    },
-                    onFailureListener = {
-                        log("Error Uploading Image To Storage $it")
-                        viewModel.showLoading.value = false
-
-                    }
-                )
-
-
-            } else {
-                viewModel.showLoading.value = false
-                dataBinding.stadiumImagesTextLayout.text = "Default Picture"
-                Toast.makeText(this, "No image selected", Toast.LENGTH_SHORT).show()
-                log("PhotoPicker: No media selected")
-            }
-        }
     }
 
     override fun closeActivity() {

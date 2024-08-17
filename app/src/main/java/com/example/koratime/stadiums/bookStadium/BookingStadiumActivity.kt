@@ -2,45 +2,25 @@ package com.example.koratime.stadiums.bookStadium
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.net.Uri
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
-import com.denzcoskun.imageslider.constants.ScaleTypes
-import com.denzcoskun.imageslider.models.SlideModel
 import com.example.koratime.Constants
-import com.example.koratime.DataUtils
 import com.example.koratime.R
-import com.example.koratime.adapters.TimeSlotsForUserAdapter
 import com.example.koratime.basic.BasicActivity
-import com.example.koratime.database.addBookingToFirestore
-import com.example.koratime.database.getBookedTimesFromFirestore
-import com.example.koratime.database.getMultipleImagesFromFirestore
-import com.example.koratime.database.playerDocumentExists
 import com.example.koratime.databinding.ActivityBookingStadiumBinding
 import com.example.koratime.model.StadiumModel
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import com.google.android.material.snackbar.Snackbar
 
 
-@Suppress("DEPRECATION", "SetTextI18n", "DefaultLocale")
+@Suppress("DEPRECATION", "NotifyDataSetChanged")
 class BookingStadiumActivity :
     BasicActivity<ActivityBookingStadiumBinding, BookingStadiumViewModel>(),
     BookingStadiumNavigator {
 
     private lateinit var stadiumModel: StadiumModel
-    private var adapter = TimeSlotsForUserAdapter(emptyList())
-    private lateinit var timeSlotsList: List<String>
-    private lateinit var availableSlots: MutableList<String>
-    private lateinit var bookedTimesList: List<String>
-    private val slideImageList = mutableListOf<String>()
-    private var selectedDate = SimpleDateFormat("MM_dd_yyyy", Locale.getDefault()).format(Date())
 
     override val TAG: String
         get() = "BookingStadiumActivity"
@@ -67,7 +47,7 @@ class BookingStadiumActivity :
             stadium = stadiumModel
             timeSlotsArray.value = resources.getStringArray(R.array.time_slots)
             toastMessage.observe(this@BookingStadiumActivity) {
-                Toast.makeText(this@BookingStadiumActivity, it, Toast.LENGTH_SHORT).show()
+                Snackbar.make(dataBinding.root, it, Snackbar.LENGTH_SHORT).show()
             }
             setUpAdapter()
             adapterCallback()

@@ -53,6 +53,9 @@ class BookingStadiumViewModel : BasicViewModel<BookingStadiumNavigator>() {
     private lateinit var bookedTimesList: List<String>
 
     fun setUpAdapter() {
+        getImagesFromFirestore {
+            bookingStadiumAdapter.changeImageSlider(it)
+        }
         getTimeSlots(selectedDate)
         calendarAdapter = CalendarAdapter(generateNextTwoWeeks())
         bookingStadiumAdapter = BookingStadiumAdapter(calendarAdapter, timeSlotsAdapter, stadium!!.stadiumID!!)

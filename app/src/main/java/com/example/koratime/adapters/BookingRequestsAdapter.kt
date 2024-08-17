@@ -43,7 +43,7 @@ class BookingRequestsAdapter(var requestsList: List<BookingModel?>?):
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(requestsList!![position]!!)
         holder.dataBinding.apply {
-            bookStatus.setTextColor(Color.parseColor("#ED7014"))
+            bookStatus.setTextColor(Color.BLUE)
         }
 
 

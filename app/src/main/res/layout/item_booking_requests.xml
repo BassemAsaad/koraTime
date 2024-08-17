@@ -10,20 +10,18 @@
             type="com.example.koratime.model.BookingModel" />
     </data>
 
-    <com.google.android.material.card.MaterialCardView
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         app:contentPadding="12dp"
-        app:cardCornerRadius="8dp"
+        app:cardCornerRadius="25dp"
         app:cardBackgroundColor="#FFFFFF"
         >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
-
         >
 
         <de.hdodenhof.circleimageview.CircleImageView
@@ -78,6 +76,6 @@
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-    </com.google.android.material.card.MaterialCardView>
+    </androidx.cardview.widget.CardView>
 
 </layout>

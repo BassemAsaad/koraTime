@@ -126,6 +126,10 @@ class ManageStadiumAdapter(
 
         }
     }
+    fun changeImagePickerText(newImagePickerTextView: String) {
+        imagePickerTextView = newImagePickerTextView
+        notifyItemChanged(0)
+    }
     fun changeImageSlider(imageList: List<SlideModel>) {
         images= imageList
         notifyItemChanged(1)
@@ -134,10 +138,7 @@ class ManageStadiumAdapter(
         dateTitle = date
         notifyItemChanged(2)
     }
-    fun changeImagePickerText(imagePickerTextView: String) {
-        this.imagePickerTextView = imagePickerTextView
-        notifyItemChanged(0)
-    }
+
 
     inner class ImagePickerViewHolder(private val binding: ItemUploadImagesBinding) :
         RecyclerView.ViewHolder(binding.root){

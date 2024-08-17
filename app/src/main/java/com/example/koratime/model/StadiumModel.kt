@@ -10,7 +10,7 @@ data class StadiumModel(
     val stadiumDescription: String? = null,
     val stadiumTelephoneNumber: String? = null,
     val stadiumPrice: String? = null,
-    val stadiumImageUrl: String? = null,
+    var stadiumImageUrl: String? = null,
     val userManager: String? = null,
     val opening: Int? = null,
     val closing: Int? = null,

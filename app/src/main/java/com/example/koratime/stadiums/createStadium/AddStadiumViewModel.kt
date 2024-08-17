@@ -1,5 +1,6 @@
 package com.example.koratime.stadiums.createStadium
 
+import android.net.Uri
 import android.util.Log
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
@@ -7,6 +8,7 @@ import com.example.koratime.DataUtils
 import com.example.koratime.basic.BasicViewModel
 import com.example.koratime.chat.ChatViewModel
 import com.example.koratime.database.addStadiumToFirestore
+import com.example.koratime.database.uploadImageToStorage
 import com.example.koratime.model.StadiumModel
 
 
@@ -27,7 +29,7 @@ class AddStadiumViewModel : BasicViewModel<AddStadiumNavigator>() {
     val priceError = ObservableField<String>()
 
     val imageError = ObservableField<String>()
-    val imageUrl = MutableLiveData<String>()
+    val imagesUri = MutableLiveData<Uri>()
 
     val openingTime = MutableLiveData<Int>()
     val closingTime = MutableLiveData<Int>()
@@ -38,37 +40,39 @@ class AddStadiumViewModel : BasicViewModel<AddStadiumNavigator>() {
     val locationError = ObservableField<String>()
 
     val toastMessage = MutableLiveData<String>()
-    fun createStadium() {
-        if (validate()) {
-            val stadium = StadiumModel(
-                stadiumName = stadiumName.get(),
-                stadiumDescription = description.get(),
-                stadiumTelephoneNumber = number.get(),
-                stadiumPrice = price.get(),
-                userManager = DataUtils.user!!.id,
-                stadiumImageUrl = imageUrl.value,
-                opening = openingTime.value,
-                closing = closingTime.value!! + openingTime.value!!,
-                latitude = latitudeLiveData.value,
-                longitude = longitudeLiveData.value,
-                address = addressLiveData.value
-            )
-            Log.e("Firebase: ", "address:  ${addressLiveData.value}")
 
+
+    fun createStadium() {
+
+        if (validate()) {
+            Log.e("Firebase: ", "address:  ${addressLiveData.value}")
             //add in firebase
-            addStadium(stadium)
-            navigator?.closeActivity()
+            uploadImageToStorage()
+
         }
     }
 
-    private fun addStadium(stadium: StadiumModel) {
-        showLoading.value = true
+    private fun addStadium(downloadUri: String) {
+        val stadium = StadiumModel(
+            stadiumName = stadiumName.get(),
+            stadiumDescription = description.get(),
+            stadiumTelephoneNumber = number.get(),
+            stadiumPrice = price.get(),
+            userManager = DataUtils.user!!.id,
+            stadiumImageUrl = downloadUri,
+            opening = openingTime.value,
+            closing = closingTime.value!! + openingTime.value!!,
+            latitude = latitudeLiveData.value,
+            longitude = longitudeLiveData.value,
+            address = addressLiveData.value
+        )
         addStadiumToFirestore(
             stadium,
             onSuccessListener = {
                 showLoading.value = false
                 Log.e("Firebase", "Stadium Added to Firestore")
                 //navigate
+                navigator?.closeActivity()
             },
             onFailureListener = {
                 showLoading.value = false
@@ -80,7 +84,23 @@ class AddStadiumViewModel : BasicViewModel<AddStadiumNavigator>() {
 
     }
 
+    private fun uploadImageToStorage() {
+        showLoading.value = true
+        uploadImageToStorage(
+            imagesUri.value!!,
+            onSuccessListener = { downloadUri ->
+                log("Image uploaded successfully to Firebase Storage")
+                // pass imageUrl to view model
 
+                addStadium(downloadUri.toString())
+            },
+            onFailureListener = {
+                log("Error uploading image to Firebase Storage $it")
+                showLoading.value = false
+            }
+        )
+
+    }
     private fun validate(): Boolean {
         var valid = true
         if (stadiumName.get().isNullOrBlank()) {
@@ -113,7 +133,7 @@ class AddStadiumViewModel : BasicViewModel<AddStadiumNavigator>() {
         } else {
             priceError.set(null)
         }
-        if (imageUrl.value == null) {
+        if (imagesUri.value == null) {
             imageError.set("Add The Stadium Image")
             valid = false
         } else {

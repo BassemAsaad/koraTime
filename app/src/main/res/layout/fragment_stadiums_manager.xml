@@ -17,7 +17,7 @@
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/app_bar"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="0dp"
             android:background="@drawable/shape_tab_indicator"
             android:elevation="0dp"
             android:fitsSystemWindows="true"
@@ -29,12 +29,13 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginHorizontal="12dp">
+                android:layout_gravity="center">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/user_container"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
                     android:layout_gravity="center">
 
                     <de.hdodenhof.circleimageview.CircleImageView
@@ -43,7 +44,7 @@
                         android:layout_height="50dp"
                         android:padding="5dp"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/userName"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         tools:src="@drawable/ic_default_user_pic" />
 
@@ -62,8 +63,8 @@
                         tools:text="Mohammed Ehab" />
 
                     <ImageView
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
                         android:background="@drawable/shape_search"
                         android:contentDescription="Logout"
                         android:onClick="@{()->vm.logOut()}"
@@ -92,7 +93,7 @@
                 android:layout_height="match_parent"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintBottom_toBottomOf="parent"
-
+                android:layout_marginHorizontal="12dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -102,15 +103,17 @@
                 android:id="@+id/create_Stadium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:backgroundTint="@color/primary"
+                android:layout_marginBottom="10dp"
+                android:layout_marginEnd="40dp"
+                android:backgroundTint="@color/quantum_white_100"
                 android:contentDescription="@string/create_stadium"
                 android:elevation="12dp"
                 android:onClick="@{()->vm.createStadium()}"
                 android:src="@drawable/ic_add"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:shapeAppearance="@style/Theme.AppCompat.Light" />
+                app:shapeAppearance="@style/Widget.Design.FloatingActionButton"
+                />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
