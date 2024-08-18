@@ -1,6 +1,6 @@
 package com.example.koratime.stadiums.bookStadium
 
-interface BookingStadiumNavigator{
+interface BookingStadiumNavigator {
     fun showLocation(lat: Double, lng: Double)
     fun showNumber()
 

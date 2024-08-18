@@ -6,7 +6,6 @@ import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import com.example.koratime.DataUtils
 import com.example.koratime.basic.BasicViewModel
-import com.example.koratime.chat.ChatViewModel
 import com.example.koratime.database.getUserFromFirestore
 import com.example.koratime.model.UserModel
 import com.google.android.gms.tasks.OnSuccessListener
@@ -34,7 +33,8 @@ class LoginViewModel : BasicViewModel<LoginNavigator>() {
             loginWithFirebase()
         }
     }
-    fun openRegisterActivity(){
+
+    fun openRegisterActivity() {
         navigator?.openRegisterActivity()
     }
 

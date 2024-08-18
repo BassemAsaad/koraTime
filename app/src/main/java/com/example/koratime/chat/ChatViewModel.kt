@@ -1,24 +1,22 @@
 package com.example.koratime.chat
 
-import android.content.Intent
 import android.util.Log
-import com.example.koratime.Constants
 import com.example.koratime.DataUtils
 import com.example.koratime.adapters.FriendsAdapter
 import com.example.koratime.basic.BasicViewModel
-import com.example.koratime.chat.chatFriends.ChatFriendsActivity
 import com.example.koratime.database.getFriendsFromFirestore
 import com.example.koratime.model.FriendModel
 
-class ChatViewModel : BasicViewModel<ChatNavigator>(){
+class ChatViewModel : BasicViewModel<ChatNavigator>() {
     override val TAG: String
         get() = ChatViewModel::class.java.simpleName
     val adapter = FriendsAdapter(null)
 
-    fun adapterSetup(){
+    fun adapterSetup() {
         getFriends()
     }
-    fun adapterCallback(){
+
+    fun adapterCallback() {
         adapter.onUserClickListener = object : FriendsAdapter.OnUserClickListener {
             override fun onItemClick(
                 user: FriendModel?,

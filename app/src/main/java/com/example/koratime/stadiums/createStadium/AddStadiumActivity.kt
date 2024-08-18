@@ -1,6 +1,5 @@
 package com.example.koratime.stadiums.createStadium
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.util.Log
@@ -9,45 +8,43 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.koratime.Constants
 import com.example.koratime.R
 import com.example.koratime.basic.BasicActivity
-import com.example.koratime.database.uploadImageToStorage
 import com.example.koratime.databinding.ActivityAddStadiumBinding
 import com.example.koratime.location.LocationPickerActivity
 import com.example.koratime.model.LocationModel
 
-@Suppress("DEPRECATION","SetTextI18n")
+@Suppress("DEPRECATION", "SetTextI18n")
 class AddStadiumActivity : BasicActivity<ActivityAddStadiumBinding, AddStadiumViewModel>(),
     AddStadiumNavigator {
     override val TAG: String
         get() = "AddStadiumActivity"
 
-    private lateinit var locationModel :LocationModel
+    private lateinit var locationModel: LocationModel
     private var openingTimeIndex: Int? = null
     private var closingTimeIndex: Int? = null
-    private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-        // photo picker
-        if (uri != null) {
-            log("PhotoPicker: Selected URI: $uri")
-            viewModel.imagesUri.value = uri
-            dataBinding.apply {
-                stadiumImagesLayout.setImageURI(uri)
-                stadiumImagesTextLayout.text = "Change Picture Chosen"
-            }
+    private val pickMedia =
+        registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+            // photo picker
+            if (uri != null) {
+                log("PhotoPicker: Selected URI: $uri")
+                viewModel.imagesUri.value = uri
+                dataBinding.apply {
+                    stadiumImagesLayout.setImageURI(uri)
+                    stadiumImagesTextLayout.text = "Change Picture Chosen"
+                }
 
-        } else {
-            viewModel.showLoading.value = false
-            dataBinding.stadiumImagesTextLayout.text = "Default Picture"
-            Toast.makeText(this, "No image selected", Toast.LENGTH_SHORT).show()
-            log("PhotoPicker: No media selected")
+            } else {
+                viewModel.showLoading.value = false
+                dataBinding.stadiumImagesTextLayout.text = "Default Picture"
+                Toast.makeText(this, "No image selected", Toast.LENGTH_SHORT).show()
+                log("PhotoPicker: No media selected")
+            }
         }
-    }
     private val locationPickerActivityResultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             //get result from location picked from location picker activity
@@ -184,14 +181,17 @@ class AddStadiumActivity : BasicActivity<ActivityAddStadiumBinding, AddStadiumVi
     override fun openImagePicker() {
         pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
     }
+
     override fun openLocationPicker() {
         val intent = Intent(this, LocationPickerActivity::class.java)
         locationPickerActivityResultLauncher.launch(intent)
     }
+
     override fun closeActivity() {
         Toast.makeText(this, "Stadium Created Successfully", Toast.LENGTH_SHORT).show()
         finish()
     }
+
     override fun onSupportNavigateUp(): Boolean {
         // go to the previous fragment when back button clicked on toolbar
         onBackPressed()

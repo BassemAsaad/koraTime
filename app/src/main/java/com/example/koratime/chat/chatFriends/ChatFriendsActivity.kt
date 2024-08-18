@@ -57,7 +57,7 @@ class ChatFriendsActivity : BasicActivity<ActivityChatFriendsBinding, ChatFriend
 
     }
 
-    
+
     override fun scrollToBottom() {
         dataBinding.recyclerView.postDelayed({
             if (viewModel.messageAdapter.itemCount > 0) {

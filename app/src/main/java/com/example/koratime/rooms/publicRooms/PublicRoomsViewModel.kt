@@ -20,6 +20,7 @@ class PublicRoomsViewModel : BasicViewModel<PublicRoomsNavigator>() {
     fun adapterSetup() {
         getAllRooms()
     }
+
     fun adapterCallback() {
         adapter.onItemClickListener = object : PublicRoomsAdapter.OnItemClickListener {
             @SuppressLint("SuspiciousIndentation")
@@ -45,6 +46,7 @@ class PublicRoomsViewModel : BasicViewModel<PublicRoomsNavigator>() {
             }
         }
     }
+
     private fun getAllRooms() {
         getAllRoomsFromFirestore(
             onSuccessListener = { querySnapShot ->

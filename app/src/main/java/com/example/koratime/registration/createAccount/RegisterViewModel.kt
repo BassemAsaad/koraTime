@@ -50,9 +50,11 @@ class RegisterViewModel : BasicViewModel<RegisterNavigator>() {
             addAccountToFirebase()
         }
     }
-    fun openLoginActivity(){
+
+    fun openLoginActivity() {
         navigator?.openLoginActivity()
     }
+
     fun openImagePicker() {
 
     }
@@ -70,7 +72,7 @@ class RegisterViewModel : BasicViewModel<RegisterNavigator>() {
                     Log.e("Firebase: ", "Account added successfully to firestore")
                     if (imagesUri.value != null) {
                         uploadImageToStorage(task.result.user?.uid)
-                    }else{
+                    } else {
                         addUser(task.result.user?.uid)
                     }
                 }
@@ -119,6 +121,7 @@ class RegisterViewModel : BasicViewModel<RegisterNavigator>() {
             }
         )
     }
+
     private fun validation(): Boolean {
         var valid = true
         // Validate National ID if the user selected "Sign Up As Stadium Manager"

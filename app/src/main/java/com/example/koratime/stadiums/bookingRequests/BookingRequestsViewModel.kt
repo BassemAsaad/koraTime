@@ -13,14 +13,14 @@ class BookingRequestsViewModel : BasicViewModel<BookingRequestsNavigator>() {
     var stadium = StadiumModel()
     var adapter = BookingRequestsAdapter(emptyList())
 
-    fun adapterSetup(){
+    fun adapterSetup() {
         getDates()
     }
 
-    private fun getDates(){
+    private fun getDates() {
         getBookingRequestsFromFirestore(
             stadiumID = stadium.stadiumID!!,
-            onSuccessListener = {querySnapshot->
+            onSuccessListener = { querySnapshot ->
                 Log.e("Firebase", "datesSlots List: $querySnapshot")
                 adapter.changeData(querySnapshot)
             },

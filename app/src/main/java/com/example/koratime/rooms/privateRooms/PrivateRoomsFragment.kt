@@ -1,39 +1,28 @@
 package com.example.koratime.rooms.privateRooms
 
-import android.annotation.SuppressLint
 import android.content.Intent
-import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Toast
-import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.koratime.Constants
-import com.example.koratime.DataUtils
 import com.example.koratime.R
-import com.example.koratime.adapters.PrivateRoomsAdapter
 import com.example.koratime.basic.BasicFragment
-import com.example.koratime.database.getUserRoomsFromFirestore
-import com.example.koratime.database.removeRoomFromFirestore
 import com.example.koratime.databinding.FragmentPrivateRoomsBinding
 import com.example.koratime.model.RoomModel
 import com.example.koratime.rooms.createRoom.AddRoomActivity
 import com.example.koratime.rooms.roomChat.RoomChatActivity
 
-class PrivateRoomsFragment : BasicFragment<FragmentPrivateRoomsBinding,PrivateRoomsViewModel>(), PrivateRoomsNavigator {
+class PrivateRoomsFragment : BasicFragment<FragmentPrivateRoomsBinding, PrivateRoomsViewModel>(),
+    PrivateRoomsNavigator {
 
     override fun initViewModel(): PrivateRoomsViewModel {
         return ViewModelProvider(this)[PrivateRoomsViewModel::class.java]
     }
+
     override fun getLayoutID(): Int {
         return R.layout.fragment_private_rooms
     }
 
-   override fun initView() {
-    callback()
+    override fun initView() {
+        callback()
     }//end init
 
     override fun callback() {
@@ -54,11 +43,11 @@ class PrivateRoomsFragment : BasicFragment<FragmentPrivateRoomsBinding,PrivateRo
         intent.putExtra(Constants.ROOM, room)
         startActivity(intent)
     }
+
     override fun openAddRoomActivity() {
         val intent = Intent(requireContext(), AddRoomActivity::class.java)
         startActivity(intent)
     }
-
 
 
 }

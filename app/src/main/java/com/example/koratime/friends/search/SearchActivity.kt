@@ -1,7 +1,5 @@
 package com.example.koratime.friends.search
 
-import android.annotation.SuppressLint
-import android.util.Log
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
 import com.example.koratime.DataUtils
@@ -35,7 +33,8 @@ class SearchActivity : BasicActivity<ActivitySearchBinding, SearchViewModel>(), 
         callback()
 
     }
-    override fun callback(){
+
+    override fun callback() {
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
             setDisplayShowHomeEnabled(true)
@@ -125,7 +124,7 @@ class SearchActivity : BasicActivity<ActivitySearchBinding, SearchViewModel>(), 
 
     }
 
-    private fun getUsers(){
+    private fun getUsers() {
         getUsersFromFirestore(
             DataUtils.user!!.id,
             onSuccessListener = { querySnapshot ->
@@ -141,6 +140,7 @@ class SearchActivity : BasicActivity<ActivitySearchBinding, SearchViewModel>(), 
             }
         )
     }
+
     override fun onSupportNavigateUp(): Boolean {
         // go to the previous fragment when back button clicked
         onBackPressed()

@@ -14,29 +14,30 @@ import com.example.koratime.databinding.ActivityManageStadiumBinding
 import com.example.koratime.model.StadiumModel
 import com.example.koratime.stadiums.bookingRequests.BookingRequestsActivity
 
-@Suppress( "SetTextI18n", "DEPRECATION")
+@Suppress("SetTextI18n", "DEPRECATION")
 class ManageStadiumActivity : BasicActivity<ActivityManageStadiumBinding, ManageStadiumViewModel>(),
     ManageStadiumNavigator {
     override val TAG: String
         get() = "ManageStadiumActivity"
     private lateinit var stadiumModel: StadiumModel
 
-    private val getMultipleContents = registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(3)) { uris ->
-        // photo picker
-        if (uris.isNotEmpty()) {
-            viewModel.showLoading.value = true
-            log("PhotoPicker: Selected URIs: $uris")
-            //upload images to storage
-            viewModel.uploadImagesToStorage(uris)
+    private val getMultipleContents =
+        registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(3)) { uris ->
+            // photo picker
+            if (uris.isNotEmpty()) {
+                viewModel.showLoading.value = true
+                log("PhotoPicker: Selected URIs: $uris")
+                //upload images to storage
+                viewModel.uploadImagesToStorage(uris)
 
-        } else {
-            viewModel.manageStadiumAdapter.changeImagePickerText("No image selected")
-            Toast.makeText(this, "No image selected", Toast.LENGTH_SHORT).show()
-            log("PhotoPicker: No media selected")
+            } else {
+                viewModel.manageStadiumAdapter.changeImagePickerText("No image selected")
+                Toast.makeText(this, "No image selected", Toast.LENGTH_SHORT).show()
+                log("PhotoPicker: No media selected")
+            }
+
+
         }
-
-
-    }
 
 
     override fun getLayoutID(): Int {
@@ -71,7 +72,7 @@ class ManageStadiumActivity : BasicActivity<ActivityManageStadiumBinding, Manage
             title = stadiumModel.stadiumName
         }
         dataBinding.apply {
-            parentRecyclerView.adapter= viewModel.manageStadiumAdapter
+            parentRecyclerView.adapter = viewModel.manageStadiumAdapter
             swipeRefresh.setOnRefreshListener {
                 dataBinding.swipeRefresh.isRefreshing = false
                 viewModel.getImagesFromFirestore {
@@ -85,35 +86,38 @@ class ManageStadiumActivity : BasicActivity<ActivityManageStadiumBinding, Manage
     }
 
 
-
-
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.stadium_manager_menu, menu)
         return true
     }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.booking_requests -> {
                 openBookingRequestsActivity()
                 return true
             }
+
             R.id.delete_stadium -> {
                 viewModel.deleteStadium()
                 return true
             }
         }
 
-        return  super.onOptionsItemSelected(item)
+        return super.onOptionsItemSelected(item)
     }
+
     override fun closeActivity() {
         finish()
     }
+
     override fun openBookingRequestsActivity() {
         val intent = Intent(this, BookingRequestsActivity::class.java)
         intent.putExtra(Constants.STADIUM_BOOKING_REQUESTS, viewModel.stadium)
         startActivity(intent)
 
     }
+
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true

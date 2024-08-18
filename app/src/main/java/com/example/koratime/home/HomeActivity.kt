@@ -19,7 +19,7 @@ import com.example.koratime.stadiums.stadiumManager.StadiumsManagerFragment
 import com.example.koratime.stadiums.stadiumsUser.StadiumsFragment
 import com.google.android.gms.location.LocationServices
 
-@Suppress("DEPRECATION","MissingPermission")
+@Suppress("DEPRECATION", "MissingPermission")
 class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>(), HomeNavigator {
 
     companion object {
@@ -36,9 +36,11 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>(), HomeNa
     override fun initViewModel(): HomeViewModel {
         return ViewModelProvider(this)[HomeViewModel::class.java]
     }
+
     override fun initView() {
         callback()
     }
+
     override fun callback() {
         viewModel.navigator = this
         dataBinding.vm = viewModel
@@ -56,12 +58,15 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>(), HomeNa
                 R.id.home_bar -> {
                     replaceFragment(mainFragment())
                 }
+
                 R.id.rooms_bar -> {
                     replaceFragment(TabsFragment())
                 }
+
                 R.id.friends_bar -> {
                     replaceFragment(FriendsRequestsFragment())
-                    }
+                }
+
                 R.id.chat_bar -> {
                     replaceFragment(ChatFragment())
                 }
@@ -69,13 +74,15 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>(), HomeNa
             return@setOnItemSelectedListener true
         }
     }
+
     private fun mainFragment(): Fragment {
-        return if (DataUtils.user?.nationalID == null){
+        return if (DataUtils.user?.nationalID == null) {
             StadiumsFragment()
-        }else{
+        } else {
             StadiumsManagerFragment()
         }
     }
+
     private fun replaceFragment(fragment: Fragment, addToBackStack: Boolean = false) {
         val push = supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, fragment)
@@ -92,14 +99,17 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>(), HomeNa
             requestLocationPermissions()
         }
     }
+
     private fun hasLocationPermissions(): Boolean {
         return ActivityCompat.checkSelfPermission(
-            this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+            this, Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(
                     this,
                     Manifest.permission.ACCESS_COARSE_LOCATION
                 ) == PackageManager.PERMISSION_GRANTED
     }
+
     private fun getLastKnownLocation() {
         val fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         fusedLocationProviderClient.lastLocation
@@ -123,10 +133,12 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>(), HomeNa
                     )
                 }
             }.addOnFailureListener { e ->
-                Toast.makeText(this, "Failed to get last known location.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Failed to get last known location.", Toast.LENGTH_SHORT)
+                    .show()
                 log("Failed to get last known location: $e")
             }
     }
+
     private fun getCityName(latitude: Double, longitude: Double): String {
         val geoCoder = Geocoder(this)
         try {
@@ -141,14 +153,17 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>(), HomeNa
             return e.toString()
         }
     }
+
     private fun requestLocationPermissions() {
-        ActivityCompat.requestPermissions(this,
+        ActivityCompat.requestPermissions(
+            this,
             arrayOf(
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ), LOCATION_PERMISSION_REQUEST_CODE
         )
     }
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
@@ -157,7 +172,7 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>(), HomeNa
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) { // Check if the request code matches the location permission request code
             if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) { // Check if permissions are granted
-               getLastKnownLocation() // If permissions are granted, attempt to get the last known location
+                getLastKnownLocation() // If permissions are granted, attempt to get the last known location
             } else {
                 Toast.makeText(this, "Location permission denied.", Toast.LENGTH_SHORT)
                     .show() // Show a toast message indicating permission denial

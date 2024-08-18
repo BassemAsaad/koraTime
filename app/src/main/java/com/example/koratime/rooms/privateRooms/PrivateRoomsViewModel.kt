@@ -1,19 +1,13 @@
 package com.example.koratime.rooms.privateRooms
 
-import android.annotation.SuppressLint
-import android.content.Intent
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
-import com.example.koratime.Constants
 import com.example.koratime.DataUtils
 import com.example.koratime.adapters.PrivateRoomsAdapter
 import com.example.koratime.basic.BasicViewModel
-import com.example.koratime.chat.ChatViewModel
 import com.example.koratime.database.getUserRoomsFromFirestore
 import com.example.koratime.database.removeRoomFromFirestore
 import com.example.koratime.model.RoomModel
-import com.example.koratime.rooms.roomChat.RoomChatActivity
 
 class PrivateRoomsViewModel : BasicViewModel<PrivateRoomsFragment>() {
     override val TAG: String
@@ -27,6 +21,7 @@ class PrivateRoomsViewModel : BasicViewModel<PrivateRoomsFragment>() {
     fun adapterSetup() {
         getRooms()
     }
+
     fun adapterCallback() {
         adapter.onItemClickListener = object : PrivateRoomsAdapter.OnItemClickListener {
             override fun onItemClick(
@@ -82,7 +77,8 @@ class PrivateRoomsViewModel : BasicViewModel<PrivateRoomsFragment>() {
     fun createRoom() {
         navigator?.openAddRoomActivity()
     }
-    private fun getRooms(){
+
+    private fun getRooms() {
         getUserRoomsFromFirestore(
             userId = DataUtils.user!!.id!!,
             onSuccessListener = { querySnapShot ->

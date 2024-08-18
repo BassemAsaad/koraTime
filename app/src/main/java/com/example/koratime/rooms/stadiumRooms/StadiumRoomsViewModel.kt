@@ -1,26 +1,23 @@
 package com.example.koratime.rooms.stadiumRooms
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.util.Log
-import com.example.koratime.Constants
 import com.example.koratime.DataUtils
 import com.example.koratime.adapters.PublicRoomsAdapter
 import com.example.koratime.basic.BasicViewModel
-import com.example.koratime.chat.ChatViewModel
 import com.example.koratime.database.getStadiumRoomFromFirestore
 import com.example.koratime.model.RoomModel
-import com.example.koratime.rooms.roomChat.RoomChatActivity
 
-class StadiumRoomsViewModel : BasicViewModel<StadiumRoomsNavigator>(){
+class StadiumRoomsViewModel : BasicViewModel<StadiumRoomsNavigator>() {
     override val TAG: String
         get() = StadiumRoomsViewModel::class.java.simpleName
     val adapter = PublicRoomsAdapter(null)
 
-    fun adapterSetup(){
+    fun adapterSetup() {
         getStadiumRooms()
     }
-    fun adapterCallback(){
+
+    fun adapterCallback() {
         adapter.onItemClickListener = object : PublicRoomsAdapter.OnItemClickListener {
             @SuppressLint("SuspiciousIndentation")
             override fun onItemClick(
@@ -34,7 +31,7 @@ class StadiumRoomsViewModel : BasicViewModel<StadiumRoomsNavigator>(){
     }
 
 
-    private fun getStadiumRooms(){
+    private fun getStadiumRooms() {
         getStadiumRoomFromFirestore(
             playerID = DataUtils.user!!.id!!,
             onSuccessListener = { querySnapShot ->

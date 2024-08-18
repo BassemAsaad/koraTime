@@ -65,7 +65,7 @@ class FriendsAdapter(var friendsList: List<FriendModel?>?) :
             }
         )
         holder.itemView.setOnClickListener {
-                onUserClickListener?.onItemClick(friendsList!![position]!!, holder, position)
+            onUserClickListener?.onItemClick(friendsList!![position]!!, holder, position)
         }
 
     }
@@ -102,6 +102,7 @@ class FriendsAdapter(var friendsList: List<FriendModel?>?) :
 
         changeData(filteredList)
     }
+
     private fun formatMessageTime(timestamp: Long): String {
         val currentTime = Calendar.getInstance()
         val messageTime = Calendar.getInstance().apply {
@@ -119,10 +120,12 @@ class FriendsAdapter(var friendsList: List<FriendModel?>?) :
                 // If the message is from today, show time
                 SimpleDateFormat("hh:mm a", Locale.getDefault()).format(messageTime.time)
             }
+
             isYesterday -> {
                 // If the message is from yesterday, show 'Yesterday'
                 "Yesterday"
             }
+
             else -> {
                 // Otherwise, show the date
                 SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(messageTime.time)

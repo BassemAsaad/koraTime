@@ -47,7 +47,7 @@ class BookingStadiumViewModel : BasicViewModel<BookingStadiumNavigator>() {
 
     private var calendarAdapter = CalendarAdapter(emptyList())
     private var timeSlotsAdapter = TimeSlotsForUserAdapter(emptyList())
-    lateinit var bookingStadiumAdapter : BookingStadiumAdapter
+    lateinit var bookingStadiumAdapter: BookingStadiumAdapter
     private lateinit var timeSlotsList: List<String>
     private lateinit var availableSlots: MutableList<String>
     private lateinit var bookedTimesList: List<String>
@@ -58,138 +58,146 @@ class BookingStadiumViewModel : BasicViewModel<BookingStadiumNavigator>() {
         }
         getTimeSlots(selectedDate)
         calendarAdapter = CalendarAdapter(generateNextTwoWeeks())
-        bookingStadiumAdapter = BookingStadiumAdapter(calendarAdapter, timeSlotsAdapter, stadium!!.stadiumID!!)
+        bookingStadiumAdapter =
+            BookingStadiumAdapter(calendarAdapter, timeSlotsAdapter, stadium!!.stadiumID!!)
 
     }
+
     fun adapterCallback() {
-        timeSlotsAdapter.onBookClickListener = object : TimeSlotsForUserAdapter.OnBookClickListener {
-            @SuppressLint("SetTextI18n")
-            override fun onclick(
-                slot: String,
-                holder: TimeSlotsForUserAdapter.ViewHolder,
-                position: Int
-            ) {
-                addBookingToFirestore(
-                    timeSlot = holder.dataBinding.tvTimeSlot.text.toString(),
-                    stadiumID = stadium!!.stadiumID!!,
-                    date = selectedDate,
-                    user = DataUtils.user!!,
-                    onSuccessListener = {
-                        holder.dataBinding.apply {
-                            tvTimeSlot.isEnabled = false
-                            tvTimeSlot.setTextColor((Color.GRAY))
-                            btnBook.isEnabled = false
-                            btnBook.text = "Booked"
-                            btnBook.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
+        timeSlotsAdapter.onBookClickListener =
+            object : TimeSlotsForUserAdapter.OnBookClickListener {
+                @SuppressLint("SetTextI18n")
+                override fun onclick(
+                    slot: String,
+                    holder: TimeSlotsForUserAdapter.ViewHolder,
+                    position: Int
+                ) {
+                    addBookingToFirestore(
+                        timeSlot = holder.dataBinding.tvTimeSlot.text.toString(),
+                        stadiumID = stadium!!.stadiumID!!,
+                        date = selectedDate,
+                        user = DataUtils.user!!,
+                        onSuccessListener = {
+                            holder.dataBinding.apply {
+                                tvTimeSlot.isEnabled = false
+                                tvTimeSlot.setTextColor((Color.GRAY))
+                                btnBook.isEnabled = false
+                                btnBook.text = "Booked"
+                                btnBook.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
+                            }
+                            log(
+                                " ${holder.dataBinding.tvTimeSlot.text} booked on  $selectedDate" +
+                                        " from userId: ${DataUtils.user!!.userName}" +
+                                        " to the stadiumID: ${stadium!!.stadiumName}"
+                            )
+
+                            toastMessage.value =
+                                "${holder.dataBinding.tvTimeSlot.text} Booked Successfully"
+
+
+                        },
+                        onFailureListener = { e ->
+                            log("Error Removing Book from firestore $e")
                         }
-                        log(" ${holder.dataBinding.tvTimeSlot.text} booked on  $selectedDate" +
-                                " from userId: ${DataUtils.user!!.userName}" +
-                                " to the stadiumID: ${stadium!!.stadiumName}")
+                    )
 
-                        toastMessage.value = "${holder.dataBinding.tvTimeSlot.text} Booked Successfully"
-
-
-                    },
-                    onFailureListener = { e ->
-                        log("Error Removing Book from firestore $e")
-                    }
-                )
-
+                }
             }
-        }
-        bookingStadiumAdapter.onSearchClickListener = object : BookingStadiumAdapter.OnSearchClickListener {
-            override fun onSearchClick(
-                holder: BookingStadiumAdapter.PlayersSearchViewHolder,
-                stadiumId: String
-            ) {
-                playerDocumentExists(stadiumId, DataUtils.user!!.id!!,
-                    onSuccessListener = { playerExist ->
-                        log(" Player ${DataUtils.user!!.userName} is looking for players")
-                        if (!playerExist) {
-                            setPlayerDataAndUpdateCounter(stadiumId, DataUtils.user!!.id!!,
-                                onSuccessListener = {
-                                    log("Player added successfully for playersList ${DataUtils.user!!.userName}")
-                                    holder.dataBinding.apply {
-                                        stopSearching.visibility = View.VISIBLE
-                                        lookForPlayers.text = "Looking For Players..."
-                                        lookForPlayers.isEnabled = false
-                                    }
-                                    checkCounterInFirestore(
-                                        stadiumID = stadiumId,
-                                        onSuccessListener = { checkCounter ->
-                                            log(" Counter == 3 ? $checkCounter")
-                                            if (checkCounter) {
-                                                getPlayersIdListFromFirestore(
-                                                    stadiumID = stadiumId,
-                                                    onSuccessListener = { playersIDs ->
-                                                        log("PlayersID List $playersIDs")
-                                                        addStadiumRoomToFirestore(
-                                                            stadium!!,
-                                                            playersIDs,
-                                                            onSuccessListener = {
-                                                                log("Stadium Room Created Successfully")
-                                                                resetCounterAndRemovePlayers(
-                                                                    stadiumID = stadiumId,
-                                                                    onSuccessListener = {
-                                                                        log("Document Removed Successfully")
-                                                                    },
-                                                                    onFailureListener = {
-                                                                        log("Error Removing Document: $it")
-                                                                    }
-                                                                ) //delete document
-
-                                                            },
-                                                            onFailureListener = {
-                                                                log("Error Adding Stadium Room $it ")
-                                                            }
-                                                        )
-
-                                                    },
-                                                    onFailureListener = {
-                                                        log("Error getting PlayersID list: $it")
-                                                    }
-                                                )// end get list of players id
-                                            }
-
-                                        },
-                                        onFailureListener = {
-                                            log("Error getting players count: $it")
+        bookingStadiumAdapter.onSearchClickListener =
+            object : BookingStadiumAdapter.OnSearchClickListener {
+                override fun onSearchClick(
+                    holder: BookingStadiumAdapter.PlayersSearchViewHolder,
+                    stadiumId: String
+                ) {
+                    playerDocumentExists(stadiumId, DataUtils.user!!.id!!,
+                        onSuccessListener = { playerExist ->
+                            log(" Player ${DataUtils.user!!.userName} is looking for players")
+                            if (!playerExist) {
+                                setPlayerDataAndUpdateCounter(stadiumId, DataUtils.user!!.id!!,
+                                    onSuccessListener = {
+                                        log("Player added successfully for playersList ${DataUtils.user!!.userName}")
+                                        holder.dataBinding.apply {
+                                            stopSearching.visibility = View.VISIBLE
+                                            lookForPlayers.text = "Looking For Players..."
+                                            lookForPlayers.isEnabled = false
                                         }
-                                    )// end check counter
+                                        checkCounterInFirestore(
+                                            stadiumID = stadiumId,
+                                            onSuccessListener = { checkCounter ->
+                                                log(" Counter == 3 ? $checkCounter")
+                                                if (checkCounter) {
+                                                    getPlayersIdListFromFirestore(
+                                                        stadiumID = stadiumId,
+                                                        onSuccessListener = { playersIDs ->
+                                                            log("PlayersID List $playersIDs")
+                                                            addStadiumRoomToFirestore(
+                                                                stadium!!,
+                                                                playersIDs,
+                                                                onSuccessListener = {
+                                                                    log("Stadium Room Created Successfully")
+                                                                    resetCounterAndRemovePlayers(
+                                                                        stadiumID = stadiumId,
+                                                                        onSuccessListener = {
+                                                                            log("Document Removed Successfully")
+                                                                        },
+                                                                        onFailureListener = {
+                                                                            log("Error Removing Document: $it")
+                                                                        }
+                                                                    ) //delete document
 
-                                },
-                                onFailureListener = {
-                                    log("Error adding player and updating counter: $it")
-                                }
-                            ) // end set player
+                                                                },
+                                                                onFailureListener = {
+                                                                    log("Error Adding Stadium Room $it ")
+                                                                }
+                                                            )
+
+                                                        },
+                                                        onFailureListener = {
+                                                            log("Error getting PlayersID list: $it")
+                                                        }
+                                                    )// end get list of players id
+                                                }
+
+                                            },
+                                            onFailureListener = {
+                                                log("Error getting players count: $it")
+                                            }
+                                        )// end check counter
+
+                                    },
+                                    onFailureListener = {
+                                        log("Error adding player and updating counter: $it")
+                                    }
+                                ) // end set player
+                            }
+                        },
+                        onFailureListener = {
+                            log(" Error adding player to search: $it")
                         }
-                    },
-                    onFailureListener = {
-                        log(" Error adding player to search: $it")
-                    }
-                )// end check if player document exist
-            }
-            override fun onStopSearchClick(
-                holder: BookingStadiumAdapter.PlayersSearchViewHolder,
-                stadiumId: String
-            ) {
-                removePlayer(
-                    stadiumID = stadiumId,
-                    userID = DataUtils.user!!.id!!,
-                    onSuccessListener = {
-                        log("Player Removed From Search Successfully")
-                        holder.dataBinding.apply {
-                            stopSearching.visibility = View.GONE
-                            lookForPlayers.text = "Click To Search For Players"
-                            lookForPlayers.isEnabled = true
+                    )// end check if player document exist
+                }
+
+                override fun onStopSearchClick(
+                    holder: BookingStadiumAdapter.PlayersSearchViewHolder,
+                    stadiumId: String
+                ) {
+                    removePlayer(
+                        stadiumID = stadiumId,
+                        userID = DataUtils.user!!.id!!,
+                        onSuccessListener = {
+                            log("Player Removed From Search Successfully")
+                            holder.dataBinding.apply {
+                                stopSearching.visibility = View.GONE
+                                lookForPlayers.text = "Click To Search For Players"
+                                lookForPlayers.isEnabled = true
+                            }
+                        },
+                        onFailureListener = { e ->
+                            log("Error Removing Player From Search: $e ")
                         }
-                    },
-                    onFailureListener = { e ->
-                       log("Error Removing Player From Search: $e ")
-                    }
-                )
+                    )
+                }
             }
-        }
         calendarAdapter.onItemClickListener = object : CalendarAdapter.OnItemClickListener {
             override fun onItemClick(
                 date: Date?,
@@ -262,6 +270,7 @@ class BookingStadiumViewModel : BasicViewModel<BookingStadiumNavigator>() {
     ): List<String> {
         return allTimeSlots.filterNot { it in bookedTimeSlots }
     }
+
     private fun generateNextTwoWeeks(): List<Date> {
         // Initialize calendar to current date
         val calendar = Calendar.getInstance()

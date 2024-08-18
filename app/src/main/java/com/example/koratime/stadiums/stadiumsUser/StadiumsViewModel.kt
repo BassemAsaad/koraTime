@@ -20,10 +20,12 @@ class StadiumsViewModel : BasicViewModel<StadiumsNavigator>() {
         Firebase.auth.signOut()
         navigator?.logout()
     }
-    fun adapterSetup(){
+
+    fun adapterSetup() {
         getAllStadiums()
     }
-    fun adapterCallback(){
+
+    fun adapterCallback() {
         adapter.onItemClickListener = object : StadiumsAdapter.OnItemClickListener {
             override fun onItemClick(stadium: StadiumModel?, position: Int) {
                 navigator?.bookingStadiumActivity(stadium)

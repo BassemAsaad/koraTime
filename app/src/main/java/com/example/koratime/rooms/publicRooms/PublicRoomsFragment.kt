@@ -10,7 +10,8 @@ import com.example.koratime.databinding.FragmentPublicRoomsBinding
 import com.example.koratime.model.RoomModel
 import com.example.koratime.rooms.roomChat.RoomChatActivity
 
-class PublicRoomsFragment : BasicFragment<FragmentPublicRoomsBinding, PublicRoomsViewModel>(), PublicRoomsNavigator {
+class PublicRoomsFragment : BasicFragment<FragmentPublicRoomsBinding, PublicRoomsViewModel>(),
+    PublicRoomsNavigator {
 
     override fun initViewModel(): PublicRoomsViewModel {
         return ViewModelProvider(this)[PublicRoomsViewModel::class.java]
@@ -25,6 +26,7 @@ class PublicRoomsFragment : BasicFragment<FragmentPublicRoomsBinding, PublicRoom
         callback()
 
     }
+
     override fun callback() {
         viewModel.apply {
             navigator = this@PublicRoomsFragment
@@ -45,7 +47,8 @@ class PublicRoomsFragment : BasicFragment<FragmentPublicRoomsBinding, PublicRoom
                     return true
                 }
             })
-        }    }
+        }
+    }
 
 
     override fun openRoomChatActivity(room: RoomModel?) {

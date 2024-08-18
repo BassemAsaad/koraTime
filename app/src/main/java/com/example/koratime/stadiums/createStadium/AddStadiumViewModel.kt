@@ -6,7 +6,6 @@ import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import com.example.koratime.DataUtils
 import com.example.koratime.basic.BasicViewModel
-import com.example.koratime.chat.ChatViewModel
 import com.example.koratime.database.addStadiumToFirestore
 import com.example.koratime.database.uploadImageToStorage
 import com.example.koratime.model.StadiumModel
@@ -44,6 +43,7 @@ class AddStadiumViewModel : BasicViewModel<AddStadiumNavigator>() {
     fun openLocationPicker() {
         navigator?.openLocationPicker()
     }
+
     fun openImagePicker() {
         navigator?.openImagePicker()
     }
@@ -55,6 +55,7 @@ class AddStadiumViewModel : BasicViewModel<AddStadiumNavigator>() {
             uploadImageToStorage()
         }
     }
+
     private fun addStadium(downloadUri: String) {
         val stadium = StadiumModel(
             stadiumName = stadiumName.get(),
@@ -86,6 +87,7 @@ class AddStadiumViewModel : BasicViewModel<AddStadiumNavigator>() {
         )
 
     }
+
     private fun uploadImageToStorage() {
         showLoading.value = true
         uploadImageToStorage(
@@ -103,6 +105,7 @@ class AddStadiumViewModel : BasicViewModel<AddStadiumNavigator>() {
         )
 
     }
+
     private fun validate(): Boolean {
         var valid = true
         if (stadiumName.get().isNullOrBlank()) {

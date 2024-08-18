@@ -44,6 +44,7 @@ abstract class BasicActivity<DB : ViewDataBinding, VM : BasicViewModel<*>> : App
     protected fun log(value: Any) {
         Log.e(TAG, value.toString())
     }
+
     private fun showLoading() {
         progressDialog = ProgressDialog(this)
         progressDialog?.apply {

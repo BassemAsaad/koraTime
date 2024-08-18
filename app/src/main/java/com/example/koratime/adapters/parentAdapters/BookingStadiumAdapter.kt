@@ -23,12 +23,14 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class BookingStadiumAdapter (
+class BookingStadiumAdapter(
     private val calendarAdapter: CalendarAdapter,
     private val timeSlotsAdapter: TimeSlotsForUserAdapter,
-    private val stadiumId: String) : RecyclerView.Adapter<ViewHolder>() {
+    private val stadiumId: String
+) : RecyclerView.Adapter<ViewHolder>() {
     private var dateTitle = SimpleDateFormat("MMM d, yyyy", Locale.getDefault()).format(Date())
-    private  var images = emptyList<SlideModel>()
+    private var images = emptyList<SlideModel>()
+
     companion object {
         private const val VIEW_TYPE_IMAGE_SLIDER = 0
         private const val VIEW_TYPE_PLAYERS_SEARCH = 1
@@ -47,10 +49,11 @@ class BookingStadiumAdapter (
             else -> throw IllegalArgumentException("Invalid position $position")
         }
     }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return when (viewType) {
-            VIEW_TYPE_IMAGE_SLIDER ->{
-                val binding : ItemImageSliderBinding = DataBindingUtil.inflate(
+            VIEW_TYPE_IMAGE_SLIDER -> {
+                val binding: ItemImageSliderBinding = DataBindingUtil.inflate(
                     LayoutInflater.from(parent.context),
                     R.layout.item_image_slider,
                     parent,
@@ -58,15 +61,17 @@ class BookingStadiumAdapter (
                 )
                 ImageSliderViewHolder(binding)
             }
+
             VIEW_TYPE_PLAYERS_SEARCH -> {
                 val binding: ItemPlayersSearchBinding = DataBindingUtil.inflate(
                     LayoutInflater.from(parent.context),
                     R.layout.item_players_search,
                     parent,
                     false
-                    )
+                )
                 PlayersSearchViewHolder(binding)
             }
+
             VIEW_TYPE_DATE_TITLE -> {
                 val binding: ItemDateTitleBinding = DataBindingUtil.inflate(
                     LayoutInflater.from(parent.context),
@@ -96,6 +101,7 @@ class BookingStadiumAdapter (
                 )
                 TimeSlotsViewHolder(binding)
             }
+
             else -> throw IllegalArgumentException("Invalid view type")
 
         }
@@ -108,15 +114,19 @@ class BookingStadiumAdapter (
             VIEW_TYPE_IMAGE_SLIDER -> {
                 (holder as ImageSliderViewHolder).bind(images)
             }
+
             VIEW_TYPE_PLAYERS_SEARCH -> {
                 (holder as PlayersSearchViewHolder).bind(stadiumId)
             }
+
             VIEW_TYPE_DATE_TITLE -> {
                 (holder as DateTitleViewHolder).bind(dateTitle)
             }
+
             VIEW_TYPE_CALENDAR -> {
                 (holder as CalendarViewHolder).bind(calendarAdapter)
             }
+
             VIEW_TYPE_TIME_SLOTS -> {
                 (holder as TimeSlotsViewHolder).bind(timeSlotsAdapter)
             }
@@ -124,15 +134,19 @@ class BookingStadiumAdapter (
 
         }
     }
+
     fun changeImageSlider(imageList: List<SlideModel>) {
-        images= imageList
+        images = imageList
         notifyItemChanged(0)
     }
+
     fun changeDateTitle(date: String) {
         dateTitle = date
         notifyItemChanged(3)
     }
-    inner class PlayersSearchViewHolder(val dataBinding: ItemPlayersSearchBinding) : ViewHolder(dataBinding.root) {
+
+    inner class PlayersSearchViewHolder(val dataBinding: ItemPlayersSearchBinding) :
+        ViewHolder(dataBinding.root) {
         fun bind(stadiumId: String) {
             playerDocumentExists(
                 stadiumID = stadiumId,
@@ -156,19 +170,20 @@ class BookingStadiumAdapter (
                 }
             )
             dataBinding.lookForPlayers.setOnClickListener {
-                onSearchClickListener?.onSearchClick(this,stadiumId)
+                onSearchClickListener?.onSearchClick(this, stadiumId)
             }
             dataBinding.stopSearching.setOnClickListener {
-                onSearchClickListener?.onStopSearchClick(this,stadiumId)
+                onSearchClickListener?.onStopSearchClick(this, stadiumId)
             }
 
         }
     }
 
     var onSearchClickListener: OnSearchClickListener? = null
+
     interface OnSearchClickListener {
-        fun onSearchClick(holder : PlayersSearchViewHolder, stadiumId : String)
-        fun onStopSearchClick(holder : PlayersSearchViewHolder, stadiumId : String)
+        fun onSearchClick(holder: PlayersSearchViewHolder, stadiumId: String)
+        fun onStopSearchClick(holder: PlayersSearchViewHolder, stadiumId: String)
     }
 
     // ViewHolder for Image Slider
@@ -180,6 +195,7 @@ class BookingStadiumAdapter (
                     binding.imageSlider.visibility = View.VISIBLE
                     binding.imageSlider.setImageList(imageList, ScaleTypes.FIT)
                 }
+
                 else -> binding.imageSlider.visibility = View.GONE
             }
         }

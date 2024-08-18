@@ -57,7 +57,7 @@ class BookingStadiumActivity :
             title = stadiumModel.stadiumName
         }
         dataBinding.apply {
-            parentRecyclerView.adapter= viewModel.bookingStadiumAdapter
+            parentRecyclerView.adapter = viewModel.bookingStadiumAdapter
             swipeRefresh.setOnRefreshListener {
                 dataBinding.swipeRefresh.isRefreshing = false
                 viewModel.getImagesFromFirestore {
@@ -76,15 +76,18 @@ class BookingStadiumActivity :
         }
 
     }
+
     override fun showNumber() {
         intent = Intent(Intent.ACTION_DIAL)
         intent.data = Uri.parse("tel:${stadiumModel.stadiumTelephoneNumber}")
         startActivity(intent)
     }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.booking_stadium_menu, menu)
         return true
     }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.stadium_location_menu -> {
@@ -92,6 +95,7 @@ class BookingStadiumActivity :
                 return true
 
             }
+
             R.id.call_stadium_menu -> {
                 showNumber()
                 return true
@@ -99,6 +103,7 @@ class BookingStadiumActivity :
         }
         return super.onOptionsItemSelected(item)
     }
+
     override fun onSupportNavigateUp(): Boolean {
         // go to the previous fragment when back button clicked on toolbar
         onBackPressed()

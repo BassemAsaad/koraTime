@@ -61,6 +61,7 @@ class StadiumsManagerFragment :
         intent.putExtra(Constants.STADIUM_MANAGER, stadium)
         startActivity(intent)
     }
+
     override fun createStadiumActivity() {
         val intent = Intent(requireContext(), AddStadiumActivity::class.java)
         startActivity(intent)

@@ -28,16 +28,18 @@ import java.util.Locale
 class ManageStadiumViewModel : BasicViewModel<ManageStadiumNavigator>() {
     override val TAG: String
         get() = ManageStadiumViewModel::class.java.simpleName
-    companion object{
+
+    companion object {
         const val TAG = "ManageStadiumViewModel"
     }
+
     var stadium: StadiumModel? = null
     private var listOfUrls = MutableLiveData<List<String>>()
     var timeSlotsArray = MutableLiveData<Array<String>>()
 
     private var timeSlotsAdapter = TimeSlotsForManagerAdapter(emptyList(), emptyList())
     private var calendarAdapter = CalendarAdapter(emptyList())
-    lateinit var manageStadiumAdapter : ManageStadiumAdapter
+    lateinit var manageStadiumAdapter: ManageStadiumAdapter
 
     private lateinit var timeSlotsList: List<String>
     private lateinit var availableSlots: List<String>
@@ -75,92 +77,105 @@ class ManageStadiumViewModel : BasicViewModel<ManageStadiumNavigator>() {
                 getTimeSlots(selectedDate)
             }
         }
-        timeSlotsAdapter.onBookClickListener = object : TimeSlotsForManagerAdapter.OnBookClickListener {
-            override fun onclick(slot: String, holder: TimeSlotsForManagerAdapter.ViewHolder, position: Int) {
-                addBookingToFirestore(
-                    timeSlot = holder.dataBinding.tvTimeSlot.text.toString(),
-                    stadiumID = stadium!!.stadiumID!!,
-                    date = selectedDate,
-                    user = DataUtils.user!!,
-                    onSuccessListener = {
-                        log(" ${holder.dataBinding.tvTimeSlot.text} booked on  " +
-                                "$selectedDate from userId: ${DataUtils.user!!.id!!} " +
-                                "to the stadiumID: ${stadium!!.stadiumID}")
-                        holder.dataBinding.apply {
-                            tvTimeSlot.apply {
-                                isEnabled = false
-                                setTextColor((Color.GRAY))
+        timeSlotsAdapter.onBookClickListener =
+            object : TimeSlotsForManagerAdapter.OnBookClickListener {
+                override fun onclick(
+                    slot: String,
+                    holder: TimeSlotsForManagerAdapter.ViewHolder,
+                    position: Int
+                ) {
+                    addBookingToFirestore(
+                        timeSlot = holder.dataBinding.tvTimeSlot.text.toString(),
+                        stadiumID = stadium!!.stadiumID!!,
+                        date = selectedDate,
+                        user = DataUtils.user!!,
+                        onSuccessListener = {
+                            log(
+                                " ${holder.dataBinding.tvTimeSlot.text} booked on  " +
+                                        "$selectedDate from userId: ${DataUtils.user!!.id!!} " +
+                                        "to the stadiumID: ${stadium!!.stadiumID}"
+                            )
+                            holder.dataBinding.apply {
+                                tvTimeSlot.apply {
+                                    isEnabled = false
+                                    setTextColor((Color.GRAY))
 
+                                }
+                                btnBook.apply {
+                                    isEnabled = false
+                                    text = "Booked"
+                                    backgroundTintList = ColorStateList.valueOf(Color.GRAY)
+                                }
                             }
-                            btnBook.apply {
-                                isEnabled = false
-                                text = "Booked"
-                                backgroundTintList = ColorStateList.valueOf(Color.GRAY)
+
+                            toastMessage.value =
+                                "${holder.dataBinding.tvTimeSlot.text} Booked Successfully"
+                            getTimeSlots(selectedDate)
+
+                        },
+                        onFailureListener = { e ->
+                            log("Error Removing Book from firestore $e")
+                        }
+                    )
+                }
+
+            }
+        timeSlotsAdapter.onTimeSlotClickListener =
+            object : TimeSlotsForManagerAdapter.OnTimeSlotClickListener {
+                override fun onclick(
+                    slot: String,
+                    holder: TimeSlotsForManagerAdapter.ViewHolder,
+                    position: Int
+                ) {
+                    removeBookingFromFirestore(
+                        timeSlot = holder.dataBinding.tvTimeSlot.text.toString(),
+                        stadiumID = stadium!!.stadiumID!!,
+                        date = selectedDate,
+                        onSuccessListener = {
+                            log("Book has been Removed successfully from firestore")
+                            holder.dataBinding.apply {
+                                tvTimeSlot.apply {
+                                    isEnabled = true
+                                    setTextColor((Color.BLACK))
+                                }
+                                btnBook.apply {
+                                    isEnabled = true
+                                    text = "Book"
+                                    backgroundTintList = null
+                                }
                             }
+                            toastMessage.value =
+                                "${holder.dataBinding.tvTimeSlot.text} Book Removed Successfully"
+                            getTimeSlots(selectedDate)
+                        },
+                        onFailureListener = {
+                            log("Error Removing Book from firestore $it")
                         }
 
-                        toastMessage.value = "${holder.dataBinding.tvTimeSlot.text} Booked Successfully"
-                        getTimeSlots(selectedDate)
-
-                    },
-                    onFailureListener = { e ->
-                        log("Error Removing Book from firestore $e")
-                    }
-                )
+                    )
+                }
             }
-
-        }
-        timeSlotsAdapter.onTimeSlotClickListener = object : TimeSlotsForManagerAdapter.OnTimeSlotClickListener {
-            override fun onclick(
-                slot: String,
-                holder: TimeSlotsForManagerAdapter.ViewHolder,
-                position: Int
-            ) {
-                removeBookingFromFirestore(
-                    timeSlot = holder.dataBinding.tvTimeSlot.text.toString(),
-                    stadiumID = stadium!!.stadiumID!!,
-                    date = selectedDate,
-                    onSuccessListener = {
-                        log("Book has been Removed successfully from firestore")
-                        holder.dataBinding.apply {
-                            tvTimeSlot.apply {
-                                isEnabled = true
-                                setTextColor((Color.BLACK))
-                            }
-                            btnBook.apply {
-                                isEnabled = true
-                                text = "Book"
-                                backgroundTintList = null
-                            }
-                        }
-                        toastMessage.value = "${holder.dataBinding.tvTimeSlot.text} Book Removed Successfully"
-                        getTimeSlots(selectedDate)
-                    },
-                    onFailureListener = {
-                        log("Error Removing Book from firestore $it")
-                    }
-
-                )
+        manageStadiumAdapter.onImagePickerClickListener =
+            object : ManageStadiumAdapter.OnImagePickerClickListener {
+                override fun onImagePickerClick() {
+                    navigator?.openImagePicker()
+                }
             }
-        }
-        manageStadiumAdapter.onImagePickerClickListener = object : ManageStadiumAdapter.OnImagePickerClickListener {
-            override fun onImagePickerClick() {
-                navigator?.openImagePicker()
-            }
-        }
     }
+
     fun deleteStadium() {
         deleteStadiumFromFirestore(
             stadiumID = stadium!!.stadiumID!!,
             onSuccessListener = {
-                Log.e(TAG,"Stadium Removed Successfully from firestore")
+                Log.e(TAG, "Stadium Removed Successfully from firestore")
                 navigator?.closeActivity()
             },
             onFailureListener = {
-                Log.e(TAG,"Error Removing Stadium from firestore")
+                Log.e(TAG, "Error Removing Stadium from firestore")
             }
         )
     }
+
     private fun getTimeSlots(date: String) {
         getBookedTimesFromFirestore(
             stadiumID = stadium!!.stadiumID!!,
@@ -171,7 +186,7 @@ class ManageStadiumViewModel : BasicViewModel<ManageStadiumNavigator>() {
                 log("Booked times $bookedTimesList")
 
                 // create opening and closing list
-                timeSlotsList =createListForOpeningTimes(
+                timeSlotsList = createListForOpeningTimes(
                     stadium!!.opening!!,
                     stadium!!.closing!!,
                     timeSlotsArray.value!!
@@ -189,7 +204,9 @@ class ManageStadiumViewModel : BasicViewModel<ManageStadiumNavigator>() {
             }
         )
     }
-    private fun createListForOpeningTimes(openingIndex: Int, closingIndex: Int, timeSlotsArray: Array<String>
+
+    private fun createListForOpeningTimes(
+        openingIndex: Int, closingIndex: Int, timeSlotsArray: Array<String>
     ): List<String> {
         val availableTimeSlots = mutableListOf<String>()
 
@@ -202,10 +219,13 @@ class ManageStadiumViewModel : BasicViewModel<ManageStadiumNavigator>() {
 
         return availableTimeSlots
     }
-    private fun removeBookedListFromOpeningTimes(allTimeSlots: List<String>, bookedTimeSlots: List<String>
+
+    private fun removeBookedListFromOpeningTimes(
+        allTimeSlots: List<String>, bookedTimeSlots: List<String>
     ): List<String> {
         return allTimeSlots.filterNot { it in bookedTimeSlots }
     }
+
     private fun generateNextTwoWeeks(): List<Date> {
         // Initialize calendar to current date
         val calendar = Calendar.getInstance()
@@ -238,6 +258,7 @@ class ManageStadiumViewModel : BasicViewModel<ManageStadiumNavigator>() {
             }
         )
     }
+
     private fun uploadImagesToFirestore() {
         addMultipleImagesToFirestore(
             listOfUrls.value!!.toMutableList(),
@@ -253,7 +274,8 @@ class ManageStadiumViewModel : BasicViewModel<ManageStadiumNavigator>() {
             }
         )
     }
-     fun getImagesFromFirestore(callback: (ArrayList<SlideModel>) -> Unit) {
+
+    fun getImagesFromFirestore(callback: (ArrayList<SlideModel>) -> Unit) {
         getMultipleImagesFromFirestore(
             stadiumID = stadium!!.stadiumID!!,
             onSuccessListener = { urls ->

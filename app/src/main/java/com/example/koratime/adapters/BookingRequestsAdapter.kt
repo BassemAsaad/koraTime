@@ -2,20 +2,15 @@ package com.example.koratime.adapters
 
 import android.annotation.SuppressLint
 import android.graphics.Color
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.koratime.DataUtils
 import com.example.koratime.R
-import com.example.koratime.database.getLastMessageFromFirestore
 import com.example.koratime.databinding.ItemBookingRequestsBinding
-import com.example.koratime.databinding.ItemFriendsBinding
 import com.example.koratime.model.BookingModel
-import com.example.koratime.model.FriendModel
 
-class BookingRequestsAdapter(var requestsList: List<BookingModel?>?):
+class BookingRequestsAdapter(var requestsList: List<BookingModel?>?) :
     RecyclerView.Adapter<BookingRequestsAdapter.ViewHolder>() {
 
     class ViewHolder(val dataBinding: ItemBookingRequestsBinding) :

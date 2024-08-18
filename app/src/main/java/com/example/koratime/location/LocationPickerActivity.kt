@@ -6,7 +6,6 @@ import android.content.Intent
 import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -33,6 +32,7 @@ class LocationPickerActivity :
     BasicActivity<ActivityLocationPickerBinding, LocationPickerViewModel>(), OnMapReadyCallback {
     override val TAG: String
         get() = "LocationPickerActivity"
+
     companion object {
         private const val DEFAULT_ZOOM = 13.8
     }
@@ -65,6 +65,7 @@ class LocationPickerActivity :
         callback()
 
     }
+
     override fun callback() {
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
@@ -95,7 +96,8 @@ class LocationPickerActivity :
 
             // create new places client instance
             placeClient = Places.createClient(this@LocationPickerActivity)
-            fusedLocationProvider = LocationServices.getFusedLocationProviderClient(this@LocationPickerActivity)
+            fusedLocationProvider =
+                LocationServices.getFusedLocationProviderClient(this@LocationPickerActivity)
         }
     }
 

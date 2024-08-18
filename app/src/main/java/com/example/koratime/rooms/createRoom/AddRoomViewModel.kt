@@ -5,7 +5,6 @@ import android.util.Log
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import com.example.koratime.basic.BasicViewModel
-import com.example.koratime.chat.ChatViewModel
 import com.example.koratime.database.addRoomToFirestore
 import com.example.koratime.database.uploadImageToStorage
 import com.example.koratime.model.RoomModel
@@ -40,7 +39,7 @@ class AddRoomViewModel : BasicViewModel<AddRoomNavigator>() {
             //add in firebase
             if (imagesUri.value != null) {
                 uploadImageToStorage()
-            }else{
+            } else {
                 addRoom()
             }
         }
@@ -68,6 +67,7 @@ class AddRoomViewModel : BasicViewModel<AddRoomNavigator>() {
             }
         )
     }
+
     private fun uploadImageToStorage() {
         showLoading.value = true
         uploadImageToStorage(
@@ -84,6 +84,7 @@ class AddRoomViewModel : BasicViewModel<AddRoomNavigator>() {
             }
         )
     }
+
     private fun validate(): Boolean {
         var valid = true
         if (roomName.get().isNullOrBlank()) {

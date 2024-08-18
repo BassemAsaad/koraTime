@@ -23,6 +23,7 @@ class FriendsRequestsViewModel : BasicViewModel<FriendsRequestsNavigator>() {
     fun adapterSetup() {
         getRequests()
     }
+
     fun adapterCallback() {
         adapter.onAddButtonClickListener = object : PendingFriendsAdapter.OnAddButtonClickListener {
             @SuppressLint("SetTextI18n")
@@ -89,31 +90,32 @@ class FriendsRequestsViewModel : BasicViewModel<FriendsRequestsNavigator>() {
 
             }
         }
-        adapter.onRemoveButtonClickListener = object : PendingFriendsAdapter.OnRemoveButtonClickListener {
-            override fun onClick(
-                user: FriendRequestModel,
-                holder: PendingFriendsAdapter.ViewHolder,
-                position: Int
-            ) {
-                val requestId = user.requestID
-                val senderID = user.senderID
-                val receiverID = DataUtils.user!!.id
-                removeFriendRequestWithRequestID(
-                    sender = senderID!!,
-                    receiver = receiverID!!,
-                    request = requestId!!,
-                    onSuccessListener = {
-                        Log.e("Firebase: ", " Request has been removed successfully $requestId")
-                        toastMessage.value = "${user.senderName} Removed"
-                        adapter.removeData(user)
-                    },
-                    onFailureListener = {
-                        Log.e("Firebase: ", " Error removing request")
+        adapter.onRemoveButtonClickListener =
+            object : PendingFriendsAdapter.OnRemoveButtonClickListener {
+                override fun onClick(
+                    user: FriendRequestModel,
+                    holder: PendingFriendsAdapter.ViewHolder,
+                    position: Int
+                ) {
+                    val requestId = user.requestID
+                    val senderID = user.senderID
+                    val receiverID = DataUtils.user!!.id
+                    removeFriendRequestWithRequestID(
+                        sender = senderID!!,
+                        receiver = receiverID!!,
+                        request = requestId!!,
+                        onSuccessListener = {
+                            Log.e("Firebase: ", " Request has been removed successfully $requestId")
+                            toastMessage.value = "${user.senderName} Removed"
+                            adapter.removeData(user)
+                        },
+                        onFailureListener = {
+                            Log.e("Firebase: ", " Error removing request")
 
-                    }
-                )
+                        }
+                    )
+                }
             }
-        }
     }
 
     private fun getRequests() {

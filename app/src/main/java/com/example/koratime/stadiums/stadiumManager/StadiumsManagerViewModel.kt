@@ -29,6 +29,7 @@ class StadiumsManagerViewModel : BasicViewModel<StadiumsManagerNavigator>() {
     fun adapterSetup() {
         getUserStadiums()
     }
+
     fun adapterCallback() {
         adapter.onItemClickListener = object : StadiumsAdapter.OnItemClickListener {
             override fun onItemClick(stadium: StadiumModel?, position: Int) {

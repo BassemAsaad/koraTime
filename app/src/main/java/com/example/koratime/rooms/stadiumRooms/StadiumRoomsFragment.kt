@@ -9,7 +9,8 @@ import com.example.koratime.databinding.FragmentStadiumRoomsBinding
 import com.example.koratime.model.RoomModel
 import com.example.koratime.rooms.roomChat.RoomChatActivity
 
-class StadiumRoomsFragment : BasicFragment<FragmentStadiumRoomsBinding, StadiumRoomsViewModel>(), StadiumRoomsNavigator {
+class StadiumRoomsFragment : BasicFragment<FragmentStadiumRoomsBinding, StadiumRoomsViewModel>(),
+    StadiumRoomsNavigator {
 
     override fun initViewModel(): StadiumRoomsViewModel {
         return ViewModelProvider(this)[StadiumRoomsViewModel::class.java]

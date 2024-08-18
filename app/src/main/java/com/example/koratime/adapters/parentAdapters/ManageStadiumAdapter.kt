@@ -24,7 +24,7 @@ class ManageStadiumAdapter(
     private val timeSlotsAdapter: TimeSlotsForManagerAdapter
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var dateTitle = SimpleDateFormat("MMM d, yyyy", Locale.getDefault()).format(Date())
-    private  var images = emptyList<SlideModel>()
+    private var images = emptyList<SlideModel>()
     private var imagePickerTextView = "Add Stadium Pictures"
 
     companion object {
@@ -53,11 +53,13 @@ class ManageStadiumAdapter(
                     LayoutInflater.from(parent.context),
                     R.layout.item_upload_images,
                     parent,
-                    false)
-                 ImagePickerViewHolder(binding)
+                    false
+                )
+                ImagePickerViewHolder(binding)
             }
-            VIEW_TYPE_IMAGE_SLIDER->{
-                val binding : ItemImageSliderBinding = DataBindingUtil.inflate(
+
+            VIEW_TYPE_IMAGE_SLIDER -> {
+                val binding: ItemImageSliderBinding = DataBindingUtil.inflate(
                     LayoutInflater.from(parent.context),
                     R.layout.item_image_slider,
                     parent,
@@ -65,6 +67,7 @@ class ManageStadiumAdapter(
                 )
                 ImageSliderViewHolder(binding)
             }
+
             VIEW_TYPE_DATE_TITLE -> {
                 val binding: ItemDateTitleBinding = DataBindingUtil.inflate(
                     LayoutInflater.from(parent.context),
@@ -109,9 +112,11 @@ class ManageStadiumAdapter(
             VIEW_TYPE_IMAGE_PICKER -> {
                 (holder as ImagePickerViewHolder).bind(imagePickerTextView)
             }
+
             VIEW_TYPE_IMAGE_SLIDER -> {
                 (holder as ImageSliderViewHolder).bind(images)
             }
+
             VIEW_TYPE_DATE_TITLE -> {
                 (holder as DateTitleViewHolder).bind(dateTitle)
             }
@@ -126,14 +131,17 @@ class ManageStadiumAdapter(
 
         }
     }
+
     fun changeImagePickerText(newImagePickerTextView: String) {
         imagePickerTextView = newImagePickerTextView
         notifyItemChanged(0)
     }
+
     fun changeImageSlider(imageList: List<SlideModel>) {
-        images= imageList
+        images = imageList
         notifyItemChanged(1)
     }
+
     fun changeDateTitle(date: String) {
         dateTitle = date
         notifyItemChanged(2)
@@ -141,15 +149,17 @@ class ManageStadiumAdapter(
 
 
     inner class ImagePickerViewHolder(private val binding: ItemUploadImagesBinding) :
-        RecyclerView.ViewHolder(binding.root){
+        RecyclerView.ViewHolder(binding.root) {
         fun bind(imagePickerTextView: String) {
             binding.imagePicker.setOnClickListener {
-               onImagePickerClickListener?.onImagePickerClick()
+                onImagePickerClickListener?.onImagePickerClick()
             }
             binding.imagePickerTextView.text = imagePickerTextView
         }
     }
+
     var onImagePickerClickListener: OnImagePickerClickListener? = null
+
     interface OnImagePickerClickListener {
         fun onImagePickerClick()
     }
@@ -163,6 +173,7 @@ class ManageStadiumAdapter(
                     binding.imageSlider.visibility = View.VISIBLE
                     binding.imageSlider.setImageList(imageList, ScaleTypes.FIT)
                 }
+
                 else -> binding.imageSlider.visibility = View.GONE
             }
         }

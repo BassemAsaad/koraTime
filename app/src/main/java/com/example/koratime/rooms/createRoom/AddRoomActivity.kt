@@ -1,16 +1,12 @@
 package com.example.koratime.rooms.createRoom
 
 
-import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
 import com.example.koratime.R
 import com.example.koratime.basic.BasicActivity
-import com.example.koratime.database.uploadImageToStorage
 import com.example.koratime.databinding.ActivityAddRoomBinding
 
 @Suppress("DEPRECATION", "SetTextI18n")
@@ -18,7 +14,8 @@ class AddRoomActivity : BasicActivity<ActivityAddRoomBinding, AddRoomViewModel>(
     AddRoomNavigator {
     override val TAG: String
         get() = "AddRoomActivity"
-        private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+    private val pickMedia =
+        registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             // photo picker
             if (uri != null) {
                 log("PhotoPicker selected URI: $uri")
@@ -36,7 +33,7 @@ class AddRoomActivity : BasicActivity<ActivityAddRoomBinding, AddRoomViewModel>(
             }
         }
 
-        override fun getLayoutID(): Int {
+    override fun getLayoutID(): Int {
         return R.layout.activity_add_room
     }
 
@@ -69,6 +66,7 @@ class AddRoomActivity : BasicActivity<ActivityAddRoomBinding, AddRoomViewModel>(
 
         }
     }
+
     override fun onSupportNavigateUp(): Boolean {
         // go to the previous fragment when back button clicked on toolbar
         onBackPressed()
@@ -78,6 +76,7 @@ class AddRoomActivity : BasicActivity<ActivityAddRoomBinding, AddRoomViewModel>(
     override fun openImagePicker() {
         pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
     }
+
     override fun closeActivity() {
         Toast.makeText(this, "Room Added Successfully", Toast.LENGTH_SHORT).show()
         finish()

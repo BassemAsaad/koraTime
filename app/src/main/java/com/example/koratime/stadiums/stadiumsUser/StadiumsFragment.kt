@@ -69,6 +69,7 @@ class StadiumsFragment : BasicFragment<FragmentStadiumsBinding, StadiumsViewMode
         intent.putExtra(Constants.STADIUM_USER, stadium)
         startActivity(intent)
     }
+
     override fun logout() {
         val intent = Intent(requireContext(), LoginActivity::class.java)
         startActivity(intent)

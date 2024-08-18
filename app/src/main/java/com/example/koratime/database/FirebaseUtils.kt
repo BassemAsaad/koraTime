@@ -869,8 +869,8 @@ fun addBookingToFirestore(
     bookingRef.set(setDate)
         .addOnSuccessListener {
             val ref = db.collection(StadiumModel.COLLECTION_NAME).document(stadiumID)
-            .collection(BookingModel.COLLECTION_NAME).document(date)
-            .collection(BookingModel.SUB_COLLECTION_NAME).document(timeSlot)
+                .collection(BookingModel.COLLECTION_NAME).document(date)
+                .collection(BookingModel.SUB_COLLECTION_NAME).document(timeSlot)
             ref.set(bookingData)
                 .addOnSuccessListener(onSuccessListener)
                 .addOnFailureListener(onFailureListener)
@@ -878,6 +878,7 @@ fun addBookingToFirestore(
         .addOnFailureListener(onFailureListener)
 
 }
+
 fun getBookingRequestsFromFirestore(
     stadiumID: String,
     onSuccessListener: OnSuccessListener<List<BookingModel>>,
@@ -916,7 +917,6 @@ fun getBookingRequestsFromFirestore(
         }
         .addOnFailureListener(onFailureListener)
 }
-
 
 
 fun removeBookingFromFirestore(

@@ -75,6 +75,7 @@ class TimeSlotsForManagerAdapter(
     }
 
     var onBookClickListener: OnBookClickListener? = null
+
     interface OnBookClickListener {
         fun onclick(slot: String, holder: ViewHolder, position: Int)
     }

@@ -77,6 +77,7 @@ class RoomChatViewModel : BasicViewModel<RoomChatNavigator>() {
                 }
             }
     }
+
     private fun validation(): Boolean {
         var check = true
 

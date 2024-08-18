@@ -9,7 +9,8 @@ import com.example.koratime.model.StadiumModel
 
 
 @Suppress("DEPRECATION")
-class BookingRequestsActivity : BasicActivity<ActivityBookingRequestsBinding, BookingRequestsViewModel>(),
+class BookingRequestsActivity :
+    BasicActivity<ActivityBookingRequestsBinding, BookingRequestsViewModel>(),
     BookingRequestsNavigator {
     override val TAG: String
         get() = "BookingRequestsActivity"
@@ -18,9 +19,11 @@ class BookingRequestsActivity : BasicActivity<ActivityBookingRequestsBinding, Bo
     override fun initViewModel(): BookingRequestsViewModel {
         return ViewModelProvider(this)[BookingRequestsViewModel::class.java]
     }
+
     override fun getLayoutID(): Int {
         return R.layout.activity_booking_requests
     }
+
     override fun initView() {
         callback()
     }
@@ -30,7 +33,7 @@ class BookingRequestsActivity : BasicActivity<ActivityBookingRequestsBinding, Bo
         viewModel.apply {
             navigator = this@BookingRequestsActivity
             stadiumModel = intent.getParcelableExtra(Constants.STADIUM_BOOKING_REQUESTS)!!
-            stadium =stadiumModel
+            stadium = stadiumModel
             adapterSetup()
         }
 
@@ -46,6 +49,7 @@ class BookingRequestsActivity : BasicActivity<ActivityBookingRequestsBinding, Bo
         }
 
     }
+
     override fun onSupportNavigateUp(): Boolean {
         // go to the previous fragment when back button clicked
         onBackPressed()
