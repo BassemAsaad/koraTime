@@ -33,8 +33,9 @@ class LoginViewModel : BasicViewModel<LoginNavigator>() {
         if (validation()) {
             loginWithFirebase()
         }
-
-
+    }
+    fun openRegisterActivity(){
+        navigator?.openRegisterActivity()
     }
 
 

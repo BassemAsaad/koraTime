@@ -1,7 +1,9 @@
 package com.example.koratime.stadiums.stadiumManager
 
-interface StadiumsManagerNavigator {
-    fun createStadiumActivity()
-    fun Logout()
+import com.example.koratime.model.StadiumModel
 
+interface StadiumsManagerNavigator {
+    fun logout()
+    fun createStadiumActivity()
+    fun manageStadiumActivity(stadium: StadiumModel?)
 }

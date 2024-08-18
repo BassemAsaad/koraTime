@@ -1,3 +1,5 @@
 package com.example.koratime.rooms.roomChat
 
-interface RoomChatNavigator
+interface RoomChatNavigator{
+    fun scrollToBottom()
+}

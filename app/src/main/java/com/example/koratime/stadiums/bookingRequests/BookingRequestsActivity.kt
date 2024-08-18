@@ -22,17 +22,16 @@ class BookingRequestsActivity : BasicActivity<ActivityBookingRequestsBinding, Bo
         return R.layout.activity_booking_requests
     }
     override fun initView() {
-        setSupportActionBar(dataBinding.toolbar)
         callback()
     }
 
     override fun callback() {
+        setSupportActionBar(dataBinding.toolbar)
         viewModel.apply {
             navigator = this@BookingRequestsActivity
-            stadiumModel = intent.getParcelableExtra(Constants.STADIUM)!!
-            viewModel.stadium =stadiumModel
-            viewModel.getDates()
-            dataBinding.recyclerView.adapter = viewModel.adapter
+            stadiumModel = intent.getParcelableExtra(Constants.STADIUM_BOOKING_REQUESTS)!!
+            stadium =stadiumModel
+            adapterSetup()
         }
 
         supportActionBar?.apply {
@@ -40,6 +39,10 @@ class BookingRequestsActivity : BasicActivity<ActivityBookingRequestsBinding, Bo
             setDisplayShowHomeEnabled(true)
             setDisplayShowTitleEnabled(true)
             title = "Requests"
+        }
+        dataBinding.apply {
+            vm = viewModel
+            recyclerView.adapter = viewModel.adapter
         }
 
     }

@@ -79,13 +79,6 @@ class RegisterActivity : BasicActivity<ActivityRegisterBinding, RegisterViewMode
                     }
                 }
             }
-            logIn.setOnClickListener {
-                closeActivity()
-            }
-            profilePictureLayout.setOnClickListener {
-                pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-            }
-
         }
 
     }
@@ -98,6 +91,12 @@ class RegisterActivity : BasicActivity<ActivityRegisterBinding, RegisterViewMode
         return true
     }
 
+    override fun openImagePicker() {
+        pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+    }
+    override fun openLoginActivity() {
+        closeActivity()
+    }
     override fun closeActivity() {
         finish()
     }

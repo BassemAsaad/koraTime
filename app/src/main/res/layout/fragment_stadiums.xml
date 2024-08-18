@@ -19,7 +19,7 @@
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/app_bar"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="0dp"
             android:background="@drawable/shape_tab_indicator"
             android:elevation="0dp"
             android:fitsSystemWindows="true"
@@ -31,12 +31,13 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginHorizontal="12dp">
+                android:layout_gravity="center">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/user_container"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
                     android:layout_gravity="center">
 
                     <de.hdodenhof.circleimageview.CircleImageView
@@ -45,7 +46,7 @@
                         android:layout_height="50dp"
                         android:padding="5dp"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/userName"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         tools:src="@drawable/ic_default_user_pic" />
 
@@ -64,10 +65,10 @@
                         tools:text="Mohammed Ehab" />
 
                     <ImageView
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
                         android:background="@drawable/shape_search"
-                        android:contentDescription="Logout"
+                        android:contentDescription="@string/logout"
                         android:onClick="@{()->vm.logOut()}"
                         android:padding="10dp"
                         android:src="@drawable/ic_logout"

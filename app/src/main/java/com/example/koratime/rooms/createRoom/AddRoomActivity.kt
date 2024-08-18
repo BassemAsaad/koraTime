@@ -66,10 +66,7 @@ class AddRoomActivity : BasicActivity<ActivityAddRoomBinding, AddRoomViewModel>(
         }
         dataBinding.apply {
             vm = viewModel
-            roomImageLayout.setOnClickListener {
-                // Launch the photo picker and let the user choose only images.
-                pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-            }
+
         }
     }
     override fun onSupportNavigateUp(): Boolean {
@@ -78,6 +75,9 @@ class AddRoomActivity : BasicActivity<ActivityAddRoomBinding, AddRoomViewModel>(
         return true
     }
 
+    override fun openImagePicker() {
+        pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+    }
     override fun closeActivity() {
         Toast.makeText(this, "Room Added Successfully", Toast.LENGTH_SHORT).show()
         finish()

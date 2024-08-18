@@ -1,7 +1,6 @@
 package com.example.koratime.stadiums.stadiumsUser
 
 import android.content.Intent
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
@@ -9,9 +8,7 @@ import com.bumptech.glide.Glide
 import com.example.koratime.Constants
 import com.example.koratime.DataUtils
 import com.example.koratime.R
-import com.example.koratime.adapters.StadiumsAdapter
 import com.example.koratime.basic.BasicFragment
-import com.example.koratime.database.getAllStadiumsFromFirestore
 import com.example.koratime.databinding.FragmentStadiumsBinding
 import com.example.koratime.model.StadiumModel
 import com.example.koratime.registration.login.LoginActivity
@@ -20,7 +17,6 @@ import com.example.koratime.stadiums.bookStadium.BookingStadiumActivity
 class StadiumsFragment : BasicFragment<FragmentStadiumsBinding, StadiumsViewModel>(),
     StadiumsNavigator {
 
-    val adapter = StadiumsAdapter(null)
 
     override fun initViewModel(): StadiumsViewModel {
         return ViewModelProvider(this)[StadiumsViewModel::class.java]
@@ -35,10 +31,17 @@ class StadiumsFragment : BasicFragment<FragmentStadiumsBinding, StadiumsViewMode
     }
 
     override fun callback() {
-        viewModel.navigator = this
+        viewModel.apply {
+            navigator = this@StadiumsFragment
+            toastMessage.observe(this@StadiumsFragment) {
+                Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+            }
+            adapterSetup()
+            adapterCallback()
+        }
         dataBinding.apply {
             vm = viewModel
-            recyclerView.adapter = adapter
+            recyclerView.adapter = viewModel.adapter
             userName.text = DataUtils.user!!.userName
             Glide.with(requireContext())
                 .load(DataUtils.user!!.profilePicture)
@@ -52,43 +55,23 @@ class StadiumsFragment : BasicFragment<FragmentStadiumsBinding, StadiumsViewMode
                 }
 
                 override fun onQueryTextChange(newText: String): Boolean {
-                    adapter.filterUsers(newText)
+                    viewModel.adapter.filterUsers(newText)
                     return true
                 }
             })
         }
-        adapter.onItemClickListener = object : StadiumsAdapter.OnItemClickListener {
-            override fun onItemClick(stadium: StadiumModel?, position: Int) {
-                val intent = Intent(requireContext(), BookingStadiumActivity::class.java)
-                intent.putExtra(Constants.STADIUM_USER, stadium)
-                startActivity(intent)
-            }
-        }
+
 
     }
 
-    override fun Logout() {
-        val intent = Intent(requireContext(), LoginActivity::class.java)
+    override fun bookingStadiumActivity(stadium: StadiumModel?) {
+        val intent = Intent(requireContext(), BookingStadiumActivity::class.java)
+        intent.putExtra(Constants.STADIUM_USER, stadium)
         startActivity(intent)
     }
-
-    override fun onStart() {
-        super.onStart()
-        getAllStadiums()
-    }
-
-    private fun getAllStadiums() {
-        getAllStadiumsFromFirestore(
-            onSuccessListener = { querySnapShot ->
-                val stadiums = querySnapShot.toObjects(StadiumModel::class.java)
-                adapter.changeData(stadiums)
-            },
-            onFailureListener = {
-                Log.e("Stadiums Adapter: ", it.localizedMessage!!.toString())
-                Toast.makeText(requireContext(), "Error Loading Stadiums", Toast.LENGTH_SHORT)
-                    .show()
-            }
-        )
+    override fun logout() {
+        val intent = Intent(requireContext(), LoginActivity::class.java)
+        startActivity(intent)
     }
 
 }

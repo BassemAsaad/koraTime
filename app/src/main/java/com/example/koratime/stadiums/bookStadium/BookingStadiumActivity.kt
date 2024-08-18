@@ -1,6 +1,5 @@
 package com.example.koratime.stadiums.bookStadium
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.view.Menu
@@ -12,7 +11,6 @@ import com.example.koratime.R
 import com.example.koratime.basic.BasicActivity
 import com.example.koratime.databinding.ActivityBookingStadiumBinding
 import com.example.koratime.model.StadiumModel
-import com.google.android.material.snackbar.Snackbar
 
 
 @Suppress("DEPRECATION", "NotifyDataSetChanged")
@@ -47,7 +45,7 @@ class BookingStadiumActivity :
             stadium = stadiumModel
             timeSlotsArray.value = resources.getStringArray(R.array.time_slots)
             toastMessage.observe(this@BookingStadiumActivity) {
-                Snackbar.make(dataBinding.root, it, Snackbar.LENGTH_SHORT).show()
+                Toast.makeText(this@BookingStadiumActivity, it, Toast.LENGTH_SHORT).show()
             }
             setUpAdapter()
             adapterCallback()
@@ -67,12 +65,10 @@ class BookingStadiumActivity :
                 }
 
             }
-
-
         }
     }
 
-    private fun showLocation(lat: Double, lng: Double) {
+    override fun showLocation(lat: Double, lng: Double) {
         val url = "geo:$lat,$lng?q=$lat,$lng(My Location)"
         val pushIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
         if (pushIntent.resolveActivity(this.packageManager) != null) {
@@ -80,7 +76,7 @@ class BookingStadiumActivity :
         }
 
     }
-    private fun showNumber() {
+    override fun showNumber() {
         intent = Intent(Intent.ACTION_DIAL)
         intent.data = Uri.parse("tel:${stadiumModel.stadiumTelephoneNumber}")
         startActivity(intent)

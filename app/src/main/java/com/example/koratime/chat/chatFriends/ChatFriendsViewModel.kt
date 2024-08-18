@@ -1,23 +1,52 @@
 package com.example.koratime.chat.chatFriends
 
 import android.util.Log
+import android.widget.Toast
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import com.example.koratime.DataUtils
+import com.example.koratime.adapters.FriendMessagesAdapter
 import com.example.koratime.basic.BasicViewModel
 import com.example.koratime.chat.ChatViewModel
 import com.example.koratime.database.addFriendMessageToFirestore
+import com.example.koratime.database.getFriendMessagesFromFirestore
 import com.example.koratime.model.FriendMessageModel
 import com.example.koratime.model.FriendModel
+import com.google.firebase.firestore.DocumentChange
 import java.util.Date
 
 class ChatFriendsViewModel : BasicViewModel<ChatFriendsNavigator>() {
     override val TAG: String
         get() = ChatFriendsViewModel::class.java.simpleName
+    var friend: FriendModel? = null
+    val messageAdapter = FriendMessagesAdapter()
     val messageField = ObservableField<String>()
     val messageFieldError = ObservableField<String>()
-    var friend: FriendModel? = null
+
     val toastMessage = MutableLiveData<String>()
+
+    fun listenForMessageUpdate() {
+        getFriendMessagesFromFirestore(
+            senderID = DataUtils.user!!.id!!,
+            friendshipID = friend!!.friendshipID!!,
+        ).addSnapshotListener { snapshots, error ->
+            if (error != null) {
+                toastMessage.value = "Error"
+            } else {
+                val newMessageList = mutableListOf<FriendMessageModel?>()
+                for (dc in snapshots!!.documentChanges) {
+                    if (dc.type == DocumentChange.Type.ADDED) {
+                        val message = dc.document.toObject(FriendMessageModel::class.java)
+                        newMessageList.add(message)
+                    }
+                }
+                messageAdapter.changeData(newMessageList)
+                navigator?.scrollToBottom() // Scroll to the last position
+
+            }
+        }
+    }
+
     fun sendMessage() {
         val friendMessageModel = FriendMessageModel(
             content = messageField.get(),

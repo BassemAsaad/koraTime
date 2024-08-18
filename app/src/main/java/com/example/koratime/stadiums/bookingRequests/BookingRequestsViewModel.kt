@@ -3,7 +3,6 @@ package com.example.koratime.stadiums.bookingRequests
 import android.util.Log
 import com.example.koratime.adapters.BookingRequestsAdapter
 import com.example.koratime.basic.BasicViewModel
-import com.example.koratime.chat.ChatViewModel
 import com.example.koratime.database.getBookingRequestsFromFirestore
 import com.example.koratime.model.StadiumModel
 
@@ -14,7 +13,11 @@ class BookingRequestsViewModel : BasicViewModel<BookingRequestsNavigator>() {
     var stadium = StadiumModel()
     var adapter = BookingRequestsAdapter(emptyList())
 
-    fun getDates(){
+    fun adapterSetup(){
+        getDates()
+    }
+
+    private fun getDates(){
         getBookingRequestsFromFirestore(
             stadiumID = stadium.stadiumID!!,
             onSuccessListener = {querySnapshot->

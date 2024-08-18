@@ -41,17 +41,20 @@ class AddStadiumViewModel : BasicViewModel<AddStadiumNavigator>() {
 
     val toastMessage = MutableLiveData<String>()
 
+    fun openLocationPicker() {
+        navigator?.openLocationPicker()
+    }
+    fun openImagePicker() {
+        navigator?.openImagePicker()
+    }
 
     fun createStadium() {
-
         if (validate()) {
             Log.e("Firebase: ", "address:  ${addressLiveData.value}")
             //add in firebase
             uploadImageToStorage()
-
         }
     }
-
     private fun addStadium(downloadUri: String) {
         val stadium = StadiumModel(
             stadiumName = stadiumName.get(),
@@ -83,7 +86,6 @@ class AddStadiumViewModel : BasicViewModel<AddStadiumNavigator>() {
         )
 
     }
-
     private fun uploadImageToStorage() {
         showLoading.value = true
         uploadImageToStorage(

@@ -21,7 +21,6 @@ import com.example.koratime.model.FriendRequestModel
 class FriendsRequestsFragment :
     BasicFragment<FragmentFriendsRequestsBinding, FriendsRequestsViewModel>(),
     FriendsRequestsNavigator {
-    private val adapter = PendingFriendsAdapter(null)
 
 
     override fun getLayoutID(): Int {
@@ -37,142 +36,16 @@ class FriendsRequestsFragment :
     }
 
     override fun callback() {
-        viewModel.navigator = this
+        viewModel.apply {
+            navigator = this@FriendsRequestsFragment
+            adapterSetup()
+            adapterCallback()
+        }
         dataBinding.apply {
             vm = viewModel
-            recyclerView.adapter = adapter
+            recyclerView.adapter = viewModel.adapter
         }
-        adapter.onAddButtonClickListener = object : PendingFriendsAdapter.OnAddButtonClickListener {
-            @SuppressLint("SetTextI18n")
-            override fun onClick(
-                user: FriendRequestModel,
-                holder: PendingFriendsAdapter.ViewHolder,
-                position: Int
-            ) {
-                checkIfFriendExist(
-                    currentUser = DataUtils.user!!,
-                    userSender = user,
-                    onSuccessListener = {
-                        Log.e("Firebase", " ${user.senderName} ex friend status $it")
-                        if (it) {
-                            updateFriendshipStatus(
-                                currentUser = DataUtils.user!!,
-                                sender = user,
-                                onSuccessListener = {
-                                    Log.e(
-                                        "Firebase",
-                                        " ${user.senderName.toString()} Updated successfully as a friend"
-                                    )
-                                    holder.dataBinding.confirmFriendButtonItem.text = "Friends"
-                                    holder.dataBinding.confirmFriendButtonItem.isEnabled = false
-                                    Toast.makeText(
-                                        requireContext(),
-                                        "${user.senderName} Added as a friends",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                },
-                                onFailureListener = { e ->
-                                    Log.e(
-                                        "Firebase",
-                                        " Error updating ${user.senderName} to be friend... Error: ",
-                                        e
-                                    )
-                                }
 
-
-                            )
-                        } else {
-                            acceptFriendRequest(
-                                sender = user,
-                                receiver = DataUtils.user!!,
-                                requestID = user.requestID!!,
-                                onSuccessListener = {
-                                    Log.e(
-                                        "Firebase",
-                                        " ${user.senderName.toString()} Accepted Successfully "
-                                    )
-                                    holder.dataBinding.confirmFriendButtonItem.text = "Friends"
-                                    holder.dataBinding.confirmFriendButtonItem.isEnabled = false
-                                    Toast.makeText(
-                                        requireContext(),
-                                        "${user.senderName} Added as a friends",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-
-                                },
-                                onFailureListener = {
-                                    Log.e("Firebase", " Error Accepting  ${user.senderName} ")
-                                }
-                            )
-                        }
-                    },
-                    onFailureListener = {
-                        Log.e("Firebase", " Error checking if ${user.senderName} is an ex friend ")
-                    }
-
-                )
-
-
-            }
-        }
-        adapter.onRemoveButtonClickListener =
-            object : PendingFriendsAdapter.OnRemoveButtonClickListener {
-                override fun onClick(
-                    user: FriendRequestModel,
-                    holder: PendingFriendsAdapter.ViewHolder,
-                    position: Int
-                ) {
-                    val requestId = user.requestID
-                    val senderID = user.senderID
-                    val receiverID = DataUtils.user!!.id
-                    removeFriendRequestWithRequestID(
-                        sender = senderID!!,
-                        receiver = receiverID!!,
-                        request = requestId!!,
-                        onSuccessListener = {
-                            Log.e("Firebase: ", " Request has been removed successfully $requestId")
-                            Toast.makeText(
-                                requireContext(),
-                                "${user.senderName} Removed",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            adapter.removeData(user)
-                        },
-                        onFailureListener = {
-                            Log.e("Firebase: ", " Error removing request")
-
-                        }
-                    )
-                }
-            }
-    }
-
-
-    override fun onStart() {
-        super.onStart()
-        getRequests()
-
-    }
-
-    private fun getRequests() {
-        getFriendRequestsFromFirestore(
-            DataUtils.user!!,
-            onSuccessListener = { querySnapshot ->
-                val user = querySnapshot.toObjects(FriendRequestModel::class.java)
-                adapter.changeData(user)
-                Log.e("Firebase: ", " Friend requests loaded successfully")
-
-            },
-            onFailureListener = { e ->
-                Log.e("Firebase: ", " Error loading friend requests: ", e)
-                Toast.makeText(
-                    requireContext(),
-                    "Error Loading Friend Requests",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-
-        )
     }
 
     override fun openSearchActivity() {

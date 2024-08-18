@@ -17,12 +17,10 @@ import com.example.koratime.friends.FriendsRequestsFragment
 import com.example.koratime.rooms.TabsFragment
 import com.example.koratime.stadiums.stadiumManager.StadiumsManagerFragment
 import com.example.koratime.stadiums.stadiumsUser.StadiumsFragment
-import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 
 @Suppress("DEPRECATION","MissingPermission")
 class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>(), HomeNavigator {
-    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
     companion object {
         const val LOCATION_PERMISSION_REQUEST_CODE = 100
@@ -37,6 +35,15 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>(), HomeNa
 
     override fun initViewModel(): HomeViewModel {
         return ViewModelProvider(this)[HomeViewModel::class.java]
+    }
+    override fun initView() {
+        callback()
+    }
+    override fun callback() {
+        viewModel.navigator = this
+        dataBinding.vm = viewModel
+        getLocationIfPermissionGranted()
+        openActivity()
     }
 
     override fun openActivity() {
@@ -62,18 +69,6 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>(), HomeNa
             return@setOnItemSelectedListener true
         }
     }
-
-    override fun initView() {
-        callback()
-    }
-
-    override fun callback() {
-        viewModel.navigator = this
-        dataBinding.vm = viewModel
-        getLocationIfPermissionGranted()
-        openActivity()
-    }
-
     private fun mainFragment(): Fragment {
         return if (DataUtils.user?.nationalID == null){
             StadiumsFragment()
@@ -106,7 +101,7 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>(), HomeNa
                 ) == PackageManager.PERMISSION_GRANTED
     }
     private fun getLastKnownLocation() {
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+        val fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         fusedLocationProviderClient.lastLocation
             .addOnSuccessListener { location ->
                 if (location != null) {
@@ -123,14 +118,13 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>(), HomeNa
                             log("Location updated in Firestore")
                         },
                         onFailureListener = {
-                            log("Error updating location in Firestore")
+                            log("Error updating location in Firestore: $it")
                         }
                     )
                 }
             }.addOnFailureListener { e ->
-                Toast.makeText(this, "Failed to get last known location.", Toast.LENGTH_SHORT)
-                    .show()
-                log("Failed to get last known location.")
+                Toast.makeText(this, "Failed to get last known location.", Toast.LENGTH_SHORT).show()
+                log("Failed to get last known location: $e")
             }
     }
     private fun getCityName(latitude: Double, longitude: Double): String {

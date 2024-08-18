@@ -80,39 +80,31 @@ class AddStadiumActivity : BasicActivity<ActivityAddStadiumBinding, AddStadiumVi
     }
 
     override fun initView() {
-        setSupportActionBar(dataBinding.toolbar)
         callback()
         setupSpinners()
 
     }
 
     override fun callback() {
+        setSupportActionBar(dataBinding.toolbar)
+        viewModel.apply {
+            navigator = this@AddStadiumActivity
+            toastMessage.observe(this@AddStadiumActivity) { message ->
+                Toast.makeText(this@AddStadiumActivity, message, Toast.LENGTH_SHORT).show()
+            }
+        }
+
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
             setDisplayShowHomeEnabled(true)
             setDisplayShowTitleEnabled(false)
         }
-        viewModel.apply {
-            navigator = this@AddStadiumActivity
-            toastMessage.observe(this@AddStadiumActivity, Observer { message ->
-                Toast.makeText(this@AddStadiumActivity, message, Toast.LENGTH_SHORT).show()
-            })
-        }
 
         dataBinding.apply {
             vm = viewModel
-            stadiumImagesLayout.setOnClickListener {
-                // Launch the photo picker and let the user choose only images.
-                pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-            }
-            locationPickerEditText.setOnClickListener {
-                val intent = Intent(this@AddStadiumActivity, LocationPickerActivity::class.java)
-                locationPickerActivityResultLauncher.launch(intent)
-            }
+
         }
     }
-
-
 
     private fun setupSpinners() {
         val timeSlots = resources.getStringArray(R.array.time_slots)
@@ -189,6 +181,13 @@ class AddStadiumActivity : BasicActivity<ActivityAddStadiumBinding, AddStadiumVi
         closingTimeIndex = selectedClosingTimeIndex
     }
 
+    override fun openImagePicker() {
+        pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+    }
+    override fun openLocationPicker() {
+        val intent = Intent(this, LocationPickerActivity::class.java)
+        locationPickerActivityResultLauncher.launch(intent)
+    }
     override fun closeActivity() {
         Toast.makeText(this, "Stadium Created Successfully", Toast.LENGTH_SHORT).show()
         finish()

@@ -1,3 +1,7 @@
 package com.example.koratime.chat
 
-interface ChatNavigator
+import com.example.koratime.model.FriendModel
+
+interface ChatNavigator{
+    fun openChatFriendsActivity(user: FriendModel?)
+}

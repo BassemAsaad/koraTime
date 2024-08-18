@@ -29,9 +29,7 @@ class LoginActivity
 
         dataBinding.apply {
             loginVM = viewModel
-            signUp.setOnClickListener {
-                openRegisterActivity()
-            }
+
         }
     }
 

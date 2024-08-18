@@ -50,6 +50,12 @@ class RegisterViewModel : BasicViewModel<RegisterNavigator>() {
             addAccountToFirebase()
         }
     }
+    fun openLoginActivity(){
+        navigator?.openLoginActivity()
+    }
+    fun openImagePicker() {
+
+    }
 
 
     private fun addAccountToFirebase() {

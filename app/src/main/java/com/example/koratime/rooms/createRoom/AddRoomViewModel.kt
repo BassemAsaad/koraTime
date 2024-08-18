@@ -31,6 +31,9 @@ class AddRoomViewModel : BasicViewModel<AddRoomNavigator>() {
 
     val toastMessage = MutableLiveData<String>()
 
+    fun openImagePicker() {
+        navigator?.openImagePicker()
+    }
 
     fun createRoom() {
         if (validate()) {

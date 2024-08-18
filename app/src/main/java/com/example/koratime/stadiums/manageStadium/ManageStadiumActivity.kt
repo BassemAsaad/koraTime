@@ -110,7 +110,7 @@ class ManageStadiumActivity : BasicActivity<ActivityManageStadiumBinding, Manage
     }
     override fun openBookingRequestsActivity() {
         val intent = Intent(this, BookingRequestsActivity::class.java)
-        intent.putExtra(Constants.STADIUM, viewModel.stadium)
+        intent.putExtra(Constants.STADIUM_BOOKING_REQUESTS, viewModel.stadium)
         startActivity(intent)
 
     }

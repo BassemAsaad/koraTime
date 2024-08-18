@@ -1,3 +1,7 @@
 package com.example.koratime.rooms.publicRooms
 
-interface PublicRoomsNavigator
+import com.example.koratime.model.RoomModel
+
+interface PublicRoomsNavigator{
+    fun openRoomChatActivity(room: RoomModel?)
+}
