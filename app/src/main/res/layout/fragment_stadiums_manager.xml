@@ -7,7 +7,7 @@
 
         <variable
             name="vm"
-            type="com.example.koratime.stadiums.stadiumManager.StadiumsManagerViewModel" />
+            type="com.example.koratime.stadiumManager.stadiumManager.StadiumsManagerViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -46,23 +46,25 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        tools:src="@drawable/ic_default_user_pic" />
+                        tools:src="@drawable/ic_default_user_pic"
+
+                        />
 
                     <TextView
                         android:id="@+id/userName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="15dp"
                         android:padding="5dp"
                         android:textColor="@color/white"
                         android:textSize="22sp"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/imageView"
+                        app:layout_constraintStart_toEndOf="@+id/profilePicture"
                         app:layout_constraintTop_toTopOf="parent"
                         tools:text="Mohammed Ehab" />
 
                     <ImageView
+                        android:id="@+id/imageView"
                         android:layout_width="45dp"
                         android:layout_height="45dp"
                         android:background="@drawable/shape_search"
@@ -90,10 +92,10 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginHorizontal="12dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginHorizontal="12dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -103,7 +105,7 @@
                 android:id="@+id/create_Stadium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="5dp"
                 android:layout_marginEnd="40dp"
                 android:backgroundTint="@color/quantum_white_100"
                 android:contentDescription="@string/create_stadium"

@@ -7,16 +7,16 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.koratime.DataUtils
+import com.example.koratime.utils.DataUtils
 import com.example.koratime.R
 import com.example.koratime.basic.BasicActivity
 import com.example.koratime.chat.ChatFragment
-import com.example.koratime.database.updateUserLocationInFirestore
+import com.example.koratime.utils.updateUserLocationInFirestore
 import com.example.koratime.databinding.ActivityHomeBinding
 import com.example.koratime.friends.FriendsRequestsFragment
 import com.example.koratime.rooms.TabsFragment
-import com.example.koratime.stadiums.stadiumManager.StadiumsManagerFragment
-import com.example.koratime.stadiums.stadiumsUser.StadiumsFragment
+import com.example.koratime.stadiumManager.stadiumManager.StadiumsManagerFragment
+import com.example.koratime.stadiumUser.stadiumsUser.StadiumsFragment
 import com.google.android.gms.location.LocationServices
 
 @Suppress("DEPRECATION", "MissingPermission")

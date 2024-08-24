@@ -9,19 +9,19 @@ import com.denzcoskun.imageslider.constants.ScaleTypes
 import com.denzcoskun.imageslider.models.SlideModel
 import com.example.koratime.R
 import com.example.koratime.adapters.CalendarAdapter
-import com.example.koratime.adapters.TimeSlotsForManagerAdapter
-import com.example.koratime.databinding.ItemCalendarBinding
+import com.example.koratime.adapters.TimeSlotsAdapter
 import com.example.koratime.databinding.ItemDateTitleBinding
+import com.example.koratime.databinding.ItemHorizontalRecyclerViewBinding
 import com.example.koratime.databinding.ItemImageSliderBinding
-import com.example.koratime.databinding.ItemTimeSlotsBinding
 import com.example.koratime.databinding.ItemUploadImagesBinding
+import com.example.koratime.databinding.ItemVerticalRecyclerViewBinding
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
 class ManageStadiumAdapter(
     private val calendarAdapter: CalendarAdapter,
-    private val timeSlotsAdapter: TimeSlotsForManagerAdapter
+    private val timeSlotsAdapter: TimeSlotsAdapter
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var dateTitle = SimpleDateFormat("MMM d, yyyy", Locale.getDefault()).format(Date())
     private var images = emptyList<SlideModel>()
@@ -79,9 +79,9 @@ class ManageStadiumAdapter(
             }
 
             VIEW_TYPE_CALENDAR -> {
-                val binding: ItemCalendarBinding = DataBindingUtil.inflate(
+                val binding: ItemHorizontalRecyclerViewBinding = DataBindingUtil.inflate(
                     LayoutInflater.from(parent.context),
-                    R.layout.item_calendar,
+                    R.layout.item_horizontal_recycler_view,
                     parent,
                     false
                 )
@@ -89,9 +89,9 @@ class ManageStadiumAdapter(
             }
 
             VIEW_TYPE_TIME_SLOTS -> {
-                val binding: ItemTimeSlotsBinding = DataBindingUtil.inflate(
+                val binding: ItemVerticalRecyclerViewBinding = DataBindingUtil.inflate(
                     LayoutInflater.from(parent.context),
-                    R.layout.item_time_slots,
+                    R.layout.item_vertical_recycler_view,
                     parent,
                     false
                 )
@@ -170,11 +170,15 @@ class ManageStadiumAdapter(
         fun bind(imageList: List<SlideModel>) {
             when {
                 imageList.isNotEmpty() -> {
+                    binding.cardView.visibility = View.VISIBLE
                     binding.imageSlider.visibility = View.VISIBLE
                     binding.imageSlider.setImageList(imageList, ScaleTypes.FIT)
                 }
 
-                else -> binding.imageSlider.visibility = View.GONE
+                else -> {
+                    binding.imageSlider.visibility = View.GONE
+                    binding.cardView.visibility = View.GONE
+                }
             }
         }
     }
@@ -188,18 +192,18 @@ class ManageStadiumAdapter(
     }
 
     // ViewHolder for Calendar RecyclerView
-    inner class CalendarViewHolder(private val binding: ItemCalendarBinding) :
+    inner class CalendarViewHolder(private val binding: ItemHorizontalRecyclerViewBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(calendarAdapter: CalendarAdapter) {
-            binding.calendarRecyclerView.adapter = calendarAdapter
+            binding.recyclerView.adapter = calendarAdapter
         }
     }
 
     // ViewHolder for Time Slots RecyclerView
-    inner class TimeSlotsViewHolder(private val binding: ItemTimeSlotsBinding) :
+    inner class TimeSlotsViewHolder(private val binding: ItemVerticalRecyclerViewBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(timeSlotsAdapter: TimeSlotsForManagerAdapter) {
-            binding.timeSlotsRecyclerView.adapter = timeSlotsAdapter
+        fun bind(timeSlotsAdapter: TimeSlotsAdapter) {
+            binding.recyclerView.adapter = timeSlotsAdapter
         }
     }
 

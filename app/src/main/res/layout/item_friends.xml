@@ -58,7 +58,7 @@
 
                 <TextView
                     android:id="@+id/lastMessage_item"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:ellipsize="end"
@@ -68,7 +68,6 @@
                     android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toEndOf="@id/userImage_item"
                     app:layout_constraintTop_toBottomOf="@+id/lastMessage_time"
                     app:layout_constraintVertical_bias="1.0"

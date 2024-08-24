@@ -8,7 +8,7 @@ import com.example.koratime.R
 import com.example.koratime.databinding.ItemStadiumsBinding
 import com.example.koratime.model.StadiumModel
 
-class StadiumsAdapter(var stadiumsList: List<StadiumModel?>?) :
+class StadiumsAdapter(private var stadiumsList: List<StadiumModel?>?) :
     RecyclerView.Adapter<StadiumsAdapter.ViewHolder>() {
 
     inner class ViewHolder(val dataBinding: ItemStadiumsBinding) :

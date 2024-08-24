@@ -2,7 +2,7 @@ package com.example.koratime.rooms.stadiumRooms
 
 import android.content.Intent
 import androidx.lifecycle.ViewModelProvider
-import com.example.koratime.Constants
+import com.example.koratime.utils.Constants
 import com.example.koratime.R
 import com.example.koratime.basic.BasicFragment
 import com.example.koratime.databinding.FragmentStadiumRoomsBinding
@@ -29,13 +29,17 @@ class StadiumRoomsFragment : BasicFragment<FragmentStadiumRoomsBinding, StadiumR
     override fun callback() {
         viewModel.apply {
             navigator = this@StadiumRoomsFragment
-            adapterSetup()
             adapterCallback()
         }
         dataBinding.apply {
             vm = viewModel
             recyclerView.adapter = viewModel.adapter
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        viewModel.adapterSetup()
     }
 
     override fun openRoomChatActivity(room: RoomModel?) {

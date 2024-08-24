@@ -16,7 +16,6 @@
         tools:context=".home.HomeActivity">
 
 
-
         <FrameLayout
             android:id="@+id/fragment_container"
             android:layout_width="match_parent"
@@ -25,8 +24,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/home_bar"
@@ -39,7 +37,7 @@
             app:itemActiveIndicatorStyle="@color/transparent"
             app:itemIconTint="@drawable/navigation_bar_color_selector"
             app:itemTextColor="@drawable/navigation_bar_color_selector"
-            app:labelVisibilityMode="selected"
+            app:labelVisibilityMode="labeled"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

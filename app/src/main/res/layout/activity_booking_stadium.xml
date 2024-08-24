@@ -7,7 +7,7 @@
 
         <variable
             name="vm"
-            type="com.example.koratime.stadiums.bookStadium.BookingStadiumViewModel" />
+            type="com.example.koratime.stadiumUser.bookStadium.BookingStadiumViewModel" />
 
         <import type="android.view.View" />
     </data>
@@ -15,7 +15,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".stadiums.manageStadium.ManageStadiumActivity">
+        tools:context=".stadiumManager.manageStadium.ManageStadiumActivity">
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipeRefresh"

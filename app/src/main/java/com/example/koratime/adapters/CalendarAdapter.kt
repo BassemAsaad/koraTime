@@ -1,5 +1,6 @@
 package com.example.koratime.adapters
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -85,6 +86,7 @@ class CalendarAdapter(private val days: List<Date>?) :
 
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun changeDate(date: Date) {
         selectedDate = date
         notifyDataSetChanged()

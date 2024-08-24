@@ -8,7 +8,7 @@ import com.example.koratime.R
 import com.example.koratime.databinding.ItemPrivateRoomsBinding
 import com.example.koratime.model.RoomModel
 
-class PrivateRoomsAdapter(var rooms: List<RoomModel?>?) :
+class PrivateRoomsAdapter(var rooms: MutableList<RoomModel?>?) :
     RecyclerView.Adapter<PrivateRoomsAdapter.ViewHolder>() {
 
     inner class ViewHolder(val dataBinding: ItemPrivateRoomsBinding) :
@@ -40,14 +40,17 @@ class PrivateRoomsAdapter(var rooms: List<RoomModel?>?) :
         val room = rooms!![position]
         holder.bind(room)
 
-        holder.itemView.setOnClickListener {
-            onItemClickListener?.onItemClick(room, position, holder)
+        holder.dataBinding.joinButton.setOnClickListener {
+            onItemClickListener?.onJoinClick(room, position, holder)
+        }
+        holder.dataBinding.removeRoom.setOnClickListener {
+            onItemClickListener?.onRemoveClick(room, position, holder)
         }
 
 
     }
 
-    fun changeData(newRoom: List<RoomModel?>?) {
+    fun changeData(newRoom: MutableList<RoomModel?>?) {
         rooms = newRoom
         notifyDataSetChanged()
     }
@@ -56,6 +59,7 @@ class PrivateRoomsAdapter(var rooms: List<RoomModel?>?) :
     var onItemClickListener: OnItemClickListener? = null
 
     interface OnItemClickListener {
-        fun onItemClick(room: RoomModel?, position: Int, holder: ViewHolder)
+        fun onJoinClick(room: RoomModel?, position: Int, holder: ViewHolder)
+        fun onRemoveClick(room: RoomModel?, position: Int, holder: ViewHolder)
     }
 }

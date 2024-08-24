@@ -10,7 +10,7 @@ import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
-import com.example.koratime.Constants
+import com.example.koratime.utils.Constants
 import com.example.koratime.R
 import com.example.koratime.basic.BasicActivity
 import com.example.koratime.databinding.ActivityLocationPickerBinding

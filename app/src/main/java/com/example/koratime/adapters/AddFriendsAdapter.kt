@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.koratime.R
-import com.example.koratime.database.checkFriendRequestStatusFromFirestore
+import com.example.koratime.utils.checkFriendRequestStatusFromFirestore
 import com.example.koratime.databinding.ItemAddFriendBinding
 import com.example.koratime.model.UserModel
 

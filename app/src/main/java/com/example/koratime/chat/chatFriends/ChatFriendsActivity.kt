@@ -3,7 +3,7 @@ package com.example.koratime.chat.chatFriends
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.koratime.Constants
+import com.example.koratime.utils.Constants
 import com.example.koratime.R
 import com.example.koratime.basic.BasicActivity
 import com.example.koratime.databinding.ActivityChatFriendsBinding

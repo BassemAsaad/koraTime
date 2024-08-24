@@ -7,7 +7,7 @@
 
         <variable
             name="vm"
-            type="com.example.koratime.stadiums.bookingRequests.BookingRequestsViewModel" />
+            type="com.example.koratime.stadiumManager.bookingRequests.BookingRequestsViewModel" />
 
     </data>
 
@@ -15,7 +15,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".stadiums.bookingRequests.BookingRequestsActivity"
+        tools:context=".stadiumManager.bookingRequests.BookingRequestsActivity"
         android:background="#33FFFFFF"
         >
 

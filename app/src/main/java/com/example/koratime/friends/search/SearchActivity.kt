@@ -2,13 +2,13 @@ package com.example.koratime.friends.search
 
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
-import com.example.koratime.DataUtils
+import com.example.koratime.utils.DataUtils
 import com.example.koratime.R
 import com.example.koratime.adapters.AddFriendsAdapter
 import com.example.koratime.basic.BasicActivity
-import com.example.koratime.database.addFriendRequestToFirestore
-import com.example.koratime.database.getUsersFromFirestore
-import com.example.koratime.database.removeFriendRequestWithoutRequestID
+import com.example.koratime.utils.addFriendRequestToFirestore
+import com.example.koratime.utils.getUsersFromFirestore
+import com.example.koratime.utils.removeFriendRequestWithoutRequestID
 import com.example.koratime.databinding.ActivitySearchBinding
 import com.example.koratime.model.UserModel
 

@@ -1,12 +1,11 @@
 package com.example.koratime.registration.createAccount
 
 import android.net.Uri
-import android.util.Log
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import com.example.koratime.basic.BasicViewModel
-import com.example.koratime.database.addUserToFirestore
 import com.example.koratime.model.UserModel
+import com.example.koratime.utils.addUserToFirestore
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 
@@ -56,7 +55,7 @@ class RegisterViewModel : BasicViewModel<RegisterNavigator>() {
     }
 
     fun openImagePicker() {
-
+        navigator?.openImagePicker()
     }
 
 
@@ -67,9 +66,9 @@ class RegisterViewModel : BasicViewModel<RegisterNavigator>() {
                 if (!task.isSuccessful) {
                     showLoading.value = false
                     toastMessage.value = task.exception?.localizedMessage
-                    Log.e("Firebase: ", task.exception?.localizedMessage.toString())
+                    log(task.exception?.localizedMessage.toString())
                 } else {
-                    Log.e("Firebase: ", "Account added successfully to firestore")
+                    log("Account added successfully to firestore")
                     if (imagesUri.value != null) {
                         uploadImageToStorage(task.result.user?.uid)
                     } else {
@@ -92,22 +91,20 @@ class RegisterViewModel : BasicViewModel<RegisterNavigator>() {
         )
         addUserToFirestore(
             user,
-            //OnSuccessListener
-            {
+            onSuccessListener =  {
+                log("account added to firestore")
                 showLoading.value = false
-                Log.e("Firebase: ", "account added to firestore")
                 navigator?.closeActivity()
             },
-            //OnFailureListener
-            {
+            onFailureListener = {
+                log("error adding account to firestore")
                 showLoading.value = false
-                Log.e("Firebase: ", "error adding account to firestore")
             })
     }
 
     private fun uploadImageToStorage(uid: String?) {
         showLoading.value = true
-        com.example.koratime.database.uploadImageToStorage(
+        com.example.koratime.utils.uploadImageToStorage(
             imagesUri.value!!,
             onSuccessListener = { downloadUri ->
                 log("Image uploaded successfully to Firebase Storage")
@@ -116,8 +113,8 @@ class RegisterViewModel : BasicViewModel<RegisterNavigator>() {
                 addUser(uid)
             },
             onFailureListener = {
-                showLoading.value = false
                 log("Error uploading image to Firebase Storage $it")
+                showLoading.value = false
             }
         )
     }

@@ -80,7 +80,6 @@ class RegisterActivity : BasicActivity<ActivityRegisterBinding, RegisterViewMode
 
     }
 
-
     override fun onSupportNavigateUp(): Boolean {
         // go to the previous fragment when back button clicked on toolbar
         onBackPressed()

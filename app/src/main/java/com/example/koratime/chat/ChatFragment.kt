@@ -3,7 +3,7 @@ package com.example.koratime.chat
 import android.content.Intent
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
-import com.example.koratime.Constants
+import com.example.koratime.utils.Constants
 import com.example.koratime.R
 import com.example.koratime.basic.BasicFragment
 import com.example.koratime.chat.chatFriends.ChatFriendsActivity
@@ -29,28 +29,31 @@ class ChatFragment : BasicFragment<FragmentChatBinding, ChatViewModel>(), ChatNa
     override fun callback() {
         viewModel.apply {
             navigator = this@ChatFragment
-            adapterSetup()
             adapterCallback()
         }
         dataBinding.apply {
             vm = viewModel
-            recyclerView.adapter = viewModel.adapter
+            searchFriends.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String): Boolean {
+                    // Handle query submission if needed
+                    return true
+                }
+
+                override fun onQueryTextChange(newText: String): Boolean {
+                    viewModel.adapter.filterUsers(newText)
+                    return true
+                }
+            })
         }
 
-        // filter users for search
-        dataBinding.searchFriends.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String): Boolean {
-                // Handle query submission if needed
-                return true
-            }
-
-            override fun onQueryTextChange(newText: String): Boolean {
-                viewModel.adapter.filterUsers(newText)
-                return true
-            }
-        })
     }
 
+    override fun onStart() {
+        super.onStart()
+        viewModel.adapterSetup()
+        dataBinding.recyclerView.adapter = viewModel.adapter
+
+    }
 
     override fun openChatFriendsActivity(user: FriendModel?) {
         val intent = Intent(requireContext(), ChatFriendsActivity::class.java)

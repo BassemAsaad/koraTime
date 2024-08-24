@@ -3,14 +3,14 @@ package com.example.koratime.friends
 import android.annotation.SuppressLint
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import com.example.koratime.DataUtils
+import com.example.koratime.utils.DataUtils
 import com.example.koratime.adapters.PendingFriendsAdapter
 import com.example.koratime.basic.BasicViewModel
-import com.example.koratime.database.acceptFriendRequest
-import com.example.koratime.database.checkIfFriendExist
-import com.example.koratime.database.getFriendRequestsFromFirestore
-import com.example.koratime.database.removeFriendRequestWithRequestID
-import com.example.koratime.database.updateFriendshipStatus
+import com.example.koratime.utils.acceptFriendRequest
+import com.example.koratime.utils.checkIfFriendExist
+import com.example.koratime.utils.getFriendRequestsFromFirestore
+import com.example.koratime.utils.removeFriendRequestWithRequestID
+import com.example.koratime.utils.updateFriendshipStatus
 import com.example.koratime.model.FriendRequestModel
 
 class FriendsRequestsViewModel : BasicViewModel<FriendsRequestsNavigator>() {

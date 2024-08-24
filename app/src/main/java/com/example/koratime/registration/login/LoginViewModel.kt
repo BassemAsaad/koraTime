@@ -4,9 +4,9 @@ package com.example.koratime.registration.login
 import android.util.Log
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
-import com.example.koratime.DataUtils
+import com.example.koratime.utils.DataUtils
 import com.example.koratime.basic.BasicViewModel
-import com.example.koratime.database.getUserFromFirestore
+import com.example.koratime.utils.getUserFromFirestore
 import com.example.koratime.model.UserModel
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.Firebase

@@ -3,7 +3,7 @@ package com.example.koratime.rooms.roomChat
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.koratime.Constants
+import com.example.koratime.utils.Constants
 import com.example.koratime.R
 import com.example.koratime.adapters.RoomMessagesAdapter
 import com.example.koratime.basic.BasicActivity

@@ -1,10 +1,10 @@
 package com.example.koratime.chat
 
 import android.util.Log
-import com.example.koratime.DataUtils
+import com.example.koratime.utils.DataUtils
 import com.example.koratime.adapters.FriendsAdapter
 import com.example.koratime.basic.BasicViewModel
-import com.example.koratime.database.getFriendsFromFirestore
+import com.example.koratime.utils.getFriendsFromFirestore
 import com.example.koratime.model.FriendModel
 
 class ChatViewModel : BasicViewModel<ChatNavigator>() {

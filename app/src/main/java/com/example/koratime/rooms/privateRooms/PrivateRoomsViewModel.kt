@@ -2,20 +2,21 @@ package com.example.koratime.rooms.privateRooms
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import com.example.koratime.DataUtils
 import com.example.koratime.adapters.PrivateRoomsAdapter
 import com.example.koratime.basic.BasicViewModel
-import com.example.koratime.database.getUserRoomsFromFirestore
-import com.example.koratime.database.removeRoomFromFirestore
 import com.example.koratime.model.RoomModel
+import com.example.koratime.utils.DataUtils
+import com.example.koratime.utils.getUserRoomsFromFirestore
+import com.example.koratime.utils.removeRoomFromFirestore
+import com.google.firebase.firestore.DocumentChange
 
 class PrivateRoomsViewModel : BasicViewModel<PrivateRoomsFragment>() {
     override val TAG: String
         get() = PrivateRoomsFragment::class.java.simpleName
     val password = MutableLiveData<String>()
     val passwordError = MutableLiveData<String>()
-    val roomPassword = MutableLiveData<String?>()
     var toastMessage = MutableLiveData<String>()
+    private val newRoomList = mutableListOf<RoomModel?>()
     val adapter = PrivateRoomsAdapter(null)
 
     fun adapterSetup() {
@@ -24,30 +25,14 @@ class PrivateRoomsViewModel : BasicViewModel<PrivateRoomsFragment>() {
 
     fun adapterCallback() {
         adapter.onItemClickListener = object : PrivateRoomsAdapter.OnItemClickListener {
-            override fun onItemClick(
+            override fun onJoinClick(
                 room: RoomModel?,
                 position: Int,
                 holder: PrivateRoomsAdapter.ViewHolder
             ) {
-                holder.dataBinding.removeRoom.setOnClickListener {
-                    removeRoomFromFirestore(
-                        roomId = room!!.roomID!!,
-                        onSuccessListener = {
-                            Log.e("Firebase", " Room Removed Successfully")
-                        },
-                        onFailureListener = {
-                            Log.e("Firebase", "Error Removing Room")
-
-                        }
-                    )
-
-                }
-
-                roomPassword.value = room!!.password
-                password.value =
-                    holder.dataBinding.roomPasswordLayout.editText?.text.toString()
-                if (room.password != null) {
-                    if (checkRoomPassword()) {
+                val password = holder.dataBinding.roomPasswordLayout.editText?.text.toString()
+                if (room!!.password != null) {
+                    if (checkRoomPassword(room.password, password)) {
                         navigator?.openRoomChatActivity(room)
                     } else {
                         holder.dataBinding.roomPasswordLayout.error = passwordError.value
@@ -58,14 +43,23 @@ class PrivateRoomsViewModel : BasicViewModel<PrivateRoomsFragment>() {
                 }
 
             }
+
+            override fun onRemoveClick(
+                room: RoomModel?,
+                position: Int,
+                holder: PrivateRoomsAdapter.ViewHolder
+            ) {
+                    navigator?.openDialog(room)
+            }
         }
+
 
     }
 
 
-    fun checkRoomPassword(): Boolean {
+    fun checkRoomPassword(roomPassword: String?, password: String?): Boolean {
         var check = true
-        if (password.value != roomPassword.value) {
+        if (roomPassword != password) {
             check = false
             passwordError.value = ("Wrong Password")
         } else {
@@ -78,16 +72,46 @@ class PrivateRoomsViewModel : BasicViewModel<PrivateRoomsFragment>() {
         navigator?.openAddRoomActivity()
     }
 
-    private fun getRooms() {
-        getUserRoomsFromFirestore(
-            userId = DataUtils.user!!.id!!,
-            onSuccessListener = { querySnapShot ->
-                val rooms = querySnapShot.toObjects(RoomModel::class.java)
-                adapter.changeData(rooms)
-            }, onFailureListener = {
-                log("Error getting rooms: $it")
+    fun removeRoom(room: RoomModel?) {
+        removeRoomFromFirestore(
+            roomId = room!!.roomID!!,
+            onSuccessListener = {
+                Log.e("Firebase", " Room Removed Successfully")
+                toastMessage.value = "Room Removed Successfully"
+            },
+            onFailureListener = {
+                Log.e("Firebase", "Error Removing Room $it")
+                toastMessage.value = "Error Removing Room"
+
             }
         )
+    }
+    private fun getRooms() {
+        getUserRoomsFromFirestore(userId = DataUtils.user!!.id!!)
+            .addSnapshotListener{ snapshots, error ->
+                if (error != null) {
+                    log(error.localizedMessage!!)
+                    toastMessage.value = "Error loading rooms"
+                }else{
+                    for (dc in snapshots!!.documentChanges) {
+                        when (dc.type) {
+                            DocumentChange.Type.ADDED -> {
+                                val room = dc.document.toObject(RoomModel::class.java)
+                                newRoomList.add(room)
+                            }
+                            DocumentChange.Type.REMOVED -> {
+                                val room = dc.document.toObject(RoomModel::class.java)
+                                newRoomList.remove(room)
+                            }
+
+                            DocumentChange.Type.MODIFIED -> log("Message Modified")
+                        }
+                    }
+                    adapter.changeData(newRoomList)
+
+                    }
+
+            }
     }
 
 }

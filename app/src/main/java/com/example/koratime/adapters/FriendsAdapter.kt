@@ -6,17 +6,17 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.koratime.DataUtils
+import com.example.koratime.utils.DataUtils
 import com.example.koratime.R
-import com.example.koratime.database.getLastMessageFromFirestore
+import com.example.koratime.utils.getLastMessageFromFirestore
 import com.example.koratime.databinding.ItemFriendsBinding
 import com.example.koratime.model.FriendMessageModel
 import com.example.koratime.model.FriendModel
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
-
-class FriendsAdapter(var friendsList: List<FriendModel?>?) :
+@SuppressLint("SetTextI18n")
+class FriendsAdapter(private var friendsList: List<FriendModel?>?) :
     RecyclerView.Adapter<FriendsAdapter.ViewHolder>() {
     class ViewHolder(val dataBinding: ItemFriendsBinding) :
         RecyclerView.ViewHolder(dataBinding.root) {
@@ -48,17 +48,21 @@ class FriendsAdapter(var friendsList: List<FriendModel?>?) :
             userID = DataUtils.user!!.id!!,
             friendshipID = holder.dataBinding.friendModel!!.friendshipID!!,
             onSuccessListener = { documents ->
-                var message = FriendMessageModel()
-                for (document in documents) {
-                    message = document.toObject(FriendMessageModel::class.java)
-                    // Access the last content sent
-                }
-                holder.dataBinding.apply {
-                    lastMessageItem.text = message.content
-                    lastMessageTime.text = formatMessageTime(message.dateTime!!)
+                val message = documents.toObjects(FriendMessageModel::class.java)
+
+                if (message.isNotEmpty()) {
+                    holder.dataBinding.apply {
+                        lastMessageItem.text = message[0].content
+                        lastMessageTime.text = formatMessageTime(message[0].dateTime!!)
+                    }
+                    Log.e("Firebase ", "Message returned successfully")
+                }else{
+                    holder.dataBinding.apply {
+                        lastMessageItem.text = "No message yet"
+                        lastMessageTime.text = ""
+                    }
                 }
 
-                Log.e("Firebase ", "Message returned successfully")
             },
             onFailureListener = {
                 Log.e("Firebase ", "Error returning message")

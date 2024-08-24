@@ -3,13 +3,13 @@ package com.example.koratime.rooms.roomChat
 import android.util.Log
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
-import com.example.koratime.DataUtils
 import com.example.koratime.adapters.RoomMessagesAdapter
 import com.example.koratime.basic.BasicViewModel
-import com.example.koratime.database.addRoomMessageToFirestore
-import com.example.koratime.database.getRoomMessagesFromFirestore
 import com.example.koratime.model.RoomMessageModel
 import com.example.koratime.model.RoomModel
+import com.example.koratime.utils.DataUtils
+import com.example.koratime.utils.addRoomMessageToFirestore
+import com.example.koratime.utils.getRoomMessagesFromFirestore
 import com.google.firebase.firestore.DocumentChange
 import java.util.Date
 

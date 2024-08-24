@@ -10,9 +10,8 @@ import com.example.koratime.R
 import com.example.koratime.databinding.ItemBookingRequestsBinding
 import com.example.koratime.model.BookingModel
 
-class BookingRequestsAdapter(var requestsList: List<BookingModel?>?) :
+class BookingRequestsAdapter(private var requestsList: List<BookingModel?>?) :
     RecyclerView.Adapter<BookingRequestsAdapter.ViewHolder>() {
-
     class ViewHolder(val dataBinding: ItemBookingRequestsBinding) :
         RecyclerView.ViewHolder(dataBinding.root) {
         fun bind(friend: BookingModel) {
@@ -38,19 +37,16 @@ class BookingRequestsAdapter(var requestsList: List<BookingModel?>?) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(requestsList!![position]!!)
         holder.dataBinding.apply {
-            bookStatus.setTextColor(Color.BLUE)
+
         }
 
 
     }
 
-    var onUserClickListener: OnUserClickListener? = null
-
-    interface OnUserClickListener {
-        fun onItemClick(user: BookingModel?, holder: ViewHolder, position: Int)
-        fun onRemoveClick(user: BookingModel?, holder: ViewHolder, position: Int)
+    interface OnItemClickListener {
+        fun onAcceptClick(position: Int)
+        fun onRejectClick(position: Int)
     }
-
     @SuppressLint("NotifyDataSetChanged")
     fun changeData(newList: List<BookingModel?>?) {
         requestsList = newList

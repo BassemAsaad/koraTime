@@ -5,8 +5,8 @@ import android.util.Log
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import com.example.koratime.basic.BasicViewModel
-import com.example.koratime.database.addRoomToFirestore
-import com.example.koratime.database.uploadImageToStorage
+import com.example.koratime.utils.addRoomToFirestore
+import com.example.koratime.utils.uploadImageToStorage
 import com.example.koratime.model.RoomModel
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth

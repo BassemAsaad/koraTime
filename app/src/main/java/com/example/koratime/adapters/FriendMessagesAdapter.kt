@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import com.example.koratime.DataUtils
+import com.example.koratime.utils.DataUtils
 import com.example.koratime.R
 import com.example.koratime.databinding.ItemFriendReceiveMessageBinding
 import com.example.koratime.databinding.ItemFriendSendMessageBinding

@@ -73,9 +73,13 @@
                     android:layout_gravity="center"
                     android:layout_marginHorizontal="10dp"
                     android:layout_marginVertical="10dp"
+                    app:queryBackground="@color/transparent"
                     android:background="@drawable/shape_rounded_search"
                     app:iconifiedByDefault="false"
-                    app:queryHint="Search For Friends" />
+                    app:queryHint="Search For Friends"
+                    app:searchIcon="@drawable/ic_search"
+
+                    />
 
 
                 <androidx.recyclerview.widget.RecyclerView

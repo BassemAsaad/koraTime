@@ -2,13 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/home_bar"
-        android:icon="@drawable/ic_home"
-        android:title="Home" />
+        android:icon="@drawable/ic_discover"
+        android:title="Discover" />
+    <item
+        android:id="@+id/bookings_bar"
+        android:icon="@drawable/ic_bookings"
+        android:title="Bookings"
+        />
     <item
         android:id="@+id/rooms_bar"
         android:icon="@drawable/ic_rooms"
         android:title="Rooms"
-        
         />
     <item
         android:id="@+id/friends_bar"

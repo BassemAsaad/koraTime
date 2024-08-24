@@ -2,10 +2,10 @@ package com.example.koratime.rooms.stadiumRooms
 
 import android.annotation.SuppressLint
 import android.util.Log
-import com.example.koratime.DataUtils
+import com.example.koratime.utils.DataUtils
 import com.example.koratime.adapters.PublicRoomsAdapter
 import com.example.koratime.basic.BasicViewModel
-import com.example.koratime.database.getStadiumRoomFromFirestore
+import com.example.koratime.utils.getStadiumRoomFromFirestore
 import com.example.koratime.model.RoomModel
 
 class StadiumRoomsViewModel : BasicViewModel<StadiumRoomsNavigator>() {

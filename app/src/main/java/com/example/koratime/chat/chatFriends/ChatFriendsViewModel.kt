@@ -3,11 +3,11 @@ package com.example.koratime.chat.chatFriends
 import android.util.Log
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
-import com.example.koratime.DataUtils
+import com.example.koratime.utils.DataUtils
 import com.example.koratime.adapters.FriendMessagesAdapter
 import com.example.koratime.basic.BasicViewModel
-import com.example.koratime.database.addFriendMessageToFirestore
-import com.example.koratime.database.getFriendMessagesFromFirestore
+import com.example.koratime.utils.addFriendMessageToFirestore
+import com.example.koratime.utils.getFriendMessagesFromFirestore
 import com.example.koratime.model.FriendMessageModel
 import com.example.koratime.model.FriendModel
 import com.google.firebase.firestore.DocumentChange

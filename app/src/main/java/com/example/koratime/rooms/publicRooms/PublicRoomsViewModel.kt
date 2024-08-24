@@ -4,8 +4,9 @@ import android.annotation.SuppressLint
 import androidx.lifecycle.MutableLiveData
 import com.example.koratime.adapters.PublicRoomsAdapter
 import com.example.koratime.basic.BasicViewModel
-import com.example.koratime.database.getAllRoomsFromFirestore
+import com.example.koratime.utils.getAllRoomsFromFirestore
 import com.example.koratime.model.RoomModel
+import com.google.firebase.firestore.DocumentChange
 
 class PublicRoomsViewModel : BasicViewModel<PublicRoomsNavigator>() {
     override val TAG: String
@@ -14,7 +15,7 @@ class PublicRoomsViewModel : BasicViewModel<PublicRoomsNavigator>() {
     private val password = MutableLiveData<String>()
     private val passwordError = MutableLiveData<String>()
     private val roomPassword = MutableLiveData<String?>()
-
+    private val newRoomList = mutableListOf<RoomModel?>()
     val adapter = PublicRoomsAdapter(null)
 
     fun adapterSetup() {
@@ -48,14 +49,30 @@ class PublicRoomsViewModel : BasicViewModel<PublicRoomsNavigator>() {
     }
 
     private fun getAllRooms() {
-        getAllRoomsFromFirestore(
-            onSuccessListener = { querySnapShot ->
-                val rooms = querySnapShot.toObjects(RoomModel::class.java)
-                adapter.changeData(rooms)
-            }, onFailureListener = {
-                log("Error Loading Rooms: $it")
+        getAllRoomsFromFirestore()
+            .addSnapshotListener { value, error ->
+                if (error != null) {
+
+                    log(error.localizedMessage!!)
+//                    toastMessage.value = "Error loading rooms"
+                }else{
+                    for (dc in value!!.documentChanges) {
+                        when (dc.type) {
+                            DocumentChange.Type.ADDED -> {
+                                val room = dc.document.toObject(RoomModel::class.java)
+                                newRoomList.add(room)
+                            }
+                            DocumentChange.Type.REMOVED -> {
+                                val room = dc.document.toObject(RoomModel::class.java)
+                                newRoomList.remove(room)
+                            }
+                            DocumentChange.Type.MODIFIED -> log("Room Modified")
+                        }
+                    }
+                    adapter.changeData(newRoomList)
+                }
+
             }
-        )
     }
 
     private fun checkRoomPassword(): Boolean {
