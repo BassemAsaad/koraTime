@@ -143,7 +143,7 @@ class BookingStadiumAdapter(
 
     fun changeDateTitle(date: String) {
         dateTitle = date
-        notifyItemChanged(3)
+        notifyItemChanged(2)
     }
 
     inner class PlayersSearchViewHolder(val dataBinding: ItemPlayersSearchBinding) :

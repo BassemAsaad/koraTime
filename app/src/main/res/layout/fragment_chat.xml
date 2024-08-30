@@ -66,29 +66,15 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <androidx.appcompat.widget.SearchView
-                    android:id="@+id/searchFriends"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_gravity="center"
-                    android:layout_marginHorizontal="10dp"
-                    android:layout_marginVertical="10dp"
-                    app:queryBackground="@color/transparent"
-                    android:background="@drawable/shape_rounded_search"
-                    app:iconifiedByDefault="false"
-                    app:queryHint="Search For Friends"
-                    app:searchIcon="@drawable/ic_search"
-
-                    />
-
-
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     android:orientation="vertical"
-                    tools:listitem="@layout/item_friends" />
+                    tools:listitem="@layout/item_friends"
+                    android:layout_marginBottom="10dp"
+                    />
             </LinearLayout>
 
 

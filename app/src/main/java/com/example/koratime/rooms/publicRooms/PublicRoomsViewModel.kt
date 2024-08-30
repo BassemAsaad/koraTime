@@ -3,6 +3,7 @@ package com.example.koratime.rooms.publicRooms
 import android.annotation.SuppressLint
 import androidx.lifecycle.MutableLiveData
 import com.example.koratime.adapters.PublicRoomsAdapter
+import com.example.koratime.adapters.parentAdapters.PublicRoomsParentAdapter
 import com.example.koratime.basic.BasicViewModel
 import com.example.koratime.utils.getAllRoomsFromFirestore
 import com.example.koratime.model.RoomModel
@@ -16,10 +17,12 @@ class PublicRoomsViewModel : BasicViewModel<PublicRoomsNavigator>() {
     private val passwordError = MutableLiveData<String>()
     private val roomPassword = MutableLiveData<String?>()
     private val newRoomList = mutableListOf<RoomModel?>()
-    val adapter = PublicRoomsAdapter(null)
+    private val adapter = PublicRoomsAdapter(emptyList())
+    lateinit var parentAdapter: PublicRoomsParentAdapter
 
     fun adapterSetup() {
         getAllRooms()
+        parentAdapter = PublicRoomsParentAdapter(adapter)
     }
 
     fun adapterCallback() {
@@ -54,7 +57,6 @@ class PublicRoomsViewModel : BasicViewModel<PublicRoomsNavigator>() {
                 if (error != null) {
 
                     log(error.localizedMessage!!)
-//                    toastMessage.value = "Error loading rooms"
                 }else{
                     for (dc in value!!.documentChanges) {
                         when (dc.type) {

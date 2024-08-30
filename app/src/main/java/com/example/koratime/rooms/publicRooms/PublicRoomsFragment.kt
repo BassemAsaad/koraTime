@@ -35,18 +35,7 @@ class PublicRoomsFragment : BasicFragment<FragmentPublicRoomsBinding, PublicRoom
         }
         dataBinding.apply {
             vm = viewModel
-            recyclerView.adapter = viewModel.adapter
-            searchRooms.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                override fun onQueryTextSubmit(query: String): Boolean {
-                    // Handle query submission if needed
-                    return true
-                }
-
-                override fun onQueryTextChange(newText: String): Boolean {
-                    viewModel.adapter.filterUsers(newText)
-                    return true
-                }
-            })
+            recyclerView.adapter = viewModel.parentAdapter
         }
     }
 

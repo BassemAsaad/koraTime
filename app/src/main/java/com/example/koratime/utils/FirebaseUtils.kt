@@ -54,17 +54,13 @@ fun getUserFromFirestore(
 }
 
 fun getUsersFromFirestore(
-    currentUserId: String?,
-    onSuccessListener: OnSuccessListener<QuerySnapshot>,
-    onFailureListener: OnFailureListener
-) {
+    currentUserId: String?
+) : Query {
     val db = Firebase.firestore
     val collection = db.collection(UserModel.COLLECTION_NAME)
-    collection
+   return collection
         .whereNotEqualTo("id", currentUserId)
-        .get()
-        .addOnSuccessListener(onSuccessListener)
-        .addOnFailureListener(onFailureListener)
+
 }
 
 fun updateUserLocationInFirestore(
@@ -297,25 +293,34 @@ fun getMultipleImagesFromFirestore(
 }
 
 fun addFriendRequestToFirestore(
-    sender: UserModel,
+    currentUser: UserModel,
     receiver: UserModel,
     onSuccessListener: OnSuccessListener<Void>,
     onFailureListener: OnFailureListener
 ) {
 
     val friendShip = mutableListOf<String>()
-    friendShip.add(sender.id!!)
+    friendShip.add(currentUser.id!!)
     friendShip.add(receiver.id!!)
 
-    val request = FriendRequestModel(
-        senderID = sender.id,
-        senderName = sender.userName,
-        senderProfilePicture = sender.profilePicture,
-        receiverID = receiver.id,
-        receiverName = receiver.userName,
-        receiverProfilePicture = receiver.profilePicture,
+    val requestSender = FriendRequestModel(
+        userID = currentUser.id,
+        username = currentUser.userName,
+        userProfilePicture = currentUser.profilePicture,
         status = "pending",
-        friendList = friendShip
+        friendList = friendShip,
+        receiver = true,
+        sender = false
+
+    )
+    val requestReceiver = FriendRequestModel(
+        userID = receiver.id,
+        username = receiver.userName,
+        userProfilePicture = receiver.profilePicture,
+        status = "pending",
+        friendList = friendShip,
+        receiver = false,
+        sender = true
     )
 
     val db = Firebase.firestore
@@ -327,18 +332,20 @@ fun addFriendRequestToFirestore(
         .document(receiver.id)
         .collection(FriendRequestModel.SUB_COLLECTION_REQUEST)
         .document(requestId)
+
     // Add the friend request to senderUser
     val senderRef = db.collection(UserModel.COLLECTION_NAME)
-        .document(sender.id)
+        .document(currentUser.id)
         .collection(FriendRequestModel.SUB_COLLECTION_REQUEST)
         .document(requestId)
     // set id
-    request.requestID = requestId
+    requestSender.requestID = requestId
+    requestReceiver.requestID = requestId
 
     // batch write can improve performance and reduce the risk of data inconsistency.
     val batch = db.batch()
-    batch.set(senderRef, request)
-    batch.set(receiverRef, request)
+    batch.set(senderRef, requestReceiver)
+    batch.set(receiverRef, requestSender)
 
     batch.commit()
         .addOnSuccessListener(onSuccessListener)
@@ -349,8 +356,8 @@ fun addFriendRequestToFirestore(
 fun checkFriendRequestStatusFromFirestore(
     currentUser: String,
     receiver: String,
-    onFailureListener: OnFailureListener,
-    callback: (String) -> Unit
+    onSuccessListener: OnSuccessListener<String>,
+    onFailureListener: OnFailureListener
 ) {
     val db = Firebase.firestore
     val receiverRef = db.collection(UserModel.COLLECTION_NAME)
@@ -365,20 +372,11 @@ fun checkFriendRequestStatusFromFirestore(
                 querySnapshot.forEach { document ->
                     // Get the status of the friend request
                     val status = document.getString("status")
-                    when (status) {
-                        "pending" -> {
-                            // callback function to handle the result of the asynchronous operation.
-                            callback("pending")
-                        }
-
-                        "accepted" -> {
-                            callback("accepted")
-                        }
-                    }
+                    onSuccessListener.onSuccess(status)
                 }
             } else {
-                // No friend request found
-                callback("not_found")
+                onSuccessListener.onSuccess("not_found")
+
             }
         }
         .addOnFailureListener(onFailureListener)
@@ -386,16 +384,16 @@ fun checkFriendRequestStatusFromFirestore(
 }
 
 fun getFriendRequestsFromFirestore(
-    receiver: UserModel,
+    user: UserModel,
     onSuccessListener: OnSuccessListener<QuerySnapshot>,
     onFailureListener: OnFailureListener
 ) {
     val db = Firebase.firestore
     val collectionRef = db.collection(UserModel.COLLECTION_NAME)
-    val receiverRef = collectionRef.document(receiver.id!!)
+    val receiverRef = collectionRef.document(user.id!!)
     receiverRef.collection(FriendRequestModel.SUB_COLLECTION_REQUEST)
-        .whereEqualTo("status", "pending")
-        .whereEqualTo("receiverID", receiver.id)
+        .whereEqualTo(FriendRequestModel.FIELD_STATUS, FriendRequestModel.STATUS_PENDING)
+        .whereEqualTo(FriendRequestModel.FIELD_RECEIVER, true)
         .get()
         .addOnSuccessListener(onSuccessListener)
         .addOnFailureListener(onFailureListener)
@@ -417,9 +415,9 @@ fun acceptFriendRequest(
         requestID = sender.requestID!!
     )
     val friendReceiver = FriendModel(
-        friendID = sender.senderID,
-        friendPicture = sender.senderProfilePicture,
-        friendName = sender.senderName,
+        friendID = sender.userID,
+        friendPicture = sender.userProfilePicture,
+        friendName = sender.username,
         friendShipStatus = true,
         requestID = sender.requestID!!
     )
@@ -435,7 +433,7 @@ fun acceptFriendRequest(
 
     // create friend collection for sender
     val friendSenderRef = db.collection(UserModel.COLLECTION_NAME)
-        .document(sender.senderID!!)
+        .document(sender.userID!!)
         .collection(FriendModel.SUB_COLLECTION_NAME)
         .document(requestId)
 
@@ -452,7 +450,7 @@ fun acceptFriendRequest(
     batch.commit()
         .addOnSuccessListener {
             updateFriendRequestStatusToAccepted(
-                sender = sender.senderID,
+                sender = sender.userID,
                 currentUser = receiver.id,
                 requestId = requestID,
                 onSuccessListener = onSuccessListener,
@@ -472,7 +470,7 @@ fun checkIfFriendExist(
     val collectionRef = db.collection(UserModel.COLLECTION_NAME)
         .document(currentUser.id!!)
         .collection(FriendModel.SUB_COLLECTION_NAME)
-        .whereEqualTo("friendID", userSender.senderID)
+        .whereEqualTo("friendID", userSender.userID)
     collectionRef.get()
         .addOnSuccessListener { document ->
             if (!document.isEmpty) {
@@ -500,11 +498,11 @@ fun updateFriendshipStatus(
     val firstUser = db.collection(UserModel.COLLECTION_NAME)
         .document(currentUser.id!!)
         .collection(FriendModel.SUB_COLLECTION_NAME)
-        .whereEqualTo("friendID", sender.senderID)
+        .whereEqualTo("friendID", sender.userID)
         .get()
 
     val secondUser = db.collection(UserModel.COLLECTION_NAME)
-        .document(sender.senderID!!)
+        .document(sender.userID!!)
         .collection(FriendModel.SUB_COLLECTION_NAME)
         .whereEqualTo("friendID", currentUser.id)
         .get()
@@ -526,7 +524,7 @@ fun updateFriendshipStatus(
                     document.reference.update(updates)
                         .addOnSuccessListener {
                             updateFriendRequestStatusToAccepted(
-                                sender = sender.senderID,
+                                sender = sender.userID,
                                 currentUser = currentUser.id,
                                 requestId = sender.requestID!!,
                                 onSuccessListener = onSuccessListener,
@@ -942,8 +940,8 @@ fun getBookedTimesFromFirestore(
     val slotsRef = db.collection(StadiumModel.COLLECTION_NAME).document(stadiumID)
         .collection(BookingModel.COLLECTION_NAME)
         .document(date)
-        return slotsRef.collection(BookingModel.SUB_COLLECTION_NAME)
-
+        .collection(BookingModel.SUB_COLLECTION_NAME)
+        return slotsRef
 }
 
 fun playerDocumentExists(

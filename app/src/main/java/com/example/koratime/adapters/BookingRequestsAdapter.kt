@@ -1,7 +1,6 @@
 package com.example.koratime.adapters
 
 import android.annotation.SuppressLint
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -12,6 +11,8 @@ import com.example.koratime.model.BookingModel
 
 class BookingRequestsAdapter(private var requestsList: List<BookingModel?>?) :
     RecyclerView.Adapter<BookingRequestsAdapter.ViewHolder>() {
+
+
     class ViewHolder(val dataBinding: ItemBookingRequestsBinding) :
         RecyclerView.ViewHolder(dataBinding.root) {
         fun bind(friend: BookingModel) {
@@ -37,11 +38,17 @@ class BookingRequestsAdapter(private var requestsList: List<BookingModel?>?) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(requestsList!![position]!!)
         holder.dataBinding.apply {
-
+            acceptRequest.setOnClickListener {
+                onItemClickListener?.onAcceptClick(position)
+            }
+            rejectRequest.setOnClickListener {
+                onItemClickListener?.onRejectClick(position)
+            }
         }
 
 
     }
+    var onItemClickListener: OnItemClickListener? = null
 
     interface OnItemClickListener {
         fun onAcceptClick(position: Int)

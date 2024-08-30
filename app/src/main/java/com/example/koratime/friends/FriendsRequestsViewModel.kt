@@ -25,7 +25,8 @@ class FriendsRequestsViewModel : BasicViewModel<FriendsRequestsNavigator>() {
     }
 
     fun adapterCallback() {
-        adapter.onAddButtonClickListener = object : PendingFriendsAdapter.OnAddButtonClickListener {
+        adapter.onAddButtonClickListener =
+            object : PendingFriendsAdapter.OnAddButtonClickListener {
             @SuppressLint("SetTextI18n")
             override fun onClick(
                 user: FriendRequestModel,
@@ -36,7 +37,7 @@ class FriendsRequestsViewModel : BasicViewModel<FriendsRequestsNavigator>() {
                     currentUser = DataUtils.user!!,
                     userSender = user,
                     onSuccessListener = {
-                        Log.e("Firebase", " ${user.senderName} ex friend status $it")
+                        Log.e("Firebase", " ${user.username} ex friend status $it")
                         if (it) {
                             updateFriendshipStatus(
                                 currentUser = DataUtils.user!!,
@@ -44,16 +45,16 @@ class FriendsRequestsViewModel : BasicViewModel<FriendsRequestsNavigator>() {
                                 onSuccessListener = {
                                     Log.e(
                                         "Firebase",
-                                        " ${user.senderName.toString()} Updated successfully as a friend"
+                                        " ${user.username.toString()} Updated successfully as a friend"
                                     )
                                     holder.dataBinding.confirmFriendButtonItem.text = "Friends"
                                     holder.dataBinding.confirmFriendButtonItem.isEnabled = false
-                                    toastMessage.value = "${user.senderName} Added as a friends"
+                                    toastMessage.value = "${user.username} Added as a friends"
                                 },
                                 onFailureListener = { e ->
                                     Log.e(
                                         "Firebase",
-                                        " Error updating ${user.senderName} to be friend... Error: ",
+                                        " Error updating ${user.username} to be friend... Error: ",
                                         e
                                     )
                                 }
@@ -68,21 +69,21 @@ class FriendsRequestsViewModel : BasicViewModel<FriendsRequestsNavigator>() {
                                 onSuccessListener = {
                                     Log.e(
                                         "Firebase",
-                                        " ${user.senderName.toString()} Accepted Successfully "
+                                        " ${user.username.toString()} Accepted Successfully "
                                     )
                                     holder.dataBinding.confirmFriendButtonItem.text = "Friends"
                                     holder.dataBinding.confirmFriendButtonItem.isEnabled = false
-                                    toastMessage.value = "${user.senderName} Added as a friends"
+                                    toastMessage.value = "${user.username} Added as a friends"
 
                                 },
                                 onFailureListener = {
-                                    Log.e("Firebase", " Error Accepting  ${user.senderName} ")
+                                    Log.e("Firebase", " Error Accepting  ${user.username} ")
                                 }
                             )
                         }
                     },
                     onFailureListener = {
-                        Log.e("Firebase", " Error checking if ${user.senderName} is an ex friend ")
+                        Log.e("Firebase", " Error checking if ${user.username} is an ex friend ")
                     }
 
                 )
@@ -98,7 +99,7 @@ class FriendsRequestsViewModel : BasicViewModel<FriendsRequestsNavigator>() {
                     position: Int
                 ) {
                     val requestId = user.requestID
-                    val senderID = user.senderID
+                    val senderID = user.userID
                     val receiverID = DataUtils.user!!.id
                     removeFriendRequestWithRequestID(
                         sender = senderID!!,
@@ -106,7 +107,7 @@ class FriendsRequestsViewModel : BasicViewModel<FriendsRequestsNavigator>() {
                         request = requestId!!,
                         onSuccessListener = {
                             Log.e("Firebase: ", " Request has been removed successfully $requestId")
-                            toastMessage.value = "${user.senderName} Removed"
+                            toastMessage.value = "${user.username} Removed"
                             adapter.removeData(user)
                         },
                         onFailureListener = {
@@ -120,7 +121,7 @@ class FriendsRequestsViewModel : BasicViewModel<FriendsRequestsNavigator>() {
 
     private fun getRequests() {
         getFriendRequestsFromFirestore(
-            DataUtils.user!!,
+            user = DataUtils.user!!,
             onSuccessListener = { querySnapshot ->
                 val user = querySnapshot.toObjects(FriendRequestModel::class.java)
                 adapter.changeData(user)

@@ -10,12 +10,11 @@ import com.example.koratime.R
 import com.example.koratime.utils.checkFriendRequestStatusFromFirestore
 import com.example.koratime.databinding.ItemAddFriendBinding
 import com.example.koratime.model.UserModel
+import com.example.koratime.utils.DataUtils
 
 
-class AddFriendsAdapter(
-    private var usersList: List<UserModel?>?,
-    private val currentUserId: String?
-) : RecyclerView.Adapter<AddFriendsAdapter.ViewHolder>() {
+class AddFriendsAdapter(private var usersList: List<UserModel?>?) :
+    RecyclerView.Adapter<AddFriendsAdapter.ViewHolder>() {
 
     class ViewHolder(val dataBinding: ItemAddFriendBinding) :
         RecyclerView.ViewHolder(dataBinding.root) {
@@ -43,62 +42,55 @@ class AddFriendsAdapter(
         val user = usersList!![position]!!
         holder.bind(user)
 
-        checkFriendRequestStatusFromFirestore(currentUser = currentUserId!!, receiver = user.id!!,
-            onFailureListener = {
-                Log.e("Firestore", "Error checking friend request status", it)
-            }) { status ->
-            Log.e("Firebase", " $status")
-            Log.e("Firebase", " ${user.userName}")
-            when (status) {
-                "pending" -> {
-                    holder.dataBinding.apply {
-                        addFriendButtonItem.text = "Pending"
-                        addFriendButtonItem.isEnabled = false
-                        removeFriendButtonItem.isEnabled = true
+        checkFriendRequestStatusFromFirestore(
+            currentUser = DataUtils.user!!.id!!,
+            receiver = user.id!!,
+            onSuccessListener = {status ->
+                Log.e("Firebase", " ${user.userName} status: $status")
+                when (status) {
+                    "pending" -> {
+                        holder.dataBinding.apply {
+                            addFriendButtonItem.text = "Pending"
+                            addFriendButtonItem.isEnabled = false
+                            removeFriendButtonItem.isEnabled = true
+                        }
+
+                    }
+                    "accepted" -> {
+                        holder.dataBinding.apply {
+                            addFriendButtonItem.text = "Friends"
+                            addFriendButtonItem.isEnabled = false
+                            removeFriendButtonItem.isEnabled = false
+                        }
                     }
 
-                }
-
-                "accepted" -> {
-                    holder.dataBinding.apply {
-                        addFriendButtonItem.text = "Friends"
-                        addFriendButtonItem.isEnabled = false
-                        removeFriendButtonItem.isEnabled = false
+                    else -> {
+                        holder.dataBinding.apply {
+                            addFriendButtonItem.text = "Add Friend"
+                            addFriendButtonItem.isEnabled = true
+                            removeFriendButtonItem.isEnabled = false
+                        }
                     }
                 }
-
-                else -> {
-                    holder.dataBinding.apply {
-                        addFriendButtonItem.text = "Add Friend"
-                        addFriendButtonItem.isEnabled = true
-                        removeFriendButtonItem.isEnabled = false
-                    }
-
-                }
-
-            }
-        }
-
+            },
+            onFailureListener = { Log.e("Firestore", "Error checking friend request status", it) }
+        )
 
         holder.dataBinding.addFriendButtonItem.setOnClickListener {
-            onAddFriendButtonClickListener?.onClick(user, holder, position)
+            onButtonClickListener?.onAddFriendClickListener(user, holder, position)
         }
         holder.dataBinding.removeFriendButtonItem.setOnClickListener {
-            onRemoveFriendButtonClickListener?.onClick(user, holder, position)
+            onButtonClickListener?.onRemoveFriendClickListener(user, holder, position)
         }
     }
 
 
-    var onAddFriendButtonClickListener: OnAddFriendButtonClickListener? = null
+    var onButtonClickListener: OnButtonClickListener? = null
 
-    interface OnAddFriendButtonClickListener {
-        fun onClick(user: UserModel, holder: ViewHolder, position: Int)
-    }
+    interface OnButtonClickListener {
+        fun onAddFriendClickListener(user: UserModel, holder: ViewHolder, position: Int)
+        fun onRemoveFriendClickListener(user: UserModel, holder: ViewHolder, position: Int)
 
-    var onRemoveFriendButtonClickListener: OnRemoveFriendButtonClickListener? = null
-
-    interface OnRemoveFriendButtonClickListener {
-        fun onClick(user: UserModel, holder: ViewHolder, position: Int)
     }
 
     @SuppressLint("NotifyDataSetChanged")

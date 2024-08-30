@@ -3,6 +3,7 @@ package com.example.koratime.chat
 import android.util.Log
 import com.example.koratime.utils.DataUtils
 import com.example.koratime.adapters.FriendsAdapter
+import com.example.koratime.adapters.parentAdapters.ChatParentAdapter
 import com.example.koratime.basic.BasicViewModel
 import com.example.koratime.utils.getFriendsFromFirestore
 import com.example.koratime.model.FriendModel
@@ -10,10 +11,12 @@ import com.example.koratime.model.FriendModel
 class ChatViewModel : BasicViewModel<ChatNavigator>() {
     override val TAG: String
         get() = ChatViewModel::class.java.simpleName
-    val adapter = FriendsAdapter(null)
+    private val adapter = FriendsAdapter(null)
+    lateinit var chatParentAdapter: ChatParentAdapter
 
     fun adapterSetup() {
         getFriends()
+        chatParentAdapter = ChatParentAdapter(adapter)
     }
 
     fun adapterCallback() {

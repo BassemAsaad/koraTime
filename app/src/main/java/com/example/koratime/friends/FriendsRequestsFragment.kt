@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.koratime.R
 import com.example.koratime.basic.BasicFragment
 import com.example.koratime.databinding.FragmentFriendsRequestsBinding
-import com.example.koratime.friends.search.SearchActivity
+import com.example.koratime.friends.search.FindFriendsActivity
 
 class FriendsRequestsFragment :
     BasicFragment<FragmentFriendsRequestsBinding, FriendsRequestsViewModel>(),
@@ -38,7 +38,7 @@ class FriendsRequestsFragment :
     }
 
     override fun openSearchActivity() {
-        val intent = Intent(requireContext(), SearchActivity::class.java)
+        val intent = Intent(requireContext(), FindFriendsActivity::class.java)
         startActivity(intent)
     }
 

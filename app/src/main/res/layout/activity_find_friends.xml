@@ -7,13 +7,13 @@
 
         <variable
             name="vm"
-            type="com.example.koratime.friends.search.SearchViewModel" />
+            type="com.example.koratime.friends.search.FindFriendsViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".friends.search.SearchActivity">
+        tools:context=".friends.search.FindFriendsActivity">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/app_bar"
@@ -44,32 +44,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/app_bar">
 
-            <androidx.appcompat.widget.SearchView
-                android:id="@+id/searchUser"
-                android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="30dp"
-                android:background="@drawable/shape_rounded_search"
-                app:iconifiedByDefault="false"
-                app:layout_constraintBottom_toTopOf="@id/recyclerView"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:queryHint="Search For People" />
-
-
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_marginTop="20dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/searchUser"
-                tools:listitem="@layout/item_add_friend" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:listitem="@layout/item_add_friend"
+                android:layout_marginBottom="10dp"
+                />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

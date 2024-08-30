@@ -1,7 +1,6 @@
 package com.example.koratime.chat
 
 import android.content.Intent
-import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
 import com.example.koratime.utils.Constants
 import com.example.koratime.R
@@ -33,17 +32,6 @@ class ChatFragment : BasicFragment<FragmentChatBinding, ChatViewModel>(), ChatNa
         }
         dataBinding.apply {
             vm = viewModel
-            searchFriends.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                override fun onQueryTextSubmit(query: String): Boolean {
-                    // Handle query submission if needed
-                    return true
-                }
-
-                override fun onQueryTextChange(newText: String): Boolean {
-                    viewModel.adapter.filterUsers(newText)
-                    return true
-                }
-            })
         }
 
     }
@@ -51,7 +39,7 @@ class ChatFragment : BasicFragment<FragmentChatBinding, ChatViewModel>(), ChatNa
     override fun onStart() {
         super.onStart()
         viewModel.adapterSetup()
-        dataBinding.recyclerView.adapter = viewModel.adapter
+        dataBinding.recyclerView.adapter = viewModel.chatParentAdapter
 
     }
 
