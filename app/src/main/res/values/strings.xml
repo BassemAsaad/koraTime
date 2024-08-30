@@ -78,5 +78,6 @@
     <string name="image_slider_content_description">image slider</string>
     <string name="stop_searching">Stop Searching?</string>
     <string name="logout">Logout</string>
+    <string name="bookings">Bookings</string>
 
 </resources>

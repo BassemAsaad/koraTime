@@ -35,6 +35,7 @@ class BookingRequestsActivity :
             stadiumModel = intent.getParcelableExtra(Constants.STADIUM_BOOKING_REQUESTS)!!
             stadium = stadiumModel
             adapterSetup()
+            adapterCallback()
         }
 
         supportActionBar?.apply {

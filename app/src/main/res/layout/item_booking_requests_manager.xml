@@ -29,7 +29,7 @@
             android:id="@+id/userImage_item"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            app:imageUrl="@{bookModel.profilePicture}"
+            app:imageUrl="@{bookModel.userPicture}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -100,22 +100,22 @@
             android:layout_marginTop="12dp"
             >
             <TextView
-                android:id="@+id/accept_request"
-                android:layout_width="80dp"
-                android:layout_height="30dp"
+                android:id="@+id/button_one"
+                android:layout_width="100dp"
+                android:layout_height="40dp"
                 android:gravity="center"
                 android:text="Accept"
                 android:textColor="@color/green"
                 android:background="@drawable/shape_approval_request"
+                android:layout_marginEnd="15dp"
                 />
             <TextView
-                android:id="@+id/reject_request"
-                android:layout_width="80dp"
-                android:layout_height="30dp"
+                android:id="@+id/button_two"
+                android:layout_width="100dp"
+                android:layout_height="40dp"
                 android:gravity="center"
                 android:text="Reject"
                 android:textColor="@color/red"
-                android:layout_marginStart="15dp"
                 android:background="@drawable/shape_approval_request"
                 />
 

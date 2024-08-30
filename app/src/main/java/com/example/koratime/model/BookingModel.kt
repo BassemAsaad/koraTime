@@ -10,11 +10,13 @@ import java.util.Locale
 data class BookingModel(
     val userId: String? = null,
     val userName: String? = null,
-    val profilePicture: String? = null,
+    val userPicture: String? = null,
+    val stadiumName: String? = null,
+    val stadiumID: String? = null,
+    val stadiumPicture: String? = null,
     var date: String? = null,
     val timeSlot: String? = null,
     val status: String? = null,
-    val stadiumName: String? = null,
     val dateTime: Long? = null,
 ) : Parcelable {
     companion object {

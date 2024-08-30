@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.koratime.utils.DataUtils
 import com.example.koratime.R
 import com.example.koratime.basic.BasicActivity
+import com.example.koratime.bookings.BookingsFragment
 import com.example.koratime.chat.ChatFragment
 import com.example.koratime.utils.updateUserLocationInFirestore
 import com.example.koratime.databinding.ActivityHomeBinding
@@ -57,6 +58,9 @@ class HomeActivity : BasicActivity<ActivityHomeBinding, HomeViewModel>(), HomeNa
             when (item.itemId) {
                 R.id.home_bar -> {
                     replaceFragment(mainFragment())
+                }
+                R.id.bookings_bar -> {
+                    replaceFragment(BookingsFragment())
                 }
 
                 R.id.rooms_bar -> {

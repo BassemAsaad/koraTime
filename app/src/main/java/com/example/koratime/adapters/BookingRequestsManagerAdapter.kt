@@ -6,14 +6,14 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.koratime.R
-import com.example.koratime.databinding.ItemBookingRequestsBinding
+import com.example.koratime.databinding.ItemBookingRequestsManagerBinding
 import com.example.koratime.model.BookingModel
 
-class BookingRequestsAdapter(private var requestsList: List<BookingModel?>?) :
-    RecyclerView.Adapter<BookingRequestsAdapter.ViewHolder>() {
+class BookingRequestsManagerAdapter(private var requestsList: List<BookingModel?>?) :
+    RecyclerView.Adapter<BookingRequestsManagerAdapter.ViewHolder>() {
 
 
-    class ViewHolder(val dataBinding: ItemBookingRequestsBinding) :
+    class ViewHolder(val dataBinding: ItemBookingRequestsManagerBinding) :
         RecyclerView.ViewHolder(dataBinding.root) {
         fun bind(friend: BookingModel) {
             dataBinding.bookModel = friend
@@ -23,9 +23,9 @@ class BookingRequestsAdapter(private var requestsList: List<BookingModel?>?) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val dataBinding: ItemBookingRequestsBinding =
+        val dataBinding: ItemBookingRequestsManagerBinding =
             DataBindingUtil.inflate(
-                LayoutInflater.from(parent.context), R.layout.item_booking_requests, parent, false
+                LayoutInflater.from(parent.context), R.layout.item_booking_requests_manager, parent, false
             )
 
         return ViewHolder(dataBinding)
@@ -36,13 +36,14 @@ class BookingRequestsAdapter(private var requestsList: List<BookingModel?>?) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(requestsList!![position]!!)
+        val request = requestsList!![position]!!
+        holder.bind(request)
         holder.dataBinding.apply {
-            acceptRequest.setOnClickListener {
-                onItemClickListener?.onAcceptClick(position)
+            buttonOne.setOnClickListener {
+                onItemClickListener?.onAcceptClick(holder,position,request.stadiumID!!,request.userId!!,request.date!!,request.timeSlot!!)
             }
-            rejectRequest.setOnClickListener {
-                onItemClickListener?.onRejectClick(position)
+            buttonTwo.setOnClickListener {
+                onItemClickListener?.onRejectClick(holder,position,request.stadiumID!!,request.userId!!,request.date!!,request.timeSlot!!)
             }
         }
 
@@ -51,8 +52,8 @@ class BookingRequestsAdapter(private var requestsList: List<BookingModel?>?) :
     var onItemClickListener: OnItemClickListener? = null
 
     interface OnItemClickListener {
-        fun onAcceptClick(position: Int)
-        fun onRejectClick(position: Int)
+        fun onAcceptClick(holder: ViewHolder,position: Int, stadiumId : String, userId : String, date : String, timeSlot : String)
+        fun onRejectClick(holder: ViewHolder,position: Int,stadiumId : String , userId : String, date : String, timeSlot : String)
     }
     @SuppressLint("NotifyDataSetChanged")
     fun changeData(newList: List<BookingModel?>?) {

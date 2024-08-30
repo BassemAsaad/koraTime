@@ -841,7 +841,9 @@ fun addBookingToFirestore(
         dateTime = Date().time,
         userName = user.userName,
         stadiumName = stadium.stadiumName,
-        profilePicture = user.profilePicture
+        stadiumID = stadium.stadiumID,
+        userPicture = user.profilePicture,
+        stadiumPicture = stadium.stadiumImageUrl
 
     )
     val db = Firebase.firestore
@@ -886,7 +888,7 @@ fun getBookingRequestsFromFirestore(
                     .collection(BookingModel.COLLECTION_NAME).document(document.id)
                     .collection(BookingModel.SUB_COLLECTION_NAME)
                     .whereEqualTo(BookingModel.FIELD_STATUS, BookingModel.STATUS_PENDING)
-                    .orderBy(BookingModel.FIELD_DATE_TIME, Query.Direction.DESCENDING)
+                    .orderBy(BookingModel.FIELD_DATE_TIME, Query.Direction.ASCENDING)
                     .get()
 
                 tasks.add(ref) // Collecting tasks
@@ -909,6 +911,70 @@ fun getBookingRequestsFromFirestore(
         .addOnFailureListener(onFailureListener)
 }
 
+fun acceptBookingRequest(
+    stadiumID: String,
+    userID: String,
+    date: String,
+    timeSlot: String,
+    onSuccessListener: OnSuccessListener<Void>,
+    onFailureListener: OnFailureListener
+) {
+    val db = Firebase.firestore
+
+    val bookingRef = db.collection(StadiumModel.COLLECTION_NAME).document(stadiumID)
+        .collection(BookingModel.COLLECTION_NAME).document(date)
+        .collection(BookingModel.SUB_COLLECTION_NAME).document(timeSlot)
+
+    val userRef = db.collection(UserModel.COLLECTION_NAME).document(userID)
+        .collection(BookingModel.COLLECTION_NAME).document(date)
+
+    val batch = db.batch()
+    batch.update(userRef, BookingModel.FIELD_STATUS, BookingModel.STATUS_ACCEPTED)
+    batch.update(bookingRef, BookingModel.FIELD_STATUS, BookingModel.STATUS_ACCEPTED)
+    batch.commit()
+        .addOnSuccessListener(onSuccessListener)
+        .addOnFailureListener(onFailureListener)
+}
+fun rejectBookingRequest(
+    stadiumID: String,
+    userID: String,
+    date: String,
+    timeSlot: String,
+    onSuccessListener: OnSuccessListener<Void>,
+    onFailureListener: OnFailureListener
+) {
+    val db = Firebase.firestore
+
+    val bookingRef = db.collection(StadiumModel.COLLECTION_NAME).document(stadiumID)
+        .collection(BookingModel.COLLECTION_NAME).document(date)
+        .collection(BookingModel.SUB_COLLECTION_NAME).document(timeSlot)
+
+    val userRef = db.collection(UserModel.COLLECTION_NAME).document(userID)
+        .collection(BookingModel.COLLECTION_NAME).document(date)
+
+    val batch = db.batch()
+    batch.update(userRef, BookingModel.FIELD_STATUS, BookingModel.STATUS_REJECTED)
+    batch.delete(bookingRef)
+    batch.commit()
+        .addOnSuccessListener(onSuccessListener)
+        .addOnFailureListener(onFailureListener)
+
+}
+
+fun getUserBookingRequestsFromFirestore(
+    user: UserModel,
+    onSuccessListener: OnSuccessListener<QuerySnapshot>,
+    onFailureListener: OnFailureListener
+){
+    val db = Firebase.firestore
+    val collection = db.collection(UserModel.COLLECTION_NAME)
+        .document(user.id!!)
+        .collection(BookingModel.COLLECTION_NAME)
+        .orderBy(BookingModel.FIELD_DATE_TIME, Query.Direction.ASCENDING)
+    collection.get()
+        .addOnSuccessListener(onSuccessListener)
+        .addOnFailureListener(onFailureListener)
+}
 
 fun removeBookingFromFirestore(
     timeSlot: String,
