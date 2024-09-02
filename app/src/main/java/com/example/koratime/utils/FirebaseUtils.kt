@@ -850,66 +850,36 @@ fun addBookingToFirestore(
     val setDate = mapOf(
         "date" to date
     )
-    val bookingRef = db.collection(StadiumModel.COLLECTION_NAME).document(stadium.stadiumID!!)
+    val bookingRefManager = db.collection(StadiumModel.COLLECTION_NAME).document(stadium.stadiumID!!)
         .collection(BookingModel.COLLECTION_NAME).document(date)
-    bookingRef.set(setDate)
+    bookingRefManager.set(setDate)
+    val bookingRefUser = db.collection(UserModel.COLLECTION_NAME).document(user.id!!)
+        .collection(BookingModel.COLLECTION_NAME).document(date)
+    bookingRefUser.set(setDate)
 
     val managerRef = db.collection(StadiumModel.COLLECTION_NAME).document(stadium.stadiumID!!)
         .collection(BookingModel.COLLECTION_NAME).document(date)
         .collection(BookingModel.SUB_COLLECTION_NAME).document(timeSlot)
     managerRef.set(bookingData)
 
-    val userRef = db.collection(UserModel.COLLECTION_NAME).document(user.id!!)
+    val userRef = db.collection(UserModel.COLLECTION_NAME).document(user.id)
         .collection(BookingModel.COLLECTION_NAME).document(date)
+        .collection(BookingModel.SUB_COLLECTION_NAME).document(timeSlot)
     userRef.set(bookingData)
+
+
+
     val batch = db.batch()
-    batch.set(bookingRef, setDate)
+    batch.set(bookingRefManager, setDate)
     batch.set(managerRef, bookingData)
+    batch.set(bookingRefUser, setDate)
     batch.set(userRef, bookingData)
     batch.commit()
         .addOnSuccessListener(onSuccessListener)
         .addOnFailureListener(onFailureListener)
 }
 
-fun getBookingRequestsFromFirestore(
-    stadiumID: String,
-    onSuccessListener: OnSuccessListener<List<BookingModel>>,
-    onFailureListener: OnFailureListener
-) {
-    val db = Firebase.firestore
-    val datesRef = db.collection(StadiumModel.COLLECTION_NAME).document(stadiumID)
-        .collection(BookingModel.COLLECTION_NAME)
 
-    datesRef.get()
-        .addOnSuccessListener { querySnapshot ->
-            val tasks = mutableListOf<Task<QuerySnapshot>>()
-            for (document in querySnapshot.documents) {
-                val ref = db.collection(StadiumModel.COLLECTION_NAME).document(stadiumID)
-                    .collection(BookingModel.COLLECTION_NAME).document(document.id)
-                    .collection(BookingModel.SUB_COLLECTION_NAME)
-                    .whereEqualTo(BookingModel.FIELD_STATUS, BookingModel.STATUS_PENDING)
-                    .orderBy(BookingModel.FIELD_DATE_TIME, Query.Direction.ASCENDING)
-                    .get()
-
-                tasks.add(ref) // Collecting tasks
-            }
-
-            // Wait for all tasks to complete
-            Tasks.whenAllComplete(tasks)
-                .addOnSuccessListener { taskResults ->
-                    val list = mutableListOf<BookingModel>()
-                    for (task in taskResults) {
-                        if (task.isSuccessful) {
-                            val query = task.result as QuerySnapshot
-                            list.addAll(query.toObjects(BookingModel::class.java))
-                        }
-                    }
-                    onSuccessListener.onSuccess(list)
-                }
-                .addOnFailureListener(onFailureListener)
-        }
-        .addOnFailureListener(onFailureListener)
-}
 
 fun acceptBookingRequest(
     stadiumID: String,
@@ -960,20 +930,76 @@ fun rejectBookingRequest(
         .addOnFailureListener(onFailureListener)
 
 }
+fun getBookingRequestsFromFirestore(
+    stadiumID: String,
+    onSuccessListener: OnSuccessListener<List<BookingModel>>,
+    onFailureListener: OnFailureListener
+) {
+    val db = Firebase.firestore
+    val datesRef = db.collection(StadiumModel.COLLECTION_NAME).document(stadiumID)
+        .collection(BookingModel.COLLECTION_NAME)
+
+    datesRef.get()
+        .addOnSuccessListener { querySnapshot ->
+            val tasks = mutableListOf<Task<QuerySnapshot>>()
+            for (document in querySnapshot.documents) {
+                val ref = db.collection(StadiumModel.COLLECTION_NAME).document(stadiumID)
+                    .collection(BookingModel.COLLECTION_NAME).document(document.id)
+                    .collection(BookingModel.SUB_COLLECTION_NAME)
+                    .whereEqualTo(BookingModel.FIELD_STATUS, BookingModel.STATUS_PENDING)
+                    .orderBy(BookingModel.FIELD_DATE_TIME, Query.Direction.ASCENDING)
+                    .get()
+
+                tasks.add(ref) // Collecting tasks
+            }
+
+            // Wait for all tasks to complete
+            Tasks.whenAllComplete(tasks)
+                .addOnSuccessListener { taskResults ->
+                    val list = mutableListOf<BookingModel>()
+                    for (task in taskResults) {
+                        if (task.isSuccessful) {
+                            val query = task.result as QuerySnapshot
+                            list.addAll(query.toObjects(BookingModel::class.java))
+                        }
+                    }
+                    onSuccessListener.onSuccess(list)
+                }
+                .addOnFailureListener(onFailureListener)
+        }
+        .addOnFailureListener(onFailureListener)
+}
 
 fun getUserBookingRequestsFromFirestore(
     user: UserModel,
-    onSuccessListener: OnSuccessListener<QuerySnapshot>,
+    onSuccessListener: OnSuccessListener<MutableList<Task<*>>>,
     onFailureListener: OnFailureListener
 ){
+
+    val tasks = mutableListOf<Task<QuerySnapshot>>()
+
     val db = Firebase.firestore
-    val collection = db.collection(UserModel.COLLECTION_NAME)
-        .document(user.id!!)
+    val userRef = db.collection(UserModel.COLLECTION_NAME).document(user.id!!)
         .collection(BookingModel.COLLECTION_NAME)
-        .orderBy(BookingModel.FIELD_DATE_TIME, Query.Direction.ASCENDING)
-    collection.get()
-        .addOnSuccessListener(onSuccessListener)
+
+    userRef.get()
+        .addOnSuccessListener { querySnapshot ->
+            for (document in querySnapshot.documents) {
+                val bookingsRef = db.collection(UserModel.COLLECTION_NAME).document(user.id)
+                    .collection(BookingModel.COLLECTION_NAME).document(document.id)
+                    .collection(BookingModel.SUB_COLLECTION_NAME)
+                    .orderBy(BookingModel.FIELD_DATE_TIME, Query.Direction.ASCENDING)
+                    .get()
+
+                tasks.add(bookingsRef) // Collecting tasks
+            }
+            // Wait for all tasks to complete
+            Tasks.whenAllComplete(tasks)
+                .addOnSuccessListener(onSuccessListener)
+                .addOnFailureListener(onFailureListener)
+        }
         .addOnFailureListener(onFailureListener)
+
 }
 
 fun removeBookingFromFirestore(

@@ -5,6 +5,7 @@ import com.example.koratime.basic.BasicViewModel
 import com.example.koratime.model.BookingModel
 import com.example.koratime.utils.DataUtils
 import com.example.koratime.utils.getUserBookingRequestsFromFirestore
+import com.google.firebase.firestore.QuerySnapshot
 
 class BookingsViewModel : BasicViewModel<BookingsNavigator>() {
     override val TAG: String
@@ -21,11 +22,14 @@ class BookingsViewModel : BasicViewModel<BookingsNavigator>() {
     private fun getBookings(){
         getUserBookingRequestsFromFirestore(
             DataUtils.user!!,
-            onSuccessListener = {
+            onSuccessListener = { taskResults->
                 log("Bookings returned successfully")
-                for (document in it) {
-                    val booking = document.toObject(BookingModel::class.java)
-                    bookingsList.add(booking)
+                log(taskResults.toString())
+                for (task in taskResults) {
+                    if (task.isSuccessful) {
+                        val query = task.result as QuerySnapshot
+                        bookingsList.addAll(query.toObjects(BookingModel::class.java))
+                    }
                 }
                 bookingsAdapter.changeData(bookingsList)
             },

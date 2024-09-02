@@ -1,4 +1,4 @@
-package com.example.koratime.notifications
+package com.example.koratime.services
 
 import android.annotation.SuppressLint
 import android.app.NotificationChannel
