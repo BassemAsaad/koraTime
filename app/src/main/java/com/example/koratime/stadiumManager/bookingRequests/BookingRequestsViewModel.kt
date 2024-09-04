@@ -8,10 +8,12 @@ import com.example.koratime.R
 import com.example.koratime.adapters.BookingRequestsManagerAdapter
 import com.example.koratime.adapters.BookingRequestsManagerAdapter.ViewHolder
 import com.example.koratime.basic.BasicViewModel
+import com.example.koratime.model.BookingModel
 import com.example.koratime.model.StadiumModel
 import com.example.koratime.utils.acceptBookingRequest
 import com.example.koratime.utils.getBookingRequestsFromFirestore
 import com.example.koratime.utils.rejectBookingRequest
+import com.google.firebase.firestore.QuerySnapshot
 
 @SuppressLint("SetTextI18n")
 class BookingRequestsViewModel : BasicViewModel<BookingRequestsNavigator>() {
@@ -20,6 +22,7 @@ class BookingRequestsViewModel : BasicViewModel<BookingRequestsNavigator>() {
 
     var stadium = StadiumModel()
     var adapter = BookingRequestsManagerAdapter(emptyList())
+    private var bookingsList = mutableListOf<BookingModel>()
 
     fun adapterSetup() {
         getDates()
@@ -89,9 +92,15 @@ class BookingRequestsViewModel : BasicViewModel<BookingRequestsNavigator>() {
     private fun getDates() {
         getBookingRequestsFromFirestore(
             stadiumID = stadium.stadiumID!!,
-            onSuccessListener = { querySnapshot ->
-                Log.e("Firebase", "datesSlots List: $querySnapshot")
-                adapter.changeData(querySnapshot)
+            onSuccessListener = { taskResults->
+                log("Bookings returned successfully")
+                for (task in taskResults) {
+                    if (task.isSuccessful) {
+                        val query = task.result as QuerySnapshot
+                        bookingsList.addAll(query.toObjects(BookingModel::class.java))
+                    }
+                }
+                adapter.changeData(bookingsList)
             },
             onFailureListener = {
                 Log.e("Firebase", "Error fetching booked times", it)

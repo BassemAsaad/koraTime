@@ -9,6 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.koratime.R
 import com.example.koratime.databinding.ItemBookBinding
+import org.checkerframework.common.returnsreceiver.qual.This
 
 @Suppress("NotifyDataSetChanged","SetTextI18n")
 class TimeSlotsAdapter(
@@ -62,7 +63,6 @@ class TimeSlotsAdapter(
         }
         holder.dataBinding.btnBook.setOnClickListener {
             onBookClickListener?.onclick(timeSlot, holder, position)
-            Toast.makeText(holder.itemView.context, "$timeSlot Book Added", Toast.LENGTH_SHORT).show()
         }
         holder.dataBinding.tvTimeSlot.setOnLongClickListener {
             onTimeSlotClickListener?.onclick(timeSlot, holder, position)

@@ -13,6 +13,7 @@ import com.example.koratime.utils.DataUtils
 import com.example.koratime.utils.addBookingToFirestore
 import com.example.koratime.utils.addStadiumRoomToFirestore
 import com.example.koratime.utils.checkCounterInFirestore
+import com.example.koratime.utils.checkUserSameSlotBooking
 import com.example.koratime.utils.getBookedTimesFromFirestore
 import com.example.koratime.utils.getMultipleImagesFromFirestore
 import com.example.koratime.utils.getPlayersIdListFromFirestore
@@ -187,18 +188,37 @@ class BookingStadiumViewModel : BasicViewModel<BookingStadiumNavigator>() {
                     holder: TimeSlotsAdapter.ViewHolder,
                     position: Int
                 ) {
-                    addBookingToFirestore(
-                        timeSlot = holder.dataBinding.tvTimeSlot.text.toString(),
-                        stadium = stadium!!,
-                        date = selectedDate,
+                    checkUserSameSlotBooking(
                         user = DataUtils.user!!,
-                        onSuccessListener = {
-                            log("Book Added Successfully to firestore")
+                        date = selectedDate,
+                        timeSlot = holder.dataBinding.tvTimeSlot.text.toString(),
+                        onSuccessListener = { check->
+                            if (check){
+                                toastMessage.value = "You already have a booking for ${holder.dataBinding.tvTimeSlot.text}."
+
+                            } else{
+                                addBookingToFirestore(
+                                    timeSlot = holder.dataBinding.tvTimeSlot.text.toString(),
+                                    stadium = stadium!!,
+                                    date = selectedDate,
+                                    user = DataUtils.user!!,
+                                    onSuccessListener = {
+                                        toastMessage.value = "${holder.dataBinding.tvTimeSlot.text} Booked Successfully."
+                                        log("${holder.dataBinding.tvTimeSlot.text} Booked Successfully.")
+                                    },
+                                    onFailureListener = { e ->
+                                        log("Error Adding Booking to firestore $e")
+                                    }
+                                )
+                            }
+
                         },
-                        onFailureListener = { e ->
-                            log("Error Adding Booking to firestore $e")
+                        onFailureListener = {
+                            log("Error Checking User Same Slot Booking $it")
                         }
+
                     )
+
                 }
 
             }

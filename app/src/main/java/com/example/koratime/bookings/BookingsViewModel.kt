@@ -24,7 +24,6 @@ class BookingsViewModel : BasicViewModel<BookingsNavigator>() {
             DataUtils.user!!,
             onSuccessListener = { taskResults->
                 log("Bookings returned successfully")
-                log(taskResults.toString())
                 for (task in taskResults) {
                     if (task.isSuccessful) {
                         val query = task.result as QuerySnapshot
