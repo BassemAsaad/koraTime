@@ -292,6 +292,56 @@ fun getMultipleImagesFromFirestore(
         }
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 fun addFriendRequestToFirestore(
     currentUser: UserModel,
     receiver: UserModel,
@@ -382,6 +432,8 @@ fun checkFriendRequestStatusFromFirestore(
         .addOnFailureListener(onFailureListener)
 
 }
+
+
 
 fun getFriendRequestsFromFirestore(
     user: UserModel,
@@ -595,37 +647,37 @@ fun removeFriendRequestWithoutRequestID(
     onFailureListener: OnFailureListener
 ) {
     val db = Firebase.firestore
-    // Create a query to find the friend request document in the receiver's collection of pending friend requests
-    val receiverQuery = db.collection(UserModel.COLLECTION_NAME)
-        .document(receiver)
-        .collection(FriendRequestModel.SUB_COLLECTION_REQUEST)
-        .whereEqualTo("receiverID", receiver)
 
-    // Create a query to find the friend request document in the sender's collection of sent friend requests
     val senderQuery = db.collection(UserModel.COLLECTION_NAME)
         .document(sender)
         .collection(FriendRequestModel.SUB_COLLECTION_REQUEST)
-        .whereEqualTo("senderID", sender)
+        .whereArrayContains("friendList", receiver)
 
-    // Delete the friend request documents
-    receiverQuery.get()
-        .addOnSuccessListener { receiverDocuments ->
-            for (receiverDocument in receiverDocuments) {
-                receiverDocument.reference.delete()
+    val receiverQuery = db.collection(UserModel.COLLECTION_NAME)
+        .document(receiver)
+        .collection(FriendRequestModel.SUB_COLLECTION_REQUEST)
+        .whereArrayContains("friendList", sender)
+
+    senderQuery.get().addOnSuccessListener { senderDocs ->
+        receiverQuery.get().addOnSuccessListener { receiverDocs ->
+
+            val batch = db.batch()
+
+            for (doc in senderDocs) {
+                batch.delete(doc.reference)
             }
-            senderQuery.get()
-                .addOnSuccessListener { senderDocuments ->
-                    for (senderDocument in senderDocuments) {
-                        senderDocument.reference.delete()
-                    }
-                    onSuccessListener.onSuccess(null)
-                }
+
+            for (doc in receiverDocs) {
+                batch.delete(doc.reference)
+            }
+
+            batch.commit()
+                .addOnSuccessListener(onSuccessListener)
                 .addOnFailureListener(onFailureListener)
-        }
-        .addOnFailureListener(onFailureListener)
 
+        }.addOnFailureListener(onFailureListener)
+    }.addOnFailureListener(onFailureListener)
 }
-
 fun removeFriendRequestWithRequestID(
     sender: String,
     receiver: String,
@@ -665,35 +717,55 @@ fun removeFriendFromFirestore(
 ) {
     val db = Firebase.firestore
 
-    // Get a reference to the friendship document for the sender
-    val firstUser = db.collection(UserModel.COLLECTION_NAME)
-        .document(user1.id!!)
+    val user1Id = user1.id!!
+    val user2Id = user2.friendID!!
+
+    // 1. Delete friendship
+    val user1Friends = db.collection(UserModel.COLLECTION_NAME)
+        .document(user1Id)
         .collection(FriendModel.SUB_COLLECTION_NAME)
-        .document(user2.friendshipID!!)
+        .whereEqualTo("friendID", user2Id)
 
-    // Get a reference to the friendship document for the receiver
-    val secondUser = db.collection(UserModel.COLLECTION_NAME)
-        .document(user2.friendID!!)
+    val user2Friends = db.collection(UserModel.COLLECTION_NAME)
+        .document(user2Id)
         .collection(FriendModel.SUB_COLLECTION_NAME)
-        .document(user2.friendshipID!!)
+        .whereEqualTo("friendID", user1Id)
 
-    // Batch write can improve performance and reduce the risk of data inconsistency.
-    val batch = db.batch()
-    batch.update(firstUser, "friendShipStatus", false)
-    batch.update(secondUser, "friendShipStatus", false)
+    // 2. Delete friend requests
+    val user1Requests = db.collection(UserModel.COLLECTION_NAME)
+        .document(user1Id)
+        .collection(FriendRequestModel.SUB_COLLECTION_REQUEST)
+        .whereArrayContains("friendList", user2Id)
 
+    val user2Requests = db.collection(UserModel.COLLECTION_NAME)
+        .document(user2Id)
+        .collection(FriendRequestModel.SUB_COLLECTION_REQUEST)
+        .whereArrayContains("friendList", user1Id)
 
-    batch.commit()
-        .addOnSuccessListener {
-            removeFriendRequestWithRequestID(
-                sender = user1.id,
-                receiver = user2.friendID,
-                request = user2.requestID!!,
-                onSuccessListener = onSuccessListener,
-                onFailureListener = onFailureListener
-            )
-        }
-        .addOnFailureListener(onFailureListener)
+    // Execute all queries
+    user1Friends.get().addOnSuccessListener { f1 ->
+        user2Friends.get().addOnSuccessListener { f2 ->
+            user1Requests.get().addOnSuccessListener { r1 ->
+                user2Requests.get().addOnSuccessListener { r2 ->
+
+                    val batch = db.batch()
+
+                    // delete friendships
+                    for (doc in f1) batch.delete(doc.reference)
+                    for (doc in f2) batch.delete(doc.reference)
+
+                    // delete requests
+                    for (doc in r1) batch.delete(doc.reference)
+                    for (doc in r2) batch.delete(doc.reference)
+
+                    batch.commit()
+                        .addOnSuccessListener(onSuccessListener)
+                        .addOnFailureListener(onFailureListener)
+
+                }.addOnFailureListener(onFailureListener)
+            }.addOnFailureListener(onFailureListener)
+        }.addOnFailureListener(onFailureListener)
+    }.addOnFailureListener(onFailureListener)
 }
 
 fun addFriendMessageToFirestore(
@@ -997,8 +1069,6 @@ fun getUserBookingRequestsFromFirestore(
     onSuccessListener: OnSuccessListener<MutableList<Task<*>>>,
     onFailureListener: OnFailureListener
 ){
-
-
     val db = Firebase.firestore
     val userRef = db.collection(UserModel.COLLECTION_NAME).document(user.id!!)
         .collection(BookingModel.COLLECTION_NAME)
@@ -1023,7 +1093,7 @@ fun getUserBookingRequestsFromFirestore(
 
 }
 
-fun removeBookingFromFirestore(
+fun removeBookingForManagerFromFirestore(
     timeSlot: String,
     stadiumID: String,
     date: String,
@@ -1041,6 +1111,39 @@ fun removeBookingFromFirestore(
 
     // Delete the booking document
     bookingRef.delete()
+        .addOnSuccessListener(onSuccessListener)
+        .addOnFailureListener(onFailureListener)
+}
+
+fun removeBookingForUserFromFirestore(
+    timeSlot: String,
+    stadiumID: String,
+    date: String,
+    userID: String,
+    onSuccessListener: OnSuccessListener<Void>,
+    onFailureListener: OnFailureListener
+) {
+    val db = Firebase.firestore
+
+    val stadiumRef = db.collection(StadiumModel.COLLECTION_NAME)
+        .document(stadiumID)
+        .collection(BookingModel.COLLECTION_NAME)
+        .document(date)
+        .collection(BookingModel.SUB_COLLECTION_NAME)
+        .document(timeSlot)
+
+    val userRef = db.collection(UserModel.COLLECTION_NAME)
+        .document(userID)
+        .collection(BookingModel.COLLECTION_NAME)
+        .document(date)
+        .collection(BookingModel.SUB_COLLECTION_NAME)
+        .document(timeSlot)
+
+    val batch = db.batch()
+    batch.delete(stadiumRef)
+    batch.delete(userRef)
+
+    batch.commit()
         .addOnSuccessListener(onSuccessListener)
         .addOnFailureListener(onFailureListener)
 }

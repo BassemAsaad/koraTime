@@ -20,6 +20,7 @@ class BookingsViewModel : BasicViewModel<BookingsNavigator>() {
 
     }
     private fun getBookings(){
+        bookingsList.clear()
         getUserBookingRequestsFromFirestore(
             DataUtils.user!!,
             onSuccessListener = { taskResults->

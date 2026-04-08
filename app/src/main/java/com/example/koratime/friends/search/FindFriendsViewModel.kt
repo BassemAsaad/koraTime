@@ -5,10 +5,12 @@ import androidx.lifecycle.MutableLiveData
 import com.example.koratime.adapters.AddFriendsAdapter
 import com.example.koratime.adapters.parentAdapters.FindFriendsAdapter
 import com.example.koratime.basic.BasicViewModel
+import com.example.koratime.model.FriendModel
 import com.example.koratime.model.UserModel
 import com.example.koratime.utils.DataUtils
 import com.example.koratime.utils.addFriendRequestToFirestore
 import com.example.koratime.utils.getUsersFromFirestore
+import com.example.koratime.utils.removeFriendFromFirestore
 import com.example.koratime.utils.removeFriendRequestWithoutRequestID
 import com.google.firebase.firestore.DocumentChange
 
@@ -28,55 +30,67 @@ class FindFriendsViewModel : BasicViewModel<FindFriendsNavigator>() {
     }
 
     fun adapterCallback() {
-        // send friend request
-        addFriendsAdapter.onButtonClickListener = object : AddFriendsAdapter.OnButtonClickListener {
-            override fun onAddFriendClickListener(
-                user: UserModel,
-                holder: AddFriendsAdapter.ViewHolder,
-                position: Int
-            ) {
-                addFriendRequestToFirestore(
-                    currentUser = DataUtils.user!!,
-                    receiver = user,
-                    onSuccessListener = {
-                        holder.dataBinding.apply {
-                            addFriendButtonItem.text = "Pending"
-                            addFriendButtonItem.isEnabled = false
-                            removeFriendButtonItem.isEnabled = true
+
+        addFriendsAdapter.onButtonClickListener =
+            object : AddFriendsAdapter.OnButtonClickListener {
+
+                override fun onAddFriendClickListener(
+                    user: UserModel,
+                    holder: AddFriendsAdapter.ViewHolder,
+                    position: Int
+                ) {
+                    addFriendRequestToFirestore(
+                        currentUser = DataUtils.user!!,
+                        receiver = user,
+                        onSuccessListener = {
+                            holder.dataBinding.addFriendButtonItem.text = "Pending"
+                            holder.dataBinding.addFriendButtonItem.isEnabled = false
+                            holder.dataBinding.removeFriendButtonItem.isEnabled = true
+                        },
+                        onFailureListener = {}
+                    )
+                }
+
+                override fun onRemoveFriendClickListener(
+                    user: UserModel,
+                    holder: AddFriendsAdapter.ViewHolder,
+                    position: Int,
+                    status: String
+                ) {
+                    when (status) {
+
+                        "pending" -> {
+                            removeFriendRequestWithoutRequestID(
+                                sender = DataUtils.user!!.id!!,
+                                receiver = user.id!!,
+                                onSuccessListener = {
+                                    holder.dataBinding.addFriendButtonItem.text = "Add Friend"
+                                    holder.dataBinding.addFriendButtonItem.isEnabled = true
+                                    holder.dataBinding.removeFriendButtonItem.isEnabled = false
+                                },
+                                onFailureListener = {}
+                            )
                         }
-                        log("Friend request sent to: ${user.id}")
-                    },
-                    onFailureListener = { e ->
-                        log("Error sending friend request $e")
-                    }
-                )
 
-            }
-
-            override fun onRemoveFriendClickListener(
-                user: UserModel,
-                holder: AddFriendsAdapter.ViewHolder,
-                position: Int
-            ) {
-                removeFriendRequestWithoutRequestID(
-                    sender = DataUtils.user!!.id!!,
-                    receiver = user.id!!,
-                    onSuccessListener = {
-                        holder.dataBinding.apply {
-                            addFriendButtonItem.text = "Add Friend"
-                            addFriendButtonItem.isEnabled = true
-                            removeFriendButtonItem.isEnabled = false
-
+                        "accepted" -> {
+                            removeFriendFromFirestore(
+                                user1 = DataUtils.user!!,
+                                user2 = FriendModel(
+                                    friendID = user.id,
+                                    friendshipID = "", // will be resolved in util
+                                    requestID = ""
+                                ),
+                                onSuccessListener = {
+                                    holder.dataBinding.addFriendButtonItem.text = "Add Friend"
+                                    holder.dataBinding.addFriendButtonItem.isEnabled = true
+                                    holder.dataBinding.removeFriendButtonItem.isEnabled = false
+                                },
+                                onFailureListener = {}
+                            )
                         }
-                        log("Friend request removed")
-                    },
-                    onFailureListener = { e ->
-                        log("Error removing friend request: $e")
-
                     }
-                )
+                }
             }
-        }
     }
 
     private fun getUsers() {
@@ -97,7 +111,7 @@ class FindFriendsViewModel : BasicViewModel<FindFriendsNavigator>() {
 
                             DocumentChange.Type.REMOVED -> {
                                 val user = doc.document.toObject(UserModel::class.java)
-                                usersList.remove(user)
+                                usersList.removeAll { it?.id == user.id }
                             }
                         }
                     }

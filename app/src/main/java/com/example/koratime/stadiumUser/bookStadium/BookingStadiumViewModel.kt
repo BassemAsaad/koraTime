@@ -18,6 +18,7 @@ import com.example.koratime.utils.getBookedTimesFromFirestore
 import com.example.koratime.utils.getMultipleImagesFromFirestore
 import com.example.koratime.utils.getPlayersIdListFromFirestore
 import com.example.koratime.utils.playerDocumentExists
+import com.example.koratime.utils.removeBookingForUserFromFirestore
 import com.example.koratime.utils.removePlayer
 import com.example.koratime.utils.resetCounterAndRemovePlayers
 import com.example.koratime.utils.setPlayerDataAndUpdateCounter
@@ -215,14 +216,27 @@ class BookingStadiumViewModel : BasicViewModel<BookingStadiumNavigator>() {
                         },
                         onFailureListener = {
                             log("Error Checking User Same Slot Booking $it")
+                        })}}
+
+        timeSlotsAdapter.onTimeSlotClickListener =
+            object : TimeSlotsAdapter.OnTimeSlotClickListener {
+                override fun onclick(slot: String, holder: TimeSlotsAdapter.ViewHolder, position: Int) {
+
+                    removeBookingForUserFromFirestore(
+                        timeSlot = slot,
+                        stadiumID = stadium!!.stadiumID!!,
+                        date = selectedDate,
+                        userID = DataUtils.user!!.id!!,
+                        onSuccessListener = {
+                            toastMessage.value = "$slot removed successfully"
+                            log("$slot removed successfully")
+                        },
+                        onFailureListener = {
+                            log("Error Checking User Same Slot Booking $it")
                         }
-
                     )
-
                 }
-
             }
-
     }
 
 

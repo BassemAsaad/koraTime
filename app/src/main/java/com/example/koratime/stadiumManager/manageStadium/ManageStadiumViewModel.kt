@@ -15,7 +15,7 @@ import com.example.koratime.utils.addMultipleImagesToFirestore
 import com.example.koratime.utils.deleteStadiumFromFirestore
 import com.example.koratime.utils.getBookedTimesFromFirestore
 import com.example.koratime.utils.getMultipleImagesFromFirestore
-import com.example.koratime.utils.removeBookingFromFirestore
+import com.example.koratime.utils.removeBookingForManagerFromFirestore
 import com.example.koratime.utils.uploadMultipleImagesToStorage
 import com.example.koratime.model.StadiumModel
 import com.google.firebase.firestore.DocumentChange
@@ -121,7 +121,7 @@ class ManageStadiumViewModel : BasicViewModel<ManageStadiumNavigator>() {
                     holder: TimeSlotsAdapter.ViewHolder,
                     position: Int
                 ) {
-                    removeBookingFromFirestore(
+                    removeBookingForManagerFromFirestore(
                         timeSlot = holder.dataBinding.tvTimeSlot.text.toString(),
                         stadiumID = stadium!!.stadiumID!!,
                         date = selectedDate,
